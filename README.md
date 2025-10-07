@@ -11,3 +11,17 @@ Plan: Interpret LLM-based instructions and plan contextual actions.
 Act: Execute keyboard/mouse actions via an ESP32-based HID emulator.
 Evaluate: Verify task success using visual feedback and logs.
 
+
+## How to Run Backend
+
+    From the project root (`ScreenAwareTaskAgent/ScreenAwareTaskAgent`), run:
+
+    uvicorn backend.main:app --reload
+
+
+    Open your browser to test endpoints:
+
+    Status check: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+    Mock PPA loop: [http://127.0.0.1:8000/mock-loop](http://127.0.0.1:8000/mock-loop)
+
+    > The `/mock-loop` endpoint executes the mock Perceive → Plan → Act cycle and returns a test result.
