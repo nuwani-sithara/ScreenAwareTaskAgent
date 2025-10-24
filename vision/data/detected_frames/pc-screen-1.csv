@@ -1,0 +1,6 @@
+Class ID,Class Name,Confidence,Bounding Box
+3,EditText,0.57,"[123,644,909,707]"
+13,TextView,0.47,"[1004,634,1751,710]"
+3,EditText,0.46,"[134,721,900,782]"
+0,Button,0.42,"[131,854,908,913]"
+0,Button,0.41,"[449,442,605,495]"

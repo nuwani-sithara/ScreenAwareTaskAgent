@@ -1,0 +1,4 @@
+Class ID,Class Name,Confidence,Bounding Box
+6,ImageView,0.74,"[421,310,630,460]"
+5,ImageButton,0.41,"[803,540,859,583]"
+6,ImageView,0.4,"[16,0,998,236]"

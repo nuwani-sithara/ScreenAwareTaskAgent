@@ -1,25 +1,22 @@
-"""
-ipcam_capture.py
-Capture frames from mobile IP camera (using IP Webcam app) and save images.
-"""
-
 import cv2
 import os
 import time
 
-def start_ipcam_capture(ip_address, save_dir="data/raw_frames", interval=2):
+def start_capture(ip_address, save_dir="data/raw_frames", mode="auto", interval=1):
     os.makedirs(save_dir, exist_ok=True)
     url = f"http://{ip_address}:8080/video"
-
     cap = cv2.VideoCapture(url)
+
     if not cap.isOpened():
-        print("❌ Unable to open video stream. Check IP or connection.")
+        print("❌ Unable to connect to camera. Check IP.")
         return
 
-    print("✅ Connected to camera. Press 's' to save manually, 'a' for auto-save, 'q' to quit.")
-    auto_save = False
+    print(f"✅ Connected to {ip_address}")
+    print(f"🎥 Mode: {mode.upper()} | Interval: {interval}s")
+    print("Press 'q' to stop capturing.\n")
+
     last_saved = 0
-    saved_count = 0
+    count = 0
 
     while True:
         ret, frame = cap.read()
@@ -28,33 +25,32 @@ def start_ipcam_capture(ip_address, save_dir="data/raw_frames", interval=2):
             time.sleep(0.5)
             continue
 
-        cv2.imshow("IP Camera Feed", frame)
-        key = cv2.waitKey(1) & 0xFF
+        # Display live feed
+        cv2.imshow("Visual Perception Capture", frame)
 
-        if key == ord('s'):
-            filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
-            cv2.imwrite(filename, frame)
-            saved_count += 1
-            print(f"💾 Saved: {filename}")
+        # --- Continuous Mode ---
+        if mode == "auto":
+            current_time = time.time()
+            if current_time - last_saved >= interval:
+                filename = os.path.join(save_dir, f"frame_{int(current_time)}.jpg")
+                cv2.imwrite(filename, frame)
+                last_saved = current_time
+                count += 1
+                print(f"💾 Auto-saved: {filename}")
 
-        if key == ord('a'):
-            auto_save = not auto_save
-            print("Auto-save:", auto_save)
+        # --- Selective Mode (press 's' to capture important frames) ---
+        elif mode == "selective":
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('s'):
+                filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
+                cv2.imwrite(filename, frame)
+                count += 1
+                print(f"💾 Manually saved: {filename}")
 
-        if auto_save and time.time() - last_saved > interval:
-            filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
-            cv2.imwrite(filename, frame)
-            saved_count += 1
-            last_saved = time.time()
-            print(f"💾 Auto-saved: {filename}")
-
-        if key == ord('q'):
+        # --- Common exit ---
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    print(f"✅ Done. Total saved images: {saved_count}")
+    print(f"\n✅ Capture stopped. Total saved: {count}")
     cap.release()
     cv2.destroyAllWindows()
-
-if __name__ == "__main__":
-    ip = input("Enter your phone IP (e.g., 192.168.1.5): ")
-    start_ipcam_capture(ip)
