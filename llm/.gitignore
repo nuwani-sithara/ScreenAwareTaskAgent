@@ -1,0 +1,111 @@
+# Ignore virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Ignore environment files
+.env
+.venv
+env.bak/
+venv.bak/
+
+# Ignore temporary files
+.DS_Store
+*.swp
+*.swo
+*~
+.thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ignore Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Ignore ML model files and datasets
+*.pth
+*.pt
+*.bin
+*.safetensors
+*.h5
+*.hdf5
+*.joblib
+*.pkl
+*.pickle
+model/
+models/
+checkpoint/
+checkpoints/
+finetuned_*/
+outputs/
+results/
+
+# Ignore dataset files
+*.csv
+*.json
+*.jsonl
+*.parquet
+data/
+datasets/
+*.data
+*.names
+
+# Ignore logs and cache
+logs/
+log/
+*.log
+.cache/
+.cache/
+transformers_cache/
+huggingface/
+.huggingface/
+
+# Ignore training outputs
+runs/
+wandb/
+mlruns/
+
+# Ignore system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ignore test coverage
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
