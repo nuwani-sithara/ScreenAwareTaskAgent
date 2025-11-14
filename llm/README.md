@@ -30,8 +30,8 @@ This project addresses these issues by:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Tharushi-Nethmini/LLM_PromptEngineering.git
-cd LLM_PromptEngineering
+git https://github.com/nuwani-sithara/ScreenAwareTaskAgent/tree/feature/llm-prompting/llm
+cd llm
 
 2. Create and activate a virtual environment
 

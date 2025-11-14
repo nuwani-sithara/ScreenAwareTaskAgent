@@ -1,8 +1,14 @@
-# generic_instruction_to_js_dataset.py
+# generic_instruction_to_js_rag_finetune_cpu_notorch.py
 import json
+import os
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+import torch
 
 # ----------------------------
-# 1️⃣ Load Dataset
+# 1️⃣ Load dataset
 # ----------------------------
 def load_dataset(file_path="llm_dataset.jsonl"):
     dataset = []
@@ -15,36 +21,135 @@ def load_dataset(file_path="llm_dataset.jsonl"):
     return dataset
 
 dataset = load_dataset()
+instructions = [entry["instruction"] for entry in dataset]
 
 # ----------------------------
-# 2️⃣ Generate JS Steps from Dataset
+# 2️⃣ Build simple TF-IDF embeddings for retrieval
 # ----------------------------
-def generate_js_steps_from_dataset(instruction):
-    """
-    Look up instruction in dataset and return structured JS steps.
-    """
-    for entry in dataset:
-        if entry["instruction"].lower() in instruction.lower():
-            # Convert output string into structured steps
-            steps_text = entry["output"].split("Step ")[1:]  # skip first empty split
-            steps = []
-            for s in steps_text:
-                try:
-                    num, rest = s.split(":", 1)
-                    steps.append({
-                        "step": int(num.strip()),
-                        "action": rest.strip(),
-                        "description": ""  # Can be filled with more info if available
-                    })
-                except ValueError:
-                    # Fallback for unexpected formatting
-                    steps.append({"step": 0, "action": s.strip(), "description": ""})
-            return steps
-    # Fallback if instruction not in dataset
-    return [{"step": 1, "action": f"Do task: {instruction}", "description": "Fallback step"}]
+vectorizer = TfidfVectorizer()
+dataset_embeddings = vectorizer.fit_transform(instructions)
+print(f"✅ Dataset embeddings ready ({len(instructions)} instructions)")
 
 # ----------------------------
-# 3️⃣ Simulate sending steps to JS frontend
+# 3️⃣ Load fine-tuned LLM (auto-detect local checkpoint)
+# ----------------------------
+def find_local_checkpoint(base_dir="fine_tuned_js_model"):
+    # prefer an absolute path if __file__ is available
+    base_path = os.path.join(os.path.dirname(__file__), base_dir) if '__file__' in globals() else base_dir
+    if os.path.isdir(base_path):
+        # if model files are at the root of the folder, return it
+        root_files = os.listdir(base_path)
+        if any(f in root_files for f in ("config.json", "pytorch_model.bin", "model.safetensors")):
+            return base_path
+
+        # otherwise search for checkpoint-* subdirectories (pick the newest)
+        subdirs = [d for d in root_files if os.path.isdir(os.path.join(base_path, d))]
+        checkpoint_dirs = [d for d in subdirs if d.startswith("checkpoint")]
+        if checkpoint_dirs:
+            # sort by numeric suffix if present
+            def ckpt_key(name):
+                nums = ''.join(ch for ch in name if ch.isdigit())
+                return int(nums) if nums else 0
+            checkpoint_dirs.sort(key=ckpt_key, reverse=True)
+            for d in checkpoint_dirs:
+                candidate = os.path.join(base_path, d)
+                files = os.listdir(candidate)
+                if any(f in files for f in ("config.json", "pytorch_model.bin", "model.safetensors")):
+                    return candidate
+
+    # if nothing found, return None
+    return None
+
+try:
+    model_candidate = find_local_checkpoint("fine_tuned_js_model")
+    if model_candidate is None:
+        raise FileNotFoundError("No local checkpoint found under 'fine_tuned_js_model'")
+
+    model_name = model_candidate
+    # Try to load tokenizer from the checkpoint; if tokenizer files are missing,
+    # fall back to a compatible base tokenizer (e.g. t5-small) based on config.
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
+    except Exception:
+        # attempt to read model_type from config and choose a sensible fallback
+        cfg_path = os.path.join(model_name, "config.json")
+        fallback_tokenizer = "t5-small"
+        try:
+            if os.path.exists(cfg_path):
+                with open(cfg_path, "r", encoding="utf-8") as fh:
+                    cfg = json.load(fh)
+                    if cfg.get("model_type") == "t5":
+                        # prefer a small T5 tokenizer if model is T5-like
+                        fallback_tokenizer = "t5-small"
+        except Exception:
+            pass
+        print(f"ℹ️ Tokenizer not found in checkpoint, falling back to '{fallback_tokenizer}' tokenizer")
+        tokenizer = AutoTokenizer.from_pretrained(fallback_tokenizer)
+        # attempt to save the fallback tokenizer into the checkpoint directory
+        try:
+            tokenizer.save_pretrained(model_name)
+            print(f"✅ Saved fallback tokenizer files to: {model_name}")
+        except Exception as _e:
+            print(f"⚠️ Could not save tokenizer to checkpoint: {_e}")
+
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_name, local_files_only=True)
+    device = torch.device("cpu")
+    model.to(device)
+    fine_tuned_available = True
+    print(f"✅ Fine-tuned model loaded from: {model_name}")
+except Exception as e:
+    print(f"⚠️ Fine-tuned model not found or failed: {e}")
+    print("ℹ️ Tip: set `model_name` to a specific checkpoint path (e.g. 'fine_tuned_js_model/checkpoint-3') or install 'safetensors' if the model uses .safetensors files.")
+    fine_tuned_available = False
+
+# ----------------------------
+# 4️⃣ RAG retrieval using cosine similarity
+# ----------------------------
+def retrieve_similar_instruction(query, top_k=1):
+    query_vec = vectorizer.transform([query])
+    sims = cosine_similarity(query_vec, dataset_embeddings)[0]
+    top_indices = np.argsort(sims)[::-1][:top_k]
+    return [dataset[i] for i in top_indices]
+
+# ----------------------------
+# 5️⃣ Generate JS steps using RAG + fine-tuned model
+# ----------------------------
+def generate_js_steps(instruction, top_k=1):
+    retrieved = retrieve_similar_instruction(instruction, top_k=top_k)
+
+    if fine_tuned_available and retrieved:
+        context = "\n".join([r["output"] for r in retrieved])
+        prompt = f"Instruction: {instruction}\nUse the following examples as reference:\n{context}\nGenerate steps:"
+        inputs = tokenizer(prompt, return_tensors="pt")
+        for k, v in inputs.items():
+            inputs[k] = v.to(device)
+        with torch.no_grad():
+            gen = model.generate(**inputs, max_new_tokens=256, do_sample=False)
+        steps_text = tokenizer.decode(gen[0], skip_special_tokens=True)
+        steps = []
+        for s in steps_text.split("Step ")[1:]:
+            try:
+                num, rest = s.split(":", 1)
+                steps.append({"step": int(num.strip()), "action": rest.strip(), "description": ""})
+            except ValueError:
+                steps.append({"step": 0, "action": s.strip(), "description": ""})
+        return steps
+    elif retrieved:
+        example = retrieved[0]
+        steps_text = example["output"].split("Step ")[1:]
+        steps = []
+        for s in steps_text:
+            try:
+                num, rest = s.split(":", 1)
+                steps.append({"step": int(num.strip()), "action": rest.strip(), "description": ""})
+            except ValueError:
+                steps.append({"step": 0, "action": s.strip(), "description": ""})
+        return steps
+    else:
+        return [{"step": 1, "action": f"Do task: {instruction}", "description": "Fallback step"}]
+
+# ----------------------------
+# 6️⃣ Simulate sending steps to frontend
 # ----------------------------
 def send_to_js(instruction, steps):
     js_data = {
@@ -58,55 +163,28 @@ def send_to_js(instruction, steps):
     return js_data
 
 # ----------------------------
-# 4️⃣ Main loop
+# 7️⃣ Main loop
 # ----------------------------
 def main():
-    print("🚀 GENERIC INSTRUCTION TO JS (DATASET-DRIVEN)")
-    print("=============================================")
+    print("🚀 GENERIC JS INSTRUCTION GENERATOR (RAG + Fine-tuned CPU, no torch)")
+    print("==============================================================")
     
     while True:
         instruction = input("\n💡 Enter any instruction (or 'quit' to exit): ").strip()
-        
         if instruction.lower() in ['quit', 'exit', 'q']:
-            print("👋 Goodbye!")
             break
-        
         if not instruction:
-            print("❌ Please enter an instruction!")
             continue
-        
-        # Generate JS steps
-        steps = generate_js_steps_from_dataset(instruction)
-        
-        # Display steps
+        steps = generate_js_steps(instruction, top_k=1)
         print(f"\n✅ STEPS FOR: '{instruction}'")
-        print("=" * 40)
         for step in steps:
-            print(f"\nStep {step['step']}: {step['action']}")
-            if step['description']:
-                print(f"   Description: {step['description']}")
-        
-        # Simulate sending steps
-        print(f"\n📤 PASSING TO JS FRONTEND...")
+            print(f"Step {step['step']}: {step['action']}")
         js_data = send_to_js(instruction, steps)
-        
-        # Show confirmation
-        print(f"\n🎯 JS RECEIVED:")
-        print(f"   Instruction: {js_data['instruction']}")
-        print(f"   Steps: {js_data['total_steps']}")
-        print(f"   Status: {js_data['status']}")
-        
-        # Continue?
-        if input("\n🔄 Process another instruction? (y/n): ").lower() != 'y':
-            print("👋 Thank you!")
+        if input("\n🔄 Another instruction? (y/n): ").lower() != 'y':
             break
 
-# ----------------------------
-# 5️⃣ Run main
-# ----------------------------
 if __name__ == "__main__":
     main()
-
 
 
 
