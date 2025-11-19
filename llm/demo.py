@@ -124,7 +124,7 @@ class SimpleAssistant:
         best_match = self.rag_system.retrieve_best_match(instruction)
         if best_match:
             steps = self.step_extractor.extract_steps_from_output(best_match["output"])
-            print("✅ Steps retrieved from RAG")
+            print("✅ Steps retrieved from dataset")
         else:
             print("⚠️ No match found in dataset, using fallback steps")
             steps = self.get_fallback_steps(instruction, category)
