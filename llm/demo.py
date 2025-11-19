@@ -1,4 +1,4 @@
-# generic_instruction_to_js_rag_finetune_cpu_notorch.py
+# demo.py - fine-tune + RAG for all
 import json
 import os
 import numpy as np
@@ -34,19 +34,14 @@ print(f"✅ Dataset embeddings ready ({len(instructions)} instructions)")
 # 3️⃣ Load fine-tuned LLM (auto-detect local checkpoint)
 # ----------------------------
 def find_local_checkpoint(base_dir="fine_tuned_js_model"):
-    # prefer an absolute path if __file__ is available
     base_path = os.path.join(os.path.dirname(__file__), base_dir) if '__file__' in globals() else base_dir
     if os.path.isdir(base_path):
-        # if model files are at the root of the folder, return it
         root_files = os.listdir(base_path)
         if any(f in root_files for f in ("config.json", "pytorch_model.bin", "model.safetensors")):
             return base_path
-
-        # otherwise search for checkpoint-* subdirectories (pick the newest)
         subdirs = [d for d in root_files if os.path.isdir(os.path.join(base_path, d))]
         checkpoint_dirs = [d for d in subdirs if d.startswith("checkpoint")]
         if checkpoint_dirs:
-            # sort by numeric suffix if present
             def ckpt_key(name):
                 nums = ''.join(ch for ch in name if ch.isdigit())
                 return int(nums) if nums else 0
@@ -56,8 +51,6 @@ def find_local_checkpoint(base_dir="fine_tuned_js_model"):
                 files = os.listdir(candidate)
                 if any(f in files for f in ("config.json", "pytorch_model.bin", "model.safetensors")):
                     return candidate
-
-    # if nothing found, return None
     return None
 
 try:
@@ -66,12 +59,9 @@ try:
         raise FileNotFoundError("No local checkpoint found under 'fine_tuned_js_model'")
 
     model_name = model_candidate
-    # Try to load tokenizer from the checkpoint; if tokenizer files are missing,
-    # fall back to a compatible base tokenizer (e.g. t5-small) based on config.
     try:
         tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
     except Exception:
-        # attempt to read model_type from config and choose a sensible fallback
         cfg_path = os.path.join(model_name, "config.json")
         fallback_tokenizer = "t5-small"
         try:
@@ -79,13 +69,11 @@ try:
                 with open(cfg_path, "r", encoding="utf-8") as fh:
                     cfg = json.load(fh)
                     if cfg.get("model_type") == "t5":
-                        # prefer a small T5 tokenizer if model is T5-like
                         fallback_tokenizer = "t5-small"
         except Exception:
             pass
         print(f"ℹ️ Tokenizer not found in checkpoint, falling back to '{fallback_tokenizer}' tokenizer")
         tokenizer = AutoTokenizer.from_pretrained(fallback_tokenizer)
-        # attempt to save the fallback tokenizer into the checkpoint directory
         try:
             tokenizer.save_pretrained(model_name)
             print(f"✅ Saved fallback tokenizer files to: {model_name}")
@@ -99,7 +87,7 @@ try:
     print(f"✅ Fine-tuned model loaded from: {model_name}")
 except Exception as e:
     print(f"⚠️ Fine-tuned model not found or failed: {e}")
-    print("ℹ️ Tip: set `model_name` to a specific checkpoint path (e.g. 'fine_tuned_js_model/checkpoint-3') or install 'safetensors' if the model uses .safetensors files.")
+    print("ℹ️ Tip: set `model_name` manually or install 'safetensors'.")
     fine_tuned_available = False
 
 # ----------------------------
@@ -116,6 +104,14 @@ def retrieve_similar_instruction(query, top_k=1):
 # ----------------------------
 def generate_js_steps(instruction, top_k=1):
     retrieved = retrieve_similar_instruction(instruction, top_k=top_k)
+
+    # 🔍 DEBUG: SHOW RAG RETRIEVAL
+    print("\n🔍 RAG Retrieved Example:")
+    if not retrieved:
+        print("⚠️ No similar instruction found")
+    else:
+        for r in retrieved:
+            print(json.dumps(r, indent=2))
 
     if fine_tuned_available and retrieved:
         context = "\n".join([r["output"] for r in retrieved])
@@ -134,6 +130,7 @@ def generate_js_steps(instruction, top_k=1):
             except ValueError:
                 steps.append({"step": 0, "action": s.strip(), "description": ""})
         return steps
+
     elif retrieved:
         example = retrieved[0]
         steps_text = example["output"].split("Step ")[1:]
@@ -145,11 +142,12 @@ def generate_js_steps(instruction, top_k=1):
             except ValueError:
                 steps.append({"step": 0, "action": s.strip(), "description": ""})
         return steps
+
     else:
         return [{"step": 1, "action": f"Do task: {instruction}", "description": "Fallback step"}]
 
 # ----------------------------
-# 6️⃣ Simulate sending steps to frontend
+# 6️⃣ Send steps to JS
 # ----------------------------
 def send_to_js(instruction, steps):
     js_data = {
@@ -188,7 +186,8 @@ if __name__ == "__main__":
 
 
 
-# # generic_instruction_to_esp32.py
+
+# # demo.py - 1
 # import json
 
 # def generate_generic_steps(instruction):
