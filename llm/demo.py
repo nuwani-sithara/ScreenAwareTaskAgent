@@ -586,12 +586,13 @@ if __name__ == "__main__":
 # ----------------------------
 # 5️⃣ Main Execution
 # ----------------------------
-if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--test":
-        test_system()
-    else:
-        assistant = SimpleAssistant()
-        assistant.interactive_mode()
+# if __name__ == "__main__":
+#     if len(sys.argv) > 1 and sys.argv[1] == "--test":
+#         test_system()
+#     else:
+#         # Use UpgradedAssistant by default (embedding + fine-tune hybrid)
+#         assistant = UpgradedAssistant()
+#         assistant.interactive_mode()
 
 # # demo.py - specify ex 1
 # import json
