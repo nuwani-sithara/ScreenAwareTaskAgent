@@ -21,6 +21,250 @@ print("🚀 LLM RAG ASSISTANT - General Software + 2048")
 print("==============================================")
 
 # ----------------------------
+# 0️⃣ Step Validator against JSONL files
+# ----------------------------
+class StepValidator:
+    """Validates generated steps against dataset examples"""
+    
+    def __init__(self, general_dataset_path=None, game_2048_dataset_path=None):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        self.general_dataset_path = general_dataset_path or os.path.join(current_dir, "llm_dataset.jsonl")
+        self.game_2048_dataset_path = game_2048_dataset_path or os.path.join(current_dir, "rag_2048.jsonl")
+        
+        self.general_dataset = self._load_dataset(self.general_dataset_path)
+        self.game_2048_dataset = self._load_dataset(self.game_2048_dataset_path)
+        
+    def _load_dataset(self, path):
+        """Load dataset from JSONL file"""
+        dataset = []
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            entry = json.loads(line)
+                            dataset.append(entry)
+                        except json.JSONDecodeError:
+                            continue
+        except FileNotFoundError:
+            pass
+        return dataset
+    
+    def get_dataset_for_category(self, category):
+        """Get appropriate dataset based on category"""
+        if category == "game_2048":
+            return self.game_2048_dataset
+        else:
+            return self.general_dataset
+    
+    def validate_steps(self, instruction, generated_steps, category):
+        """
+        Validate generated steps against dataset examples
+        Returns: {
+            'is_valid': bool,
+            'confidence': float (0-1),
+            'matched_instruction': str or None,
+            'similarity': float,
+            'issues': list,
+            'warnings': list,
+            'suggestions': list
+        }
+        """
+        validation_result = {
+            'is_valid': True,
+            'confidence': 0.5,
+            'matched_instruction': None,
+            'similarity': 0.0,
+            'issues': [],
+            'warnings': [],
+            'suggestions': [],
+            'step_count_match': None,
+            'format_valid': True
+        }
+        
+        # 1. Check step format
+        format_issues = self._validate_step_format(generated_steps)
+        if format_issues:
+            validation_result['issues'].extend(format_issues)
+            validation_result['format_valid'] = False
+            validation_result['is_valid'] = False
+        
+        # 2. Get dataset and find similar examples
+        dataset = self.get_dataset_for_category(category)
+        
+        if not dataset:
+            validation_result['warnings'].append(f"No dataset found for category: {category}")
+            return validation_result
+        
+        # 3. Find best matching instruction in dataset
+        best_match = self._find_similar_instruction(instruction, dataset)
+        
+        if best_match:
+            validation_result['matched_instruction'] = best_match['instruction']
+            
+            # Extract steps from matched example
+            dataset_steps = StepExtractor.extract_steps_from_output(best_match['output'])
+            validation_result['step_count_match'] = len(generated_steps) == len(dataset_steps)
+            
+            # Compare step counts
+            if len(generated_steps) != len(dataset_steps):
+                validation_result['warnings'].append(
+                    f"Step count mismatch: generated {len(generated_steps)} steps, "
+                    f"but similar example has {len(dataset_steps)} steps"
+                )
+            
+            # Calculate similarity scores
+            similarity = self._calculate_steps_similarity(generated_steps, dataset_steps)
+            validation_result['similarity'] = similarity
+            
+            # Determine confidence
+            if similarity > 0.8:
+                validation_result['confidence'] = 0.95
+            elif similarity > 0.6:
+                validation_result['confidence'] = 0.7
+            elif similarity > 0.4:
+                validation_result['confidence'] = 0.5
+                validation_result['warnings'].append("Steps have low similarity to dataset examples")
+            else:
+                validation_result['confidence'] = 0.3
+                validation_result['issues'].append("Steps significantly differ from dataset examples")
+                validation_result['is_valid'] = False
+            
+            # 4. Specific validations by category
+            if category == "game_2048":
+                game_issues = self._validate_game_2048_steps(generated_steps)
+                if game_issues:
+                    validation_result['issues'].extend(game_issues)
+                    validation_result['is_valid'] = False
+            else:
+                software_issues = self._validate_software_steps(generated_steps)
+                if software_issues:
+                    validation_result['warnings'].extend(software_issues)
+        else:
+            validation_result['warnings'].append(f"No similar instruction found in dataset for: {instruction}")
+            validation_result['confidence'] = 0.4
+        
+        return validation_result
+    
+    def _validate_step_format(self, steps):
+        """Check if steps follow expected format"""
+        issues = []
+        
+        if not isinstance(steps, list):
+            issues.append("Steps must be a list")
+            return issues
+        
+        if len(steps) == 0:
+            issues.append("No steps generated")
+            return issues
+        
+        for i, step in enumerate(steps):
+            if not isinstance(step, dict):
+                issues.append(f"Step {i+1}: Not a dictionary")
+                continue
+            
+            if 'step' not in step or 'action' not in step:
+                issues.append(f"Step {i+1}: Missing 'step' or 'action' field")
+            
+            if isinstance(step.get('step'), int) and step['step'] != i + 1:
+                issues.append(f"Step {i+1}: Step number mismatch (expected {i+1}, got {step['step']})")
+            
+            action = step.get('action', '').strip()
+            if not action:
+                issues.append(f"Step {i+1}: Empty action")
+            elif len(action) < 5:
+                issues.append(f"Step {i+1}: Action too short ('{action}')")
+        
+        return issues
+    
+    def _find_similar_instruction(self, instruction, dataset):
+        """Find most similar instruction in dataset"""
+        if not dataset:
+            return None
+        
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        
+        try:
+            instructions = [item['instruction'] for item in dataset]
+            vectorizer = TfidfVectorizer()
+            embeddings = vectorizer.fit_transform(instructions)
+            query_vec = vectorizer.transform([instruction])
+            similarities = cosine_similarity(query_vec, embeddings)[0]
+            best_idx = np.argmax(similarities)
+            
+            if similarities[best_idx] > 0.1:
+                return dataset[best_idx]
+        except Exception:
+            pass
+        
+        return None
+    
+    def _calculate_steps_similarity(self, generated_steps, dataset_steps):
+        """Calculate similarity between generated and dataset steps (0-1)"""
+        if not generated_steps or not dataset_steps:
+            return 0.0
+        
+        # Check step count similarity
+        count_sim = 1.0 - abs(len(generated_steps) - len(dataset_steps)) / max(len(generated_steps), len(dataset_steps))
+        
+        # Check action text similarity
+        gen_actions = [s.get('action', '').lower() for s in generated_steps]
+        ds_actions = [s.get('action', '').lower() for s in dataset_steps]
+        
+        try:
+            from sklearn.feature_extraction.text import TfidfVectorizer
+            from sklearn.metrics.pairwise import cosine_similarity
+            
+            vectorizer = TfidfVectorizer()
+            all_actions = gen_actions + ds_actions
+            embeddings = vectorizer.fit_transform(all_actions)
+            
+            action_sims = []
+            for i in range(len(gen_actions)):
+                similarities = cosine_similarity(embeddings[i:i+1], embeddings[len(gen_actions):])[0]
+                action_sims.append(np.max(similarities) if len(similarities) > 0 else 0)
+            
+            action_sim = np.mean(action_sims) if action_sims else 0.0
+            
+            # Weighted average
+            overall_sim = 0.4 * count_sim + 0.6 * action_sim
+            return float(overall_sim)
+        except Exception:
+            return float(count_sim)
+    
+    def _validate_game_2048_steps(self, steps):
+        """Validate steps specific to 2048 game"""
+        issues = []
+        action_text = ' '.join([s.get('action', '').lower() for s in steps])
+        
+        # Check for game-specific keywords - at least ONE should be present
+        game_keywords = ['game', 'play', 'swipe', 'tile', 'restart', 'reset', 'score', 'move', 'board', 'merge', 'focus', 'window', 'keyboard', 'arrow']
+        found_keywords = [kw for kw in game_keywords if kw in action_text]
+        
+        # Only flag if NO game-related keywords found at all
+        if len(found_keywords) == 0:
+            issues.append("Steps don't contain game-related keywords (e.g., 'game', 'play', 'swipe', 'tile')")
+        
+        return issues
+    
+    def _validate_software_steps(self, steps):
+        """Validate steps specific to software development"""
+        warnings = []
+        action_text = ' '.join([s.get('action', '').lower() for s in steps])
+        
+        # Check for typical software development keywords
+        typical_keywords = ['create', 'implement', 'add', 'set up', 'button', 'field', 'input', 'output']
+        found_keywords = [kw for kw in typical_keywords if kw in action_text]
+        
+        if len(found_keywords) == 0:
+            warnings.append("No typical software development keywords found in steps")
+        
+        return warnings
+
+# ----------------------------
 # 1️⃣ Simple RAG System for 2048 Game
 # ----------------------------
 class SimpleRAGSystem:
@@ -142,6 +386,9 @@ class SimpleAssistant:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         self.rag_system_general = SimpleRAGSystem(dataset_path=os.path.join(current_dir, "llm_dataset.jsonl"), dataset_name="llm_dataset.jsonl")
         self.rag_system_2048 = SimpleRAGSystem(dataset_path=os.path.join(current_dir, "rag_2048.jsonl"), dataset_name="rag_2048.jsonl")
+        
+        # Initialize validator
+        self.validator = StepValidator()
 
         # Load fine-tuned model for general software
         print("📌 Loading fine-tuned model...")
@@ -302,13 +549,41 @@ class SimpleAssistant:
                 else:
                     print("⚠️ No RAG fallback match, using generic fallback steps")
                     steps = self.get_fallback_steps(instruction, category)
+        
+        # Validate generated steps
+        validation = self.validator.validate_steps(instruction, steps, category)
+        
         result = {
             "instruction": instruction,
             "category": category,
             "steps": steps,
             "total_steps": len(steps),
-            "status": "ready_for_execution"
+            "status": "ready_for_execution",
+            "validation": {
+                "is_valid": validation['is_valid'],
+                "confidence": validation['confidence'],
+                "matched_instruction": validation['matched_instruction'],
+                "similarity": round(validation['similarity'], 3),
+                "issues": validation['issues'],
+                "warnings": validation['warnings'],
+                "format_valid": validation['format_valid']
+            }
         }
+        
+        # Print validation results
+        print("\n✅ VALIDATION RESULTS:")
+        print(f"   Status: {'✓ VALID' if validation['is_valid'] else '✗ INVALID'}")
+        print(f"   Confidence: {validation['confidence']:.1%}")
+        print(f"   Similarity: {validation['similarity']:.1%}")
+        if validation['matched_instruction']:
+            print(f"   Matched: '{validation['matched_instruction']}'")
+        if validation['issues']:
+            for issue in validation['issues']:
+                print(f"   ❌ Issue: {issue}")
+        if validation['warnings']:
+            for warning in validation['warnings']:
+                print(f"   ⚠️  Warning: {warning}")
+        
         return result
 
     def get_fallback_steps(self, instruction, category):
@@ -363,13 +638,102 @@ def test_system():
         "Play 2048 game: swipe right",
         "Create a Python calculator to multiply numbers"
     ]
+    
+    validation_summary = {
+        'total_tests': len(test_cases),
+        'passed': 0,
+        'failed': 0,
+        'avg_confidence': 0.0,
+        'results': []
+    }
+    
     for instruction in test_cases:
         print(f"\n{'='*50}")
         result = assistant.process_instruction(instruction)
         print(f"📝 {instruction}")
         print(f"🏷️  {result['category']} - {len(result['steps'])} steps")
+        
+        validation = result.get('validation', {})
+        is_valid = validation.get('is_valid', False)
+        confidence = validation.get('confidence', 0.0)
+        
+        validation_summary['results'].append({
+            'instruction': instruction,
+            'is_valid': is_valid,
+            'confidence': confidence,
+            'matched': validation.get('matched_instruction'),
+            'issues': validation.get('issues', []),
+            'warnings': validation.get('warnings', [])
+        })
+        
+        if is_valid:
+            validation_summary['passed'] += 1
+        else:
+            validation_summary['failed'] += 1
+        
         for step in result['steps'][:3]:
             print(f"   {step['step']}. {step['action'][:50]}...")
+    
+    # Print summary
+    print(f"\n\n{'='*60}")
+    print("📊 VALIDATION SUMMARY REPORT")
+    print(f"{'='*60}")
+    print(f"Total Tests: {validation_summary['total_tests']}")
+    print(f"Passed: {validation_summary['passed']} ✓")
+    print(f"Failed: {validation_summary['failed']} ✗")
+    print(f"Success Rate: {(validation_summary['passed']/validation_summary['total_tests'])*100:.1f}%")
+    
+    print(f"\nDetailed Results:")
+    for i, res in enumerate(validation_summary['results'], 1):
+        status = "✓ PASS" if res['is_valid'] else "✗ FAIL"
+        print(f"\n{i}. {res['instruction']}")
+        print(f"   Status: {status} | Confidence: {res['confidence']:.1%}")
+        if res['matched']:
+            print(f"   Matched: {res['matched']}")
+        if res['issues']:
+            for issue in res['issues']:
+                print(f"   ❌ {issue}")
+        if res['warnings']:
+            for warning in res['warnings']:
+                print(f"   ⚠️ {warning}")
+    
+    print(f"\n{'='*60}\n")
+
+def generate_validation_report(instruction):
+    """Generate a detailed validation report for a single instruction"""
+    assistant = SimpleAssistant()
+    result = assistant.process_instruction(instruction)
+    validation = result.get('validation', {})
+    
+    report = {
+        'timestamp': str(np.datetime64('now')),
+        'instruction': instruction,
+        'category': result['category'],
+        'steps': result['steps'],
+        'validation_details': {
+            'is_valid': validation.get('is_valid', False),
+            'confidence': validation.get('confidence', 0.0),
+            'similarity': validation.get('similarity', 0.0),
+            'matched_instruction': validation.get('matched_instruction'),
+            'format_valid': validation.get('format_valid', False),
+            'issues': validation.get('issues', []),
+            'warnings': validation.get('warnings', []),
+        },
+        'recommendation': _get_recommendation(validation)
+    }
+    
+    return report
+
+def _get_recommendation(validation):
+    """Get recommendation based on validation results"""
+    if validation.get('is_valid') and validation.get('confidence', 0) > 0.8:
+        return "✓ Steps are valid and ready for execution"
+    elif validation.get('is_valid') and validation.get('confidence', 0) > 0.6:
+        return "⚠️ Steps are valid but confidence is moderate. Review before execution."
+    elif validation.get('issues'):
+        return "✗ Steps have issues. Review and regenerate if needed."
+    else:
+        return "⚠️ Steps have warnings. Consider reviewing for improvements."
 
 # ----------------------------
 # 5️⃣ Main Execution
