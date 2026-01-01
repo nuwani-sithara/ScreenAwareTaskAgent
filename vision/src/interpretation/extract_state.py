@@ -1,59 +1,139 @@
 import cv2
-import pandas as pd
 import json
 import os
-from ocr_utils import extract_digits
+
+from fixed_layout import (
+    TILE_CENTERS,
+    SCORE_CENTER,
+    BEST_SCORE_CENTER,
+    TILE_W, TILE_H,
+    SCORE_W, SCORE_H
+)
+
+from image_utils import crop_from_center
+from ocr_utils import extract_tile_number, extract_score
 from state_builder import build_game_state
 
+
 IMAGE_DIR = "data/detected_images"
-CSV_DIR = "data/detected_csvs"
 OUT_DIR = "data/extracted_json"
 
 os.makedirs(OUT_DIR, exist_ok=True)
 
-for csv_file in os.listdir(CSV_DIR):
-    if not csv_file.endswith(".csv"):
-        continue
 
-    name = csv_file.replace(".csv", "")
-    image = cv2.imread(f"{IMAGE_DIR}/{name}.jpg")
-    df = pd.read_csv(f"{CSV_DIR}/{csv_file}")
+def main():
+    for img_file in os.listdir(IMAGE_DIR):
+        if not img_file.endswith(".jpg"):
+            continue
 
-    detections = {
-        "tiles": [],
-        "board": None,
-        "score": None,
-        "best_score": None,
-        "buttons": []
-    }
+        name = img_file.replace(".jpg", "")
+        img_path = os.path.join(IMAGE_DIR, img_file)
+        img = cv2.imread(img_path)
 
-    for _, r in df.iterrows():
-        crop = image[int(r.y_min):int(r.y_max), int(r.x_min):int(r.x_max)]
+        if img is None:
+            print(f"❌ Failed to load {img_file}")
+            continue
 
-        if r.class_name == "tile":
-            val = extract_digits(crop)
-            if val.isdigit():
-                detections["tiles"].append({
-                    "value": int(val),
-                    "bbox": [r.x_min, r.y_min, r.x_max, r.y_max]
-                })
+        detections = {
+            "tiles": [],
+            "score": None,
+            "best_score": None,
+            "button": None
+        }
 
-        elif r.class_name == "board":
-            detections["board"] = {
-                "bbox": [r.x_min, r.y_min, r.x_max, r.y_max]
-            }
+        # =====================
+        # 🔹 TILE OCR + COORDS
+        # =====================
+        for (row, col), (cx, cy) in TILE_CENTERS.items():
+            crop = crop_from_center(img, cx, cy, TILE_W, TILE_H)
 
-        elif r.class_name == "score_box":
-            val = extract_digits(crop)
-            if val.isdigit():
-                detections["score"] = int(val)
+            val = extract_tile_number(crop)
+            if val == "":
+                val = "0"
 
-        elif r.class_name == "best_score_box":
-            val = extract_digits(crop)
-            if val.isdigit():
-                detections["best_score"] = int(val)
+            x_min = cx - TILE_W // 2
+            y_min = cy - TILE_H // 2
+            x_max = cx + TILE_W // 2
+            y_max = cy + TILE_H // 2
 
-    game_state = build_game_state(detections)
+            detections["tiles"].append({
+                "row": row,
+                "col": col,
+                "value": int(val),
+                "center_x": cx,
+                "center_y": cy,
+                "width": TILE_W,
+                "height": TILE_H,
+                "bbox": [x_min, y_min, x_max, y_max]
+            })
 
-    with open(f"{OUT_DIR}/{name}.json", "w") as f:
-        json.dump(game_state, f, indent=4)
+            # 🔍 Debug overlay (optional)
+            cv2.circle(img, (cx, cy), 3, (0, 0, 255), -1)
+
+        # =====================
+        # 🔹 SCORE
+        # =====================
+        score_crop = crop_from_center(
+            img,
+            SCORE_CENTER[0],
+            SCORE_CENTER[1],
+            SCORE_W,
+            SCORE_H
+        )
+
+        score_val = extract_score(score_crop)
+
+        detections["score"] = {
+            "value": int(score_val) if score_val.isdigit() else 0,
+            "center_x": SCORE_CENTER[0],
+            "center_y": SCORE_CENTER[1],
+            "width": SCORE_W,
+            "height": SCORE_H,
+            "bbox": [
+                SCORE_CENTER[0] - SCORE_W // 2,
+                SCORE_CENTER[1] - SCORE_H // 2,
+                SCORE_CENTER[0] + SCORE_W // 2,
+                SCORE_CENTER[1] + SCORE_H // 2
+            ]
+        }
+
+        # =====================
+        # 🔹 BEST SCORE
+        # =====================
+        best_crop = crop_from_center(
+            img,
+            BEST_SCORE_CENTER[0],
+            BEST_SCORE_CENTER[1],
+            SCORE_W,
+            SCORE_H
+        )
+
+        best_val = extract_score(best_crop)
+
+        detections["best_score"] = {
+            "value": int(best_val) if best_val.isdigit() else 0,
+            "center_x": BEST_SCORE_CENTER[0],
+            "center_y": BEST_SCORE_CENTER[1],
+            "width": SCORE_W,
+            "height": SCORE_H,
+            "bbox": [
+                BEST_SCORE_CENTER[0] - SCORE_W // 2,
+                BEST_SCORE_CENTER[1] - SCORE_H // 2,
+                BEST_SCORE_CENTER[0] + SCORE_W // 2,
+                BEST_SCORE_CENTER[1] + SCORE_H // 2
+            ]
+        }
+
+        # =====================
+        # 🔹 BUILD GAME STATE
+        # =====================
+        game_state = build_game_state(detections)
+
+        with open(os.path.join(OUT_DIR, f"{name}.json"), "w") as f:
+            json.dump(game_state, f, indent=4)
+
+        print(f"✅ Extracted {name}")
+
+
+if __name__ == "__main__":
+    main()
