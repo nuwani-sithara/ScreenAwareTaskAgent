@@ -2,7 +2,7 @@ import cv2
 import pytesseract
 import numpy as np
 
-# ⚠️ Uncomment if needed
+# Uncomment if needed
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 img = cv2.imread("data/detected_images/frame_1765771009.jpg")
@@ -25,7 +25,7 @@ cv2.imshow("enhanced", enhanced)
 
 cv2.imwrite("debug_ocr_input.png", enhanced)
 
-# 🔥 OCR CONFIG FOR 2048 TILES
+# OCR CONFIG FOR 2048 TILES
 config = "--oem 3 --psm 8 -c tessedit_char_whitelist=0123456789"
 
 text = pytesseract.image_to_string(enhanced, config=config)
@@ -35,9 +35,9 @@ digits = "".join(c for c in text if c.isdigit())
 print("EXTRACTED:", repr(digits))
 
 if digits:
-    print("✅ OCR SUCCESS:", digits)
+    print("OCR SUCCESS:", digits)
 else:
-    print("❌ OCR FAILED")
+    print("OCR FAILED")
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

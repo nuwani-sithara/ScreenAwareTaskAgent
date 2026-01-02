@@ -8,7 +8,7 @@ SAVE_DIR = "data/dataset/raw"
 if not os.path.exists(SAVE_DIR):
     os.makedirs(SAVE_DIR)
 
-print("📸 Auto Screenshot Started...")
+print("Auto Screenshot Started...")
 print("Go to https://play2048.co/ and keep the window visible.")
 print("Press CTRL + C to stop.\n")
 

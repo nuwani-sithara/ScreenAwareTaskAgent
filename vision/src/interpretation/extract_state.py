@@ -31,7 +31,7 @@ def main():
         img = cv2.imread(img_path)
 
         if img is None:
-            print(f"❌ Failed to load {img_file}")
+            print(f"Failed to load {img_file}")
             continue
 
         detections = {
@@ -42,7 +42,7 @@ def main():
         }
 
         # =====================
-        # 🔹 TILE OCR + COORDS
+        # TILE OCR + COORDS
         # =====================
         for (row, col), (cx, cy) in TILE_CENTERS.items():
             crop = crop_from_center(img, cx, cy, TILE_W, TILE_H)
@@ -67,11 +67,11 @@ def main():
                 "bbox": [x_min, y_min, x_max, y_max]
             })
 
-            # 🔍 Debug overlay (optional)
+            # Debug overlay (optional)
             cv2.circle(img, (cx, cy), 3, (0, 0, 255), -1)
 
         # =====================
-        # 🔹 SCORE
+        # SCORE
         # =====================
         score_crop = crop_from_center(
             img,
@@ -98,7 +98,7 @@ def main():
         }
 
         # =====================
-        # 🔹 BEST SCORE
+        # BEST SCORE
         # =====================
         best_crop = crop_from_center(
             img,
@@ -125,14 +125,14 @@ def main():
         }
 
         # =====================
-        # 🔹 BUILD GAME STATE
+        # BUILD GAME STATE
         # =====================
         game_state = build_game_state(detections)
 
         with open(os.path.join(OUT_DIR, f"{name}.json"), "w") as f:
             json.dump(game_state, f, indent=4)
 
-        print(f"✅ Extracted {name}")
+        print(f"Extracted {name}")
 
 
 if __name__ == "__main__":

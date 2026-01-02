@@ -8,11 +8,11 @@ def start_capture(ip_address, save_dir="data/raw_frames", mode="auto", interval=
     cap = cv2.VideoCapture(url)
 
     if not cap.isOpened():
-        print("❌ Unable to connect to camera. Check IP.")
+        print("Unable to connect to camera. Check IP.")
         return
 
-    print(f"✅ Connected to {ip_address}")
-    print(f"🎥 Mode: {mode.upper()} | Interval: {interval}s")
+    print(f"Connected to {ip_address}")
+    print(f"Mode: {mode.upper()} | Interval: {interval}s")
     print("Press 'q' to stop capturing.\n")
 
     last_saved = 0
@@ -21,7 +21,7 @@ def start_capture(ip_address, save_dir="data/raw_frames", mode="auto", interval=
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("⚠️ Frame not received. Retrying...")
+            print("Frame not received. Retrying...")
             time.sleep(0.5)
             continue
 
@@ -36,7 +36,7 @@ def start_capture(ip_address, save_dir="data/raw_frames", mode="auto", interval=
                 cv2.imwrite(filename, frame)
                 last_saved = current_time
                 count += 1
-                print(f"💾 Auto-saved: {filename}")
+                print(f"Auto-saved: {filename}")
 
         # --- Selective Mode (press 's' to capture important frames) ---
         elif mode == "selective":
@@ -45,12 +45,12 @@ def start_capture(ip_address, save_dir="data/raw_frames", mode="auto", interval=
                 filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
                 cv2.imwrite(filename, frame)
                 count += 1
-                print(f"💾 Manually saved: {filename}")
+                print(f"Manually saved: {filename}")
 
         # --- Common exit ---
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    print(f"\n✅ Capture stopped. Total saved: {count}")
+    print(f"\nCapture stopped. Total saved: {count}")
     cap.release()
     cv2.destroyAllWindows()

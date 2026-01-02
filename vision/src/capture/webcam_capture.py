@@ -8,7 +8,7 @@ def list_available_cameras(max_index=5):
     Returns a list of available camera indexes and shows a brief preview.
     """
     available_cameras = []
-    print("🔍 Scanning for available cameras...")
+    print("Scanning for available cameras...")
 
     backend = cv2.CAP_DSHOW if platform.system() == "Windows" else 0
 
@@ -18,13 +18,13 @@ def list_available_cameras(max_index=5):
             ret, frame = cap.read()
             if ret:
                 available_cameras.append(i)
-                print(f"✅ Camera index {i} is available")
+                print(f"Camera index {i} is available")
                 cv2.imshow(f"Preview Camera {i}", frame)
                 cv2.waitKey(1000)  # show preview for 1 second
                 cv2.destroyWindow(f"Preview Camera {i}")
             cap.release()
         else:
-            print(f"❌ Camera index {i} not available")
+            print(f"Camera index {i} not available")
     return available_cameras
 
 def select_camera(available_cameras):
@@ -40,9 +40,9 @@ def select_camera(available_cameras):
             if 0 <= choice < len(available_cameras):
                 return available_cameras[choice]
             else:
-                print("❌ Invalid choice. Try again.")
+                print("Invalid choice. Try again.")
         except ValueError:
-            print("❌ Please enter a valid number.")
+            print("Please enter a valid number.")
 
 def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="auto", interval=1):
     os.makedirs(save_dir, exist_ok=True)
@@ -51,7 +51,7 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
     if camera_index is None:
         available_cameras = list_available_cameras()
         if not available_cameras:
-            print("❌ No cameras found.")
+            print("No cameras found.")
             return
         camera_index = select_camera(available_cameras)
 
@@ -59,11 +59,11 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
     cap = cv2.VideoCapture(camera_index, backend)
 
     if not cap.isOpened():
-        print(f"❌ Unable to open camera index {camera_index}")
+        print(f"Unable to open camera index {camera_index}")
         return
 
-    print(f"\n✅ Webcam Connected (Camera Index: {camera_index})")
-    print(f"🎥 Mode: {mode.upper()} | Interval: {interval}s")
+    print(f"\nWebcam Connected (Camera Index: {camera_index})")
+    print(f"Mode: {mode.upper()} | Interval: {interval}s")
     print("Press 'q' to stop.\n")
 
     last_saved = 0
@@ -72,7 +72,7 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("⚠️ Failed to read frame. Retrying...")
+            print("Failed to read frame. Retrying...")
             time.sleep(0.2)
             continue
 
@@ -86,7 +86,7 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
                 cv2.imwrite(filename, frame)
                 last_saved = now
                 count += 1
-                print(f"💾 Saved: {filename}")
+                print(f"Saved: {filename}")
 
         # SELECTIVE MODE
         if mode == "selective":
@@ -95,13 +95,12 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
                 filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
                 cv2.imwrite(filename, frame)
                 count += 1
-                print(f"💾 Manually saved: {filename}")
-
+                print(f"Manually saved: {filename}")
         # EXIT
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    print(f"\n✅ Capture stopped. Total saved: {count}")
+    print(f"\nCapture stopped. Total saved: {count}")
     cap.release()
     cv2.destroyAllWindows()
 
