@@ -1,27 +1,28 @@
-import cv2
-import pytesseract
+import requests
 import logging
 
-# If Windows, set the Tesseract executable path (only needed if not in PATH)
-pytesseract.pytesseract.tesseract_cmd = r"C:\Users\PM_User\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
+VISION_BASE_URL = "http://localhost:8001"  # Vision FastAPI service
 
 def perceive():
-    print("👁️ Perceiving screen (OCR)...")
-    logging.info("👁️ Perceiving screen with OCR...")
+    """
+    Agent perception step.
+    Requests screen data from the Vision component.
+    """
+    logging.info("👁️ Requesting perception data from Vision service...")
 
-    # STEP 1: Load an image (temporary mock for screenshot/camera)
-    screenshot = cv2.imread("backend/core/sample_screen.png")  # <-- use any .png/.jpg for testing
+    try:
+        response = requests.post(f"{VISION_BASE_URL}/vision/capture", timeout=5)
+        response.raise_for_status()
 
-    if screenshot is None:
-        logging.error("❌ Screenshot not found!")
-        return {"screen_text": ""}
+        perception_data = response.json()
 
-    # STEP 2: Convert to grayscale (improves OCR accuracy)
-    gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
+        logging.info("📄 Perception data received successfully")
+        return perception_data
 
-    # STEP 3: Apply OCR
-    extracted_text = pytesseract.image_to_string(gray)
-
-    # STEP 4: Log and return OCR result
-    logging.info(f"📄 OCR Extracted Text: {extracted_text.strip()}")
-    return {"screen_text": extracted_text.strip()}
+    except requests.exceptions.RequestException as e:
+        logging.error(f"❌ Vision service error: {e}")
+        return {
+            "error": "vision_unavailable",
+            "screen_text": "",
+            "detections": []
+        }

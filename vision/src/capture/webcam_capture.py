@@ -104,5 +104,25 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
     cap.release()
     cv2.destroyAllWindows()
 
+def start_webcam_stream(camera_index=0):
+    """
+    Generator-style webcam stream for Vision API.
+    Returns frames continuously until stopped.
+    """
+    backend = cv2.CAP_DSHOW if platform.system() == "Windows" else 0
+    cap = cv2.VideoCapture(camera_index, backend)
+
+    if not cap.isOpened():
+        raise RuntimeError(f"Unable to open camera index {camera_index}")
+
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                continue
+            yield frame
+    finally:
+        cap.release()
+
 if __name__ == "__main__":
     start_webcam_capture()
