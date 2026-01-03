@@ -26,11 +26,11 @@ commands = [
 
 try:
     with serial.Serial(port, baud, timeout=2) as ser:
-        print(f"Connected to {port}. Waiting 3 seconds before HID tasks...")
+        print(f"Connected to {port}. Waiting 5 seconds before HID tasks...")
         time.sleep(5)
 
         for cmd in commands:
-            ser.write((json.dumps(cmd) + "\n").encode('utf-8'))
+            ser.write((json.dumps(cmd) ).encode('utf-8'))
             print(f"Sent: {cmd}")
 
             response = ser.readline().decode('utf-8', errors='ignore').strip()
