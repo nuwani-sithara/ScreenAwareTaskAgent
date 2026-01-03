@@ -13,7 +13,7 @@ os.makedirs(output_img_folder, exist_ok=True)
 os.makedirs(output_csv_folder, exist_ok=True)
 
 # load model
-model = YOLO("runs/train/2048_ui/weights/best.pt")
+model = YOLO("runs/2048_ui/yolo_train2/weights/best.pt")
 
 # process each image
 for img_file in os.listdir(preprocessed_folder):
