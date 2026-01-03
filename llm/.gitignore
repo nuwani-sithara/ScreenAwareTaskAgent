@@ -109,3 +109,8 @@ htmlcov/
 .coverage
 .coverage.*
 .pytest_cache/
+
+# Ignore markdown documentation files
+*.md
+
+
