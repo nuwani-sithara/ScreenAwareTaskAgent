@@ -1,0 +1,15 @@
+path: E:/sliit-project/ScreenAwareTaskAgent/vision/data/dataset2
+
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 7
+names: ['login_button', 'login_form', 'password_input', 'success_alert', 'title_text', 'unsuccess_alert', 'username_input']
+
+roboflow:
+  workspace: researchproject-khu8g
+  project: screenaware-login-ui
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/researchproject-khu8g/screenaware-login-ui/dataset/2
