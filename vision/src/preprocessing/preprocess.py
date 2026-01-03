@@ -14,14 +14,22 @@ import argparse
 import os
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-RAW_DIR = os.path.join(BASE_DIR, "data", "raw_frames")
-OUT_DIR = os.path.join(BASE_DIR, "data", "preprocessed_frames")
-os.makedirs(OUT_DIR, exist_ok=True)
+DEFAULT_RAW_DIR = os.path.join(BASE_DIR, "data", "raw_frames")
+DEFAULT_OUT_DIR = os.path.join(BASE_DIR, "data", "preprocessed_frames")
 
-def preprocess_all(crop=None, resize=None, ext_in=(".jpg", ".png")):
-    files = [f for f in sorted(os.listdir(RAW_DIR)) if f.lower().endswith(ext_in)]
+
+def preprocess_all(raw_dir=None, out_dir=None, crop=None, resize=None, ext_in=(".jpg", ".png")):
+    """Preprocess all images found in raw_dir and write to out_dir.
+
+    If raw_dir or out_dir are None, defaults inside data/ are used.
+    """
+    raw_dir = raw_dir or DEFAULT_RAW_DIR
+    out_dir = out_dir or DEFAULT_OUT_DIR
+    os.makedirs(out_dir, exist_ok=True)
+
+    files = [f for f in sorted(os.listdir(raw_dir)) if f.lower().endswith(ext_in)]
     for fname in files:
-        path = os.path.join(RAW_DIR, fname)
+        path = os.path.join(raw_dir, fname)
         img = cv2.imread(path)
         if img is None:
             print("Skipping (not an image):", path)
@@ -50,7 +58,7 @@ def preprocess_all(crop=None, resize=None, ext_in=(".jpg", ".png")):
             new_w, new_h = int(w * scale), int(h * scale)
             img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
 
-        out_path = os.path.join(OUT_DIR, fname)
+        out_path = os.path.join(out_dir, fname)
         cv2.imwrite(out_path, img)
         print("Wrote:", out_path)
 

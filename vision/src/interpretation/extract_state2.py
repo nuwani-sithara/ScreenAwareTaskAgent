@@ -27,21 +27,24 @@ if _easyocr_available:
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-CSV_DIR = os.path.join(BASE_DIR, "data", "detected_csvs")
-FRAME_DIR = os.path.join(BASE_DIR, "data", "raw_frames")
-OUTPUT_JSON = os.path.join(BASE_DIR, "data", "final_output", "vision_data.json")
+DEFAULT_CSV_DIR = os.path.join(BASE_DIR, "data", "detected_csvs")
+DEFAULT_FRAME_DIR = os.path.join(BASE_DIR, "data", "raw_frames")
 
 
-def run_extraction():
-    """Process CSV detections and produce a final JSON placed at OUTPUT_JSON."""
+def run_extraction(csv_dir=None, frame_dir=None, output_json=None):
+    """Process CSV detections and produce a final JSON placed at output_json."""
+    csv_dir = csv_dir or DEFAULT_CSV_DIR
+    frame_dir = frame_dir or DEFAULT_FRAME_DIR
+    output_json = output_json or os.path.join(BASE_DIR, "data", "final_output", "vision_data.json")
+
     vision_data = []
 
-    csv_files = sorted(os.listdir(CSV_DIR))
+    csv_files = sorted(os.listdir(csv_dir))
     frame_id = 1
 
     for csv_file in csv_files:
         frame_name = csv_file.replace(".csv", ".jpg")
-        frame_path = os.path.join(FRAME_DIR, frame_name)
+        frame_path = os.path.join(frame_dir, frame_name)
 
         image = cv2.imread(frame_path)
         if image is None:
@@ -52,7 +55,7 @@ def run_extraction():
             "elements": {}
         }
 
-        with open(os.path.join(CSV_DIR, csv_file), newline='') as f:
+        with open(os.path.join(csv_dir, csv_file), newline='') as f:
             reader = csv.DictReader(f)
 
             for row in reader:
@@ -185,14 +188,14 @@ def run_extraction():
         "vision_data": vision_data
     }
 
-    os.makedirs(os.path.dirname(OUTPUT_JSON), exist_ok=True)
+    os.makedirs(os.path.dirname(output_json), exist_ok=True)
 
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+    with open(output_json, "w", encoding="utf-8") as f:
         json.dump(final_json, f, indent=4)
 
     print("✅ Vision data with OCR created successfully")
 
-    return OUTPUT_JSON
+    return output_json
 
 
 if __name__ == "__main__":

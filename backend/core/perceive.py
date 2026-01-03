@@ -13,13 +13,15 @@ def start_capture(timeout=5):
         logging.error("Failed to start vision capture: %s", e)
         return None
 
-def stop_and_get_vision(timeout=120):
+def stop_and_get_vision(session_id=None, timeout=120):
     """
     Send /vision/stop which stops capture and runs preprocessing->detection->extraction.
     This can take time (model + OCR), so use a generous timeout (e.g. 120s).
+    Optionally pass the session_id as a query parameter to ensure we stop the correct session.
     """
     try:
-        r = requests.post(f"{VISION_BASE_URL}/vision/stop", timeout=timeout)
+        params = {"session_id": session_id} if session_id else {}
+        r = requests.post(f"{VISION_BASE_URL}/vision/stop", params=params, timeout=timeout)
         r.raise_for_status()
         data = r.json()
         if data.get("status") == "completed":
@@ -48,13 +50,16 @@ def perceive(wait_seconds=3):
     """
     logging.info("Requesting vision perception (start -> wait -> stop)...")
 
-    start_capture()  # safe to call even if already running
+    start_resp = start_capture()
+    session_id = None
+    if start_resp and isinstance(start_resp, dict):
+        session_id = start_resp.get("session_id")
 
     # allow camera to gather a few frames
     time.sleep(wait_seconds)
 
-    vision_data = stop_and_get_vision(timeout=180)  # increase timeout if dataset/model is large
-    if "error" in vision_data:
+    vision_data = stop_and_get_vision(session_id=session_id, timeout=180)  # increase timeout if dataset/model is large
+    if isinstance(vision_data, dict) and vision_data.get("error"):
         logging.error("Perception error: %s", vision_data)
     else:
         logging.info("Perception data received")

@@ -6,13 +6,17 @@ from ultralytics import YOLO
 
 # paths (use absolute paths relative to vision/)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-preprocessed_folder = os.path.join(BASE_DIR, "data", "preprocessed_frames")
-output_img_folder = os.path.join(BASE_DIR, "data", "detected_images")
-output_csv_folder = os.path.join(BASE_DIR, "data", "detected_csvs")
+DEFAULT_PREPRO = os.path.join(BASE_DIR, "data", "preprocessed_frames")
+DEFAULT_OUT_IMG = os.path.join(BASE_DIR, "data", "detected_images")
+DEFAULT_OUT_CSV = os.path.join(BASE_DIR, "data", "detected_csvs")
 
 
-def run_detection(model_path=None, conf=0.1, iou=0.5):
-    """Run YOLO detection over all images in preprocessed_folder."""
+def run_detection(preprocessed_folder=None, output_img_folder=None, output_csv_folder=None, model_path=None, conf=0.1, iou=0.5):
+    """Run YOLO detection over all images in preprocessed_folder and write outputs to output_* folders."""
+    preprocessed_folder = preprocessed_folder or DEFAULT_PREPRO
+    output_img_folder = output_img_folder or DEFAULT_OUT_IMG
+    output_csv_folder = output_csv_folder or DEFAULT_OUT_CSV
+
     os.makedirs(output_img_folder, exist_ok=True)
     os.makedirs(output_csv_folder, exist_ok=True)
 

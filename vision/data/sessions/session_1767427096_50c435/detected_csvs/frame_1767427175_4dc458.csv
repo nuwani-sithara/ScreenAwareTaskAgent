@@ -1,0 +1,4 @@
+class,class_name,confidence,x_min,y_min,x_max,y_max
+1,login_form,0.9461297988891602,223,54,462,350
+3,success_alert,0.37749773263931274,245,286,440,323
+1,login_form,0.12664513289928436,454,0,639,348
