@@ -11,8 +11,11 @@ import os
 import cv2
 import argparse
 
-RAW_DIR = "data/raw_frames"
-OUT_DIR = "data/preprocessed_frames"
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+RAW_DIR = os.path.join(BASE_DIR, "data", "raw_frames")
+OUT_DIR = os.path.join(BASE_DIR, "data", "preprocessed_frames")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 def preprocess_all(crop=None, resize=None, ext_in=(".jpg", ".png")):
