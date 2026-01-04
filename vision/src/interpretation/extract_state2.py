@@ -23,6 +23,137 @@ if _easyocr_available:
         _easyocr_reader = None
         _easyocr_available = False
 
+# --- OCR helper utilities ---
+
+def expand_bbox(x_min, y_min, x_max, y_max, img_w, img_h, pad=0.12):
+    pad_w = int((x_max - x_min) * pad)
+    pad_h = int((y_max - y_min) * pad)
+    nx_min = max(0, x_min - pad_w)
+    ny_min = max(0, y_min - pad_h)
+    nx_max = min(img_w, x_max + pad_w)
+    ny_max = min(img_h, y_max + pad_h)
+    return nx_min, ny_min, nx_max, ny_max
+
+
+def deskew(img):
+    # expects a binary or grayscale image
+    try:
+        coords = np.column_stack(np.where(img > 0))
+        if coords.shape[0] < 10:
+            return img
+        angle = cv2.minAreaRect(coords)[-1]
+        if angle < -45:
+            angle = -(90 + angle)
+        else:
+            angle = -angle
+        (h, w) = img.shape[:2]
+        M = cv2.getRotationMatrix2D((w // 2, h // 2), angle, 1.0)
+        return cv2.warpAffine(img, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    except Exception:
+        return img
+
+
+def unsharp_mask(img):
+    try:
+        blur = cv2.GaussianBlur(img, (0, 0), sigmaX=1.0)
+        return cv2.addWeighted(img, 1.5, blur, -0.5, 0)
+    except Exception:
+        return img
+
+
+def preprocess_for_ocr(img):
+    """Return a dict of preprocessing variants to try for OCR."""
+    if img is None or img.size == 0:
+        return {}
+
+    # ensure color -> gray
+    if len(img.shape) == 3:
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    else:
+        gray = img.copy()
+
+    # upscale small crops
+    h0, w0 = gray.shape[:2]
+    scale = 2 if max(h0, w0) < 300 else 1
+    if scale != 1:
+        gray = cv2.resize(gray, (int(w0 * scale), int(h0 * scale)), interpolation=cv2.INTER_CUBIC)
+
+    # denoise + contrast
+    gray = cv2.bilateralFilter(gray, d=9, sigmaColor=75, sigmaSpace=75)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    gray = clahe.apply(gray)
+
+    # sharpen
+    gray = unsharp_mask(gray)
+
+    variants = {"orig": gray}
+
+    # adaptive threshold
+    try:
+        adaptive = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    except Exception:
+        _, adaptive = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    variants["adaptive"] = adaptive
+
+    # otsu
+    _, otsu = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    variants["otsu"] = otsu
+
+    # deskew variants (on binary)
+    try:
+        variants["deskewed"] = deskew(otsu)
+    except Exception:
+        pass
+
+    return variants
+
+
+def run_tesseract_variants(proc_variants, class_name):
+    """Run Tesseract over multiple preprocessed variants and configs; return best text and avg confidence."""
+    configs = ["--oem 3 --psm 6", "--oem 3 --psm 7", "--oem 3 --psm 11"]
+
+    # class-specific whitelist (optional)
+    whitelist_map = {
+        "login_button": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+        "title_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:.-_ ",
+        "username_input": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@._- "
+    }
+
+    best_text = ""
+    best_conf = -1.0
+
+    for name, proc in proc_variants.items():
+        for cfg in configs:
+            cfg_str = cfg
+            wl = whitelist_map.get(class_name)
+            if wl:
+                cfg_str = cfg_str + f" -c tessedit_char_whitelist={wl}"
+
+            try:
+                data = pytesseract.image_to_data(proc, config=cfg_str, output_type=Output.DICT)
+            except Exception:
+                continue
+
+            words = [w for w in data.get('text', []) if str(w).strip()]
+            text = " ".join(words).strip()
+
+            confs = []
+            for c in data.get('conf', []):
+                try:
+                    ci = float(c)
+                    if ci >= 0:
+                        confs.append(ci)
+                except Exception:
+                    continue
+
+            avg_conf = float(np.mean(confs)) if confs else -1.0
+
+            if avg_conf > best_conf or (avg_conf == best_conf and len(text) > len(best_text)):
+                best_conf = avg_conf
+                best_text = text
+
+    return best_text, (best_conf if best_conf >= 0 else None)
+
 # Optional if Tesseract not in PATH
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
@@ -76,98 +207,46 @@ def run_extraction(csv_dir=None, frame_dir=None, output_json=None):
                     # skip if crop is empty
                     if cropped is None or cropped.size == 0:
                         extracted_text = ""
+                        ocr_confidence = None
                     else:
-                        def preprocess_for_ocr(img):
-                            if img is None or img.size == 0:
-                                return img
+                        # expand bbox to avoid clipped text
+                        img_h, img_w = image.shape[:2]
+                        nx_min, ny_min, nx_max, ny_max = expand_bbox(x_min, y_min, x_max, y_max, img_w, img_h, pad=0.12)
+                        cropped_exp = image[ny_min:ny_max, nx_min:nx_max]
 
-                            # ensure grayscale
-                            if len(img.shape) == 3:
-                                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                            else:
-                                gray = img
+                        # get preprocessing variants
+                        proc_variants = preprocess_for_ocr(cropped_exp)
 
-                            h, w = gray.shape[:2]
-                            # upscale small crops for better OCR
-                            scale = 2 if max(h, w) < 300 else 1
-                            if scale != 1:
-                                gray = cv2.resize(gray, (w * scale, h * scale), interpolation=cv2.INTER_LINEAR)
-
-                            # denoise while keeping edges
-                            gray = cv2.bilateralFilter(gray, d=9, sigmaColor=75, sigmaSpace=75)
-
-                            # improve contrast
-                            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-                            gray = clahe.apply(gray)
-
-                            # adaptive threshold to get clean text
-                            try:
-                                gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                                             cv2.THRESH_BINARY, 11, 2)
-                            except Exception:
-                                # fallback to Otsu
-                                _, gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-                            return gray
-
-                        proc = preprocess_for_ocr(cropped)
-
-                        # try a few tesseract configs and pick the best by avg confidence
-                        configs = ["--oem 3 --psm 6", "--oem 3 --psm 7", "--oem 3 --psm 11"]
-                        best_text = ""
-                        best_conf = -1.0
-
-                        for cfg in configs:
-                            try:
-                                data = pytesseract.image_to_data(proc, config=cfg, output_type=Output.DICT)
-                            except Exception:
-                                continue
-
-                            # join non-empty words preserving spaces
-                            words = [w for w in data.get('text', []) if str(w).strip()]
-                            text = " ".join(words).strip()
-
-                            confs = []
-                            for c in data.get('conf', []):
-                                try:
-                                    ci = float(c)
-                                    if ci >= 0:
-                                        confs.append(ci)
-                                except Exception:
-                                    continue
-
-                            avg_conf = float(np.mean(confs)) if confs else -1.0
-
-                            # prefer higher avg_conf, tie-breaker by longer text
-                            score = (avg_conf, len(text))
-                            if avg_conf > best_conf or (avg_conf == best_conf and len(text) > len(best_text)):
-                                best_conf = avg_conf
-                                best_text = text
+                        # run Tesseract variants
+                        best_text, best_conf = run_tesseract_variants(proc_variants, class_name)
 
                         extracted_text = best_text or ""
-                        ocr_confidence = float(best_conf) if best_conf >= 0 else None
+                        ocr_confidence = float(best_conf) if best_conf is not None else None
 
                         # fallback to EasyOCR if available and confidence low
                         if (ocr_confidence is None or ocr_confidence < 50) and _easyocr_available and _easyocr_reader is not None:
                             try:
-                                e_res = _easyocr_reader.readtext(proc)
-                                # e_res: list of (bbox, text, conf)
+                                # use the 'orig' variant if available
+                                easy_img = proc_variants.get('orig') if proc_variants.get('orig') is not None else cropped_exp
+                                e_res = _easyocr_reader.readtext(easy_img)
                                 e_texts = [t[1].strip() for t in e_res if t[1].strip()]
                                 e_confs = [float(t[2]) for t in e_res if isinstance(t[2], (int, float))]
                                 if e_texts:
                                     e_text = " ".join(e_texts).strip()
                                     e_avg = float(np.mean(e_confs)) if e_confs else None
-                                    # use EasyOCR result if it seems better
                                     if e_avg is None or (ocr_confidence is None) or (e_avg > ocr_confidence):
                                         extracted_text = e_text
                                         ocr_confidence = e_avg
                             except Exception:
                                 pass
+                else:
+                    extracted_text = ""
+                    ocr_confidence = None
 
-                        # ensure string
-                        extracted_text = extracted_text or ""
-                        if 'ocr_confidence' not in locals():
-                            ocr_confidence = None
+                # ensure string
+                extracted_text = extracted_text or ""
+                if ocr_confidence is None:
+                    ocr_confidence = None
 
                 frame_entry["elements"][class_name] = {
                     "bbox": {

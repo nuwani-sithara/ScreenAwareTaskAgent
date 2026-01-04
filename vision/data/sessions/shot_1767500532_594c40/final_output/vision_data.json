@@ -1,0 +1,75 @@
+{
+    "vision_data": [
+        {
+            "frame_id": 1,
+            "elements": {
+                "unsuccess_alert": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 281,
+                        "x_max": 423,
+                        "y_max": 317
+                    },
+                    "confidence": 0.9858662486076355,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 199,
+                        "y_min": 39,
+                        "x_max": 450,
+                        "y_max": 340
+                    },
+                    "confidence": 0.9821532368659973,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 292,
+                        "y_min": 80,
+                        "x_max": 356,
+                        "y_max": 108
+                    },
+                    "confidence": 0.9782171249389648,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 226,
+                        "y_min": 136,
+                        "x_max": 423,
+                        "y_max": 172
+                    },
+                    "confidence": 0.970421314239502,
+                    "text": "iene nis ee i i Oe i ty ie 3 BY",
+                    "ocr_confidence": 21.181818181818183
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 238,
+                        "x_max": 423,
+                        "y_max": 272
+                    },
+                    "confidence": 0.9670357704162598,
+                    "text": "ESSOAoSBOGMOTDS Geen",
+                    "ocr_confidence": 9.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 228,
+                        "y_min": 195,
+                        "x_max": 423,
+                        "y_max": 231
+                    },
+                    "confidence": 0.9331400394439697,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        }
+    ]
+}
