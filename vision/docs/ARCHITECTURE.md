@@ -35,6 +35,7 @@ Single-shot: `/vision/capture?run_pipeline=true` creates a temporary shot sessio
   - Adaptive/Otsu threshold variations and deskew
   - Multiple Tesseract `--psm` variants + class-specific character whitelist
   - EasyOCR fallback when Tesseract confidence is low
+  - PaddleOCR fallback (optional) for improved robustness on difficult crops; requires installing `paddleocr` and a compatible `paddlepaddle` build (CPU/GPU) per the PaddlePaddle installation guide
 - **Change detection**: small grayscale images (max dim ~320), absdiff + binary threshold, compute fraction of changed pixels. Default: 1% threshold.
 
 ## Endpoints & expected responses

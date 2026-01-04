@@ -23,6 +23,23 @@ if _easyocr_available:
         _easyocr_reader = None
         _easyocr_available = False
 
+# optional PaddleOCR fallback
+try:
+    from paddleocr import PaddleOCR
+    _paddleocr_available = True
+except Exception:
+    PaddleOCR = None
+    _paddleocr_available = False
+
+# create one PaddleOCR reader (CPU) if available
+_paddleocr_reader = None
+if _paddleocr_available:
+    try:
+        _paddleocr_reader = PaddleOCR(use_angle_cls=True, lang='en')
+    except Exception:
+        _paddleocr_reader = None
+        _paddleocr_available = False
+
 # --- OCR helper utilities ---
 
 def expand_bbox(x_min, y_min, x_max, y_max, img_w, img_h, pad=0.12):
@@ -239,15 +256,46 @@ def run_extraction(csv_dir=None, frame_dir=None, output_json=None):
                                         ocr_confidence = e_avg
                             except Exception:
                                 pass
-                else:
-                    extracted_text = ""
-                    ocr_confidence = None
 
-                # ensure string
-                extracted_text = extracted_text or ""
-                if ocr_confidence is None:
-                    ocr_confidence = None
+                    # PaddleOCR fallback if still low confidence and available
+                    if (ocr_confidence is None or ocr_confidence < 50) and _paddleocr_available and _paddleocr_reader is not None:
+                        try:
+                            # PaddleOCR returns list of lines: [ [[box coords]], (text, conf) ]
+                            paddle_res = _paddleocr_reader.ocr(cropped_exp, cls=True)  # cls=True for angle correction
+                            p_texts = []
+                            p_confs = []
+                            for line in paddle_res:
+                                if len(line) >= 2:
+                                    # some versions return [[box], (text, conf)] or [[box, ...], [(text, conf)]]; be resilient
+                                    candidate = None
+                                    confv = None
+                                    # try to extract text/conf robustly
+                                    if isinstance(line[1], tuple) or isinstance(line[1], list):
+                                        candidate = line[1][0]
+                                        try:
+                                            confv = float(line[1][1])
+                                        except Exception:
+                                            confv = None
+                                    else:
+                                        # some versions: [[box], text, conf]
+                                        try:
+                                            candidate = line[1]
+                                        except Exception:
+                                            candidate = None
+                                    if candidate and str(candidate).strip():
+                                        p_texts.append(str(candidate).strip())
+                                    if confv is not None:
+                                        p_confs.append(confv)
+                            if p_texts:
+                                p_text = " ".join(p_texts).strip()
+                                p_avg = float(np.mean(p_confs)) if p_confs else None
+                                if p_avg is None or (ocr_confidence is None) or (p_avg > ocr_confidence):
+                                    extracted_text = p_text
+                                    ocr_confidence = p_avg
+                        except Exception:
+                            pass
 
+                # Build element entry for this class
                 frame_entry["elements"][class_name] = {
                     "bbox": {
                         "x_min": x_min,

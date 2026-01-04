@@ -38,3 +38,7 @@ mss==9.0.1
 
 # For typing hints (optional)
 typing_extensions==4.10.0
+
+# Optional OCR fallback (install paddleocr and its dependencies per your platform)
+# NOTE: PaddleOCR requires a compatible paddlepaddle installation. See https://www.paddlepaddle.org for install instructions
+paddleocr==2.6.1
