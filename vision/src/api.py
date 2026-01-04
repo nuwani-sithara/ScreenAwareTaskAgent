@@ -99,7 +99,7 @@ def webcam_capture_loop(camera_index=0, save_dir=None, save_interval=1.0):
 
                 # Save frame
                 cv2.imwrite(filepath, frame)
-                logging.info(f"💾 Frame saved: {filepath}")
+                logging.info(f"Frame saved: {filepath}")
 
                 last_saved = now
                 try:
@@ -223,31 +223,69 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 RAW_FRAMES_DIR = os.path.join(BASE_DIR, "data", "raw_frames")
 
 @app.post("/vision/capture")
-def capture_once():
+def capture_once(run_pipeline: bool = False):
+    """Save the current frame. If no session is active, run a single-shot pipeline and return JSON.
+
+    - If a session is active and run_pipeline is False: save to session's raw_dir and return saved_frame metadata.
+    - If no session is active (single-shot), create a temporary shot session, run preprocess->detect->extract and return the final JSON.
+    """
     global latest_frame, latest_result, current_session
 
     if latest_frame is None:
         return {"status": "no_frame_available"}
 
-    # decide where to save: current session raw dir if present, otherwise a default raw_frames folder
-    if current_session and current_session.get("raw_dir"):
+    # If inside a session and no explicit run_pipeline requested, just save to that session
+    if current_session and not run_pipeline:
         save_dir = current_session.get("raw_dir")
-    else:
-        save_dir = os.path.join(BASE_DIR, "data", "raw_frames")
+        os.makedirs(save_dir, exist_ok=True)
 
-    os.makedirs(save_dir, exist_ok=True)
+        filename = f"frame_{int(time.time())}_{uuid.uuid4().hex[:6]}.jpg"
+        filepath = os.path.join(save_dir, filename)
+        cv2.imwrite(filepath, latest_frame)
 
-    # Unique filename
+        logging.info(f"Frame saved to session: {filepath}")
+        response = latest_result.copy()
+        response["saved_frame"] = filepath
+        return response
+
+    # Single-shot flow (no active session) OR client requested run_pipeline=True
+    shot_id = f"shot_{int(time.time())}_{uuid.uuid4().hex[:6]}"
+    session_root = os.path.join(SESSIONS_DIR, shot_id)
+    raw_dir = os.path.join(session_root, "raw_frames")
+    preproc_dir = os.path.join(session_root, "preprocessed_frames")
+    detected_images_dir = os.path.join(session_root, "detected_images")
+    detected_csvs_dir = os.path.join(session_root, "detected_csvs")
+    final_output_dir = os.path.join(session_root, "final_output")
+
+    os.makedirs(raw_dir, exist_ok=True)
+    os.makedirs(preproc_dir, exist_ok=True)
+    os.makedirs(detected_images_dir, exist_ok=True)
+    os.makedirs(detected_csvs_dir, exist_ok=True)
+    os.makedirs(final_output_dir, exist_ok=True)
+
+    # Save the captured frame into the shot raw dir
     filename = f"frame_{int(time.time())}_{uuid.uuid4().hex[:6]}.jpg"
-    filepath = os.path.join(save_dir, filename)
-
-    # Save frame
+    filepath = os.path.join(raw_dir, filename)
     cv2.imwrite(filepath, latest_frame)
+    logging.info(f"Single-shot frame saved: {filepath}")
 
-    logging.info(f"💾 Frame saved: {filepath}")
+    try:
+        # run preprocessing -> detection -> extraction for this single frame
+        logging.info("Starting single-shot preprocessing...")
+        preprocess_all(raw_dir=raw_dir, out_dir=preproc_dir)
 
-    # Attach path to response
-    response = latest_result.copy()
-    response["saved_frame"] = filepath
+        logging.info("Running single-shot detection...")
+        run_detection(preprocessed_folder=preproc_dir, output_img_folder=detected_images_dir, output_csv_folder=detected_csvs_dir)
 
-    return response
+        logging.info("Running single-shot extraction...")
+        out_path = os.path.join(final_output_dir, "vision_data.json")
+        out_path = run_extraction(csv_dir=detected_csvs_dir, frame_dir=raw_dir, output_json=out_path)
+
+        with open(out_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        return {"status": "completed", "vision_data": data, "session_id": shot_id}
+
+    except Exception as e:
+        logging.exception("Single-shot pipeline failed")
+        return {"status": "error", "detail": str(e)}

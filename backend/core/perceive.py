@@ -33,12 +33,28 @@ def stop_and_get_vision(session_id=None, timeout=120):
         logging.error("Vision stop request failed: %s", e)
         return {"error": "vision_unavailable", "detail": str(e)}
 
-def capture_snapshot(timeout=5):
-    """Request a single saved frame (doesn't run full pipeline)."""
+def capture_snapshot(timeout=180, run_pipeline=True):
+    """
+    Request a single saved frame and run full pipeline on it. Returns the parsed vision JSON on success.
+
+    By default this runs the full pipeline (run_pipeline=True) and uses a generous timeout.
+    """
     try:
-        r = requests.post(f"{VISION_BASE_URL}/vision/capture", timeout=timeout)
+        params = {"run_pipeline": "true"} if run_pipeline else {}
+        r = requests.post(f"{VISION_BASE_URL}/vision/capture", params=params, timeout=timeout)
         r.raise_for_status()
-        return r.json()
+        resp = r.json()
+
+        # If pipeline completed, return the vision data
+        if isinstance(resp, dict) and resp.get("status") == "completed" and "vision_data" in resp:
+            return resp.get("vision_data")
+
+        # If it's only a saved frame metadata, return it
+        if isinstance(resp, dict) and "saved_frame" in resp:
+            return resp
+
+        return resp
+
     except requests.RequestException as e:
         logging.error("Snapshot capture failed: %s", e)
         return {"error": "capture_failed", "detail": str(e)}
