@@ -1,4 +1,82 @@
-def perceive():
-    print("👁️ Perceiving screen...")
-    # Mock data (later: replace with camera OCR result)
-    return {"screen_text": "Login Page Detected"}
+import requests
+import logging
+import time
+
+VISION_BASE_URL = "http://localhost:8001"  # Vision FastAPI service
+
+def start_capture(timeout=5):
+    try:
+        r = requests.post(f"{VISION_BASE_URL}/vision/start", timeout=timeout)
+        r.raise_for_status()
+        return r.json()
+    except requests.RequestException as e:
+        logging.error("Failed to start vision capture: %s", e)
+        return None
+
+def stop_and_get_vision(session_id=None, timeout=120):
+    """
+    Send /vision/stop which stops capture and runs preprocessing->detection->extraction.
+    This can take time (model + OCR), so use a generous timeout (e.g. 120s).
+    Optionally pass the session_id as a query parameter to ensure we stop the correct session.
+    """
+    try:
+        params = {"session_id": session_id} if session_id else {}
+        r = requests.post(f"{VISION_BASE_URL}/vision/stop", params=params, timeout=timeout)
+        r.raise_for_status()
+        data = r.json()
+        if data.get("status") == "completed":
+            return data.get("vision_data")
+        else:
+            logging.error("Vision stop returned non-completed status: %s", data.get("status"))
+            return {"error": "not_completed", "detail": data}
+    except requests.RequestException as e:
+        logging.error("Vision stop request failed: %s", e)
+        return {"error": "vision_unavailable", "detail": str(e)}
+
+def capture_snapshot(timeout=180, run_pipeline=True):
+    """
+    Request a single saved frame and run full pipeline on it. Returns the parsed vision JSON on success.
+
+    By default this runs the full pipeline (run_pipeline=True) and uses a generous timeout.
+    """
+    try:
+        params = {"run_pipeline": "true"} if run_pipeline else {}
+        r = requests.post(f"{VISION_BASE_URL}/vision/capture", params=params, timeout=timeout)
+        r.raise_for_status()
+        resp = r.json()
+
+        # If pipeline completed, return the vision data
+        if isinstance(resp, dict) and resp.get("status") == "completed" and "vision_data" in resp:
+            return resp.get("vision_data")
+
+        # If it's only a saved frame metadata, return it
+        if isinstance(resp, dict) and "saved_frame" in resp:
+            return resp
+
+        return resp
+
+    except requests.RequestException as e:
+        logging.error("Snapshot capture failed: %s", e)
+        return {"error": "capture_failed", "detail": str(e)}
+
+def perceive(wait_seconds=3):
+    """
+    High-level convenience: start capture (if not already), wait `wait_seconds`,
+    then stop and fetch the final JSON.
+    """
+    logging.info("Requesting vision perception (start -> wait -> stop)...")
+
+    start_resp = start_capture()
+    session_id = None
+    if start_resp and isinstance(start_resp, dict):
+        session_id = start_resp.get("session_id")
+
+    # allow camera to gather a few frames
+    time.sleep(wait_seconds)
+
+    vision_data = stop_and_get_vision(session_id=session_id, timeout=180)  # increase timeout if dataset/model is large
+    if isinstance(vision_data, dict) and vision_data.get("error"):
+        logging.error("Perception error: %s", vision_data)
+    else:
+        logging.info("Perception data received")
+    return vision_data

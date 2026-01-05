@@ -1,0 +1,13 @@
+# Dataset configuration for UI element detection
+path: ../../datasets/UIElements  # change this to your dataset path
+train: images/train
+val: images/val
+
+# Classes (you can adjust based on dataset)
+names:
+  0: button
+  1: icon
+  2: textbox
+  3: label
+  4: menu
+  5: dialog

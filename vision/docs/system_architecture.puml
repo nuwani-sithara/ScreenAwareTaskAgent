@@ -1,0 +1,45 @@
+@startuml
+!theme plain
+skinparam componentStyle uml2
+
+title System Architecture — Vision + Agentic Core
+
+actor "User / Tester" as User
+
+node "Agentic Host" {
+  [Agentic Core\nbackend service] as Agentic
+}
+
+node "Vision Host" {
+  component "Vision Service (FastAPI)" as VisionAPI
+  component "YOLO Model (weights)" as YOLOModel
+  component "OCR Engines" as OCRs
+  database "Local FS / Sessions" as Storage
+}
+
+node "Optional GPU Node" as GPU {
+  [GPU for YOLO inference] as GPUDevice
+}
+
+User -> Agentic : trigger task (e.g., perceive)
+Agentic -> VisionAPI : HTTP POST /vision/start or /vision/capture
+VisionAPI -> YOLOModel : read model (inference)
+VisionAPI -> OCRs : call Tesseract / EasyOCR / PaddleOCR
+VisionAPI -> Storage : read/write session files (raw_frames, outputs)
+VisionAPI -> Agentic : return final JSON (vision_data)
+
+VisionAPI --> GPUDevice : (optional) accelerate detection
+
+note right of VisionAPI
+- Runs on a host (container or VM)
+- Exposes ports (e.g., 8001)
+- Can be horizontally scaled for load
+end note
+
+note left of OCRs
+- Tesseract (system binary)
+- EasyOCR (python)
+- PaddleOCR (python; requires paddlepaddle install)
+end note
+
+@enduml

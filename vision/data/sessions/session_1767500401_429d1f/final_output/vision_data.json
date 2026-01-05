@@ -1,0 +1,430 @@
+{
+    "vision_data": [
+        {
+            "frame_id": 1,
+            "elements": {
+                "username_input": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 137,
+                        "x_max": 423,
+                        "y_max": 171
+                    },
+                    "confidence": 0.9850447773933411,
+                    "text": "a",
+                    "ocr_confidence": 45.0
+                },
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 228,
+                        "y_min": 281,
+                        "x_max": 423,
+                        "y_max": 317
+                    },
+                    "confidence": 0.9791488647460938,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 201,
+                        "y_min": 39,
+                        "x_max": 451,
+                        "y_max": 340
+                    },
+                    "confidence": 0.9768547415733337,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 292,
+                        "y_min": 81,
+                        "x_max": 356,
+                        "y_max": 108
+                    },
+                    "confidence": 0.9464792609214783,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 228,
+                        "y_min": 239,
+                        "x_max": 423,
+                        "y_max": 272
+                    },
+                    "confidence": 0.8101646900177002,
+                    "text": "Nast i we ra Pe Ney I LOGIN i Fs",
+                    "ocr_confidence": 31.9
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 228,
+                        "y_min": 197,
+                        "x_max": 423,
+                        "y_max": 230
+                    },
+                    "confidence": 0.7414618134498596,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 2,
+            "elements": {
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 281,
+                        "x_max": 424,
+                        "y_max": 318
+                    },
+                    "confidence": 0.9898238778114319,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 292,
+                        "y_min": 80,
+                        "x_max": 356,
+                        "y_max": 108
+                    },
+                    "confidence": 0.9824157953262329,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 200,
+                        "y_min": 39,
+                        "x_max": 450,
+                        "y_max": 341
+                    },
+                    "confidence": 0.9791088104248047,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 226,
+                        "y_min": 136,
+                        "x_max": 423,
+                        "y_max": 172
+                    },
+                    "confidence": 0.9665027856826782,
+                    "text": "lial Tainan a ee ase Ry a a ia i ae a i iN 3. 3",
+                    "ocr_confidence": 19.1875
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 239,
+                        "x_max": 423,
+                        "y_max": 272
+                    },
+                    "confidence": 0.9649386405944824,
+                    "text": "PF",
+                    "ocr_confidence": 50.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 196,
+                        "x_max": 423,
+                        "y_max": 231
+                    },
+                    "confidence": 0.9107584357261658,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 3,
+            "elements": {
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 280,
+                        "x_max": 423,
+                        "y_max": 317
+                    },
+                    "confidence": 0.9891179203987122,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 292,
+                        "y_min": 80,
+                        "x_max": 356,
+                        "y_max": 108
+                    },
+                    "confidence": 0.9839770197868347,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 199,
+                        "y_min": 39,
+                        "x_max": 450,
+                        "y_max": 340
+                    },
+                    "confidence": 0.9832291007041931,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 226,
+                        "y_min": 136,
+                        "x_max": 423,
+                        "y_max": 172
+                    },
+                    "confidence": 0.9703187346458435,
+                    "text": "vu slemeiceielmeeememermmemmmmersiantiadied i sakes ae 5 aa ie of",
+                    "ocr_confidence": 23.11111111111111
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 238,
+                        "x_max": 423,
+                        "y_max": 272
+                    },
+                    "confidence": 0.969058096408844,
+                    "text": "amen epee ae ROSE",
+                    "ocr_confidence": 17.5
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 194,
+                        "x_max": 423,
+                        "y_max": 231
+                    },
+                    "confidence": 0.9384680390357971,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 4,
+            "elements": {
+                "unsuccess_alert": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 281,
+                        "x_max": 423,
+                        "y_max": 318
+                    },
+                    "confidence": 0.9902051687240601,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 292,
+                        "y_min": 80,
+                        "x_max": 356,
+                        "y_max": 108
+                    },
+                    "confidence": 0.9838054180145264,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 200,
+                        "y_min": 39,
+                        "x_max": 450,
+                        "y_max": 341
+                    },
+                    "confidence": 0.9801788926124573,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 225,
+                        "y_min": 136,
+                        "x_max": 423,
+                        "y_max": 173
+                    },
+                    "confidence": 0.9775171279907227,
+                    "text": "idle a Ee f",
+                    "ocr_confidence": 4.25
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 239,
+                        "x_max": 423,
+                        "y_max": 272
+                    },
+                    "confidence": 0.9632535576820374,
+                    "text": "hy",
+                    "ocr_confidence": 30.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 196,
+                        "x_max": 423,
+                        "y_max": 231
+                    },
+                    "confidence": 0.9188146591186523,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 5,
+            "elements": {
+                "unsuccess_alert": {
+                    "bbox": {
+                        "x_min": 226,
+                        "y_min": 281,
+                        "x_max": 423,
+                        "y_max": 317
+                    },
+                    "confidence": 0.9971158504486084,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 201,
+                        "y_min": 38,
+                        "x_max": 450,
+                        "y_max": 341
+                    },
+                    "confidence": 0.9935826659202576,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 225,
+                        "y_min": 238,
+                        "x_max": 423,
+                        "y_max": 273
+                    },
+                    "confidence": 0.844912588596344,
+                    "text": "i yale i wy bn ma a Le ae Loon",
+                    "ocr_confidence": 28.8
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 137,
+                        "x_max": 424,
+                        "y_max": 172
+                    },
+                    "confidence": 0.5655674338340759,
+                    "text": "asi tit fk Sf ._ATETETEneaeF a",
+                    "ocr_confidence": 26.166666666666668
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 197,
+                        "x_max": 424,
+                        "y_max": 230
+                    },
+                    "confidence": 0.302659273147583,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 290,
+                        "y_min": 76,
+                        "x_max": 373,
+                        "y_max": 117
+                    },
+                    "confidence": 0.1500999927520752,
+                    "text": "pee",
+                    "ocr_confidence": 52.0
+                }
+            }
+        },
+        {
+            "frame_id": 6,
+            "elements": {
+                "unsuccess_alert": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 281,
+                        "x_max": 423,
+                        "y_max": 317
+                    },
+                    "confidence": 0.988342821598053,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 292,
+                        "y_min": 80,
+                        "x_max": 356,
+                        "y_max": 108
+                    },
+                    "confidence": 0.9859306812286377,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 200,
+                        "y_min": 39,
+                        "x_max": 450,
+                        "y_max": 340
+                    },
+                    "confidence": 0.9796318411827087,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 226,
+                        "y_min": 136,
+                        "x_max": 423,
+                        "y_max": 172
+                    },
+                    "confidence": 0.9724111557006836,
+                    "text": "een coe",
+                    "ocr_confidence": 22.0
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 227,
+                        "y_min": 238,
+                        "x_max": 423,
+                        "y_max": 272
+                    },
+                    "confidence": 0.9698607921600342,
+                    "text": "Foe",
+                    "ocr_confidence": 21.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 228,
+                        "y_min": 196,
+                        "x_max": 423,
+                        "y_max": 231
+                    },
+                    "confidence": 0.9403289556503296,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        }
+    ]
+}

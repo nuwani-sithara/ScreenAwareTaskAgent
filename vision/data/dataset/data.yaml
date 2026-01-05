@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 5
+names: ['best_score_box', 'board', 'button', 'score_box', 'tile']
+
+roboflow:
+  workspace: researchproject-khu8g
+  project: 2048_phase1_tiles
+  version: 3
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/researchproject-khu8g/2048_phase1_tiles/dataset/3

@@ -1,0 +1,691 @@
+{
+    "vision_data": [
+        {
+            "frame_id": 1,
+            "elements": {
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 73,
+                        "x_max": 463,
+                        "y_max": 334
+                    },
+                    "confidence": 0.9875396490097046,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 263,
+                        "x_max": 438,
+                        "y_max": 296
+                    },
+                    "confidence": 0.97137850522995,
+                    "text": "LoGiN",
+                    "ocr_confidence": 0.3625833648107597
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 165,
+                        "x_max": 437,
+                        "y_max": 199
+                    },
+                    "confidence": 0.9391342401504517,
+                    "text": "Entor U IInam",
+                    "ocr_confidence": 0.03562180680382753
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 310,
+                        "y_min": 112,
+                        "x_max": 371,
+                        "y_max": 137
+                    },
+                    "confidence": 0.9302433729171753,
+                    "text": "print",
+                    "ocr_confidence": 21.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 221,
+                        "x_max": 438,
+                        "y_max": 254
+                    },
+                    "confidence": 0.6092468500137329,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 2,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 263,
+                        "x_max": 438,
+                        "y_max": 296
+                    },
+                    "confidence": 0.9968794584274292,
+                    "text": "[046",
+                    "ocr_confidence": 0.068348228931427
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 72,
+                        "x_max": 463,
+                        "y_max": 334
+                    },
+                    "confidence": 0.9916368126869202,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 165,
+                        "x_max": 437,
+                        "y_max": 199
+                    },
+                    "confidence": 0.9751821756362915,
+                    "text": "Eee",
+                    "ocr_confidence": 12.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 221,
+                        "x_max": 439,
+                        "y_max": 255
+                    },
+                    "confidence": 0.9680911898612976,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 111,
+                        "x_max": 371,
+                        "y_max": 137
+                    },
+                    "confidence": 0.9607508778572083,
+                    "text": "Izn",
+                    "ocr_confidence": 0.07987782603495079
+                }
+            }
+        },
+        {
+            "frame_id": 3,
+            "elements": {
+                "login_form": {
+                    "bbox": {
+                        "x_min": 454,
+                        "y_min": 1,
+                        "x_max": 639,
+                        "y_max": 346
+                    },
+                    "confidence": 0.10963127762079239,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 4,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 263,
+                        "x_max": 438,
+                        "y_max": 296
+                    },
+                    "confidence": 0.9970632195472717,
+                    "text": "LOGIN",
+                    "ocr_confidence": 3.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 72,
+                        "x_max": 463,
+                        "y_max": 334
+                    },
+                    "confidence": 0.9894380569458008,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 165,
+                        "x_max": 437,
+                        "y_max": 199
+                    },
+                    "confidence": 0.9747492074966431,
+                    "text": "eS 3",
+                    "ocr_confidence": 43.0
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 111,
+                        "x_max": 371,
+                        "y_max": 136
+                    },
+                    "confidence": 0.9721562266349792,
+                    "text": "I@",
+                    "ocr_confidence": 0.08174712580521051
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 221,
+                        "x_max": 438,
+                        "y_max": 255
+                    },
+                    "confidence": 0.9673430919647217,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 5,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 262,
+                        "x_max": 438,
+                        "y_max": 296
+                    },
+                    "confidence": 0.9955441355705261,
+                    "text": "tLoow",
+                    "ocr_confidence": 34.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 72,
+                        "x_max": 463,
+                        "y_max": 334
+                    },
+                    "confidence": 0.9919359683990479,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 111,
+                        "x_max": 371,
+                        "y_max": 137
+                    },
+                    "confidence": 0.9811792969703674,
+                    "text": "Login",
+                    "ocr_confidence": 70.0
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 164,
+                        "x_max": 439,
+                        "y_max": 199
+                    },
+                    "confidence": 0.9780043959617615,
+                    "text": "Firter uermame",
+                    "ocr_confidence": 7.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 227,
+                        "x_max": 439,
+                        "y_max": 256
+                    },
+                    "confidence": 0.9586802124977112,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 6,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 262,
+                        "x_max": 438,
+                        "y_max": 296
+                    },
+                    "confidence": 0.9953579306602478,
+                    "text": "Oden",
+                    "ocr_confidence": 2.0
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 222,
+                        "y_min": 72,
+                        "x_max": 463,
+                        "y_max": 333
+                    },
+                    "confidence": 0.9925469756126404,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 111,
+                        "x_max": 371,
+                        "y_max": 137
+                    },
+                    "confidence": 0.9766517281532288,
+                    "text": "4on",
+                    "ocr_confidence": 0.09042383160339194
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 164,
+                        "x_max": 437,
+                        "y_max": 199
+                    },
+                    "confidence": 0.9766452312469482,
+                    "text": "(a ae",
+                    "ocr_confidence": 27.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 221,
+                        "x_max": 439,
+                        "y_max": 255
+                    },
+                    "confidence": 0.9682607054710388,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 7,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 262,
+                        "x_max": 438,
+                        "y_max": 296
+                    },
+                    "confidence": 0.9957795143127441,
+                    "text": "{040",
+                    "ocr_confidence": 0.01896738074719906
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 72,
+                        "x_max": 463,
+                        "y_max": 333
+                    },
+                    "confidence": 0.9927148222923279,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 110,
+                        "x_max": 371,
+                        "y_max": 137
+                    },
+                    "confidence": 0.9865756630897522,
+                    "text": "Lea@",
+                    "ocr_confidence": 0.10765373706817627
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 165,
+                        "x_max": 437,
+                        "y_max": 198
+                    },
+                    "confidence": 0.9737193584442139,
+                    "text": "Sd",
+                    "ocr_confidence": 60.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 220,
+                        "x_max": 438,
+                        "y_max": 255
+                    },
+                    "confidence": 0.962547242641449,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 8,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 246,
+                        "x_max": 438,
+                        "y_max": 278
+                    },
+                    "confidence": 0.9947073459625244,
+                    "text": "Qquv",
+                    "ocr_confidence": 0.1584581434726715
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 243,
+                        "y_min": 148,
+                        "x_max": 436,
+                        "y_max": 170
+                    },
+                    "confidence": 0.9885972142219543,
+                    "text": "f ng ee | elie",
+                    "ocr_confidence": 28.6
+                },
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 288,
+                        "x_max": 438,
+                        "y_max": 324
+                    },
+                    "confidence": 0.9701938033103943,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 62,
+                        "x_max": 462,
+                        "y_max": 349
+                    },
+                    "confidence": 0.9530359506607056,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 209,
+                        "x_max": 438,
+                        "y_max": 239
+                    },
+                    "confidence": 0.919590950012207,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 95,
+                        "x_max": 371,
+                        "y_max": 135
+                    },
+                    "confidence": 0.8286822438240051,
+                    "text": "fog",
+                    "ocr_confidence": 64.0
+                }
+            }
+        },
+        {
+            "frame_id": 9,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 246,
+                        "x_max": 438,
+                        "y_max": 279
+                    },
+                    "confidence": 0.9907354116439819,
+                    "text": "Icy",
+                    "ocr_confidence": 0.06710300659476255
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 53,
+                        "x_max": 463,
+                        "y_max": 351
+                    },
+                    "confidence": 0.9895780682563782,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 148,
+                        "x_max": 437,
+                        "y_max": 181
+                    },
+                    "confidence": 0.9854834079742432,
+                    "text": "nl",
+                    "ocr_confidence": 33.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 204,
+                        "x_max": 439,
+                        "y_max": 238
+                    },
+                    "confidence": 0.9757155179977417,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 94,
+                        "x_max": 371,
+                        "y_max": 120
+                    },
+                    "confidence": 0.9721937775611877,
+                    "text": "Ioan",
+                    "ocr_confidence": 0.029890937730669975
+                },
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 288,
+                        "x_max": 440,
+                        "y_max": 323
+                    },
+                    "confidence": 0.9163092970848083,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 10,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 245,
+                        "x_max": 439,
+                        "y_max": 279
+                    },
+                    "confidence": 0.992584228515625,
+                    "text": "ne LOGes",
+                    "ocr_confidence": 12.5
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 223,
+                        "y_min": 53,
+                        "x_max": 464,
+                        "y_max": 350
+                    },
+                    "confidence": 0.9895554780960083,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 148,
+                        "x_max": 437,
+                        "y_max": 181
+                    },
+                    "confidence": 0.9771955013275146,
+                    "text": "ain reece aR",
+                    "ocr_confidence": 25.0
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 93,
+                        "x_max": 372,
+                        "y_max": 119
+                    },
+                    "confidence": 0.9760376214981079,
+                    "text": "togin",
+                    "ocr_confidence": 54.0
+                },
+                "unsuccess_alert": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 288,
+                        "x_max": 439,
+                        "y_max": 323
+                    },
+                    "confidence": 0.9753691554069519,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 203,
+                        "x_max": 439,
+                        "y_max": 238
+                    },
+                    "confidence": 0.9587680697441101,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 11,
+            "elements": {
+                "login_form": {
+                    "bbox": {
+                        "x_min": 454,
+                        "y_min": 0,
+                        "x_max": 639,
+                        "y_max": 348
+                    },
+                    "confidence": 0.12664513289928436,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 245,
+                        "y_min": 286,
+                        "x_max": 440,
+                        "y_max": 323
+                    },
+                    "confidence": 0.37749773263931274,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        },
+        {
+            "frame_id": 12,
+            "elements": {
+                "login_button": {
+                    "bbox": {
+                        "x_min": 247,
+                        "y_min": 246,
+                        "x_max": 439,
+                        "y_max": 279
+                    },
+                    "confidence": 0.9936473965644836,
+                    "text": "(omv",
+                    "ocr_confidence": 0.13341966271400452
+                },
+                "login_form": {
+                    "bbox": {
+                        "x_min": 219,
+                        "y_min": 54,
+                        "x_max": 464,
+                        "y_max": 348
+                    },
+                    "confidence": 0.9904050827026367,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 148,
+                        "x_max": 437,
+                        "y_max": 181
+                    },
+                    "confidence": 0.9825016856193542,
+                    "text": "eS",
+                    "ocr_confidence": 31.0
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 309,
+                        "y_min": 93,
+                        "x_max": 372,
+                        "y_max": 120
+                    },
+                    "confidence": 0.9752388000488281,
+                    "text": "Login",
+                    "ocr_confidence": 93.0
+                },
+                "unsuccess_alert": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 288,
+                        "x_max": 439,
+                        "y_max": 323
+                    },
+                    "confidence": 0.9731763601303101,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 246,
+                        "y_min": 204,
+                        "x_max": 439,
+                        "y_max": 237
+                    },
+                    "confidence": 0.9710473418235779,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        }
+    ]
+}

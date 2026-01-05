@@ -1,0 +1,44 @@
+# YOLOv8 / Ultralytics
+ultralytics==8.2.103
+
+# Computer Vision
+opencv-python==4.10.0.84
+opencv-contrib-python==4.10.0.84
+
+# Deep Learning (PyTorch)
+torch>=2.1.0
+torchvision>=0.16.0
+
+# Image Processing
+Pillow==10.3.0
+
+# Numerical Computing
+numpy==1.26.4
+
+# Drawing + Annotation
+matplotlib==3.8.4
+
+# File/directory utilities
+tqdm==4.66.2
+
+# Data handling
+pandas==2.2.1
+
+# Roboflow (for uploading/downloading datasets)
+roboflow==1.1.27
+
+# Web requests (for dataset downloads)
+requests==2.31.0
+
+# YAML parsing (for ui_elements.yaml)
+pyyaml==6.0.1
+
+# Screen capturing (if needed for game capture)
+mss==9.0.1
+
+# For typing hints (optional)
+typing_extensions==4.10.0
+
+# Optional OCR fallback (install paddleocr and its dependencies per your platform)
+# NOTE: PaddleOCR requires a compatible paddlepaddle installation. See https://www.paddlepaddle.org for install instructions
+paddleocr==2.6.1

@@ -94,3 +94,9 @@ Desktop.ini
 logs/
 temp/
 tmp/
+
+# =====================================
+# 📁 Project-specific
+# =====================================
+# Add any project-specific files or directories to ignore below
+/runs
