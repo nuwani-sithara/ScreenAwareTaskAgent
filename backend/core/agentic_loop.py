@@ -1,5 +1,6 @@
 import requests
 import logging
+import time
 
 from backend.core.perceive import perceive
 from backend.core.plan import plan
@@ -8,15 +9,17 @@ from backend.core.act import act_with_retry
 VISION_BASE_URL = "http://localhost:8001"
 
 def start_vision():
-    logging.info("▶️ Starting Vision capture loop...")
+    logging.info("Starting Vision capture loop...")
     requests.post(f"{VISION_BASE_URL}/vision/start")
 
 def stop_vision():
-    logging.info("⏹️ Stopping Vision capture loop...")
+    logging.info("Stopping Vision capture loop...")
     requests.post(f"{VISION_BASE_URL}/vision/stop")
 
-def run_cycle():
-    # 1️⃣ Ensure vision is running
+def run_cycle(start_delay: float = 3.0, stop_at_end: bool = True):
+    # 1️⃣ Ensure vision is running (after a short delay)
+    if start_delay and start_delay > 0:
+        time.sleep(start_delay)
     start_vision()
 
     # 2️⃣ Perceive
@@ -37,6 +40,10 @@ def run_cycle():
 
     # 6️⃣ Agent decides to stop vision (example condition)
     if action_plan.get("stop_vision", False):
+        stop_vision()
+
+    # Optionally ensure vision is stopped at the end of the cycle
+    if stop_at_end and not action_plan.get("stop_vision", False):
         stop_vision()
 
     return {
