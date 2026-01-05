@@ -50,6 +50,11 @@ Single-shot: `/vision/capture?run_pipeline=true` creates a temporary shot sessio
 3. Use FastAPI docs: `http://127.0.0.1:8001/docs` for manual testing.
 4. Use backend helper: `from backend.core.perceive import perceive; perceive()` — runs start→wait→stop and returns `vision_data`.
 
+## Diagrams
+- Software architecture (component diagram): `vision/docs/software_architecture.puml`
+- System architecture (deployment & external dependencies): `vision/docs/system_architecture.puml`
+
+You can render `.puml` files with a PlantUML tool or the VS Code PlantUML extension to get visual diagrams.
 ## Debugging & evaluation
 - Check logs for saved frames ("Frame saved: ...") when capturing.
 - Inspect session folder `vision/data/sessions/<session_id>/` to view intermediate files.

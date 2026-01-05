@@ -1,0 +1,40 @@
+@startuml
+!theme plain
+skinparam componentStyle uml2
+
+title Vision Service — Software Architecture
+
+package "Agentic System" {
+  [Agentic Core\nbackend/core/perceive.py] as Agentic
+}
+
+package "Vision Service (FastAPI)" {
+  [API\nsrc/api.py\nEndpoints: /vision/start, /vision/capture, /vision/stop] as API
+  [Session Manager\n(session creation, session folders)] as Session
+  [Capture\nsrc/capture/webcam_capture.py\nstart_webcam_stream] as Capture
+  [Change Detector\nframe-diff & threshold] as Change
+  [Preprocessing\nsrc/preprocessing/preprocess.py] as Preproc
+  [Detection (YOLO)\nsrc/detection/yolo_detect.py] as Detect
+  [Interpretation & OCR\nsrc/interpretation/extract_state2.py] as Interpret
+  [Data Storage\nvision/data/sessions/...] as Storage
+  [Model Artifacts\nand OCR Engines] as Models
+}
+
+Agentic -> API : POST /vision/start
+API -> Session : create session
+API -> Capture : start stream (camera 0)
+Capture -> Change : frames
+Change -> Storage : save raw_frames (on change)
+API -> Session : stop / finalise
+API -> Preproc : preprocess(raw_dir -> preproc_dir)
+Preproc -> Detect : preprocessed_frames
+Detect -> Storage : detected_images + detected_csvs
+Detect -> Interpret : detected_csvs + raw_frames
+Interpret -> Storage : final_output/vision_data.json
+API -> Agentic : return vision_data JSON
+
+Models --> Detect
+Models --> Interpret
+Storage --> API : session files
+
+@enduml
