@@ -1237,7 +1237,240 @@ class AgenticAssistant:
 
 
 # ----------------------------
-# 7️⃣ Validation Report Generator
+# 6️⃣ JSONL Output Saver (Line-by-Line Format)
+# ----------------------------
+class JSONLOutputSaver:
+    """Handles saving outputs to JSONL format with line-by-line display"""
+    
+    @staticmethod
+    def save_output_line_by_line(steps, goal, ui_state, is_valid, confidence, output_file="agentic_output_line.jsonl"):
+        """
+        Save steps as JSONL format with line-by-line formatting
+        
+        Args:
+            steps: The generated steps list
+            goal: The test goal
+            ui_state: The UI state dictionary
+            is_valid: Validation result
+            confidence: Confidence score
+            output_file: Path to save JSONL file
+        """
+        import json
+        from datetime import datetime
+        
+        # Create a JSONL entry
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "goal": goal,
+            "ui_state": ui_state,
+            "steps": steps,
+            "step_count": len(steps),
+            "is_valid": is_valid,
+            "confidence": confidence,
+            "source": "agentic_assistant"
+        }
+        
+        # Write to JSONL file with line-by-line formatting
+        try:
+            with open(output_file, "a", encoding="utf-8") as f:
+                # Convert to JSON string with indentation
+                json_str = json.dumps(entry, ensure_ascii=False, indent=2)
+                # Write the JSON string
+                f.write(json_str + "\n")
+                # Add a separator between entries
+                f.write("---\n\n")
+            
+            print(f"\n💾 Saved to {output_file} (line-by-line format)")
+            print(f"   - Steps: {len(steps)}")
+            print(f"   - Valid: {is_valid}")
+            print(f"   - Confidence: {confidence:.2f}")
+            
+            return output_file
+        except Exception as e:
+            print(f"⚠️ Failed to save JSONL: {e}")
+            return None
+    
+    @staticmethod
+    def display_jsonl_file_line_by_line(file_path, max_entries=5):
+        """Display JSONL file contents line by line"""
+        import json
+        
+        print(f"\n📋 JSONL File Contents: {file_path}")
+        print("="*70)
+        
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+                # Split by "---" separator
+                entries_raw = content.split("---\n")
+                
+                entries = []
+                for entry_raw in entries_raw:
+                    entry_raw = entry_raw.strip()
+                    if entry_raw:
+                        try:
+                            entries.append(json.loads(entry_raw))
+                        except json.JSONDecodeError:
+                            continue
+                
+                if not entries:
+                    print("No entries found.")
+                    return
+                
+                if max_entries:
+                    entries = entries[-max_entries:]  # Show most recent entries
+                
+                print(f"Total entries in file: {len(entries)}")
+                print(f"Displaying {len(entries)} most recent entries line by line:")
+                
+                for i, entry in enumerate(entries, 1):
+                    print(f"\n{'='*60}")
+                    print(f"ENTRY {i}/{len(entries)}")
+                    print('='*60)
+                    
+                    # Display each field on a separate line
+                    print(f"Timestamp: {entry.get('timestamp', 'N/A')}")
+                    print(f"Goal: {entry.get('goal', 'N/A')}")
+                    print(f"Step Count: {entry.get('step_count', 0)}")
+                    print(f"Valid: {'✓ Yes' if entry.get('is_valid') else '✗ No'}")
+                    print(f"Confidence: {entry.get('confidence', 0):.2f}")
+                    print(f"Source: {entry.get('source', 'agentic_assistant')}")
+                    
+                    # UI State
+                    ui_state = entry.get('ui_state', {})
+                    if ui_state:
+                        print(f"\nUI State:")
+                        print(f"  Screen: {ui_state.get('screen', 'unknown')}")
+                        elements = ui_state.get('elements', [])
+                        print(f"  Elements ({len(elements)}):")
+                        for elem in elements:
+                            elem_type = elem.get('type', 'unknown')
+                            label = elem.get('label') or elem.get('text') or 'N/A'
+                            print(f"    • {elem_type}: {label}")
+                    
+                    # Steps
+                    steps = entry.get('steps', [])
+                    if steps:
+                        print(f"\nSteps ({len(steps)}):")
+                        for step in steps:
+                            step_num = step.get('step', '?')
+                            action = step.get('action', '')
+                            print(f"  {step_num}. {action}")
+                    
+                    print('='*60)
+                
+        except FileNotFoundError:
+            print(f"❌ File not found: {file_path}")
+        except Exception as e:
+            print(f"❌ Error reading file: {e}")
+    
+    @staticmethod
+    def print_formatted_entry_line_by_line(entry):
+        """Print a single JSONL entry line by line"""
+        print("\n" + "="*70)
+        print("💾 SAVED ENTRY (Line-by-Line Display)")
+        print("="*70)
+        
+        # Print each field on a separate line
+        print(f"📅 Timestamp: {entry.get('timestamp', 'N/A')}")
+        print(f"🎯 Goal: {entry.get('goal', 'N/A')}")
+        print(f"✅ Valid: {'✓ Yes' if entry.get('is_valid') else '✗ No'}")
+        print(f"📈 Confidence: {entry.get('confidence', 0):.1%}")
+        print(f"📊 Step Count: {entry.get('step_count', 0)}")
+        print(f"🔧 Source: {entry.get('source', 'agentic_assistant')}")
+        
+        # UI State on separate lines
+        ui_state = entry.get('ui_state', {})
+        if ui_state:
+            print(f"\n🖥️  UI State:")
+            print(f"  Screen: {ui_state.get('screen', 'unknown')}")
+            elements = ui_state.get('elements', [])
+            print(f"  Elements ({len(elements)}):")
+            for elem in elements:
+                elem_type = elem.get('type', 'unknown')
+                label = elem.get('label') or elem.get('text') or 'N/A'
+                print(f"    • {elem_type}: {label}")
+        
+        # Steps on separate lines
+        steps = entry.get('steps', [])
+        if steps:
+            print(f"\n📋 Steps ({len(steps)}):")
+            for step in steps:
+                step_num = step.get('step', '?')
+                action = step.get('action', '')
+                print(f"  {step_num}. {action}")
+        
+        print("="*70)
+    
+    @staticmethod
+    def print_json_line_by_line(json_data):
+        """Print JSON data line by line for each field"""
+        print("\n" + "="*70)
+        print("📄 RAW JSON OUTPUT (Line by Line)")
+        print("="*70)
+        
+        def print_indented(key, value, indent=0):
+            indent_str = "  " * indent
+            
+            if isinstance(value, dict):
+                print(f"{indent_str}{key}:")
+                for k, v in value.items():
+                    print_indented(k, v, indent + 1)
+            elif isinstance(value, list):
+                print(f"{indent_str}{key}: [")
+                for i, item in enumerate(value):
+                    if isinstance(item, dict):
+                        print(f"{indent_str}  Item {i + 1}:")
+                        for k, v in item.items():
+                            print_indented(k, v, indent + 2)
+                    else:
+                        print(f"{indent_str}  • {item}")
+                print(f"{indent_str}]")
+            else:
+                print(f"{indent_str}{key}: {value}")
+        
+        for key, value in json_data.items():
+            print_indented(key, value)
+        
+        print("="*70)
+
+
+# ----------------------------
+# 7️⃣ Enhanced Validation Report Generator (with JSONL saving)
+# ----------------------------
+def generate_validation_report_with_jsonl(ui_state, goal, output_file="agentic_output_line.jsonl"):
+    """Generate validation report AND save to JSONL with line-by-line format"""
+    # Use existing function
+    report = generate_validation_report(ui_state, goal)
+    
+    # Save to JSONL with line-by-line format
+    saved_file = JSONLOutputSaver.save_output_line_by_line(
+        report['steps'],
+        goal,
+        ui_state,
+        report['validation_details']['is_valid'],
+        report['validation_details']['confidence'],
+        output_file
+    )
+    
+    if saved_file:
+        # Display the saved entry line by line
+        JSONLOutputSaver.print_formatted_entry_line_by_line({
+            "timestamp": "Just saved",
+            "goal": goal,
+            "ui_state": ui_state,
+            "steps": report['steps'],
+            "step_count": len(report['steps']),
+            "is_valid": report['validation_details']['is_valid'],
+            "confidence": report['validation_details']['confidence'],
+            "source": "agentic_assistant"
+        })
+    
+    return report
+
+
+# ----------------------------
+# 8️⃣ Validation Report Generator (Original)
 # ----------------------------
 def _get_recommendation(validation):
     """Get recommendation based on validation results"""
@@ -1308,7 +1541,7 @@ def print_validation_report(report):
 
 
 # ----------------------------
-# 8️⃣ Main Demo
+# 9️⃣ Main Demo
 # ----------------------------
 if __name__ == "__main__":
 
@@ -1326,13 +1559,62 @@ if __name__ == "__main__":
     goal = "Login using valid username and password"
 
     try:
-        # 🔹 Generate and print validation report
-        report = generate_validation_report(ui_state, goal)
+        print("\n" + "="*70)
+        print("🚀 Starting Agentic Assistant with Line-by-Line JSONL Output")
+        print("="*70)
+        
+        # 🔹 Generate validation report AND save to JSONL with line-by-line format
+        report = generate_validation_report_with_jsonl(ui_state, goal, "login_steps_line_by_line.jsonl")
+        
+        # 🔹 Print validation report
         print_validation_report(report)
         
-        # 🔹 Also output raw JSON for programmatic use
-        print("\n✅ RAW OUTPUT (JSON)")
-        print(json.dumps(report, indent=2, default=str))
+        # 🔹 Also show JSONL file contents line by line
+        JSONLOutputSaver.display_jsonl_file_line_by_line("login_steps_line_by_line.jsonl")
+        
+        # 🔹 Show the saved entry in raw JSON line-by-line format
+        print("\n" + "="*70)
+        print("📄 RAW OUTPUT (Line by Line)")
+        print("="*70)
+        
+        # Create a complete entry for display
+        complete_entry = {
+            "timestamp": "2024-01-05T12:34:56.789012",
+            "goal": goal,
+            "ui_state": ui_state,
+            "steps": report['steps'],
+            "step_count": len(report['steps']),
+            "is_valid": report['validation_details']['is_valid'],
+            "confidence": report['validation_details']['confidence'],
+            "source": "agentic_assistant"
+        }
+        
+        # Print each field line by line
+        print(f"timestamp: {complete_entry['timestamp']}")
+        print(f"goal: {complete_entry['goal']}")
+        print(f"ui_state:")
+        print(f"  screen: {complete_entry['ui_state']['screen']}")
+        print(f"  elements: [")
+        for elem in complete_entry['ui_state']['elements']:
+            print(f"    {{")
+            print(f"      type: {elem.get('type', 'unknown')}")
+            print(f"      label: {elem.get('label', 'N/A')}")
+            if 'text' in elem:
+                print(f"      text: {elem.get('text', 'N/A')}")
+            print(f"    }}")
+        print(f"  ]")
+        print(f"steps: [")
+        for step in complete_entry['steps']:
+            print(f"    {{")
+            print(f"      step: {step.get('step', '?')}")
+            print(f"      action: {step.get('action', '')}")
+            print(f"    }}")
+        print(f"  ]")
+        print(f"step_count: {complete_entry['step_count']}")
+        print(f"is_valid: {complete_entry['is_valid']}")
+        print(f"confidence: {complete_entry['confidence']}")
+        print(f"source: {complete_entry['source']}")
+        print("="*70)
         
     except RuntimeError as e:
         print('\n💥 Runtime error while initializing the model:')
@@ -1342,6 +1624,14 @@ if __name__ == "__main__":
         print('  pip install torch --index-url https://download.pytorch.org/whl/cpu')
         print('- Or install a matching CUDA-enabled build if you have a GPU and drivers configured.')
         print('- Make sure your Python, Visual C++ redistributable and GPU drivers are up to date.')
+
+
+
+
+
+
+
+
 
 
 
