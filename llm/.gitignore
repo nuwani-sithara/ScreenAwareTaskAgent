@@ -73,7 +73,6 @@ results/
 # Ignore dataset files
 *.csv
 *.json
-*.jsonl
 *.parquet
 data/
 datasets/
