@@ -1,0 +1,79 @@
+{
+    "vision_data": [
+        {
+            "frame_id": 1,
+            "elements": {}
+        },
+        {
+            "frame_id": 2,
+            "elements": {
+                "login_form": {
+                    "bbox": {
+                        "x_min": 250,
+                        "y_min": 50,
+                        "x_max": 484,
+                        "y_max": 336
+                    },
+                    "confidence": 0.9914973378181458,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "login_button": {
+                    "bbox": {
+                        "x_min": 273,
+                        "y_min": 236,
+                        "x_max": 457,
+                        "y_max": 270
+                    },
+                    "confidence": 0.9677591323852539,
+                    "text": "2owee ha",
+                    "ocr_confidence": 14.5
+                },
+                "username_input": {
+                    "bbox": {
+                        "x_min": 271,
+                        "y_min": 141,
+                        "x_max": 459,
+                        "y_max": 175
+                    },
+                    "confidence": 0.9645529389381409,
+                    "text": "Cn",
+                    "ocr_confidence": 28.0
+                },
+                "success_alert": {
+                    "bbox": {
+                        "x_min": 272,
+                        "y_min": 279,
+                        "x_max": 457,
+                        "y_max": 312
+                    },
+                    "confidence": 0.9546697735786438,
+                    "text": "",
+                    "ocr_confidence": null
+                },
+                "title_text": {
+                    "bbox": {
+                        "x_min": 335,
+                        "y_min": 88,
+                        "x_max": 396,
+                        "y_max": 114
+                    },
+                    "confidence": 0.9442571997642517,
+                    "text": "Login",
+                    "ocr_confidence": 96.0
+                },
+                "password_input": {
+                    "bbox": {
+                        "x_min": 271,
+                        "y_min": 197,
+                        "x_max": 459,
+                        "y_max": 231
+                    },
+                    "confidence": 0.9251304268836975,
+                    "text": "",
+                    "ocr_confidence": null
+                }
+            }
+        }
+    ]
+}
