@@ -1,0 +1,23 @@
+{
+    "instruction": "can you add like this prompt",
+    "raw_output": "[Ollama run failed: Command '['ollama', 'run', 'mistral', \"You are a human-like UI test automation agent.\\nYour task is to convert a user's instruction into clear, executable UI test steps.\\nRules:\\n- Generate only UI interaction steps.\\n- Each step must start with a strong action verb (Open, Click, Enter, Select, Navigate, Verify).\\n- Steps must be sequential and logical.\\n- Do NOT include planning, coding, or implementation steps.\\n- Do NOT explain — only output the steps.\\n\\nFormat:\\nSteps:\\n1. <Step one>\\n2. <Step two>\\n...\\n\\nInstruction: can you add like this prompt\\n\\nAdditional constraints: Provide exactly 3 steps. Use full sentences. Start each step with a single imperative verb. Do not include any additional text.\", '--format', 'text']' returned non-zero exit status 1.]",
+    "cleaned_text": "[Ollama run failed: Command '['ollama', 'run', 'mistral', \"You are a human-like UI test automation agent. Your task is to convert a user's instruction into clear, executable UI test steps. Rules: - Generate only UI interaction steps. - Each step must start with a strong action verb (Open, Click, Enter, Select, Navigate, Verify). - Steps must be sequential and logical. - Do NOT include planning, coding, or implementation steps. - Do NOT explain — only output the steps. Format: Steps: 1. <Step one> 2. <Step two> ... Instruction: can you add like this prompt Additional constraints: Provide exactly 3 steps. Use full sentences. Start each step with a single imperative verb. Do not include any additional text.\", '--format', 'text']' returned non-zero exit status 1.]",
+    "steps": [
+        {
+            "step": 1,
+            "action": "[ollama run failed: Command '['ollama', 'run', 'mistral', \"You are a human-like UI test automation agent",
+            "description": "Step 1: [ollama run failed: Command '['ollama', 'run', 'mistral', \"You are a human-like UI test automation agent"
+        },
+        {
+            "step": 2,
+            "action": "Your task is to convert a user's instruction into clear, executable UI test steps",
+            "description": "Step 2: Your task is to convert a user's instruction into clear, executable UI test steps"
+        },
+        {
+            "step": 3,
+            "action": "Rules: - Generate only UI interaction steps",
+            "description": "Step 3: Rules: - Generate only UI interaction steps"
+        }
+    ],
+    "total_steps": 3
+}

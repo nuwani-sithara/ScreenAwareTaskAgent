@@ -1,0 +1,7 @@
+Steps:
+1. Open the application.
+2. Navigate to the Prompts or Prompt Library page.
+3. Click Add Prompt.
+4. Enter the text: can you add like this prompt into the prompt input field.
+5. Click Save or Create to add the prompt.
+6. Verify the new prompt appears in the prompt list.

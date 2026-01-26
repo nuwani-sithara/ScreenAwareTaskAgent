@@ -1,0 +1,524 @@
+{
+    "instruction": "What is 2048?",
+    "category": "game_2048",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Merge tiles strategically.",
+            "description": "Step 1: Merge tiles strategically."
+        },
+        {
+            "step": 2,
+            "action": "Keep largest tile in corner.",
+            "description": "Step 2: Keep largest tile in corner."
+        },
+        {
+            "step": 3,
+            "action": "Avoid moves blocking merges.",
+            "description": "Step 3: Avoid moves blocking merges."
+        },
+        {
+            "step": 4,
+            "action": "Plan moves ahead.",
+            "description": "Step 4: Plan moves ahead."
+        },
+        {
+            "step": 5,
+            "action": "Reach 2048 tile.",
+            "description": "Step 5: Reach 2048 tile."
+        }
+    ],
+    "total_steps": 5,
+    "status": "needs_review",
+    "validation": {
+        "is_valid": false,
+        "confidence": 0.3066054584518337,
+        "has_steps": true,
+        "dataset_match_score": 0.362,
+        "structure_score": 0.3,
+        "content_score": 0.24,
+        "issues": [],
+        "warnings": [
+            "Steps don't match common patterns from dataset"
+        ],
+        "suggestions": [
+            "Consider using common game_2048 verbs like: identify, execute, focus",
+            "Try patterns from dataset: 'update board.', 'continue merging.', 'continue playing.'"
+        ],
+        "format_valid": true,
+        "dataset_stats": {
+            "avg_steps": 5.0,
+            "common_verbs": [
+                "plan",
+                "identify",
+                "execute",
+                "focus",
+                "press",
+                "avoid",
+                "analyze",
+                "make",
+                "wait",
+                "continue"
+            ],
+            "total_entries": 47,
+            "total_steps": 235
+        },
+        "matched_patterns": [],
+        "similarity": 0.36151364612958414,
+        "matched_instruction": null
+    },
+    "timestamp": "2026-01-25T07:12:12.611536"
+}
+
+{
+    "instruction": "Play 2048 game: swipe left",
+    "category": "game_2048",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Focus 2048 game window.",
+            "description": "Step 1: Focus 2048 game window."
+        },
+        {
+            "step": 2,
+            "action": "Press ArrowLeft key.",
+            "description": "Step 2: Press ArrowLeft key."
+        },
+        {
+            "step": 3,
+            "action": "Wait for tiles to merge.",
+            "description": "Step 3: Wait for tiles to merge."
+        },
+        {
+            "step": 4,
+            "action": "Update board.",
+            "description": "Step 4: Update board."
+        },
+        {
+            "step": 5,
+            "action": "Decide next move.",
+            "description": "Step 5: Decide next move."
+        }
+    ],
+    "total_steps": 5,
+    "status": "ready_for_execution",
+    "validation": {
+        "is_valid": true,
+        "confidence": 1.0,
+        "has_steps": true,
+        "dataset_match_score": 1.0,
+        "structure_score": 1.0,
+        "content_score": 1.0,
+        "issues": [],
+        "warnings": [],
+        "suggestions": [],
+        "format_valid": true,
+        "dataset_stats": {},
+        "matched_patterns": [],
+        "similarity": 1.0,
+        "matched_instruction": "Play 2048 game: swipe left"
+    },
+    "timestamp": "2026-01-25T07:12:12.620526"
+}
+
+{
+    "instruction": "Think about software design",
+    "category": "general_software",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Plan implementation for: Think about software design",
+            "description": "Step 1: Plan implementation for: Think about software design"
+        },
+        {
+            "step": 2,
+            "action": "Set up basic structure",
+            "description": "Step 2: Set up basic structure"
+        },
+        {
+            "step": 3,
+            "action": "Implement core features",
+            "description": "Step 3: Implement core features"
+        },
+        {
+            "step": 4,
+            "action": "Test functionality",
+            "description": "Step 4: Test functionality"
+        },
+        {
+            "step": 5,
+            "action": "Debug and refine",
+            "description": "Step 5: Debug and refine"
+        }
+    ],
+    "total_steps": 5,
+    "status": "needs_review",
+    "validation": {
+        "is_valid": false,
+        "confidence": 0.08172413793103447,
+        "has_steps": true,
+        "dataset_match_score": 0.0,
+        "structure_score": 0.272,
+        "content_score": 0.0,
+        "issues": [],
+        "warnings": [
+            "Steps don't match common patterns from dataset",
+            "Only 0/5 steps use common general_software verbs"
+        ],
+        "suggestions": [
+            "Consider using common general_software verbs like: add, allow, select",
+            "Try patterns from dataset: 'handle errors.', 'create clear button to', 'create input fields no1'"
+        ],
+        "format_valid": true,
+        "dataset_stats": {
+            "avg_steps": 5.506329113924051,
+            "common_verbs": [
+                "add",
+                "allow",
+                "select",
+                "display",
+                "click",
+                "validate",
+                "define",
+                "enter",
+                "import",
+                "handle"
+            ],
+            "total_entries": 79,
+            "total_steps": 435
+        },
+        "matched_patterns": [],
+        "similarity": 0.0,
+        "matched_instruction": null
+    },
+    "timestamp": "2026-01-25T07:12:27.684812"
+}
+
+{
+    "instruction": "Create a JS app to add 2 numbers",
+    "category": "general_software arithmetic_operations",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Create input fields no1 and no2.",
+            "description": "Step 1: Create input fields no1 and no2."
+        },
+        {
+            "step": 2,
+            "action": "Create output field result.",
+            "description": "Step 2: Create output field result."
+        },
+        {
+            "step": 3,
+            "action": "Create Add button that sums no1 and no2.",
+            "description": "Step 3: Create Add button that sums no1 and no2."
+        },
+        {
+            "step": 4,
+            "action": "Create Clear button to reset fields.",
+            "description": "Step 4: Create Clear button to reset fields."
+        }
+    ],
+    "total_steps": 4,
+    "status": "ready_for_execution",
+    "validation": {
+        "is_valid": true,
+        "confidence": 1.0,
+        "has_steps": true,
+        "dataset_match_score": 1.0,
+        "structure_score": 1.0,
+        "content_score": 1.0,
+        "issues": [],
+        "warnings": [],
+        "suggestions": [],
+        "format_valid": true,
+        "dataset_stats": {},
+        "matched_patterns": [],
+        "similarity": 1.0000000000000002,
+        "matched_instruction": "Create a JS app to add 2 numbers"
+    },
+    "timestamp": "2026-01-25T07:12:41.657405"
+}
+
+{
+    "instruction": "Explain how to play 2048",
+    "category": "game_2048",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Observe newly generated tiles.",
+            "description": "Step 1: Observe newly generated tiles."
+        },
+        {
+            "step": 2,
+            "action": "Adjust moves to accommodate.",
+            "description": "Step 2: Adjust moves to accommodate."
+        },
+        {
+            "step": 3,
+            "action": "Merge tiles efficiently.",
+            "description": "Step 3: Merge tiles efficiently."
+        },
+        {
+            "step": 4,
+            "action": "Avoid blocking key merges.",
+            "description": "Step 4: Avoid blocking key merges."
+        },
+        {
+            "step": 5,
+            "action": "Continue gameplay.",
+            "description": "Step 5: Continue gameplay."
+        }
+    ],
+    "total_steps": 5,
+    "status": "needs_review",
+    "validation": {
+        "is_valid": false,
+        "confidence": 0.3592931441215745,
+        "has_steps": true,
+        "dataset_match_score": 0.493,
+        "structure_score": 0.3,
+        "content_score": 0.24,
+        "issues": [],
+        "warnings": [
+            "Steps don't match common patterns from dataset"
+        ],
+        "suggestions": [
+            "Consider using common game_2048 verbs like: plan, identify, execute",
+            "Try patterns from dataset: 'update board.', 'continue merging.', 'continue playing.'"
+        ],
+        "format_valid": true,
+        "dataset_stats": {
+            "avg_steps": 5.0,
+            "common_verbs": [
+                "plan",
+                "identify",
+                "execute",
+                "focus",
+                "press",
+                "avoid",
+                "analyze",
+                "make",
+                "wait",
+                "continue"
+            ],
+            "total_entries": 47,
+            "total_steps": 235
+        },
+        "matched_patterns": [],
+        "similarity": 0.4932328603039362,
+        "matched_instruction": null
+    },
+    "timestamp": "2026-01-25T07:12:41.813479"
+}
+
+{
+    "instruction": "Create a Python calculator to multiply numbers",
+    "category": "general_software arithmetic_operations",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Create input fields no1 and no2.",
+            "description": "Step 1: Create input fields no1 and no2."
+        },
+        {
+            "step": 2,
+            "action": "Create output field result.",
+            "description": "Step 2: Create output field result."
+        },
+        {
+            "step": 3,
+            "action": "Create Multiply button that multiplies no1 and no2.",
+            "description": "Step 3: Create Multiply button that multiplies no1 and no2."
+        },
+        {
+            "step": 4,
+            "action": "Create Clear button to reset fields.",
+            "description": "Step 4: Create Clear button to reset fields."
+        }
+    ],
+    "total_steps": 4,
+    "status": "needs_review",
+    "validation": {
+        "is_valid": false,
+        "confidence": 0.5423034482758621,
+        "has_steps": true,
+        "dataset_match_score": 1.0,
+        "structure_score": 0.174,
+        "content_score": 0.3,
+        "issues": [],
+        "warnings": [
+            "Step 3: Very long (8 words vs avg 4.1)"
+        ],
+        "suggestions": [
+            "Consider using common general_software arithmetic_operations verbs like: add, allow, select"
+        ],
+        "format_valid": true,
+        "dataset_stats": {
+            "avg_steps": 5.506329113924051,
+            "common_verbs": [
+                "add",
+                "allow",
+                "select",
+                "display",
+                "click",
+                "validate",
+                "define",
+                "enter",
+                "import",
+                "handle"
+            ],
+            "total_entries": 79,
+            "total_steps": 435
+        },
+        "matched_patterns": [
+            {
+                "step": 4,
+                "pattern": "create clear button to",
+                "frequency": 11
+            },
+            {
+                "step": 1,
+                "pattern": "create input fields no1",
+                "frequency": 8
+            },
+            {
+                "step": 2,
+                "pattern": "create output field result.",
+                "frequency": 7
+            },
+            {
+                "step": 3,
+                "pattern": "create multiply button that",
+                "frequency": 4
+            }
+        ],
+        "similarity": 0.6260055882742733,
+        "matched_instruction": null
+    },
+    "timestamp": "2026-01-25T07:12:52.526222"
+}
+
+{
+    "instruction": "What is 2048?",
+    "category": "game_2048",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Merge tiles strategically.",
+            "description": "Step 1: Merge tiles strategically."
+        },
+        {
+            "step": 2,
+            "action": "Keep largest tile in corner.",
+            "description": "Step 2: Keep largest tile in corner."
+        },
+        {
+            "step": 3,
+            "action": "Avoid moves blocking merges.",
+            "description": "Step 3: Avoid moves blocking merges."
+        },
+        {
+            "step": 4,
+            "action": "Plan moves ahead.",
+            "description": "Step 4: Plan moves ahead."
+        },
+        {
+            "step": 5,
+            "action": "Reach 2048 tile.",
+            "description": "Step 5: Reach 2048 tile."
+        }
+    ],
+    "total_steps": 5,
+    "status": "needs_review",
+    "validation": {
+        "is_valid": false,
+        "confidence": 0.3066054584518337,
+        "has_steps": true,
+        "dataset_match_score": 0.362,
+        "structure_score": 0.3,
+        "content_score": 0.24,
+        "issues": [],
+        "warnings": [
+            "Steps don't match common patterns from dataset"
+        ],
+        "suggestions": [
+            "Consider using common game_2048 verbs like: identify, execute, focus",
+            "Try patterns from dataset: 'update board.', 'continue merging.', 'continue playing.'"
+        ],
+        "format_valid": true,
+        "dataset_stats": {
+            "avg_steps": 5.0,
+            "common_verbs": [
+                "plan",
+                "identify",
+                "execute",
+                "focus",
+                "press",
+                "avoid",
+                "analyze",
+                "make",
+                "wait",
+                "continue"
+            ],
+            "total_entries": 47,
+            "total_steps": 235
+        },
+        "matched_patterns": [],
+        "similarity": 0.36151364612958414,
+        "matched_instruction": null
+    },
+    "timestamp": "2026-01-25T07:12:53.646116"
+}
+
+{
+    "instruction": "Play 2048 game: swipe left",
+    "category": "game_2048",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Focus 2048 game window.",
+            "description": "Step 1: Focus 2048 game window."
+        },
+        {
+            "step": 2,
+            "action": "Press ArrowLeft key.",
+            "description": "Step 2: Press ArrowLeft key."
+        },
+        {
+            "step": 3,
+            "action": "Wait for tiles to merge.",
+            "description": "Step 3: Wait for tiles to merge."
+        },
+        {
+            "step": 4,
+            "action": "Update board.",
+            "description": "Step 4: Update board."
+        },
+        {
+            "step": 5,
+            "action": "Decide next move.",
+            "description": "Step 5: Decide next move."
+        }
+    ],
+    "total_steps": 5,
+    "status": "ready_for_execution",
+    "validation": {
+        "is_valid": true,
+        "confidence": 1.0,
+        "has_steps": true,
+        "dataset_match_score": 1.0,
+        "structure_score": 1.0,
+        "content_score": 1.0,
+        "issues": [],
+        "warnings": [],
+        "suggestions": [],
+        "format_valid": true,
+        "dataset_stats": {},
+        "matched_patterns": [],
+        "similarity": 1.0,
+        "matched_instruction": "Play 2048 game: swipe left"
+    },
+    "timestamp": "2026-01-25T07:12:53.745205"
+}
+

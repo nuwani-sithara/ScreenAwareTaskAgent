@@ -1,0 +1,79 @@
+{
+    "prompt": "Provide 5 numbered steps to add a product to the cart. Use full sentences, start each step with an imperative verb (e.g., 'Click', 'Open'), and format them as: 1. Step sentence\n2. Step sentence\n...",
+    "raw_output": "[Ollama run failed: Command '['ollama', 'run', 'mistral', \"Provide 5 numbered steps to add a product to the cart. Use full sentences, start each step with an imperative verb (e.g., 'Click', 'Open'), and format them as: 1. Step sentence\\n2. Step sentence\\n...\", '--format', 'text']' returned non-zero exit status 1.]",
+    "cleaned_text": "[Ollama run failed: Command '['ollama', 'run', 'mistral', \"Provide 5 numbered steps to add a product to the cart. Use full sentences, start each step with an imperative verb (e.g., 'Click', 'Open'), and format them as: 1. Step sentence 2. Step sentence ...\", '--format', 'text']' returned non-zero exit status 1.]",
+    "steps": [
+        {
+            "step": 1,
+            "action": "[Ollama run failed: Command '['ollama', 'run', 'mistral', \"Provide 5 numbered steps to add a product to the cart",
+            "description": "Step 1: [Ollama run failed: Command '['ollama', 'run', 'mistral', \"Provide 5 numbered steps to add a product to the cart"
+        },
+        {
+            "step": 2,
+            "action": "Use full sentences, start each step with an imperative verb (e",
+            "description": "Step 2: Use full sentences, start each step with an imperative verb (e"
+        },
+        {
+            "step": 4,
+            "action": ", 'Click', 'Open'), and format them as: 1",
+            "description": "Step 4: , 'Click', 'Open'), and format them as: 1"
+        },
+        {
+            "step": 5,
+            "action": "Step sentence 2",
+            "description": "Step 5: Step sentence 2"
+        },
+        {
+            "step": 6,
+            "action": "Step sentence",
+            "description": "Step 6: Step sentence"
+        },
+        {
+            "step": 7,
+            "action": "\", '--format', 'text']' returned non-zero exit status 1",
+            "description": "Step 7: \", '--format', 'text']' returned non-zero exit status 1"
+        }
+    ],
+    "total_steps": 6,
+    "validation": {
+        "quality": {
+            "quality_score": 0.25,
+            "issues": [],
+            "warnings": [
+                "Steps are not sequentially numbered starting at 1",
+                "Many steps do not begin with an action verb",
+                "Steps lack transitional words (then/after/next) to indicate flow"
+            ],
+            "suggestions": [
+                "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+            ]
+        },
+        "algorithmic": {
+            "is_valid": false,
+            "confidence": 0.45,
+            "action_score": 0.0,
+            "dataset_score": 0.5,
+            "alignment_score": 1.0,
+            "details": [
+                "Step 1 basic checks: hasVerb=False, length=18",
+                "Step 2 basic checks: hasVerb=False, length=11",
+                "Step 4 basic checks: hasVerb=False, length=8",
+                "Step 5 basic checks: hasVerb=False, length=3",
+                "Step 6 basic checks: hasVerb=False, length=2",
+                "Step 7 basic checks: hasVerb=False, length=8",
+                "Confidence below threshold 0.55: 0.450"
+            ]
+        },
+        "hsv": {
+            "is_valid": false,
+            "confidence": 0.525,
+            "scores": {
+                "action_score": 0.0,
+                "dataset_score": 1.0,
+                "alignment_score": 0.5
+            },
+            "issues": []
+        },
+        "timestamp": "2026-01-26T06:53:42.664166"
+    }
+}

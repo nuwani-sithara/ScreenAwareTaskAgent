@@ -20,16 +20,24 @@ def print_header(text, char="="):
     print(text.center(width))
     print(char * width)
 
-def validate_and_display(instruction):
-    """Process instruction and display validation results"""
-    print_header(f"VALIDATING: {instruction}", "-")
-    
+def validate_and_display(instruction=None, result=None):
+    """Process instruction and display validation results.
+
+    If `result` is provided, use it directly and skip re-processing the
+    instruction to avoid duplicate outputs written by `demo.SimpleAssistant`.
+    """
+    if instruction is None and result is None:
+        print("❌ validate_and_display requires an instruction or a result object")
+        return False
+
+    header_text = instruction if instruction is not None else result.get('instruction', 'provided result')
+    print_header(f"VALIDATING: {header_text}", "-")
+
     try:
-        # Initialize assistant
-        assistant = SimpleAssistant()
-        
-        # Process instruction
-        result = assistant.process_instruction(instruction)
+        # Use the provided result when available to avoid double-processing
+        if result is None:
+            assistant = SimpleAssistant()
+            result = assistant.process_instruction(instruction)
         
         # Extract validation details
         val = result['validation']

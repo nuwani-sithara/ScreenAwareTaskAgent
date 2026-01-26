@@ -7,6 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from datetime import datetime
 import torch
 
 if sys.platform == "win32":
@@ -876,6 +877,19 @@ class SimpleAssistant:
                 "matched_instruction": validation['matched_instruction']  # For backward compatibility
             }
         }
+        # Persist the result as a JSONL record for later analysis
+        try:
+            # ensure timestamp in ISO format
+            if 'timestamp' not in result:
+                result['timestamp'] = datetime.utcnow().isoformat()
+            # write to workspace-relative file `generated_steps.jsonl` in llm/
+            # Save only the human-readable pretty JSON block (compact JSONL removed)
+            try:
+                self.save_result_pretty_json(result)
+            except Exception:
+                pass
+        except Exception:
+            pass
         
         # Print validation results
         print("\n✅ VALIDATION RESULTS:")
@@ -968,6 +982,95 @@ class SimpleAssistant:
                 
             except Exception as e:
                 print(f"❌ Error: {e}")
+
+    def save_result_jsonl(self, result: dict, file_name: str = "generated_steps.jsonl"):
+        """Append a result dict as a single JSON line into `llm/generated_steps.jsonl`.
+        The file is created in the same directory as this script.
+        """
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            path = os.path.join(current_dir, file_name)
+            # Ensure basic sanitization for JSON-serializable types
+            out = dict(result)
+            # Convert numpy types if present
+            try:
+                import numpy as _np
+                for k, v in list(out.items()):
+                    if isinstance(v, _np.generic):
+                        out[k] = v.item()
+            except Exception:
+                pass
+
+            # Deduplication: if last line has same instruction+steps, skip appending
+            try:
+                if os.path.exists(path):
+                    with open(path, 'rb') as fh:
+                        try:
+                            fh.seek(-4096, os.SEEK_END)
+                        except OSError:
+                            fh.seek(0)
+                        tail = fh.read().decode('utf-8', errors='ignore')
+                        lines = [ln for ln in tail.splitlines() if ln.strip()]
+                        if lines:
+                            last_line = lines[-1]
+                            try:
+                                last_obj = json.loads(last_line)
+                                # Compare instruction and steps for equality
+                                if last_obj.get('instruction') == out.get('instruction') and last_obj.get('steps') == out.get('steps'):
+                                    return
+                            except Exception:
+                                # If parsing fails, continue to append
+                                pass
+            except Exception:
+                # If any file-read issue occurs, fall back to appending
+                pass
+
+            with open(path, 'a', encoding='utf-8') as fh:
+                fh.write(json.dumps(out, ensure_ascii=False) + '\n')
+        except Exception:
+            # Fail silently; saving is best-effort
+            return
+
+    def save_result_pretty_json(self, result: dict, file_name: str = "generated_steps_pretty.jsonl"):
+        """Append a pretty-printed JSON block per result into a separate file.
+        This keeps a human-readable log while preserving `generated_steps.jsonl` for programmatic use.
+        Each block is separated by a blank line.
+        """
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            path = os.path.join(current_dir, file_name)
+            out = dict(result)
+            # Convert numpy types if present
+            try:
+                import numpy as _np
+                for k, v in list(out.items()):
+                    if isinstance(v, _np.generic):
+                        out[k] = v.item()
+            except Exception:
+                pass
+
+            # Deduplication similar to compact JSONL: skip if last block matches instruction+steps
+            try:
+                if os.path.exists(path):
+                    with open(path, 'r', encoding='utf-8') as fh:
+                        data = fh.read()
+                        # Find last JSON block by looking from the end for '{'
+                        last_brace = data.rfind('{')
+                        if last_brace != -1:
+                            last_block = data[last_brace:]
+                            try:
+                                last_obj = json.loads(last_block)
+                                if last_obj.get('instruction') == out.get('instruction') and last_obj.get('steps') == out.get('steps'):
+                                    return
+                            except Exception:
+                                pass
+            except Exception:
+                pass
+
+            with open(path, 'a', encoding='utf-8') as fh:
+                fh.write(json.dumps(out, ensure_ascii=False, indent=4) + '\n\n')
+        except Exception:
+            return
 
 # ----------------------------
 # 4️⃣ Quick Test
@@ -1116,7 +1219,6 @@ if __name__ == "__main__":
     else:
         assistant = SimpleAssistant()
         assistant.interactive_mode()
-
 
 # # demo.py - Steps generated by fine-tuned model or steps generated by RAG using seperate jsonl file
 # import json
