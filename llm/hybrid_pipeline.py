@@ -4,12 +4,12 @@ from pathlib import Path
 from typing import Dict, Any
 
 try:
-    from llm_n.flan_t5_rewriter import rewrite_steps
+    from llm.flan_t5_rewriter import rewrite_steps
 except Exception:
-    from llm_n.simple_rewriter import rewrite_steps
+    from llm.simple_rewriter import rewrite_steps
 
 try:
-    from llm_n.ollama_adapter import _extract_steps_from_text
+    from llm.ollama_adapter import _extract_steps_from_text
 except Exception:
     _extract_steps_from_text = None
 
@@ -33,8 +33,8 @@ def _extract_steps_fallback(text: str):
     return steps
 
 
-def process_entries(input_path: str = "llm_n/generated_ollama_pretty.jsonl",
-                    output_path: str = "llm_n/hybrid_results_pretty.jsonl",
+def process_entries(input_path: str = "llm/generated_ollama_pretty.jsonl",
+                    output_path: str = "llm/hybrid_results_pretty.jsonl",
                     model_name: str = "google/flan-t5-small") -> Dict[str, int]:
     inp = Path(input_path)
     out = Path(output_path)

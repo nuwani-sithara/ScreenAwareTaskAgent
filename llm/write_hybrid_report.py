@@ -2,7 +2,7 @@ import csv
 import json
 from pathlib import Path
 
-def write_report(input_path='llm_n/hybrid_results_pretty.jsonl', out_csv='llm_n/hybrid_report.csv'):
+def write_report(input_path='llm/hybrid_results_pretty.jsonl', out_csv='llm/hybrid_report.csv'):
     p = Path(input_path)
     rows = []
     if not p.exists():

@@ -4,19 +4,19 @@ import time
 import re
 from pathlib import Path
 
-from llm_n import ollama_adapter
+from llm import ollama_adapter
 try:
-    from llm_n.flan_t5_rewriter import rewrite_steps as flan_rewrite
+    from llm.flan_t5_rewriter import rewrite_steps as flan_rewrite
 except Exception:
-    from llm_n.simple_rewriter import rewrite_steps as flan_rewrite
+    from llm.simple_rewriter import rewrite_steps as flan_rewrite
 
-from llm_n.step_validators import StepQualityValidator
+from llm.step_validators import StepQualityValidator
 
 
-OUT_PATH = Path("llm_n/interactive_results.json")
-ESP32_OUT = Path("llm_n/esp32_steps.jsonl")
-SELECTION_REPORT = Path("llm_n/selection_report.json")
-DISPLAY_OUT = Path("llm_n/esp32_display.jsonl")
+OUT_PATH = Path("llm/interactive_results.json")
+ESP32_OUT = Path("llm/esp32_steps.jsonl")
+SELECTION_REPORT = Path("llm/selection_report.json")
+DISPLAY_OUT = Path("llm/esp32_display.jsonl")
 
 
 def summarize_steps(steps):

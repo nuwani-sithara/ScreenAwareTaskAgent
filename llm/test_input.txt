@@ -1,2 +1,0 @@
-Play 2048 game: swipe left
-quit

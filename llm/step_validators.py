@@ -284,24 +284,3 @@ def validate_steps_hsv_a(
         },
         "issues": issues,
     }
-
-
-if __name__ == "__main__":
-    # Simple smoke test when run directly
-    sample_steps = [
-        {"step": 1, "action": "Focus on the 2048 game window"},
-        {"step": 2, "action": "Analyze current tile positions"},
-        {"step": 3, "action": "Execute swipe left action"},
-        {"step": 4, "action": "Wait for tiles to merge"},
-        {"step": 5, "action": "Check for new tile appearance"},
-    ]
-
-    v = StepQualityValidator()
-    print("--- StepQualityValidator.evaluate ---")
-    print(v.evaluate(sample_steps))
-    print("--- StepQualityValidator.validate_algorithm ---")
-    print(v.validate_algorithm("Play 2048 game: swipe left", sample_steps, dataset_patterns={
-        'common_patterns': ['execute swipe left action'], 'common_verbs': set(['focus','analyze','execute','swipe']), 'avg_steps':5
-    }))
-    print("--- validate_steps_hsv_a ---")
-    print(validate_steps_hsv_a("Play 2048 game: swipe left", sample_steps, dataset_patterns={'common_verbs': set(['focus','analyze','execute','swipe']), 'avg_steps':5}, similarity_score=0.95))

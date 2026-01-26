@@ -1,115 +1,73 @@
-# Ignore virtual environment
-venv/
-env/
-ENV/
-.venv/
-
-# Ignore Python cache files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
 *.egg-info/
-.installed.cfg
+dist/
+build/
 *.egg
-MANIFEST
 
-# Ignore environment files
-.env
+# Virtual Environments
+venv/
+env/
+ENV/
 .venv
-env.bak/
-venv.bak/
 
-# Ignore temporary files
-.DS_Store
-*.swp
-*.swo
-*~
-.thumbs.db
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
 
-# Ignore IDE files
+# PyTorch / Model Files
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+
+# Model Checkpoints and Training Outputs
+models/checkpoints/
+models/*/
+fine_tuned_*/
+runs/
+checkpoints/
+lightning_logs/
+
+# Data Files
+data/
+*.jsonl
+*.csv
+*.tsv
+*.parquet
+
+# Keep important dataset files (uncomment specific files if needed)
+!automation_dataset.jsonl
+!automation_dataset_clean.jsonl
+
+# Logs
+*.log
+logs/
+tensorboard/
+
+# IDE / Editor
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# Ignore Jupyter notebooks checkpoints
-.ipynb_checkpoints/
-
-# Ignore ML model files and datasets
-*.pth
-*.pt
-*.bin
-*.safetensors
-*.h5
-*.hdf5
-*.joblib
-*.pkl
-*.pickle
-model/
-models/
-checkpoint/
-checkpoints/
-finetuned_*/
-outputs/
-results/
-
-# Ignore dataset files
-*.csv
-*.json
-*.parquet
-data/
-datasets/
-*.data
-*.names
-
-# Ignore logs and cache
-logs/
-log/
-*.log
-.cache/
-.cache/
-transformers_cache/
-huggingface/
-.huggingface/
-
-# Ignore training outputs
-runs/
-wandb/
-mlruns/
-
-# Ignore system files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
+
+# OS
 Thumbs.db
+desktop.ini
 
-# Ignore test coverage
-htmlcov/
-.coverage
-.coverage.*
-.pytest_cache/
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
 
-# Ignore markdown documentation files
-*.md
-
-
+# Environment variables
+.env
+.env.local

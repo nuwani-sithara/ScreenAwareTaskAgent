@@ -6297,5 +6297,617 @@
       }
     },
     "timestamp": 1769445304.1713939
+  },
+  {
+    "instruction": "update profile photo",
+    "generated": {
+      "instruction": "Instruction: update profile photo -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30"
+        },
+        {
+          "step": 2,
+          "action": "0194151Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 0194151Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30"
+        },
+        {
+          "step": 4,
+          "action": "2933337Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 2933337Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30"
+        },
+        {
+          "step": 6,
+          "action": "6074623Z\",\"response\":\"",
+          "description": "Step 6: 6074623Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30"
+        },
+        {
+          "step": 9,
+          "action": "9529177Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 9529177Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:31",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:31"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30.0194151Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30.2933337Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30.6074623Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:30.9529177Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:31.2857471Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:31.5995777Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:31.9396351Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:32.2165568Z\",\"response\":\" Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:32.5261235Z\",\"response\":\" section\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:32.8315918Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:33.1446865Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:33.4543502Z\",\"response\":\" application\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:33.764902Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:34.0737706Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:34.3872698Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:34.6989348Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:35.0058764Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:35.3206222Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:35.6236843Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:35.9430344Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:36.2536072Z\",\"response\":\" select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:36.5641395Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:36.879084Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:37.196444Z\",\"response\":\"Edit\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:37.5079377Z\",\"response\":\" Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:37.8362303Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:38.1762813Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:38.4972997Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:38.8395107Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:39.1786817Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:39.5230257Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:39.8706937Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:40.1947733Z\",\"response\":\" In\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:40.5426439Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:40.885708Z\",\"response\":\" updated\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:41.2082368Z\",\"response\":\" view\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:41.5130233Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:41.8185142Z\",\"response\":\" find\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:42.1262175Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:42.4255488Z\",\"response\":\" current\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:42.7312593Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:43.0444957Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:43.3501453Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:43.6627541Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:43.9664762Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:44.2771407Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:44.5812839Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:44.8940264Z\",\"response\":\" T\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:45.2158736Z\",\"response\":\"ap\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:45.5173828Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:45.8240414Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:46.1262428Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:46.432747Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:46.7395757Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:47.052874Z\",\"response\":\"Change\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:47.3938758Z\",\"response\":\" Photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:47.7281199Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:48.0724729Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:48.4248251Z\",\"response\":\" next\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:48.8258722Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:49.2127356Z\",\"response\":\" it\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:49.5384855Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:49.9486796Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:50.322335Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:50.6954917Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:51.0317389Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:51.3624744Z\",\"response\":\" Choose\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:51.7186836Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:52.0790659Z\",\"response\":\" method\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:52.4716943Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:52.8472978Z\",\"response\":\" upload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:53.1838767Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:53.5139274Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:53.8655539Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:54.1836112Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:54.5007345Z\",\"response\":\"options\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:54.8558343Z\",\"response\":\" may\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:55.1864071Z\",\"response\":\" include\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:55.5232775Z\",\"response\":\" Gallery\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:55.8875505Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:56.273189Z\",\"response\":\" Camera\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:56.6992381Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:57.2753706Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:57.6425147Z\",\"response\":\" U\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:58.0133534Z\",\"response\":\"pload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:58.3827135Z\",\"response\":\" from\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:58.8374982Z\",\"response\":\" device\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:59.2732336Z\",\"response\":\").\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:52:59.6494782Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:00.0292719Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:00.4163515Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:00.7933181Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:01.1331972Z\",\"response\":\" Select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:01.4558199Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:01.7872451Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:02.1257117Z\",\"response\":\" image\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:02.4641989Z\",\"response\":\" from\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:02.8252685Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:03.1987283Z\",\"response\":\" chosen\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:03.5713993Z\",\"response\":\" method\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:03.9322346Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:04.3140063Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:04.6840116Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:05.0445271Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:05.3748124Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:05.7083442Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:06.053584Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:06.3801829Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:06.6949007Z\",\"response\":\" selection\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:07.007396Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:07.3922552Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:07.7341702Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:08.0757358Z\",\"response\":\"Save\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:08.4389013Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:08.8016394Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:09.1418195Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:09.4894248Z\",\"response\":\"Upload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:09.8433666Z\",\"response\":\"'.\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:10.1791496Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:10.5169871Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:10.888765Z\",\"response\":\"8\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:11.2364944Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:11.5339707Z\",\"response\":\" Wait\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:11.8633471Z\",\"response\":\" for\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:12.2079213Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:12.5565881Z\",\"response\":\" system\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:12.9199757Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:13.2748588Z\",\"response\":\" process\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:13.6255115Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:13.9671495Z\",\"response\":\" save\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:14.29681Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:14.6600185Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:15.0278258Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:15.3689432Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:15.7593898Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:16.0747399Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:16.4233856Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:16.7572184Z\",\"response\":\"9\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:17.0843066Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:17.4051261Z\",\"response\":\" Check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:17.7463454Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:18.1192959Z\",\"response\":\" updated\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:18.5550362Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:18.8939016Z\",\"response\":\" view\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:19.2536922Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:19.6214798Z\",\"response\":\" ensure\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:19.9944921Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:20.3553655Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:20.7459675Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:21.1937475Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:21.5814674Z\",\"response\":\" correctly\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:21.9434214Z\",\"response\":\" displayed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:22.3464948Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T16:53:22.7746349Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,3901,3880,29515,4777,8509,9196,2707,5339,2242,1054,17092,11954,6712,1633,29491,7834,4475,2348,1917,1163,1032,3735,3760,12911,29491,3117,1550,29515,4,1027,29508,29491,10131,12358,1066,1040,24306,4979,1070,1040,5761,29491,781,781,29518,29491,6000,1148,1072,6107,1040,1232,9238,24306,29510,4319,29491,781,781,29538,29491,1328,1040,9225,2972,29493,2068,1040,2636,8509,6522,29491,781,781,29549,29491,1088,1145,1210,6814,1124,1040,1232,6268,17323,29510,7029,2447,1066,1146,29491,781,781,29550,29491,22583,1040,2806,1066,13067,1032,1401,9196,1093,4306,1761,3792,17365,29493,25129,29493,1210,1268,6507,1245,4663,1377,781,781,29552,29491,14109,1040,12553,4237,1245,1040,9497,2806,29491,781,781,29555,29491,10775,3548,1040,8263,1254,25443,1232,12111,29510,1210,1232,16656,4903,781,781,29551,29491,13886,1122,1040,2355,1066,2527,1072,5370,1040,1401,8509,6522,29491,781,781,29542,29491,5682,1040,9225,8509,2972,1066,6175,1040,1401,9196,1117,13510,14760,29491],\"total_duration\":53458510500,\"load_duration\":170126200,\"prompt_eval_count\":32,\"prompt_eval_duration\":489515700,\"eval_count\":154,\"eval_duration\":52610818300}\n",
+      "timestamp": "2026-01-26T16:53:22.835914"
+    },
+    "rewritten_text": "1. Navigate to the Profile section of the application\n2. Locate and select the 'Edit Profile' option\n3. Open In the updated view, find the current profile picture\n4. Tap or click on the 'Change Photo' button next to it\n5. Choose the method to upload a new photo (options may include Gallery, Camera, or Upload from device)\n6. Select the desired image from the chosen method\n7. Confirm the selection by clicking 'Save' or 'Upload'\n8. Wait for the system to process and save the new profile picture\n9. Check the updated profile view to ensure the new photo is correctly displayed",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Navigate to the Profile section of the application",
+        "description": "Step 1: Navigate to the Profile section of the application"
+      },
+      {
+        "step": 2,
+        "action": "Locate and select the 'Edit Profile' option",
+        "description": "Step 2: Locate and select the 'Edit Profile' option"
+      },
+      {
+        "step": 3,
+        "action": "Open In the updated view, find the current profile picture",
+        "description": "Step 3: Open In the updated view, find the current profile picture"
+      },
+      {
+        "step": 4,
+        "action": "Tap or click on the 'Change Photo' button next to it",
+        "description": "Step 4: Tap or click on the 'Change Photo' button next to it"
+      },
+      {
+        "step": 5,
+        "action": "Choose the method to upload a new photo (options may include Gallery, Camera, or Upload from device)",
+        "description": "Step 5: Choose the method to upload a new photo (options may include Gallery, Camera, or Upload from device)"
+      },
+      {
+        "step": 6,
+        "action": "Select the desired image from the chosen method",
+        "description": "Step 6: Select the desired image from the chosen method"
+      },
+      {
+        "step": 7,
+        "action": "Confirm the selection by clicking 'Save' or 'Upload'",
+        "description": "Step 7: Confirm the selection by clicking 'Save' or 'Upload'"
+      },
+      {
+        "step": 8,
+        "action": "Wait for the system to process and save the new profile picture",
+        "description": "Step 8: Wait for the system to process and save the new profile picture"
+      },
+      {
+        "step": 9,
+        "action": "Check the updated profile view to ensure the new photo is correctly displayed",
+        "description": "Step 9: Check the updated profile view to ensure the new photo is correctly displayed"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Navigate to the Profile section of the application",
+        "description": "Navigate to the Profile section of the application"
+      },
+      {
+        "step": 2,
+        "action": "Locate and select the 'Edit Profile' option",
+        "description": "Locate and select the 'Edit Profile' option"
+      },
+      {
+        "step": 3,
+        "action": "Open In the updated view, find the current profile picture",
+        "description": "Open In the updated view, find the current profile picture"
+      },
+      {
+        "step": 4,
+        "action": "Tap or click on the 'Change Photo' button next to it",
+        "description": "Tap or click on the 'Change Photo' button next to it"
+      },
+      {
+        "step": 5,
+        "action": "Choose the method to upload a new photo (options may include Gallery, Camera, or Upload from device)",
+        "description": "Choose the method to upload a new photo (options may include Gallery, Camera, or Upload from device)"
+      },
+      {
+        "step": 6,
+        "action": "Select the desired image from the chosen method",
+        "description": "Select the desired image from the chosen method"
+      },
+      {
+        "step": 7,
+        "action": "Confirm the selection by clicking 'Save' or 'Upload'",
+        "description": "Confirm the selection by clicking 'Save' or 'Upload'"
+      },
+      {
+        "step": 8,
+        "action": "Wait for the system to process and save the new profile picture",
+        "description": "Wait for the system to process and save the new profile picture"
+      },
+      {
+        "step": 9,
+        "action": "Check the updated profile view to ensure the new photo is correctly displayed",
+        "description": "Check the updated profile view to ensure the new photo is correctly displayed"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.867,
+        "issues": [],
+        "warnings": [],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.9,
+        "issues": [],
+        "warnings": [],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.589,
+        "action_score": 0.556,
+        "dataset_score": 0.5,
+        "alignment_score": 0.778,
+        "details": [
+          "Step 1 basic checks: length=8",
+          "Step 2 basic checks: length=7",
+          "Step 3 basic checks: length=9",
+          "Step 7 basic checks: length=8"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.628,
+        "action_score": 0.667,
+        "dataset_score": 0.5,
+        "alignment_score": 0.778,
+        "details": [
+          "Step 1 basic checks: length=8",
+          "Step 2 basic checks: length=7",
+          "Step 7 basic checks: length=8"
+        ]
+      }
+    },
+    "timestamp": 1769446402.8392918
+  },
+  {
+    "instruction": "update profile photo",
+    "generated": {
+      "instruction": "Instruction: update profile photo -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42"
+        },
+        {
+          "step": 2,
+          "action": "202155Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 202155Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42"
+        },
+        {
+          "step": 4,
+          "action": "5290635Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 5290635Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42"
+        },
+        {
+          "step": 6,
+          "action": "8111029Z\",\"response\":\"",
+          "description": "Step 6: 8111029Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43"
+        },
+        {
+          "step": 9,
+          "action": "0942545Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 0942545Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42.202155Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42.5290635Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:42.8111029Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43.0942545Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43.3755895Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43.6600605Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:43.9417351Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:44.2234685Z\",\"response\":\" account\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:44.5251323Z\",\"response\":\" settings\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:44.8085058Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:45.0994057Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:45.3863436Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:45.67586Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:45.9660505Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:46.254327Z\",\"response\":\" icon\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:46.5408372Z\",\"response\":\" located\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:46.8260777Z\",\"response\":\" at\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:47.1128581Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:47.4032805Z\",\"response\":\" top\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:47.6992778Z\",\"response\":\" right\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:47.9863572Z\",\"response\":\" corner\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:48.2891311Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:48.6147334Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:48.9575659Z\",\"response\":\" screen\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:49.3653012Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:49.7192467Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:50.0125928Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:50.3043552Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:50.6171195Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:50.9239587Z\",\"response\":\" Access\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:51.2389069Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:51.5430435Z\",\"response\":\" account\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:51.8915646Z\",\"response\":\" settings\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:52.184073Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:52.4793012Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:52.7815735Z\",\"response\":\" From\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:53.0780662Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:53.3704231Z\",\"response\":\" drop\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:53.665796Z\",\"response\":\"-\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:53.9584402Z\",\"response\":\"down\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:54.2517861Z\",\"response\":\" menu\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:54.5503483Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:54.8435402Z\",\"response\":\" select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:55.1381907Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:55.4312116Z\",\"response\":\"Account\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:55.7298123Z\",\"response\":\" Settings\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:56.0224319Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:56.316893Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:56.6193213Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:56.9138167Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:57.2084637Z\",\"response\":\" depending\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:57.5019857Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:57.8502302Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:58.175377Z\",\"response\":\" platform\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:58.4686901Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:58.8130072Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:59.1228789Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:59.4353302Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:01:59.7334083Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:00.0329647Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:00.3294916Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:00.6303793Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:00.9244895Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:01.2204835Z\",\"response\":\" Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:01.5156052Z\",\"response\":\" section\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:01.810277Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:02.1088063Z\",\"response\":\" On\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:02.4038284Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:02.7003027Z\",\"response\":\" account\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:02.9983596Z\",\"response\":\" settings\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:03.2938379Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:03.5952596Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:03.8941066Z\",\"response\":\" find\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:04.2215198Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:04.534324Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:04.828451Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:05.1292191Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:05.4277095Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:05.7309841Z\",\"response\":\"Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:06.0265547Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:06.326653Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:06.6273997Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:06.9322908Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:07.2321804Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:07.5312412Z\",\"response\":\" label\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:07.8309954Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:08.1339006Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:08.4312432Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:08.7324635Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:09.0271666Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:09.3319425Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:09.6367369Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:09.9356549Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:10.2368429Z\",\"response\":\" current\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:10.5403383Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:10.844836Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:11.1494855Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:11.4869047Z\",\"response\":\" Sc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:11.8228919Z\",\"response\":\"roll\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:12.1636405Z\",\"response\":\" down\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:12.4918518Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:12.8029564Z\",\"response\":\" look\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:13.1446918Z\",\"response\":\" for\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:13.5210804Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:13.8538001Z\",\"response\":\" area\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:14.2278756Z\",\"response\":\" where\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:14.6310248Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:15.0350721Z\",\"response\":\" current\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:15.4688342Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:15.7983083Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:16.1529945Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:16.4824327Z\",\"response\":\" displayed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:16.8150984Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:17.1229006Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:17.4377571Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:17.7478145Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:18.0620944Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:18.3737462Z\",\"response\":\" Select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:18.6964113Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:19.0598187Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:19.3820529Z\",\"response\":\"Edit\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:19.7092293Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:20.0386926Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:20.3762385Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:20.6878126Z\",\"response\":\"Update\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:20.9984231Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:21.3252929Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:21.6437094Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:21.9629582Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:22.2864604Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:22.6113966Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:22.9263321Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:23.2967881Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:23.721704Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:24.1660497Z\",\"response\":\"Edit\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:24.5644542Z\",\"response\":\" Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:24.9121323Z\",\"response\":\" Picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:25.274747Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:25.6256889Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:25.9611351Z\",\"response\":\"Change\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:26.2938098Z\",\"response\":\" Picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:26.6278403Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:26.9812584Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:27.3986879Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:27.7301292Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:28.0750823Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:28.415224Z\",\"response\":\" next\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:28.756511Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:29.1293127Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:29.4696558Z\",\"response\":\" current\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:29.8661738Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:30.2490109Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:30.6245845Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:31.0437793Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:31.3805321Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:31.7336504Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:32.0661039Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:32.4319148Z\",\"response\":\" U\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:32.805028Z\",\"response\":\"pload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:33.1408549Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:33.4751197Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:33.8085503Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:34.1488807Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:34.4796336Z\",\"response\":\" Choose\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:34.8121463Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:35.1403815Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:35.4638167Z\",\"response\":\" image\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:35.8629659Z\",\"response\":\" file\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:36.2573176Z\",\"response\":\" from\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:36.6612781Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:37.0531449Z\",\"response\":\" device\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:37.4525195Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:37.9275707Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:38.3401527Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:38.735872Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:39.1167171Z\",\"response\":\"Upload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:39.5008743Z\",\"response\":\" Photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:39.9209921Z\",\"response\":\"\\\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:40.300337Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:40.6760098Z\",\"response\":\"B\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:41.0574134Z\",\"response\":\"row\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:41.4538908Z\",\"response\":\"se\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:41.8348978Z\",\"response\":\"\\\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:42.2181097Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:42.6006844Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:42.9815722Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:43.3900493Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:43.7984779Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:44.2035823Z\",\"response\":\" then\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:44.6070274Z\",\"response\":\" select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:45.0261468Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:45.4401891Z\",\"response\":\" file\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:45.8236011Z\",\"response\":\" you\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:46.210512Z\",\"response\":\" want\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:46.6022195Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:46.9905225Z\",\"response\":\" use\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:47.3638187Z\",\"response\":\" as\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:47.734785Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:48.0704408Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:48.4075239Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:48.7571921Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:49.1567773Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:49.5500002Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:49.8814859Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:50.2146082Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:50.5267098Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:50.8572411Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:51.1707092Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:51.4917753Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:51.8319653Z\",\"response\":\" upload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:52.1728266Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:52.5143887Z\",\"response\":\" After\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:52.8610141Z\",\"response\":\" selecting\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:53.1951804Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:53.5097743Z\",\"response\":\" file\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:53.8521498Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:54.1722755Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:54.4829543Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:54.799645Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:55.160857Z\",\"response\":\" correct\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:55.5328603Z\",\"response\":\" image\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:55.8702267Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:56.1897645Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:56.509347Z\",\"response\":\" chosen\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:56.8557926Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:57.1997761Z\",\"response\":\" confirm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:57.5347977Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:57.8609694Z\",\"response\":\" upload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:58.188386Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:58.5190261Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:58.8540997Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:59.1728657Z\",\"response\":\"Save\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:59.489088Z\",\"response\":\"\\\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:02:59.8162086Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:00.145312Z\",\"response\":\"Update\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:00.4952534Z\",\"response\":\" Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:00.9201608Z\",\"response\":\" Picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:01.325204Z\",\"response\":\"\\\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:01.705193Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:02.0606729Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:02.4014446Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:02.7384265Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:03.1283051Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:03.5178838Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:03.9123927Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:04.2954547Z\",\"response\":\"8\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:04.6848556Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:05.0894001Z\",\"response\":\" Wait\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:05.4745023Z\",\"response\":\" for\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:05.8832984Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:06.3077749Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:06.6850402Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:07.0810808Z\",\"response\":\" process\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:07.4651368Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:07.8590126Z\",\"response\":\" update\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:08.2405469Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:08.6316053Z\",\"response\":\" The\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:09.0134144Z\",\"response\":\" system\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:09.4042151Z\",\"response\":\" will\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:09.7911549Z\",\"response\":\" process\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:10.1813047Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:10.571723Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:10.9642969Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:11.3519737Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:11.7509405Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:12.1768276Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:12.592311Z\",\"response\":\" once\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:13.0278352Z\",\"response\":\" it\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:13.429844Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:13.8251352Z\",\"response\":\"s\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:14.2200713Z\",\"response\":\" done\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:14.6131805Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:14.9392269Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:15.256916Z\",\"response\":\" updated\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:15.5755734Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:15.893419Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:16.2210923Z\",\"response\":\" should\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:16.5430758Z\",\"response\":\" be\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:16.8685717Z\",\"response\":\" displayed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:17.1817608Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:17.521575Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:17.856492Z\",\"response\":\" account\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:18.198267Z\",\"response\":\" settings\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:18.5294801Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:18.8504295Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:19.1762203Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:19.500172Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:19.8267018Z\",\"response\":\"9\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:20.1422603Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:20.4609609Z\",\"response\":\" Return\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:20.8146247Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:21.1570409Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:21.4707104Z\",\"response\":\" main\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:21.7840537Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:22.1126528Z\",\"response\":\" view\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:22.4235038Z\",\"response\":\":\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:22.7390778Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:23.064584Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:23.3732137Z\",\"response\":\" back\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:23.6887196Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:24.0115013Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:24.3622195Z\",\"response\":\" main\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:24.692797Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:25.0170125Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:25.3471651Z\",\"response\":\" d\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:25.6885166Z\",\"response\":\"ashboard\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:26.0706683Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:26.3587165Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:26.6937324Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:27.0265856Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:27.3895164Z\",\"response\":\" appropriate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:27.6909742Z\",\"response\":\" link\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:28.0240216Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:28.3691948Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:28.7181085Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:29.0528693Z\",\"response\":\" see\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:29.3728483Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:29.7125629Z\",\"response\":\" newly\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:30.0741845Z\",\"response\":\" updated\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:30.4443332Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:30.8008368Z\",\"response\":\" picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:31.1520528Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:03:31.5268193Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,3901,3880,29515,4777,8509,9196,2707,5339,2242,1054,17092,11954,6712,1633,29491,7834,4475,2348,1917,1163,1032,3735,3760,12911,29491,3117,1550,29515,4,1027,29508,29491,10131,12358,1066,1342,3476,7240,29515,10981,1124,1040,8509,10228,6419,1206,1040,2598,1871,7349,1070,1040,5689,29491,781,781,29518,29491,12327,1040,3476,7240,3652,29515,4440,1040,6856,29501,4022,9282,29493,6107,1113,8588,19691,29507,1210,4452,4319,10853,1124,1040,5949,29491,781,781,29538,29491,10131,12358,1066,1040,24306,4979,29515,2186,1040,3476,7240,3652,29493,2068,1072,6814,1124,1040,1113,9489,29507,4319,1210,1032,4452,4638,29491,781,781,29549,29491,6000,1148,1342,2636,8509,9196,29515,3290,2352,1828,1210,1681,1122,1040,3466,1738,1342,2636,8509,6522,1117,14760,29491,781,781,29550,29491,14109,1040,1232,9238,29510,1210,1232,5233,29510,8509,9196,4319,29515,10981,1124,1040,1232,9238,24306,28640,1415,1232,6268,28640,1415,1210,1032,4452,7029,2447,1066,1342,2636,8509,9196,29491,781,781,29552,29491,1268,6507,1401,8509,9196,29515,22583,1040,12553,4237,2497,1245,1342,4663,1254,25443,1124,1113,16656,17323,1316,1113,29528,1439,1099,1316,1210,1032,4452,7029,29493,1636,6107,1040,2497,1136,1715,1066,1706,1158,1342,1401,8509,6522,29491,781,781,29555,29491,10775,3548,1040,13067,29515,3298,26273,1040,2497,29493,2645,1137,1040,5482,4237,1427,1518,9497,1072,9503,1040,13067,1254,25443,1113,12111,1316,1113,5233,24306,28640,1316,1210,1032,4452,7029,29491,781,781,29551,29491,13886,1122,1040,9196,1066,2527,1072,4777,29515,1183,2355,1390,2527,1342,1401,8509,6522,29493,1072,3095,1146,29510,29481,2971,29493,1342,9225,8509,6522,1791,1115,14760,1124,1342,3476,7240,3652,29491,781,781,29542,29491,5339,1066,1342,2959,8509,2972,29515,10131,12358,1620,1066,1040,2959,8509,1210,1049,14337,1254,25443,1124,1040,8426,3830,1210,7029,1066,1800,1342,13254,9225,8509,6522,29491],\"total_duration\":126795163000,\"load_duration\":10562591000,\"prompt_eval_count\":32,\"prompt_eval_duration\":6887288200,\"eval_count\":323,\"eval_duration\":108989794600}\n",
+      "timestamp": "2026-01-26T17:03:31.639945"
+    },
+    "rewritten_text": "1. Navigate to your account settings: Click on the profile icon located at the top right corner of the screen\n2. Access the account settings page: From the drop-down menu, select \"Account Settings\" or similar option depending on the platform\n3. Navigate to the Profile section: On the account settings page, find and click on the \"Profile\" option or a similar label\n4. Locate your current profile photo: Scroll down or look for the area where your current profile picture is displayed\n5. Select the 'Edit' or 'Update' profile photo option: Click on the 'Edit Profile Picture', 'Change Picture', or a similar button next to your current profile photo\n6. Upload new profile photo: Choose the desired image file from your device by clicking on \"Upload Photo\", \"Browse\", or a similar button, then select the file you want to use as your new profile picture\n7. Confirm the upload: After selecting the file, check that the correct image has been chosen and confirm the upload by clicking \"Save\", \"Update Profile Picture\", or a similar button\n8. Wait for the photo to process and update: The system will process your new profile picture, and once it's done, your updated profile picture should be displayed on your account settings page\n9. Return to your main profile view: Navigate back to the main profile or dashboard by clicking on the appropriate link or button to see your newly updated profile picture",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Navigate to your account settings: Click on the profile icon located at the top right corner of the screen",
+        "description": "Step 1: Navigate to your account settings: Click on the profile icon located at the top right corner of the screen"
+      },
+      {
+        "step": 2,
+        "action": "Access the account settings page: From the drop-down menu, select \"Account Settings\" or similar option depending on the platform",
+        "description": "Step 2: Access the account settings page: From the drop-down menu, select \"Account Settings\" or similar option depending on the platform"
+      },
+      {
+        "step": 3,
+        "action": "Navigate to the Profile section: On the account settings page, find and click on the \"Profile\" option or a similar label",
+        "description": "Step 3: Navigate to the Profile section: On the account settings page, find and click on the \"Profile\" option or a similar label"
+      },
+      {
+        "step": 4,
+        "action": "Locate your current profile photo: Scroll down or look for the area where your current profile picture is displayed",
+        "description": "Step 4: Locate your current profile photo: Scroll down or look for the area where your current profile picture is displayed"
+      },
+      {
+        "step": 5,
+        "action": "Select the 'Edit' or 'Update' profile photo option: Click on the 'Edit Profile Picture', 'Change Picture', or a similar button next to your current profile photo",
+        "description": "Step 5: Select the 'Edit' or 'Update' profile photo option: Click on the 'Edit Profile Picture', 'Change Picture', or a similar button next to your current profile photo"
+      },
+      {
+        "step": 6,
+        "action": "Upload new profile photo: Choose the desired image file from your device by clicking on \"Upload Photo\", \"Browse\", or a similar button, then select the file you want to use as your new profile picture",
+        "description": "Step 6: Upload new profile photo: Choose the desired image file from your device by clicking on \"Upload Photo\", \"Browse\", or a similar button, then select the file you want to use as your new profile picture"
+      },
+      {
+        "step": 7,
+        "action": "Confirm the upload: After selecting the file, check that the correct image has been chosen and confirm the upload by clicking \"Save\", \"Update Profile Picture\", or a similar button",
+        "description": "Step 7: Confirm the upload: After selecting the file, check that the correct image has been chosen and confirm the upload by clicking \"Save\", \"Update Profile Picture\", or a similar button"
+      },
+      {
+        "step": 8,
+        "action": "Wait for the photo to process and update: The system will process your new profile picture, and once it's done, your updated profile picture should be displayed on your account settings page",
+        "description": "Step 8: Wait for the photo to process and update: The system will process your new profile picture, and once it's done, your updated profile picture should be displayed on your account settings page"
+      },
+      {
+        "step": 9,
+        "action": "Return to your main profile view: Navigate back to the main profile or dashboard by clicking on the appropriate link or button to see your newly updated profile picture",
+        "description": "Step 9: Return to your main profile view: Navigate back to the main profile or dashboard by clicking on the appropriate link or button to see your newly updated profile picture"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Navigate to your account settings: Click on the profile icon located at the top right corner of the screen",
+        "description": "Navigate to your account settings: Click on the profile icon located at the top right corner of the screen"
+      },
+      {
+        "step": 2,
+        "action": "Access the account settings page: From the drop-down menu, select \"Account Settings\" or similar option depending on the platform",
+        "description": "Access the account settings page: From the drop-down menu, select \"Account Settings\" or similar option depending on the platform"
+      },
+      {
+        "step": 3,
+        "action": "Navigate to the Profile section: On the account settings page, find and click on the \"Profile\" option or a similar label",
+        "description": "Navigate to the Profile section: On the account settings page, find and click on the \"Profile\" option or a similar label"
+      },
+      {
+        "step": 4,
+        "action": "Locate your current profile photo: Scroll down or look for the area where your current profile picture is displayed",
+        "description": "Locate your current profile photo: Scroll down or look for the area where your current profile picture is displayed"
+      },
+      {
+        "step": 5,
+        "action": "Select the 'Edit' or 'Update' profile photo option: Click on the 'Edit Profile Picture', 'Change Picture', or a similar button next to your current profile photo",
+        "description": "Select the 'Edit' or 'Update' profile photo option: Click on the 'Edit Profile Picture', 'Change Picture', or a similar button next to your current profile photo"
+      },
+      {
+        "step": 6,
+        "action": "Upload new profile photo: Choose the desired image file from your device by clicking on \"Upload Photo\", \"Browse\", or a similar button, then select the file you want to use as your new profile picture",
+        "description": "Upload new profile photo: Choose the desired image file from your device by clicking on \"Upload Photo\", \"Browse\", or a similar button, then select the file you want to use as your new profile picture"
+      },
+      {
+        "step": 7,
+        "action": "Confirm the upload: After selecting the file, check that the correct image has been chosen and confirm the upload by clicking \"Save\", \"Update Profile Picture\", or a similar button",
+        "description": "Confirm the upload: After selecting the file, check that the correct image has been chosen and confirm the upload by clicking \"Save\", \"Update Profile Picture\", or a similar button"
+      },
+      {
+        "step": 8,
+        "action": "Wait for the photo to process and update: The system will process your new profile picture, and once it's done, your updated profile picture should be displayed on your account settings page",
+        "description": "Wait for the photo to process and update: The system will process your new profile picture, and once it's done, your updated profile picture should be displayed on your account settings page"
+      },
+      {
+        "step": 9,
+        "action": "Return to your main profile view: Navigate back to the main profile or dashboard by clicking on the appropriate link or button to see your newly updated profile picture",
+        "description": "Return to your main profile view: Navigate back to the main profile or dashboard by clicking on the appropriate link or button to see your newly updated profile picture"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.767,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.767,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.5,
+        "action_score": 0.222,
+        "dataset_score": 0.5,
+        "alignment_score": 0.889,
+        "details": [
+          "Step 1 basic checks: length=19",
+          "Step 2 basic checks: length=19",
+          "Step 3 basic checks: length=21",
+          "Step 4 basic checks: length=19",
+          "Step 6 basic checks: length=35",
+          "Step 7 basic checks: length=29",
+          "Step 9 basic checks: length=29",
+          "Confidence below threshold 0.55: 0.500"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.5,
+        "action_score": 0.222,
+        "dataset_score": 0.5,
+        "alignment_score": 0.889,
+        "details": [
+          "Step 1 basic checks: length=19",
+          "Step 2 basic checks: length=19",
+          "Step 3 basic checks: length=21",
+          "Step 4 basic checks: length=19",
+          "Step 6 basic checks: length=35",
+          "Step 7 basic checks: length=29",
+          "Step 9 basic checks: length=29",
+          "Confidence below threshold 0.55: 0.500"
+        ]
+      }
+    },
+    "timestamp": 1769447011.6516612
+  },
+  {
+    "instruction": "update profile photo",
+    "generated": {
+      "instruction": "Instruction: update profile photo -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:02",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:02"
+        },
+        {
+          "step": 2,
+          "action": "406874Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 406874Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:02",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:02"
+        },
+        {
+          "step": 4,
+          "action": "6998399Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 6998399Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03"
+        },
+        {
+          "step": 6,
+          "action": "0062648Z\",\"response\":\"",
+          "description": "Step 6: 0062648Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03"
+        },
+        {
+          "step": 9,
+          "action": "3436183Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 3436183Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:02.406874Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:02.6998399Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03.0062648Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03.3436183Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:03.7239356Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:04.1048402Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:04.4067319Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:04.7910744Z\",\"response\":\" account\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:05.1346023Z\",\"response\":\" settings\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:05.458757Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:05.7951655Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:06.1279658Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:06.459444Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:06.7817255Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:07.1270407Z\",\"response\":\" Select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:07.4441986Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:07.7682808Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:08.1031281Z\",\"response\":\"Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:08.4305713Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:08.7399463Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:09.0585384Z\",\"response\":\" from\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:09.3673684Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:09.6804888Z\",\"response\":\" menu\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:09.9914386Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:10.3283911Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:10.652007Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:10.9827516Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:11.2989488Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:11.6097084Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:11.9442096Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:12.2635855Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:12.586901Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:12.9119015Z\",\"response\":\"Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:13.2409869Z\",\"response\":\" Picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:13.5744554Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:13.894385Z\",\"response\":\" section\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:14.2166189Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:14.5433712Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:14.8716023Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:15.1938014Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:15.5118728Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:15.8459126Z\",\"response\":\" T\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:16.1686907Z\",\"response\":\"ap\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:16.4999421Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:16.8229803Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:17.1386192Z\",\"response\":\"Edit\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:17.4553759Z\",\"response\":\" Profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:17.7709159Z\",\"response\":\" Picture\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:18.0990131Z\",\"response\":\"'.\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:18.4252604Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:18.7358169Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:19.0431804Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:19.344376Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:19.6508277Z\",\"response\":\" Choose\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:19.9610738Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:20.2700496Z\",\"response\":\" source\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:20.5723775Z\",\"response\":\" for\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:20.8741513Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:21.1787819Z\",\"response\":\" new\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:21.4785118Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:21.7899607Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:22.0942161Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:22.3951624Z\",\"response\":\"Options\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:22.7006515Z\",\"response\":\" may\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:22.9969606Z\",\"response\":\" include\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:23.2951056Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:23.5956389Z\",\"response\":\"G\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:23.9019651Z\",\"response\":\"allery\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:24.2025193Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:24.5038429Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:24.8185395Z\",\"response\":\"Camera\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:25.1188823Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:25.4309613Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:25.7258549Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:26.0301128Z\",\"response\":\"Upload\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:26.3381054Z\",\"response\":\" from\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:26.6558101Z\",\"response\":\" Cloud\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:26.9647046Z\",\"response\":\"').\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:27.2673357Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:27.5661933Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:27.8717802Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:28.1740736Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:28.4820909Z\",\"response\":\" Select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:28.7888115Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:29.1071701Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:29.4104283Z\",\"response\":\" image\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:29.7192052Z\",\"response\":\" from\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:30.0180097Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:30.3306413Z\",\"response\":\" chosen\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:30.6391211Z\",\"response\":\" source\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:30.939229Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:31.2517834Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:31.5550431Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:31.8694407Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:32.1691865Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:32.4777628Z\",\"response\":\" C\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:32.7951673Z\",\"response\":\"rop\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:33.1091645Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:33.4364165Z\",\"response\":\" adjust\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:33.74916Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:34.0580031Z\",\"response\":\" image\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:34.3646923Z\",\"response\":\" as\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:34.6616202Z\",\"response\":\" necessary\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:34.9664226Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:35.2688699Z\",\"response\":\" ensure\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:35.5728144Z\",\"response\":\" it\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:35.9033922Z\",\"response\":\" fits\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:36.2737671Z\",\"response\":\" properly\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:36.6306461Z\",\"response\":\" within\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:36.9888235Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:37.3298959Z\",\"response\":\" designated\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:37.6843638Z\",\"response\":\" space\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:38.1398402Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:38.5235095Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:38.9468572Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:39.5160927Z\",\"response\":\"8\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:39.9163303Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:40.2593001Z\",\"response\":\" Save\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:40.6314751Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:40.9801305Z\",\"response\":\" confirm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:41.3338559Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:41.702132Z\",\"response\":\" changes\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:42.0532597Z\",\"response\":\" you\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:42.3935423Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:42.7162122Z\",\"response\":\"ve\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:43.0511258Z\",\"response\":\" made\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:43.4009554Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:43.8037743Z\",\"response\":\" update\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:44.1600809Z\",\"response\":\" your\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:44.5349051Z\",\"response\":\" profile\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:44.8976972Z\",\"response\":\" photo\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:45.2413434Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-26T17:31:45.6644865Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,3901,3880,29515,4777,8509,9196,2707,5339,2242,1054,17092,11954,6712,1633,29491,7834,4475,2348,1917,1163,1032,3735,3760,12911,29491,3117,1550,29515,4,1027,29508,29491,10131,12358,1066,1342,3476,7240,29491,781,781,29518,29491,14109,1040,1232,9489,29510,4319,1245,1040,9282,29491,781,781,29538,29491,6000,1148,1040,1232,9489,28640,29510,4979,29491,781,781,29549,29491,1088,1145,1124,1232,9238,24306,28640,4903,781,781,29550,29491,22583,1040,3600,1122,1342,1401,8509,9196,1093,4786,1761,3792,1232,29545,9818,1415,1232,17289,1415,1210,1232,16656,1245,14600,5300,781,781,29552,29491,14109,1040,12553,4237,1245,1342,9497,3600,29491,781,781,29555,29491,1102,2274,1072,8160,1040,4237,1158,5660,1066,6175,1146,17163,9990,3141,1040,21212,3532,29491,781,781,29551,29491,15994,1210,9503,1040,5203,1136,29510,1101,2037,1066,4777,1342,8509,9196,29491],\"total_duration\":44029993000,\"load_duration\":374662100,\"prompt_eval_count\":32,\"prompt_eval_duration\":342405300,\"eval_count\":133,\"eval_duration\":43124603600}\n",
+      "timestamp": "2026-01-26T17:31:45.691218"
+    },
+    "rewritten_text": "1. Navigate to your account settings\n2. Select the 'Profile' option from the menu\n3. Locate the 'Profile Picture' section\n4. Tap on 'Edit Profile Picture'\n5. Choose the source for your new profile photo (Options may include 'Gallery', 'Camera', or 'Upload from Cloud')\n6. Select the desired image from your chosen source\n7. Crop and adjust the image as necessary to ensure it fits properly within the designated space\n8. Save or confirm the changes you've made to update your profile photo",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Navigate to your account settings",
+        "description": "Step 1: Navigate to your account settings"
+      },
+      {
+        "step": 2,
+        "action": "Select the 'Profile' option from the menu",
+        "description": "Step 2: Select the 'Profile' option from the menu"
+      },
+      {
+        "step": 3,
+        "action": "Locate the 'Profile Picture' section",
+        "description": "Step 3: Locate the 'Profile Picture' section"
+      },
+      {
+        "step": 4,
+        "action": "Tap on 'Edit Profile Picture'",
+        "description": "Step 4: Tap on 'Edit Profile Picture'"
+      },
+      {
+        "step": 5,
+        "action": "Choose the source for your new profile photo (Options may include 'Gallery', 'Camera', or 'Upload from Cloud')",
+        "description": "Step 5: Choose the source for your new profile photo (Options may include 'Gallery', 'Camera', or 'Upload from Cloud')"
+      },
+      {
+        "step": 6,
+        "action": "Select the desired image from your chosen source",
+        "description": "Step 6: Select the desired image from your chosen source"
+      },
+      {
+        "step": 7,
+        "action": "Crop and adjust the image as necessary to ensure it fits properly within the designated space",
+        "description": "Step 7: Crop and adjust the image as necessary to ensure it fits properly within the designated space"
+      },
+      {
+        "step": 8,
+        "action": "Save or confirm the changes you've made to update your profile photo",
+        "description": "Step 8: Save or confirm the changes you've made to update your profile photo"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Navigate to your account settings",
+        "description": "Navigate to your account settings"
+      },
+      {
+        "step": 2,
+        "action": "Select the 'Profile' option from the menu",
+        "description": "Select the 'Profile' option from the menu"
+      },
+      {
+        "step": 3,
+        "action": "Locate the 'Profile Picture' section",
+        "description": "Locate the 'Profile Picture' section"
+      },
+      {
+        "step": 4,
+        "action": "Tap on 'Edit Profile Picture'",
+        "description": "Tap on 'Edit Profile Picture'"
+      },
+      {
+        "step": 5,
+        "action": "Choose the source for your new profile photo (Options may include 'Gallery', 'Camera', or 'Upload from Cloud')",
+        "description": "Choose the source for your new profile photo (Options may include 'Gallery', 'Camera', or 'Upload from Cloud')"
+      },
+      {
+        "step": 6,
+        "action": "Select the desired image from your chosen source",
+        "description": "Select the desired image from your chosen source"
+      },
+      {
+        "step": 7,
+        "action": "Crop and adjust the image as necessary to ensure it fits properly within the designated space",
+        "description": "Crop and adjust the image as necessary to ensure it fits properly within the designated space"
+      },
+      {
+        "step": 8,
+        "action": "Save or confirm the changes you've made to update your profile photo",
+        "description": "Save or confirm the changes you've made to update your profile photo"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.787,
+        "issues": [],
+        "warnings": [
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.787,
+        "issues": [],
+        "warnings": [
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.575,
+        "action_score": 0.625,
+        "dataset_score": 0.5,
+        "alignment_score": 0.625,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 3 basic checks: length=5",
+          "Step 7 basic checks: length=16"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.575,
+        "action_score": 0.625,
+        "dataset_score": 0.5,
+        "alignment_score": 0.625,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 3 basic checks: length=5",
+          "Step 7 basic checks: length=16"
+        ]
+      }
+    },
+    "timestamp": 1769448705.6970856
   }
 ]

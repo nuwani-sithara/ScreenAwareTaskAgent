@@ -1,107 +1,130 @@
-# LLM Prompt Engineering - Human-like Test Automation Agent
+# Language Model Training from Scratch
 
-## Project Overview
+This project contains the environment and structure for training a language model from scratch using PyTorch and Hugging Face libraries.
 
-This project implements a **human-like test automation agent** that executes **functional and exploratory testing** based on **natural language instructions**. It leverages **Large Language Models (LLMs)** and prompt engineering to convert human instructions into automated test scripts, eliminating the need for manual scripting.
+## Project Structure
 
----
+```
+llm_n/
+├── data/           # Training and validation datasets
+├── models/         # Saved model checkpoints
+├── scripts/        # Training and utility scripts
+│   └── verify_cuda.py  # GPU and CUDA verification script
+├── venv/           # Python virtual environment
+├── requirements.txt    # Python dependencies
+└── README.md       # This file
+```
 
-## Motivation / Problem Statement
+## Setup Instructions
 
-Automated testing tools today often require scripting, lack natural language support, and struggle to adapt to dynamic user interfaces.  
-This project addresses these issues by:  
-- Accepting natural language test instructions.  
-- Generating automation scripts dynamically.  
-- Adapting to UI changes without manual intervention.  
+### 1. Activate Virtual Environment
 
----
+```powershell
+# Windows PowerShell
+.\venv\Scripts\activate
 
-## Key Features
+# Or use full path
+cd llm_n
+.\venv\Scripts\activate
+```
 
-- **Natural Language Driven:** Enter test instructions in plain English.  
-- **Functional & Exploratory Testing:** Supports multiple test scenarios.  
-- **Dynamic UI Adaptation:** Handles changes in the application interface automatically.  
-- **No Manual Scripting Required:** LLMs generate automation steps intelligently.  
+### 2. Install Dependencies
 
----
+Due to disk space constraints, you may need to install packages in stages:
 
-## Installation
+#### Option A: Install PyTorch with CUDA support (Requires ~2.5 GB)
+```powershell
+# For CUDA 12.1
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 
-### 1. Clone the repository
+# For CUDA 11.8
+pip install torch --index-url https://download.pytorch.org/whl/cu118
+```
 
-```bash
-git https://github.com/nuwani-sithara/ScreenAwareTaskAgent/tree/feature/llm-prompting/llm
-cd llm
+#### Option B: Install CPU-only PyTorch first (Smaller, ~200 MB)
+```powershell
+pip install torch
+```
 
-2. Create and activate a virtual environment
+#### Install remaining packages:
+```powershell
+pip install transformers datasets tokenizers numpy matplotlib tqdm
+```
 
-Windows PowerShell:
-
-python -m venv venv
-venv\Scripts\Activate.ps1
-
-
-Windows Command Prompt (cmd):
-
-python -m venv venv
-venv\Scripts\activate.bat
-
-3. Install dependencies
+Or install all at once (if you have enough disk space):
+```powershell
 pip install -r requirements.txt
+```
 
+### 3. Verify CUDA Setup
 
-This installs all required packages, including:
-hf_xet, huggingface_hub[hf_xet], selenium, webdriver-manager, transformers, torch, langchain-community, and others.
+Run the verification script to check if GPU is properly configured:
 
-Usage
+```powershell
+python scripts\verify_cuda.py
+```
 
-Ensure the virtual environment is activated.
+This will check:
+- PyTorch installation
+- CUDA availability
+- GPU detection and properties
+- GPU computation test
+- Other required libraries
 
-Run the main script:
+## Upgrading to CUDA Version
 
-python demo.py
+If you installed CPU-only PyTorch and want to upgrade to CUDA:
 
+```powershell
+# Uninstall CPU version
+pip uninstall torch
 
-Enter your test instructions in natural language.
+# Install CUDA version
+pip install torch --index-url https://download.pytorch.org/whl/cu121
+```
 
-The agent will perform the corresponding automation steps.
+## System Requirements
 
-Project Structure
-LLM_PromptEngineering/
-├─ demo.py                  # Main script to test automation agent
-├─ requirements.txt         # Python dependencies
-├─ .gitignore               # Ignored files like venv, __pycache__, .env
-├─ README.md                # Project documentation
-└─ venv/                    # Virtual environment (ignored in Git)
+- **GPU**: NVIDIA GPU with CUDA support
+- **CUDA**: Version 11.8 or 12.1 recommended
+- **Disk Space**: ~3-4 GB for all dependencies
+- **RAM**: 8 GB minimum, 16 GB+ recommended for training
+- **Python**: 3.8 or higher
 
-Dependencies
+## Disk Space Management
 
-Python 3.11+
+If you encounter "No space left on device" errors:
 
-Libraries: torch, transformers, selenium, webdriver-manager, langchain-community, hf_xet, huggingface_hub[hf_xet]
+1. Clean pip cache: `pip cache purge`
+2. Free up disk space
+3. Install packages one at a time
+4. Consider using CPU-only version initially
 
-Notes
+## Next Steps
 
-Do not commit the venv/ folder — it is ignored via .gitignore.
+1. Prepare your training data in the `data/` folder
+2. Create training scripts in the `scripts/` folder
+3. Configure model architecture and hyperparameters
+4. Start training and save checkpoints to `models/`
 
-Use requirements.txt to recreate the environment on another machine:
+## Troubleshooting
 
-python -m venv venv
-pip install -r requirements.txt
+### CUDA Not Detected
 
+1. Verify NVIDIA drivers are installed: `nvidia-smi`
+2. Check CUDA toolkit installation
+3. Ensure PyTorch CUDA version matches your CUDA installation
+4. Run `python scripts\verify_cuda.py` for detailed diagnostics
 
-Make sure your system has Python 3.11 or higher installed.
+### Import Errors
 
-References
+Make sure virtual environment is activated:
+```powershell
+.\venv\Scripts\activate
+```
 
-Hugging Face Transformers Documentation
+### Disk Space Issues
 
-LangChain Documentation
-
-Selenium WebDriver Documentation
-
-License
-
-This project is for academic purposes (Final Year Project) and may be adapted for non-commercial research use.
-
-
+- Use CPU-only PyTorch initially
+- Clean temporary files and caches
+- Install packages incrementally

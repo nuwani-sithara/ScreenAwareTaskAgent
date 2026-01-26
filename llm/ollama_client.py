@@ -1,7 +1,7 @@
 """Simple Ollama client wrapper with HTTP and CLI fallback.
 
 Usage:
-    from llm_n.ollama_client import OllamaClient
+    from llm.ollama_client import OllamaClient
     c = OllamaClient()
     text = c.generate("Hello world", model="mistral")
 
