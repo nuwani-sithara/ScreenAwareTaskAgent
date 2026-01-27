@@ -20,6 +20,8 @@ export class Sanitizer {
         return this.sanitizeMouseMove(sanitized);
       case 'mouse_scroll':
         return this.sanitizeMouseScroll(sanitized);
+      case 'mouse_drag':
+        return this.sanitizeMouseDrag(sanitized);
       case 'type_text':
         return this.sanitizeTypeText(sanitized);
       default:
@@ -49,6 +51,21 @@ export class Sanitizer {
     // Clamp scroll to reasonable range
     cmd.scroll = Math.round(this.clamp(cmd.scroll, -10, 10));
     
+    return cmd;
+  }
+
+  /**
+   * Sanitize mouse_drag command
+   */
+  private static sanitizeMouseDrag(cmd: any): any {
+    // Clamp each axis per single report expectation
+    cmd.dx = Math.round(this.clamp(cmd.dx, -2000, 2000));
+    cmd.dy = Math.round(this.clamp(cmd.dy, -2000, 2000));
+
+    // Clamp duration to reasonable bounds
+    if (cmd.duration === undefined || typeof cmd.duration !== 'number') cmd.duration = 300;
+    cmd.duration = Math.round(this.clamp(cmd.duration, 0, 10000));
+
     return cmd;
   }
   

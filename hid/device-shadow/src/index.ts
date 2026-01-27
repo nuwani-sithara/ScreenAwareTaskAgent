@@ -97,8 +97,8 @@ export class DeviceShadow {
       });
     };
 
-    // If this is a mouse_move, first execute a deterministic anchor move to top-left
-    if (command.cmd === 'mouse_move') {
+    // If this is a mouse_move or mouse_drag, first execute a deterministic anchor move to top-left
+    if (command.cmd === 'mouse_move' || command.cmd === 'mouse_drag') {
       const anchor = {
         cmd: 'mouse_move',
         dx: -1000,

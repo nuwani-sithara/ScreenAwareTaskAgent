@@ -16,6 +16,9 @@
 #define CMD_MOUSE_MOVE   "mouse_move"
 #define CMD_MOUSE_CLICK  "mouse_click"
 #define CMD_MOUSE_SCROLL "mouse_scroll"
+// Mouse button press/release (for drag operations)
+#define CMD_MOUSE_DOWN   "mouse_down"
+#define CMD_MOUSE_UP     "mouse_up"
 
 // Keyboard commands
 #define CMD_KEY_PRESS    "key_press"

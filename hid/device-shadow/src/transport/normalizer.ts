@@ -22,6 +22,10 @@ export class Normalizer {
     switch (command.cmd) {
       case 'mouse_move':
         return this.normalizeMouseMove(command);
+      case 'mouse_scroll':
+        return this.normalizeMouseScroll(command);
+      case 'mouse_drag':
+        return this.normalizeMouseDrag(command);
       default:
         // Most commands don't need normalization
         return [command];
@@ -61,6 +65,57 @@ export class Normalizer {
       remainingY -= stepY;
     }
     
+    return commands;
+  }
+
+  /**
+   * Normalize mouse_scroll into one or more wheel reports
+   */
+  private static normalizeMouseScroll(cmd: any): NormalizedCommand[] {
+    const scroll = cmd.scroll;
+
+    if (Math.abs(scroll) <= 127) return [cmd];
+
+    const commands: NormalizedCommand[] = [];
+    let remaining = scroll;
+
+    while (remaining !== 0) {
+      const step = this.clamp(remaining, -127, 127);
+      commands.push({ cmd: 'mouse_scroll', scroll: step });
+      remaining -= step;
+    }
+
+    return commands;
+  }
+
+  /**
+   * Normalize a drag into press + multiple move steps + release
+   */
+  private static normalizeMouseDrag(cmd: any): NormalizedCommand[] {
+    const { dx, dy, duration } = cmd;
+
+    // First, split movement into per-report steps using mouse_move normalizer
+    const moveParts = this.normalizeMouseMove({ cmd: 'mouse_move', dx, dy });
+
+    const totalSteps = moveParts.length;
+    const commands: NormalizedCommand[] = [];
+
+    // Start with mouse_down (default left button unless specified)
+    const button = cmd.button || 'left';
+    commands.push({ cmd: 'mouse_down', button });
+
+    // Distribute duration across steps (simple even spacing)
+    const perStepDelay = totalSteps > 0 ? Math.max(0, Math.round((duration || 300) / totalSteps)) : 0;
+
+    for (const part of moveParts) {
+      const stepCmd: any = { ...part };
+      if (perStepDelay > 0) stepCmd._delay = perStepDelay;
+      commands.push(stepCmd);
+    }
+
+    // End with mouse_up
+    commands.push({ cmd: 'mouse_up', button });
+
     return commands;
   }
   

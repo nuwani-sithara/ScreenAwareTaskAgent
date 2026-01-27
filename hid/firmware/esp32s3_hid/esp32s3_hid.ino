@@ -150,6 +150,12 @@ void processCommand(const String& cmdLine) {
   else if (strcmp(cmd, CMD_MOUSE_CLICK) == 0) {
     handleMouseClick();
   }
+  else if (strcmp(cmd, CMD_MOUSE_DOWN) == 0) {
+    handleMouseDown();
+  }
+  else if (strcmp(cmd, CMD_MOUSE_UP) == 0) {
+    handleMouseUp();
+  }
   else if (strcmp(cmd, CMD_MOUSE_SCROLL) == 0) {
     handleMouseScroll();
   }
@@ -199,6 +205,49 @@ void handleMouseClick() {
   
   Mouse.click(mouseButton);
   sendSuccess(CMD_MOUSE_CLICK);
+}
+
+void handleMouseDown() {
+  const char* button = jsonDoc["button"];
+  if (!button) {
+    sendError("missing_button", "No 'button' field");
+    return;
+  }
+
+  uint8_t mouseButton = MOUSE_LEFT;
+  if (strcmp(button, "right") == 0) {
+    mouseButton = MOUSE_RIGHT;
+  } else if (strcmp(button, "middle") == 0) {
+    mouseButton = MOUSE_MIDDLE;
+  }
+
+  Mouse.press(mouseButton);
+  sendSuccess(CMD_MOUSE_DOWN);
+}
+
+void handleMouseUp() {
+  const char* button = jsonDoc["button"];
+  uint8_t mouseButton = 0;
+
+  if (!button) {
+    // If no button specified, release all
+    Mouse.release(MOUSE_LEFT);
+    Mouse.release(MOUSE_RIGHT);
+    Mouse.release(MOUSE_MIDDLE);
+    sendSuccess(CMD_MOUSE_UP);
+    return;
+  }
+
+  if (strcmp(button, "right") == 0) {
+    mouseButton = MOUSE_RIGHT;
+  } else if (strcmp(button, "middle") == 0) {
+    mouseButton = MOUSE_MIDDLE;
+  } else {
+    mouseButton = MOUSE_LEFT;
+  }
+
+  Mouse.release(mouseButton);
+  sendSuccess(CMD_MOUSE_UP);
 }
 
 void handleMouseScroll() {

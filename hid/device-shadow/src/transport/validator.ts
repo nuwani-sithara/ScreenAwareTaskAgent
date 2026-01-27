@@ -34,6 +34,12 @@ export class Validator {
     switch (command.cmd) {
       case 'mouse_move':
         return this.validateMouseMove(command);
+      case 'mouse_down':
+        return this.validateMouseDown(command);
+      case 'mouse_up':
+        return this.validateMouseUp(command);
+      case 'mouse_drag':
+        return this.validateMouseDrag(command);
       case 'ack':
         return { valid: true };
       case 'mouse_click':
@@ -51,6 +57,22 @@ export class Validator {
       default:
         return { valid: false, error: `Unknown command: ${command.cmd}` };
     }
+  }
+
+  private static validateMouseDown(cmd: any): ValidationResult {
+    const button = cmd.button;
+    if (button !== undefined && typeof button !== 'string') {
+      return { valid: false, error: 'button must be a string' };
+    }
+    return { valid: true };
+  }
+
+  private static validateMouseUp(cmd: any): ValidationResult {
+    const button = cmd.button;
+    if (button !== undefined && typeof button !== 'string') {
+      return { valid: false, error: 'button must be a string' };
+    }
+    return { valid: true };
   }
   
   /**
@@ -104,6 +126,30 @@ export class Validator {
       return { valid: false, error: 'scroll must be a finite number' };
     }
     
+    return { valid: true };
+  }
+
+  /**
+   * Validate mouse_drag command
+   * Expected fields: dx, dy, duration (ms, optional)
+   */
+  private static validateMouseDrag(cmd: any): ValidationResult {
+    const dx = cmd.dx;
+    const dy = cmd.dy;
+    const duration = cmd.duration !== undefined ? cmd.duration : 300;
+
+    if (typeof dx !== 'number' || typeof dy !== 'number') {
+      return { valid: false, error: 'dx and dy must be numbers' };
+    }
+
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) {
+      return { valid: false, error: 'dx and dy must be finite numbers' };
+    }
+
+    if (typeof duration !== 'number' || !Number.isFinite(duration) || duration < 0 || duration > 10000) {
+      return { valid: false, error: 'duration must be a finite number between 0 and 10000' };
+    }
+
     return { valid: true };
   }
   
