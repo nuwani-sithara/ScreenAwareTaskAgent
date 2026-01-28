@@ -109,7 +109,12 @@ def run_interactive(show_validation: bool = False):
     if not instr.strip():
         print("No instruction provided")
         return
-    strict_prompt = f"Instruction: {instr} -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:"
+    strict_prompt = (
+        f"You are an expert UI automation agent. Given the instruction: '{instr}', "
+        "return a concise, numbered list of UI steps to accomplish the task. "
+        "Each step should start with a strong action verb.\n"
+        "Example:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:"
+    )
     print("Generating with Ollama (strict prompt)...")
     gen = ollama_adapter.generate_and_format(strict_prompt)
     raw_text = gen.get("cleaned_text") or gen.get("raw_output") or ""
@@ -120,6 +125,8 @@ def run_interactive(show_validation: bool = False):
         error_msg = raw_text.strip()
     if error_msg:
         print("Ollama generation failed; not saving steps. See adapter output for details.")
+        print(f"Error message: {error_msg}")
+        print(f"Raw Ollama output: {raw_text}")
         return
     responses = []
     try:
@@ -139,7 +146,7 @@ def run_interactive(show_validation: bool = False):
     else:
         orig_steps = gen.get("steps") or []
     print("Rewriting with Flan‑T5 (or fallback)...")
-    rewritten_text = flan_rewrite(raw_text, steps=orig_steps) if callable(flan_rewrite) else raw_text
+    rewritten_text = flan_rewrite(raw_text) if callable(flan_rewrite) else raw_text
     try:
         rewritten_steps = ollama_adapter._extract_steps_from_text(rewritten_text)
     except Exception:
@@ -220,6 +227,11 @@ def run_interactive(show_validation: bool = False):
     rewritten_summary = {"steps": rewritten_steps, "quality": q_rew.get("quality_score", 0.0), "confidence": alg_rew.get("confidence", 0.0)}
     try:
         display_steps, display_source = select_steps(original_summary, rewritten_summary)
+        # If rewritten steps look like model metadata, force fallback to original
+        if display_source == "rewritten" and display_steps and any(
+            isinstance(s, dict) and ("model" in s.get("action", "") or "created_at" in s.get("action", ""))
+            for s in display_steps):
+            display_steps, display_source = original_summary["steps"], "original-forced"
     except Exception:
         display_steps, display_source = rewritten_steps, "rewritten"
     print(f"--- Chosen Steps ({display_source}) ---")
@@ -246,6 +258,13 @@ def run_interactive(show_validation: bool = False):
             }
             line = json.dumps(compact, ensure_ascii=False)
             ef.write(line + "\n")
+            # Send steps to agentic AI backend
+            try:
+                import requests
+                resp = requests.post("http://localhost:8001/llm/steps", json=compact, timeout=10)
+                print(f"Sent steps to agentic AI backend: {resp.status_code} {resp.text}")
+            except Exception as e:
+                print(f"Failed to send steps to agentic AI backend: {e}")
         print(f"Appended chosen steps to {ESP32_OUT}")
         # Also write a human-readable display JSONL line for quick review on host
         try:

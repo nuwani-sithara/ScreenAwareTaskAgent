@@ -6,6 +6,7 @@ from backend.core.plan import plan
 from backend.core.act import act_with_retry
 
 VISION_BASE_URL = "http://localhost:8001"
+LLM_BASE_URL = "http://localhost:8002"  # LLM FastAPI service
 
 def start_vision():
     logging.info("▶️ Starting Vision capture loop...")
