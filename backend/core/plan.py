@@ -1,5 +1,5 @@
 import logging
-from backend.core.llm_agent import generate_plan
+from core.llm_agent import generate_plan
 
 def plan(perception):
     print("🧩 Planning next action (LangChain LLM)...")

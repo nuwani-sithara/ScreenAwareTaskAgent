@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.core.agentic_loop import run_cycle
+from core.agentic_loop import run_cycle
 
 # 1️⃣ Create FastAPI instance
 app = FastAPI(title="ScreenPilot Backend", version="0.1")
