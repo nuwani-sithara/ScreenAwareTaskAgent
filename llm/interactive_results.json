@@ -6909,5 +6909,1797 @@
       }
     },
     "timestamp": 1769448705.6970856
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "Instruction: add product to the cart -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41"
+        },
+        {
+          "step": 2,
+          "action": "1125879Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 1125879Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41"
+        },
+        {
+          "step": 4,
+          "action": "388885Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 388885Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41"
+        },
+        {
+          "step": 6,
+          "action": "6491531Z\",\"response\":\"",
+          "description": "Step 6: 6491531Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41"
+        },
+        {
+          "step": 9,
+          "action": "9132785Z\",\"response\":\" Click\",\"done\":false}",
+          "description": "Step 9: 9132785Z\",\"response\":\" Click\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:42",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:42"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41.1125879Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41.388885Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41.6491531Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:41.9132785Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:42.2382213Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:42.5066301Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:42.8078679Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:43.132474Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:43.4540765Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:43.7682213Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:44.0855243Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:44.3575571Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:44.6380447Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:44.9289854Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:45.2070136Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:45.4759031Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:45.7492608Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:46.0181578Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:46.3037049Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:46.5733493Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:46.8786008Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:47.2028103Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:47.4669128Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:47.7365309Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:48.0233366Z\",\"response\":\" list\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:48.2971101Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:48.5642745Z\",\"response\":\" items\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:48.8519105Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:49.138596Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:49.4045864Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:49.6796076Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:49.9485597Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:50.2206439Z\",\"response\":\" Select\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:50.4865159Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:50.7504665Z\",\"response\":\" quantity\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:51.0213867Z\",\"response\":\" for\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:51.2843904Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:51.5538295Z\",\"response\":\" chosen\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:51.822429Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:52.0945146Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:52.3585676Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:52.6319192Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:52.8988949Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:53.1838079Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:53.4468159Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:53.7208329Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:53.9951441Z\",\"response\":\" total\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:54.2716707Z\",\"response\":\" price\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:54.5420845Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:54.8179327Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:55.1062063Z\",\"response\":\" item\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:55.3776688Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:55.661226Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:55.9349445Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:56.2143438Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:56.4915999Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:56.7646674Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:57.1018948Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:57.4153611Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:57.6919502Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:57.9673842Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:58.2403878Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:58.5175895Z\",\"response\":\" addition\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:58.79206Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:59.0742182Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:59.3419128Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:59.6236054Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:57:59.9028851Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:00.1822028Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:00.4591818Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:00.7361196Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:01.0135743Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:01.2869971Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:01.5614023Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:01.8339925Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:02.114898Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:02.3894878Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:02.6739206Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:02.9505377Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:03.2398194Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:03.5115844Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:03.8031067Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:04.0806302Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:04.3661796Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:04.6513849Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:04.9354459Z\",\"response\":\" Ob\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:05.2332507Z\",\"response\":\"serve\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:05.5199296Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:05.8866721Z\",\"response\":\" update\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:06.1641402Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:06.451483Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:06.7246516Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:07.0252335Z\",\"response\":\" total\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:07.3054211Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:07.5994653Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:07.8743201Z\",\"response\":\" listing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:08.1589686Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:08.4535281Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:08.7272537Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:09.0119712Z\",\"response\":\" area\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:09.2876555Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:09.5723532Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:09.8550802Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:10.1360401Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:10.4084873Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:10.6919799Z\",\"response\":\" Option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:10.9724327Z\",\"response\":\"ally\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:11.2544801Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:11.5344672Z\",\"response\":\" consider\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:11.8309562Z\",\"response\":\" navig\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:12.1093002Z\",\"response\":\"ating\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:12.4011809Z\",\"response\":\" back\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:12.6796029Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:12.963853Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:13.26125Z\",\"response\":\" main\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:13.5403742Z\",\"response\":\" shop\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:13.8314056Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:14.1142681Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:14.4376621Z\",\"response\":\" brows\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:14.7131136Z\",\"response\":\"ing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:15.0056658Z\",\"response\":\" other\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:15.2880281Z\",\"response\":\" products\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:15.576662Z\",\"response\":\" after\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:15.8619359Z\",\"response\":\" adding\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:16.1540914Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:16.4380529Z\",\"response\":\" item\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:16.7296203Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:17.0204378Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:17.3008137Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:17.5890511Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-27T16:58:17.8712333Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,3901,3880,29515,1735,2861,1066,1040,8316,2707,5339,2242,1054,17092,11954,6712,1633,29491,7834,4475,2348,1917,1163,1032,3735,3760,12911,29491,3117,1550,29515,4,1027,29508,29491,10981,1124,1040,1113,2759,1066,14638,29507,7029,29491,781,781,29518,29491,6000,1148,1040,12553,2861,1065,1040,2042,1070,5675,29491,781,781,29538,29491,14109,1040,15837,1122,1040,9497,2861,29491,781,781,29549,29491,25312,1040,3870,4912,1070,1040,3283,1065,1040,8316,29491,781,781,29550,29491,10775,3548,1040,5286,1070,1040,2861,1066,1040,8316,1254,25443,1124,1040,1113,2759,29507,7029,1210,4452,4319,29491,781,781,29552,29491,3413,8456,1040,4777,1066,1040,8316,3870,1072,2861,17011,1065,1040,8316,3466,29491,781,781,29555,29491,8432,1346,29493,2685,28323,1845,1620,1066,1040,2959,5894,3652,1210,20020,1056,1567,4844,1792,9601,1040,3283,1066,1040,8316,29491],\"total_duration\":53069476100,\"load_duration\":9947881500,\"prompt_eval_count\":34,\"prompt_eval_duration\":6346203200,\"eval_count\":131,\"eval_duration\":36618503700}\n",
+      "timestamp": "2026-01-27T16:58:17.937621"
+    },
+    "rewritten_text": "1. Click on the \"Add to Cart\" button\n2. Locate the desired product in the list of items\n3. Select the quantity for the chosen product\n4. Verify the total price of the item in the cart\n5. Confirm the addition of the product to the cart by clicking on the \"Add\" button or similar option\n6. Observe the update to the cart total and product listing in the cart area\n7. Optionally, consider navigating back to the main shop page or browsing other products after adding the item to the cart",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Click on the \"Add to Cart\" button",
+        "description": "Step 1: Click on the \"Add to Cart\" button"
+      },
+      {
+        "step": 2,
+        "action": "Locate the desired product in the list of items",
+        "description": "Step 2: Locate the desired product in the list of items"
+      },
+      {
+        "step": 3,
+        "action": "Select the quantity for the chosen product",
+        "description": "Step 3: Select the quantity for the chosen product"
+      },
+      {
+        "step": 4,
+        "action": "Verify the total price of the item in the cart",
+        "description": "Step 4: Verify the total price of the item in the cart"
+      },
+      {
+        "step": 5,
+        "action": "Confirm the addition of the product to the cart by clicking on the \"Add\" button or similar option",
+        "description": "Step 5: Confirm the addition of the product to the cart by clicking on the \"Add\" button or similar option"
+      },
+      {
+        "step": 6,
+        "action": "Observe the update to the cart total and product listing in the cart area",
+        "description": "Step 6: Observe the update to the cart total and product listing in the cart area"
+      },
+      {
+        "step": 7,
+        "action": "Optionally, consider navigating back to the main shop page or browsing other products after adding the item to the cart",
+        "description": "Step 7: Optionally, consider navigating back to the main shop page or browsing other products after adding the item to the cart"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Click on the \"Add to Cart\" button",
+        "description": "Click on the \"Add to Cart\" button"
+      },
+      {
+        "step": 2,
+        "action": "Locate the desired product in the list of items",
+        "description": "Locate the desired product in the list of items"
+      },
+      {
+        "step": 3,
+        "action": "Select the quantity for the chosen product",
+        "description": "Select the quantity for the chosen product"
+      },
+      {
+        "step": 4,
+        "action": "Verify the total price of the item in the cart",
+        "description": "Verify the total price of the item in the cart"
+      },
+      {
+        "step": 5,
+        "action": "Confirm the addition of the product to the cart by clicking on the \"Add\" button or similar option",
+        "description": "Confirm the addition of the product to the cart by clicking on the \"Add\" button or similar option"
+      },
+      {
+        "step": 6,
+        "action": "Observe the update to the cart total and product listing in the cart area",
+        "description": "Observe the update to the cart total and product listing in the cart area"
+      },
+      {
+        "step": 7,
+        "action": "Optionally, consider navigating back to the main shop page or browsing other products after adding the item to the cart",
+        "description": "Optionally, consider navigating back to the main shop page or browsing other products after adding the item to the cart"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.829,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.829,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.6,
+        "action_score": 0.429,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": [
+          "Step 2 basic checks: length=9",
+          "Step 5 basic checks: length=18",
+          "Step 6 basic checks: length=14",
+          "Step 7 basic checks: length=20"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.6,
+        "action_score": 0.429,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": [
+          "Step 2 basic checks: length=9",
+          "Step 5 basic checks: length=18",
+          "Step 6 basic checks: length=14",
+          "Step 7 basic checks: length=20"
+        ]
+      }
+    },
+    "timestamp": 1769533097.9431298
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "Instruction: add product to the cart -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19"
+        },
+        {
+          "step": 2,
+          "action": "4706575Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 4706575Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19"
+        },
+        {
+          "step": 4,
+          "action": "8120403Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 8120403Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+        },
+        {
+          "step": 6,
+          "action": "1623374Z\",\"response\":\"",
+          "description": "Step 6: 1623374Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+        },
+        {
+          "step": 9,
+          "action": "5009834Z\",\"response\":\" Click\",\"done\":false}",
+          "description": "Step 9: 5009834Z\",\"response\":\" Click\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19.4706575Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19.8120403Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20.1623374Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20.5009834Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20.840939Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.2333404Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.6458746Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.9919851Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22.38893Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22.7660009Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:23.1026594Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:23.434758Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:23.7803386Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:24.1161416Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:24.472117Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:24.8197884Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:25.1604069Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:25.5076826Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:25.9030429Z\",\"response\":\" shopping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:26.2589599Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:26.5987696Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:26.9335034Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:27.272329Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:27.6246581Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:28.0157841Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:28.3653091Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:28.6970963Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:29.0439859Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:29.3878639Z\",\"response\":\" selected\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:29.7287079Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:30.0711894Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:30.4055633Z\",\"response\":\" displayed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:30.7550069Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:31.1055254Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:31.4398433Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:31.7874952Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:32.1296553Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:32.4732202Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:32.8120752Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:33.1482314Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:33.4931663Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:33.8343471Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:34.187426Z\",\"response\":\" correct\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:34.5346958Z\",\"response\":\" quantity\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:34.8794049Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:35.2263151Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:35.5768612Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:35.9179293Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:36.2728728Z\",\"response\":\" listed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:36.6241242Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:36.9640715Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:37.3166189Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:37.6665783Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:38.0055112Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:38.3504744Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:38.6810712Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:39.0303835Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:39.3848277Z\",\"response\":\"Optional\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:39.7417405Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:40.0981111Z\",\"response\":\" Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:40.4549085Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:40.7959647Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:41.1422804Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:41.4835891Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:41.8365788Z\",\"response\":\" if\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:42.1946275Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:42.5683997Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:42.9227497Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:43.266922Z\",\"response\":\" return\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:43.6173194Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:43.9609469Z\",\"response\":\" shopping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:44.296822Z\",\"response\":\" if\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:44.6480209Z\",\"response\":\" more\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:44.9976676Z\",\"response\":\" items\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:45.3418772Z\",\"response\":\" are\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:45.697679Z\",\"response\":\" needed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:46.0447497Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:46.3902689Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,3901,3880,29515,1735,2861,1066,1040,8316,2707,5339,2242,1054,17092,11954,6712,1633,29491,7834,4475,2348,1917,1163,1032,3735,3760,12911,29491,3117,1550,29515,4,1027,29508,29491,10981,1113,2759,1066,14638,29507,7029,781,781,29518,29491,10131,12358,1066,1040,11925,8316,3652,781,781,29538,29491,10775,3548,1040,6705,2861,1117,14760,1065,1040,8316,781,781,29549,29491,25312,1137,1040,5482,15837,1070,1040,2861,1117,9974,1065,1040,8316,781,781,29550,29491,1093,15883,29499,1901,4756,1066,2645,1174,1281,12553,29493,1210,1372,1066,11925,1281,1448,5675,1228,4004,29491],\"total_duration\":27508717100,\"load_duration\":65334500,\"prompt_eval_count\":34,\"prompt_eval_duration\":521186000,\"eval_count\":78,\"eval_duration\":26839043000}\n",
+      "timestamp": "2026-01-28T08:58:46.396651"
+    },
+    "rewritten_text": "Response:\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19.8120403Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19.8120403Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20.1623374Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20.840939Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21.9919851Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22.38893Z\",\"response\":\" Cart\",\"done\":false \"model",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Response:\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19",
+        "description": "Step 1: Response:\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19"
+      },
+      {
+        "step": 2,
+        "action": "Click 8120403Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19",
+        "description": "Step 2: 8120403Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19"
+      },
+      {
+        "step": 3,
+        "action": "Click 8120403Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+        "description": "Step 3: 8120403Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+      },
+      {
+        "step": 4,
+        "action": "Click 1623374Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+        "description": "Step 4: 1623374Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+      },
+      {
+        "step": 5,
+        "action": "Click 840939Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "Step 5: 840939Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 6,
+        "action": "Click 9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "Step 6: 9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 7,
+        "action": "Click 9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "Step 7: 9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 8,
+        "action": "Click 9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "Step 8: 9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 9,
+        "action": "Click 9919851Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22",
+        "description": "Step 9: 9919851Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22"
+      },
+      {
+        "step": 10,
+        "action": "Click 38893Z\",\"response\":\" Cart\",\"done\":false \"model",
+        "description": "Step 10: 38893Z\",\"response\":\" Cart\",\"done\":false \"model"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Response:\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19",
+        "description": "Response:\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19"
+      },
+      {
+        "step": 2,
+        "action": "8120403Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19",
+        "description": "8120403Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:19"
+      },
+      {
+        "step": 3,
+        "action": "8120403Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+        "description": "8120403Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+      },
+      {
+        "step": 4,
+        "action": "1623374Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20",
+        "description": "1623374Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:20"
+      },
+      {
+        "step": 5,
+        "action": "840939Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "840939Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 6,
+        "action": "9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 7,
+        "action": "9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 8,
+        "action": "9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21",
+        "description": "9919851Z\",\"response\":\" to\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:21"
+      },
+      {
+        "step": 9,
+        "action": "9919851Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22",
+        "description": "9919851Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T08:58:22"
+      },
+      {
+        "step": 10,
+        "action": "38893Z\",\"response\":\" Cart\",\"done\":false \"model",
+        "description": "38893Z\",\"response\":\" Cart\",\"done\":false \"model"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.72,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.4,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 1",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.54,
+        "action_score": 0.4,
+        "dataset_score": 0.5,
+        "alignment_score": 0.8,
+        "details": [
+          "Step 2 basic checks: length=6",
+          "Step 3 basic checks: length=9",
+          "Step 5 basic checks: length=15",
+          "Confidence below threshold 0.55: 0.540"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.275,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.3,
+        "details": [
+          "Step 1 basic checks: length=3",
+          "Step 2 basic checks: length=3",
+          "Step 3 basic checks: length=3",
+          "Step 4 basic checks: length=3",
+          "Step 5 basic checks: length=4",
+          "Step 6 basic checks: length=3",
+          "Step 7 basic checks: length=3",
+          "Step 8 basic checks: length=3",
+          "Step 9 basic checks: length=3",
+          "Step 10 basic checks: length=3",
+          "Confidence below threshold 0.55: 0.275"
+        ]
+      }
+    },
+    "timestamp": 1769590875.8820097
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "Instruction: add product to the cart -- Return numbered UI interaction steps only. Each step must start with a strong action verb. Steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:09",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:09"
+        },
+        {
+          "step": 2,
+          "action": "84227Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 84227Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10"
+        },
+        {
+          "step": 4,
+          "action": "1876782Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 1876782Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10"
+        },
+        {
+          "step": 6,
+          "action": "4818482Z\",\"response\":\"",
+          "description": "Step 6: 4818482Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10"
+        },
+        {
+          "step": 9,
+          "action": "7701181Z\",\"response\":\" Click\",\"done\":false}",
+          "description": "Step 9: 7701181Z\",\"response\":\" Click\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:11",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:11"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:09.84227Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10.1876782Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10.4818482Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:10.7701181Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:11.0687117Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:11.3519716Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:11.6456287Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:11.9594981Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:12.2931637Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:12.6346456Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:12.9634378Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:13.305697Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:13.652298Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:13.9729888Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:14.3497627Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:14.7335117Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:15.1088407Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:15.4736815Z\",\"response\":\" selected\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:15.8603779Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:16.2121451Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:16.5397201Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:16.858643Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:17.1585109Z\",\"response\":\" area\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:17.5018883Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:17.8278513Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:18.1296953Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:18.4245339Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:18.7247271Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:19.0676192Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:19.4171158Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:19.7142557Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:20.0292463Z\",\"response\":\" correct\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:20.3205664Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:20.6210663Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:20.9174372Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:21.2161709Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:21.5152369Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:21.8107679Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:22.1168964Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:22.4107276Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:22.7142465Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:23.0063063Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:23.3136769Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:23.6143107Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:23.9196831Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:24.2163524Z\",\"response\":\" quantity\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:24.5125561Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:24.8144858Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:25.1130551Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:25.421192Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:25.714696Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:26.0167305Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:26.3226683Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:26.6200036Z\",\"response\":\" as\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:26.919091Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:27.2199549Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:27.5536101Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:27.9495478Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:28.3307233Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:28.7242142Z\",\"response\":\" Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:29.1040578Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:29.5045817Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:29.900767Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:30.2723785Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:30.6560429Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:31.0228813Z\",\"response\":\" continue\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:31.384282Z\",\"response\":\" shopping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:31.7573597Z\",\"response\":\" as\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:32.1283861Z\",\"response\":\" needed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:05:32.4426686Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,3901,3880,29515,1735,2861,1066,1040,8316,2707,5339,2242,1054,17092,11954,6712,1633,29491,7834,4475,2348,1917,1163,1032,3735,3760,12911,29491,3117,1550,29515,4,1027,29508,29491,10981,1113,2759,1066,14638,29507,7029,781,781,29518,29491,6000,1148,1040,6705,2861,1065,1040,8316,3466,781,781,29538,29491,10775,3548,1137,1040,5482,2861,1427,1518,4654,1066,1040,8316,781,781,29549,29491,25312,1040,15837,1070,1040,2861,1065,1040,8316,1117,1158,12553,781,781,29550,29491,1901,4756,1066,2645,1174,1210,4456,11925,1158,4004],\"total_duration\":41094155800,\"load_duration\":11009438100,\"prompt_eval_count\":34,\"prompt_eval_duration\":7475918600,\"eval_count\":70,\"eval_duration\":22537540400}\n",
+      "timestamp": "2026-01-28T09:05:32.450036"
+    },
+    "rewritten_text": "List of models \"mistral\",\"created_at\": \"2026-01-28T09:05:09.84227Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10.4818482Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10.4818482Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10.4818482Z\",\"response\":\" \"\"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10.4818482Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12.2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12.2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12.2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12.2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-0",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "List of models \"mistral\",\"created_at\": \"2026-01-28T09:05:09",
+        "description": "Step 1: List of models \"mistral\",\"created_at\": \"2026-01-28T09:05:09"
+      },
+      {
+        "step": 2,
+        "action": "Click 84227Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "Step 2: 84227Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 3,
+        "action": "Click 4818482Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "Step 3: 4818482Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 4,
+        "action": "Click 4818482Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "Step 4: 4818482Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 5,
+        "action": "Click 4818482Z\",\"response\":\" \"\"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "Step 5: 4818482Z\",\"response\":\" \"\"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 6,
+        "action": "Click 4818482Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "Step 6: 4818482Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 7,
+        "action": "Click 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "Step 7: 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 8,
+        "action": "Click 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "Step 8: 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 9,
+        "action": "Click 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "Step 9: 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 10,
+        "action": "Click 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-0",
+        "description": "Step 10: 2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-0"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "List of models \"mistral\",\"created_at\": \"2026-01-28T09:05:09",
+        "description": "List of models \"mistral\",\"created_at\": \"2026-01-28T09:05:09"
+      },
+      {
+        "step": 2,
+        "action": "84227Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "84227Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 3,
+        "action": "4818482Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "4818482Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 4,
+        "action": "4818482Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "4818482Z\",\"response\":\" \"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 5,
+        "action": "4818482Z\",\"response\":\" \"\"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10",
+        "description": "4818482Z\",\"response\":\" \"\"\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:10"
+      },
+      {
+        "step": 6,
+        "action": "4818482Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "4818482Z\",\"response\":\" \" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 7,
+        "action": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 8,
+        "action": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 9,
+        "action": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12",
+        "description": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-01-28T09:05:12"
+      },
+      {
+        "step": 10,
+        "action": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-0",
+        "description": "2931637Z\",\"response\":\" Cart\",\"done\":false \"model\":\"mistral\",\"created_at\": \"2026-0"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.72,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.4,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 1",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.54,
+        "action_score": 0.4,
+        "dataset_score": 0.5,
+        "alignment_score": 0.8,
+        "details": [
+          "Step 2 basic checks: length=8",
+          "Step 3 basic checks: length=11",
+          "Step 5 basic checks: length=8",
+          "Confidence below threshold 0.55: 0.540"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.325,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.5,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=4",
+          "Step 3 basic checks: length=4",
+          "Step 4 basic checks: length=4",
+          "Step 5 basic checks: length=4",
+          "Step 6 basic checks: length=5",
+          "Step 7 basic checks: length=4",
+          "Step 8 basic checks: length=4",
+          "Step 9 basic checks: length=4",
+          "Step 10 basic checks: length=4",
+          "Confidence below threshold 0.55: 0.325"
+        ]
+      }
+    },
+    "timestamp": 1769591191.77212
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UI steps to accomplish the task. Each step should start with a strong action verb.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:41",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:41"
+        },
+        {
+          "step": 2,
+          "action": "4473584Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 4473584Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:42",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:42"
+        },
+        {
+          "step": 4,
+          "action": "5789283Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 5789283Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:43",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:43"
+        },
+        {
+          "step": 6,
+          "action": "7331515Z\",\"response\":\"",
+          "description": "Step 6: 7331515Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:44",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:44"
+        },
+        {
+          "step": 9,
+          "action": "8099977Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 8099977Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:45",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:45"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:41.4473584Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:42.5789283Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:43.7331515Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:44.8099977Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:45.742269Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:46.0347167Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:46.3329975Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:46.6240476Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:46.9179597Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:47.2036434Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:47.4947162Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:47.7874958Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:48.075874Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:48.3662972Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:48.6512809Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:48.9493002Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:49.2387122Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:49.5345537Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:49.8285969Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:50.1316348Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:50.4258912Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:50.7200048Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:51.0151303Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:51.3019382Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:51.689295Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:52.0349798Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:52.3652764Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:52.6984441Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:53.0163065Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:53.3133275Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:53.6045543Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:53.9010395Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:54.2050652Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:54.4939945Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:54.7905967Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:55.0770354Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:55.3681695Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:55.6532455Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:55.939797Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:56.2243658Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:56.5153294Z\",\"response\":\"check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:56.8149251Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:57.1124216Z\",\"response\":\" icon\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:57.4017261Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:57.6885576Z\",\"response\":\" counter\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:57.9872018Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:58.2701369Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:58.5723299Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:58.86822Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:59.1606376Z\",\"response\":\" Access\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:59.45708Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:13:59.7517424Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:00.0487266Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:00.3371207Z\",\"response\":\"click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:00.6334223Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:00.8975818Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:01.1638947Z\",\"response\":\" icon\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:01.4215069Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:01.6874507Z\",\"response\":\" go\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:01.9530428Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:02.2354452Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:02.499297Z\",\"response\":\" shopping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:02.774646Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:03.0439608Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:03.3198157Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:03.5864214Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:03.8667583Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:04.1383787Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:04.4108319Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:04.6787698Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:04.9574841Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:05.2459369Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:05.5378921Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:05.8142165Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:06.0886401Z\",\"response\":\" present\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:06.3719183Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:06.6434953Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:06.9259269Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:07.3033635Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:07.6024652Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:07.8818017Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:08.1661841Z\",\"response\":\" Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:08.4399183Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:08.7170477Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:08.9933084Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:09.2733751Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:09.5501365Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:09.828058Z\",\"response\":\"click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:10.10647Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:10.3859688Z\",\"response\":\"Check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:10.6646336Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:10.9456333Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:11.2318141Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:11.5072839Z\",\"response\":\"Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:11.7893509Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:12.0717022Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:12.3515594Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:12.6312578Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:12.9163937Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:13.2014007Z\",\"response\":\" any\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:13.5228704Z\",\"response\":\" relevant\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:13.8039193Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:14.0947746Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:14.3761521Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:14.6587549Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:14.949275Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:15.231989Z\",\"response\":\" Follow\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:15.5226789Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:15.8049006Z\",\"response\":\" remaining\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:16.0955519Z\",\"response\":\" steps\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:16.3735203Z\",\"response\":\" for\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:16.6616551Z\",\"response\":\" completing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:16.9485023Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:17.2375075Z\",\"response\":\" purchase\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:17.5174929Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:17.8133464Z\",\"response\":\" if\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:18.1097237Z\",\"response\":\" necessary\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:18.3901157Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:18.6839085Z\",\"response\":\"prov\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:18.9691903Z\",\"response\":\"ide\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:19.2609234Z\",\"response\":\" shipping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:19.5401232Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:19.8332021Z\",\"response\":\" bill\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:20.1213912Z\",\"response\":\"ing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:20.4124072Z\",\"response\":\" information\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:20.7012737Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:20.9901628Z\",\"response\":\" review\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:21.2754226Z\",\"response\":\" order\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:21.5636237Z\",\"response\":\" details\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:21.8542878Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:22.1467782Z\",\"response\":\" etc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:22.4365819Z\",\"response\":\".)\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:14:22.7231581Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,1763,1228,1164,8351,17092,5375,1120,8841,29491,13396,1040,13894,29515,1232,1756,2861,1066,1040,8316,1415,1372,1032,3846,1632,29493,2242,1054,2042,1070,17092,6712,1066,18468,1040,4406,29491,7834,4475,1791,1917,1163,1032,3735,3760,12911,29491,781,21043,29515,781,29508,29491,6397,1040,1722,781,29518,29491,10981,1232,2759,1066,14638,29510,781,29538,29491,10775,3548,8493,781,781,7500,1550,29515,4,1027,29508,29491,10131,12358,1066,1040,2861,3652,781,29518,29491,6000,1148,1072,6814,1124,1040,1232,2759,1066,14638,29510,7029,1210,4319,781,29538,29491,25312,1137,1040,2861,1427,1518,4654,1066,1040,8316,1093,3656,8316,10228,1210,6341,29499,781,29549,29491,12327,1040,8316,1093,7418,1124,8316,10228,1210,1344,1066,1040,11925,8316,3652,29499,781,29550,29491,10775,3548,1137,1040,2861,1117,2937,1065,1040,8316,781,29552,29491,1901,4756,1066,2645,1174,1093,7418,1232,4596,1174,1415,1232,1701,4756,1066,14638,29510,1210,1475,9366,7029,29499,781,29555,29491,10590,1040,9177,6712,1122,24557,1040,8493,29493,1281,5660,1093,12719,1315,14137,1072,5643,1056,2639,29493,4826,2513,4930,29493,5113,3742],\"total_duration\":42437515300,\"load_duration\":151351200,\"prompt_eval_count\":79,\"prompt_eval_duration\":961704800,\"eval_count\":133,\"eval_duration\":41210728500}\n",
+      "timestamp": "2026-01-28T09:14:22.762437"
+    },
+    "rewritten_text": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:13:41.4473584Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:42.5789283Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43.7331515Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44.8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44.8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44.8099977Z\",\"response\":\" Nav\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43.329975Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43.329975Z\",\"response\": \"to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:46.6240476Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\"",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:13:41",
+        "description": "Step 1: list of models \"mistral\",\"created_at\": \"2026-01-28T09:13:41"
+      },
+      {
+        "step": 2,
+        "action": "4473584Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:42",
+        "description": "Step 2: 4473584Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:42"
+      },
+      {
+        "step": 3,
+        "action": "5789283Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43",
+        "description": "Step 3: 5789283Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43"
+      },
+      {
+        "step": 4,
+        "action": "7331515Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44",
+        "description": "Step 4: 7331515Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44"
+      },
+      {
+        "step": 5,
+        "action": "8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44",
+        "description": "Step 5: 8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44"
+      },
+      {
+        "step": 6,
+        "action": "8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44",
+        "description": "Step 6: 8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44"
+      },
+      {
+        "step": 7,
+        "action": "8099977Z\",\"response\":\" Nav\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43",
+        "description": "Step 7: 8099977Z\",\"response\":\" Nav\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43"
+      },
+      {
+        "step": 8,
+        "action": "329975Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43",
+        "description": "Step 8: 329975Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43"
+      },
+      {
+        "step": 9,
+        "action": "329975Z\",\"response\": \"to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:46",
+        "description": "Step 9: 329975Z\",\"response\": \"to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:46"
+      },
+      {
+        "step": 10,
+        "action": "6240476Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\"",
+        "description": "Step 10: 6240476Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\""
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:13:41",
+        "description": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:13:41"
+      },
+      {
+        "step": 2,
+        "action": "4473584Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:42",
+        "description": "4473584Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:42"
+      },
+      {
+        "step": 3,
+        "action": "5789283Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43",
+        "description": "5789283Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43"
+      },
+      {
+        "step": 4,
+        "action": "7331515Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44",
+        "description": "7331515Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44"
+      },
+      {
+        "step": 5,
+        "action": "8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44",
+        "description": "8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44"
+      },
+      {
+        "step": 6,
+        "action": "8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44",
+        "description": "8099977Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:44"
+      },
+      {
+        "step": 7,
+        "action": "8099977Z\",\"response\":\" Nav\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43",
+        "description": "8099977Z\",\"response\":\" Nav\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43"
+      },
+      {
+        "step": 8,
+        "action": "329975Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43",
+        "description": "329975Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:43"
+      },
+      {
+        "step": 9,
+        "action": "329975Z\",\"response\": \"to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:46",
+        "description": "329975Z\",\"response\": \"to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:13:46"
+      },
+      {
+        "step": 10,
+        "action": "6240476Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\"",
+        "description": "6240476Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\""
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.643,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.4,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 1",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.5,
+        "action_score": 0.143,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=11",
+          "Step 4 basic checks: length=14",
+          "Step 5 basic checks: length=9",
+          "Step 6 basic checks: length=12",
+          "Step 7 basic checks: length=19",
+          "Confidence below threshold 0.55: 0.500"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.225,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.1,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=6",
+          "Step 3 basic checks: length=5",
+          "Step 4 basic checks: length=5",
+          "Step 5 basic checks: length=5",
+          "Step 6 basic checks: length=5",
+          "Step 7 basic checks: length=5",
+          "Step 8 basic checks: length=5",
+          "Step 9 basic checks: length=5",
+          "Step 10 basic checks: length=4",
+          "Confidence below threshold 0.55: 0.225"
+        ]
+      }
+    },
+    "timestamp": 1769591795.356064
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UI steps to accomplish the task. Each step should start with a strong action verb.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14"
+        },
+        {
+          "step": 2,
+          "action": "4460585Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 4460585Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14"
+        },
+        {
+          "step": 4,
+          "action": "7325607Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 7325607Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+        },
+        {
+          "step": 6,
+          "action": "0051132Z\",\"response\":\"",
+          "description": "Step 6: 0051132Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+        },
+        {
+          "step": 9,
+          "action": "2853349Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 2853349Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14.4460585Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14.7325607Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.0051132Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.2853349Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.5548089Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.8415911Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:16.1107159Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:16.391077Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:16.661894Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:16.9498022Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:17.2240939Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:17.5060578Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:17.78377Z\",\"response\":\" Find\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:18.0703651Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:18.3471081Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:18.6262419Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:18.9065458Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:19.1930888Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:19.4782135Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:19.771698Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:20.0634243Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:20.3523335Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:20.6362234Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:20.9126799Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:21.2013535Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:21.4780304Z\",\"response\":\" action\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:21.7705908Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:22.0523613Z\",\"response\":\"e\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:22.3429196Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:22.6232507Z\",\"response\":\"g\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:22.9051324Z\",\"response\":\".,\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:23.1913193Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:23.4732673Z\",\"response\":\"B\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:23.7703919Z\",\"response\":\"uy\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:24.0534643Z\",\"response\":\" Now\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:24.3408801Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:24.623302Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:24.9162901Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:25.1948684Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:25.4824375Z\",\"response\":\" Bag\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:25.7697784Z\",\"response\":\"')\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:26.0568982Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:26.3415218Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:26.6358731Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:26.9244096Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:27.2126727Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:27.5056528Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:27.7963992Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:28.0898372Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:28.3740777Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:28.6661801Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:28.9516877Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:29.240979Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:29.5378895Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:29.8262899Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:30.119306Z\",\"response\":\" checking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:30.403748Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:30.6983207Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:30.9823953Z\",\"response\":\" icon\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:31.2861119Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:31.5689532Z\",\"response\":\" notification\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:31.8739267Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:32.1687347Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:32.4546489Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:32.7513932Z\",\"response\":\" update\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:33.0383542Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:33.3314403Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:33.6266425Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:33.9272796Z\",\"response\":\" If\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:34.219077Z\",\"response\":\" necessary\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:34.5099569Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:34.8103325Z\",\"response\":\" proceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:35.1270987Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:35.4249125Z\",\"response\":\" view\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:35.7278359Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:36.0242868Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:36.3145629Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:36.6092378Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:36.8973595Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:37.2014646Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:37.4923573Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:37.7922682Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:38.0918374Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:38.3836418Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:38.6850961Z\",\"response\":\" present\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:38.9761449Z\",\"response\":\" in\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:39.3211591Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:39.6262722Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:39.934963Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:40.2446068Z\",\"response\":\" meet\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:40.5376687Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:40.8388574Z\",\"response\":\" desired\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:41.1329299Z\",\"response\":\" quantity\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:41.4346701Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:41.7444843Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:42.0595748Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:42.3593554Z\",\"response\":\" Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:42.6573737Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:42.9654896Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:43.2595442Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:43.5614627Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:43.8637416Z\",\"response\":\" if\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:44.1644723Z\",\"response\":\" prompt\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:44.4655788Z\",\"response\":\"ed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:44.7649471Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:45.0706968Z\",\"response\":\"or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:45.3659159Z\",\"response\":\" skip\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:45.6700758Z\",\"response\":\" if\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:45.9713958Z\",\"response\":\" auto\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:46.2736637Z\",\"response\":\"-\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:46.5691496Z\",\"response\":\"check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:46.8692845Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:47.1792944Z\",\"response\":\" is\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:47.4712049Z\",\"response\":\" enabled\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:47.7805029Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:48.0802947Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:48.3886727Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:48.6933819Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:48.9935939Z\",\"response\":\" Complete\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:49.3012334Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:49.6001594Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:49.9070615Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:50.2133827Z\",\"response\":\" process\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:50.5163501Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:50.8492027Z\",\"response\":\" providing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:51.1571381Z\",\"response\":\" necessary\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:51.4601104Z\",\"response\":\" information\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:51.7699053Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:52.0854605Z\",\"response\":\" confirm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:52.3927135Z\",\"response\":\"ing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:52.6897786Z\",\"response\":\" purchase\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:52.9964138Z\",\"response\":\" details\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:53.3056432Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:53.6065547Z\",\"response\":\"8\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:53.9086687Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:54.2127113Z\",\"response\":\" Re\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:54.5545572Z\",\"response\":\"ceive\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:54.8937694Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:55.2017808Z\",\"response\":\" confirmation\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:55.5013688Z\",\"response\":\" message\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:55.8135968Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:56.1139315Z\",\"response\":\" notification\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:56.4128743Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:56.7185828Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:57.0326012Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:57.3369717Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:57.6370556Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:57.95333Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:58.2550414Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:58.56707Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:58.8723681Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:59.1794389Z\",\"response\":\" successfully\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:59.4831071Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,1763,1228,1164,8351,17092,5375,1120,8841,29491,13396,1040,13894,29515,1232,1756,2861,1066,1040,8316,1415,1372,1032,3846,1632,29493,2242,1054,2042,1070,17092,6712,1066,18468,1040,4406,29491,7834,4475,1791,1917,1163,1032,3735,3760,12911,29491,781,21043,29515,781,29508,29491,6397,1040,1722,781,29518,29491,10981,1232,2759,1066,14638,29510,781,29538,29491,10775,3548,8493,781,781,7500,1550,29515,4,1027,29508,29491,10131,12358,1066,1040,2861,3652,781,29518,29491,9537,1072,6814,1124,1040,1232,2759,1066,14638,29510,7029,1210,4452,3760,1093,29474,29491,29489,2831,1232,29528,5301,3729,1415,1232,2759,1066,18467,2249,781,29538,29491,25312,1137,1040,2861,1427,1518,4654,1066,1040,8316,1254,13547,1040,8316,10228,29493,15669,29493,1210,3652,4777,781,29549,29491,1815,5660,29493,9632,1066,2972,1040,8316,781,29550,29491,10775,3548,1040,2861,1117,2937,1065,1040,8316,1072,3415,1040,12553,15837,781,29552,29491,1901,4756,1066,2645,1174,1281,12278,1054,1093,1039,9351,1281,4795,29501,3656,1174,1117,10419,29499,781,29555,29491,22697,1040,2645,1174,2527,1254,8269,5660,2639,1072,9503,1056,8493,4930,781,29551,29491,2066,12410,1032,23279,3696,1210,15669,1137,1040,2861,1427,1518,4654,1066,1040,8316,10898],\"total_duration\":63815223800,\"load_duration\":41005500,\"prompt_eval_count\":79,\"prompt_eval_duration\":18733868000,\"eval_count\":153,\"eval_duration\":44911657400}\n",
+      "timestamp": "2026-01-28T09:21:59.490500"
+    },
+    "rewritten_text": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14.7325607Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.5548089Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.5548089Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15.853349Z\",\"response\":\" Nav\",\"done\":f",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14",
+        "description": "Step 1: Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14"
+      },
+      {
+        "step": 2,
+        "action": "7325607Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 2: 7325607Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 3,
+        "action": "5548089Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 3: 5548089Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 4,
+        "action": "5548089Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 4: 5548089Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 5,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 5: 853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 6,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 6: 853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 7,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 7: 853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 8,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 8: 853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 9,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "Step 9: 853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 10,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":f",
+        "description": "Step 10: 853349Z\",\"response\":\" Nav\",\"done\":f"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14",
+        "description": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:14"
+      },
+      {
+        "step": 2,
+        "action": "7325607Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "7325607Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 3,
+        "action": "5548089Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "5548089Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 4,
+        "action": "5548089Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "5548089Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 5,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 6,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 7,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 8,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 9,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15",
+        "description": "853349Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:21:15"
+      },
+      {
+        "step": 10,
+        "action": "853349Z\",\"response\":\" Nav\",\"done\":f",
+        "description": "853349Z\",\"response\":\" Nav\",\"done\":f"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.638,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.4,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 1",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.463,
+        "action_score": 0.125,
+        "dataset_score": 0.5,
+        "alignment_score": 0.875,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=18",
+          "Step 4 basic checks: length=7",
+          "Step 5 basic checks: length=13",
+          "Step 6 basic checks: length=11",
+          "Step 7 basic checks: length=12",
+          "Step 8 basic checks: length=16",
+          "Confidence below threshold 0.55: 0.463"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.2,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.0,
+        "details": [
+          "Step 1 basic checks: length=3",
+          "Step 2 basic checks: length=3",
+          "Step 3 basic checks: length=3",
+          "Step 4 basic checks: length=3",
+          "Step 5 basic checks: length=3",
+          "Step 6 basic checks: length=3",
+          "Step 7 basic checks: length=3",
+          "Step 8 basic checks: length=3",
+          "Step 9 basic checks: length=3",
+          "Step 10 basic checks: length=2",
+          "Confidence below threshold 0.55: 0.200"
+        ]
+      }
+    },
+    "timestamp": 1769592161.107062
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UI steps to accomplish the task. Each step should start with a strong action verb.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+        },
+        {
+          "step": 2,
+          "action": "6463414Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 6463414Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+        },
+        {
+          "step": 4,
+          "action": "9111477Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 9111477Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01"
+        },
+        {
+          "step": 6,
+          "action": "1819019Z\",\"response\":\"",
+          "description": "Step 6: 1819019Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01"
+        },
+        {
+          "step": 9,
+          "action": "4448402Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 4448402Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.9111477Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01.1819019Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01.4448402Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:01.7126672Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:02.0049004Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:02.2981128Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:02.59075Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:02.8838509Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:03.1801908Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:03.4447745Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:03.7212341Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:03.9962159Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:04.2655937Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:04.5258476Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:04.7977183Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:05.0620666Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:05.334872Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:05.5945607Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:05.8672227Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:06.1318216Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:06.4006301Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:06.6710295Z\",\"response\":\"\\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:06.9460885Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:07.2322549Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:07.5134825Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:07.7843929Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:08.0584895Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:08.3320738Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:08.6081802Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:08.8852356Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:09.1657186Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:09.4380584Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:09.7092196Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:09.9828205Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:10.2557933Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:10.5374137Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:10.8428794Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:11.118006Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:11.4025137Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:11.6915716Z\",\"response\":\" Access\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:11.9673325Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:12.2539667Z\",\"response\":\" navigate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:12.530212Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:12.8650641Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:13.2026061Z\",\"response\":\" shopping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:13.5339532Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:13.8421443Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:14.125717Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:14.4063204Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:14.6902114Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:14.9854482Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:15.2720872Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:15.5562777Z\",\"response\":\" option\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:15.8438146Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:16.1294577Z\",\"response\":\" proceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:16.4094503Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:16.6961539Z\",\"response\":\" check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:16.9820103Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:17.2687179Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:17.5485459Z\",\"response\":\" confirm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:17.8421539Z\",\"response\":\" purchase\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:18.1276975Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,1763,1228,1164,8351,17092,5375,1120,8841,29491,13396,1040,13894,29515,1232,1756,2861,1066,1040,8316,1415,1372,1032,3846,1632,29493,2242,1054,2042,1070,17092,6712,1066,18468,1040,4406,29491,7834,4475,1791,1917,1163,1032,3735,3760,12911,29491,781,21043,29515,781,29508,29491,6397,1040,1722,781,29518,29491,10981,1232,2759,1066,14638,29510,781,29538,29491,10775,3548,8493,781,781,7500,1550,29515,4,1027,29508,29491,10131,12358,1066,1040,2861,3652,781,29518,29491,6000,1148,1072,6814,1124,1040,1113,2759,1066,14638,29507,7029,781,29538,29491,25312,1137,1040,2861,1427,1518,4654,1066,1040,8316,781,29549,29491,12327,1210,23457,1066,1040,11925,8316,781,29550,29491,10981,1124,1040,4319,1066,9632,1066,2645,1174,1210,9503,8493],\"total_duration\":17954937200,\"load_duration\":43962800,\"prompt_eval_count\":79,\"prompt_eval_duration\":426427900,\"eval_count\":63,\"eval_duration\":17434822400}\n",
+      "timestamp": "2026-01-28T09:24:18.237016"
+    },
+    "rewritten_text": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00.6463414Z\",\"response\":\" Nav\",\"done\":false",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 1: Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 2,
+        "action": "6463414Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 2: 6463414Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 3,
+        "action": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 3: 6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 4,
+        "action": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 4: 6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 5,
+        "action": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 5: 6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 6,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 6: 6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 7,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 7: 6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 8,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 8: 6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 9,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Step 9: 6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 10,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false",
+        "description": "Step 10: 6463414Z\",\"response\":\" Nav\",\"done\":false"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "Response: \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 2,
+        "action": "6463414Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" \",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 3,
+        "action": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 4,
+        "action": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 5,
+        "action": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" 1\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 6,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 7,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 8,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 9,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00",
+        "description": "6463414Z\",\"response\":\" Nav\",\"done\":false \"model\":\"mistral\",\"created_at\":\"2026-01-28T09:24:00"
+      },
+      {
+        "step": 10,
+        "action": "6463414Z\",\"response\":\" Nav\",\"done\":false",
+        "description": "6463414Z\",\"response\":\" Nav\",\"done\":false"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.72,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.2,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 2",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.59,
+        "action_score": 0.4,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=9",
+          "Step 4 basic checks: length=7"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.2,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.0,
+        "details": [
+          "Step 1 basic checks: length=3",
+          "Step 2 basic checks: length=3",
+          "Step 3 basic checks: length=3",
+          "Step 4 basic checks: length=3",
+          "Step 5 basic checks: length=3",
+          "Step 6 basic checks: length=3",
+          "Step 7 basic checks: length=3",
+          "Step 8 basic checks: length=3",
+          "Step 9 basic checks: length=3",
+          "Step 10 basic checks: length=2",
+          "Confidence below threshold 0.55: 0.200"
+        ]
+      }
+    },
+    "timestamp": 1769592311.3171692
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UI steps to accomplish the task. Each step should start with a strong action verb.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20"
+        },
+        {
+          "step": 2,
+          "action": "0784848Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 0784848Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20"
+        },
+        {
+          "step": 4,
+          "action": "3446908Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 3446908Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20"
+        },
+        {
+          "step": 6,
+          "action": "6263603Z\",\"response\":\"",
+          "description": "Step 6: 6263603Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20"
+        },
+        {
+          "step": 9,
+          "action": "9048635Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 9048635Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:21",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:21"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20.0784848Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20.3446908Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20.6263603Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:20.9048635Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:21.1784523Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:21.4360604Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:21.7047472Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:21.9657873Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:22.2307579Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:22.4949064Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:22.7613604Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:23.0301932Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:23.2991167Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:23.5618004Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:23.8363142Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:24.113117Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:24.3779568Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:24.642955Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:24.9100734Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:25.1810894Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:25.450886Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:25.7212924Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:25.9932806Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:26.2632168Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:26.5358424Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:26.8057592Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:27.0855761Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:27.3555461Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:27.6340772Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:27.9127779Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:28.1904325Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:28.4612651Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:28.7355623Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:29.0145335Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:29.2895043Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:29.5705638Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:29.8448891Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:30.1256468Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:30.402921Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:30.6804024Z\",\"response\":\" Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:30.958729Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:31.2377577Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:31.5117265Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:31.7923557Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:32.0684849Z\",\"response\":\" if\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:32.3497765Z\",\"response\":\" necessary\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:32.6287492Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:32.9117272Z\",\"response\":\"depend\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:33.2088879Z\",\"response\":\"ing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:33.5143684Z\",\"response\":\" on\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:33.8367794Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:34.1197946Z\",\"response\":\" platform\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:34.4024943Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:34.6869309Z\",\"response\":\"s\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:34.969522Z\",\"response\":\" work\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:35.2702454Z\",\"response\":\"flow\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:35.5533157Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:35.840537Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:36.1232662Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:36.4080272Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:36.6952936Z\",\"response\":\" Conf\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:36.9829572Z\",\"response\":\"irm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:37.2688452Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:37.5574999Z\",\"response\":\" addition\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:37.8397588Z\",\"response\":\" of\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:38.127564Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:38.4214238Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:38.708598Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:38.9959919Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:39.2911216Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:39.5807858Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:39.8692071Z\",\"response\":\" usually\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:40.1681135Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:40.4656944Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:40.7702953Z\",\"response\":\" a\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:41.0580535Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:41.3472586Z\",\"response\":\"View\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:41.6412556Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:41.9271777Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:42.2228901Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:42.5543423Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:42.859948Z\",\"response\":\" link\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:43.2178791Z\",\"response\":\"/\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:43.5285935Z\",\"response\":\"button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:43.8583338Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:27:44.1509187Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,1763,1228,1164,8351,17092,5375,1120,8841,29491,13396,1040,13894,29515,1232,1756,2861,1066,1040,8316,1415,1372,1032,3846,1632,29493,2242,1054,2042,1070,17092,6712,1066,18468,1040,4406,29491,7834,4475,1791,1917,1163,1032,3735,3760,12911,29491,781,21043,29515,781,29508,29491,6397,1040,1722,781,29518,29491,10981,1232,2759,1066,14638,29510,781,29538,29491,10775,3548,8493,781,781,7500,1550,29515,4,1027,29508,29491,10131,12358,1066,1040,2861,3652,781,29518,29491,6000,1148,1072,6814,1040,1232,2759,1066,14638,29510,7029,781,29538,29491,25312,1137,1040,2861,1427,1518,4654,1066,1040,8316,781,29549,29491,1901,4756,1066,1040,8316,1281,5660,1093,12337,1056,1124,1040,5949,29510,29481,1539,5124,29499,781,29550,29491,10775,3548,1040,5286,1070,1040,2861,1066,1040,8316,29493,5080,1254,25443,1032,1232,2854,14638,29510,1210,4452,3830,29516,5327,29491],\"total_duration\":24512105300,\"load_duration\":44451200,\"prompt_eval_count\":79,\"prompt_eval_duration\":391974600,\"eval_count\":86,\"eval_duration\":24010063900}\n",
+      "timestamp": "2026-01-28T09:27:44.156326"
+    },
+    "rewritten_text": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:27:20.0784848Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20.3446908Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20.6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20.6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20.6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20.6263603Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21.9657873Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21.9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21.9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\":",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "Step 1: list of models \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 2,
+        "action": "Click 0784848Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "Step 2: 0784848Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 3,
+        "action": "Click 3446908Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "Step 3: 3446908Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 4,
+        "action": "Click 6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "Step 4: 6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 5,
+        "action": "Click 6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "Step 5: 6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 6,
+        "action": "Click 6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "Step 6: 6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 7,
+        "action": "Click 6263603Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21",
+        "description": "Step 7: 6263603Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21"
+      },
+      {
+        "step": 8,
+        "action": "Click 9657873Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21",
+        "description": "Step 8: 9657873Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21"
+      },
+      {
+        "step": 9,
+        "action": "Click 9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21",
+        "description": "Step 9: 9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21"
+      },
+      {
+        "step": 10,
+        "action": "Click 9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\":",
+        "description": "Step 10: 9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\":"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 2,
+        "action": "0784848Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "0784848Z\",\"response\": \"\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 3,
+        "action": "3446908Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "3446908Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 4,
+        "action": "6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 5,
+        "action": "6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 6,
+        "action": "6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20",
+        "description": "6263603Z\",\"response\": \"1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:20"
+      },
+      {
+        "step": 7,
+        "action": "6263603Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21",
+        "description": "6263603Z\",\"response\": \"igate\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21"
+      },
+      {
+        "step": 8,
+        "action": "9657873Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21",
+        "description": "9657873Z\",\"response\": \"product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21"
+      },
+      {
+        "step": 9,
+        "action": "9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21",
+        "description": "9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:27:21"
+      },
+      {
+        "step": 10,
+        "action": "9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\":",
+        "description": "9657873Z\",\"response\": \" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\":"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.66,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.4,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 1",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.52,
+        "action_score": 0.2,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=8",
+          "Step 4 basic checks: length=11",
+          "Step 5 basic checks: length=18",
+          "Confidence below threshold 0.55: 0.520"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.275,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.3,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=6",
+          "Step 3 basic checks: length=5",
+          "Step 4 basic checks: length=5",
+          "Step 5 basic checks: length=5",
+          "Step 6 basic checks: length=5",
+          "Step 7 basic checks: length=5",
+          "Step 8 basic checks: length=5",
+          "Step 9 basic checks: length=6",
+          "Step 10 basic checks: length=5",
+          "Confidence below threshold 0.55: 0.275"
+        ]
+      }
+    },
+    "timestamp": 1769592503.8474169
+  },
+  {
+    "instruction": "add product to the cart",
+    "generated": {
+      "instruction": "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UI steps to accomplish the task. Each step should start with a strong action verb.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:25",
+          "description": "Step 1: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:25"
+        },
+        {
+          "step": 2,
+          "action": "4511954Z\",\"response\":\" \",\"done\":false}",
+          "description": "Step 2: 4511954Z\",\"response\":\" \",\"done\":false}"
+        },
+        {
+          "step": 3,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:25",
+          "description": "Step 3: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:25"
+        },
+        {
+          "step": 4,
+          "action": "7274385Z\",\"response\":\"1\",\"done\":false}",
+          "description": "Step 4: 7274385Z\",\"response\":\"1\",\"done\":false}"
+        },
+        {
+          "step": 5,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26",
+          "description": "Step 5: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26"
+        },
+        {
+          "step": 6,
+          "action": "0027548Z\",\"response\":\"",
+          "description": "Step 6: 0027548Z\",\"response\":\""
+        },
+        {
+          "step": 7,
+          "action": "\",\"done\":false}",
+          "description": "Step 7: \",\"done\":false}"
+        },
+        {
+          "step": 8,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26",
+          "description": "Step 8: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26"
+        },
+        {
+          "step": 9,
+          "action": "286724Z\",\"response\":\" Nav\",\"done\":false}",
+          "description": "Step 9: 286724Z\",\"response\":\" Nav\",\"done\":false}"
+        },
+        {
+          "step": 10,
+          "action": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26",
+          "description": "Step 10: {\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26"
+        }
+      ],
+      "total_steps": 10,
+      "status": "ready_for_execution",
+      "raw_output": "{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:25.4511954Z\",\"response\":\" \",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:25.7274385Z\",\"response\":\"1\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26.0027548Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26.286724Z\",\"response\":\" Nav\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26.5576497Z\",\"response\":\"igate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:26.8169859Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:27.0783543Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:27.3457429Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:27.6237635Z\",\"response\":\" page\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:27.8963437Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:28.1641647Z\",\"response\":\"2\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:28.4297202Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:28.6964189Z\",\"response\":\" Loc\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:28.9623112Z\",\"response\":\"ate\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:29.2272467Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:29.4921985Z\",\"response\":\" click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:29.7581423Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:30.025661Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:30.2897955Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:30.559227Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:30.831382Z\",\"response\":\" Cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:31.1037608Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:31.3735948Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:31.6425872Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:31.9142627Z\",\"response\":\" equivalent\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:32.2969417Z\",\"response\":\" action\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:32.5670672Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:32.8405489Z\",\"response\":\"e\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:33.1198018Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:33.388138Z\",\"response\":\"g\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:33.6793455Z\",\"response\":\".,\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:34.0374667Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:34.409863Z\",\"response\":\"Add\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:34.8941442Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:35.2220261Z\",\"response\":\" Bag\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:35.5890943Z\",\"response\":\"\\\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:35.9404498Z\",\"response\":\" \\\"\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:36.3193731Z\",\"response\":\"B\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:36.650568Z\",\"response\":\"uy\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:36.9867553Z\",\"response\":\" Now\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:37.3069545Z\",\"response\":\"\\\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:37.6833033Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:38.0205999Z\",\"response\":\"3\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:38.3790052Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:38.7728612Z\",\"response\":\" Verify\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:39.138386Z\",\"response\":\" that\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:39.4790986Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:39.8073204Z\",\"response\":\" product\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:40.1565523Z\",\"response\":\" has\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:40.4500233Z\",\"response\":\" been\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:40.7399154Z\",\"response\":\" added\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:41.0226441Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:41.3108436Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:41.5937105Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:41.8774708Z\",\"response\":\" (\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:42.1604308Z\",\"response\":\"check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:42.4426148Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:42.726356Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:43.014043Z\",\"response\":\" icon\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:43.3018551Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:43.586547Z\",\"response\":\" mini\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:44.0089119Z\",\"response\":\"-\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:44.2964243Z\",\"response\":\"cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:44.683057Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:44.9852051Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:45.2670443Z\",\"response\":\" shopping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:45.5559641Z\",\"response\":\" bag\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:45.9453269Z\",\"response\":\")\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:46.2280084Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:46.5202433Z\",\"response\":\"4\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:46.8050583Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:47.0956012Z\",\"response\":\" If\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:47.3829668Z\",\"response\":\" necessary\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:47.679916Z\",\"response\":\",\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:47.9647096Z\",\"response\":\" proceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:48.263202Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:48.5478336Z\",\"response\":\" view\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:48.8366692Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:49.1260221Z\",\"response\":\" cart\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:49.4103415Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:49.7003515Z\",\"response\":\"5\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:49.9978224Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:50.2888335Z\",\"response\":\" Click\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:50.5731487Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:50.8683957Z\",\"response\":\"Pro\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:51.1578735Z\",\"response\":\"ceed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:51.4491477Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:51.7600706Z\",\"response\":\" Check\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:52.0725566Z\",\"response\":\"out\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:52.3649961Z\",\"response\":\"'\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:52.6599495Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:52.9529214Z\",\"response\":\" similar\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:53.24143Z\",\"response\":\" button\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:53.5306594Z\",\"response\":\" to\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:53.8283168Z\",\"response\":\" complete\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:54.121175Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:54.4159275Z\",\"response\":\" purchase\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:54.7004273Z\",\"response\":\" process\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:54.9990639Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:55.2900369Z\",\"response\":\"6\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:55.5846693Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:55.8726935Z\",\"response\":\" Enter\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:56.2658763Z\",\"response\":\" required\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:56.6806937Z\",\"response\":\" shipping\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:56.971587Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:57.2619049Z\",\"response\":\" bill\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:57.5572841Z\",\"response\":\"ing\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:57.8492858Z\",\"response\":\" information\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:58.1472902Z\",\"response\":\" as\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:58.5393026Z\",\"response\":\" needed\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:58.9368314Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:59.233638Z\",\"response\":\"7\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:59.5208499Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:30:59.8241182Z\",\"response\":\" Review\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:00.2257751Z\",\"response\":\" order\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:00.5255565Z\",\"response\":\" details\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:00.8229171Z\",\"response\":\" and\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:01.1195464Z\",\"response\":\" confirm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:01.4160657Z\",\"response\":\" accuracy\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:01.7082324Z\",\"response\":\"\\n\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:02.0058522Z\",\"response\":\"8\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:02.299229Z\",\"response\":\".\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:02.592774Z\",\"response\":\" Complete\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:02.8917365Z\",\"response\":\" the\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:03.18662Z\",\"response\":\" purchase\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:03.4848639Z\",\"response\":\" by\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:03.7803726Z\",\"response\":\" clicking\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:04.0820967Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:04.3836667Z\",\"response\":\"Place\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:04.778243Z\",\"response\":\" Order\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:05.1883083Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:05.4785451Z\",\"response\":\" '\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:05.7785843Z\",\"response\":\"Confirm\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:06.191629Z\",\"response\":\" P\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:06.5899836Z\",\"response\":\"urchase\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:07.0188764Z\",\"response\":\"',\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:07.3345072Z\",\"response\":\" or\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:07.756578Z\",\"response\":\" equivalent\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:08.0593521Z\",\"response\":\" action\",\"done\":false}\n{\"model\":\"mistral\",\"created_at\":\"2026-01-28T09:31:08.3713358Z\",\"response\":\"\",\"done\":true,\"done_reason\":\"stop\",\"context\":[3,29473,1763,1228,1164,8351,17092,5375,1120,8841,29491,13396,1040,13894,29515,1232,1756,2861,1066,1040,8316,1415,1372,1032,3846,1632,29493,2242,1054,2042,1070,17092,6712,1066,18468,1040,4406,29491,7834,4475,1791,1917,1163,1032,3735,3760,12911,29491,781,21043,29515,781,29508,29491,6397,1040,1722,781,29518,29491,10981,1232,2759,1066,14638,29510,781,29538,29491,10775,3548,8493,781,781,7500,1550,29515,4,1027,29508,29491,10131,12358,1066,1040,2861,3652,781,29518,29491,6000,1148,1072,6814,1040,1232,2759,1066,14638,29510,7029,1210,10612,3760,1093,29474,29491,29489,2831,1113,2759,1066,18467,1316,1113,29528,5301,3729,2011,781,29538,29491,25312,1137,1040,2861,1427,1518,4654,1066,1040,8316,1093,3656,1040,8316,10228,29493,14428,29501,14808,29493,1210,11925,7403,29499,781,29549,29491,1815,5660,29493,9632,1066,2972,1040,8316,781,29550,29491,10981,1232,1701,4756,1066,5682,1174,29510,1210,4452,7029,1066,4928,1040,8493,2527,781,29552,29491,10578,3798,14137,1072,5643,1056,2639,1158,4004,781,29555,29491,9117,2513,4930,1072,9503,14020,781,29551,29491,22697,1040,8493,1254,25443,1232,19730,9774,1415,1232,22973,1135,21337,1415,1210,10612,3760],\"total_duration\":43362098200,\"load_duration\":48655200,\"prompt_eval_count\":79,\"prompt_eval_duration\":390699100,\"eval_count\":140,\"eval_duration\":42795997100}\n",
+      "timestamp": "2026-01-28T09:31:08.378152"
+    },
+    "rewritten_text": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:30:25.4511954Z\",\"response\":\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26.8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26.8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26.8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26.8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26.8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26.8169859Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27.6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27.6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-0",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:30:25",
+        "description": "Step 1: list of models \"mistral\",\"created_at\": \"2026-01-28T09:30:25"
+      },
+      {
+        "step": 2,
+        "action": "Click 4511954Z\",\"response\":\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "Step 2: 4511954Z\",\"response\":\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 3,
+        "action": "Click 8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "Step 3: 8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 4,
+        "action": "Click 8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "Step 4: 8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 5,
+        "action": "Click 8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "Step 5: 8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 6,
+        "action": "Click 8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "Step 6: 8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 7,
+        "action": "Click 8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "Step 7: 8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 8,
+        "action": "Click 8169859Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27",
+        "description": "Step 8: 8169859Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27"
+      },
+      {
+        "step": 9,
+        "action": "Click 6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27",
+        "description": "Step 9: 6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27"
+      },
+      {
+        "step": 10,
+        "action": "Click 6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-0",
+        "description": "Step 10: 6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-0"
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:30:25",
+        "description": "list of models \"mistral\",\"created_at\": \"2026-01-28T09:30:25"
+      },
+      {
+        "step": 2,
+        "action": "4511954Z\",\"response\":\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "4511954Z\",\"response\":\" \",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 3,
+        "action": "8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 4,
+        "action": "8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "8169859Z\",\"response\":\" 1\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 5,
+        "action": "8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 6,
+        "action": "8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 7,
+        "action": "8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26",
+        "description": "8169859Z\",\"response\":\" to\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:26"
+      },
+      {
+        "step": 8,
+        "action": "8169859Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27",
+        "description": "8169859Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27"
+      },
+      {
+        "step": 9,
+        "action": "6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27",
+        "description": "6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-01-28T09:30:27"
+      },
+      {
+        "step": 10,
+        "action": "6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-0",
+        "description": "6237635Z\",\"response\":\" product\",\"done\":false\"  \"model\": \"mistral\",\"created_at\": \"2026-0"
+      }
+    ],
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.713,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.2,
+        "issues": [],
+        "warnings": [
+          "Duplicate steps detected: 2",
+          "Many steps do not begin with an action verb",
+          "Steps lack transitional words (then/after/next) to indicate flow"
+        ],
+        "suggestions": [
+          "Merge or rephrase duplicate steps to avoid repetition",
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.519,
+        "action_score": 0.375,
+        "dataset_score": 0.5,
+        "alignment_score": 0.75,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=17",
+          "Step 4 basic checks: length=7",
+          "Step 7 basic checks: length=6",
+          "Step 8 basic checks: length=12",
+          "Confidence below threshold 0.55: 0.519"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.275,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 0.3,
+        "details": [
+          "Step 1 basic checks: length=5",
+          "Step 2 basic checks: length=5",
+          "Step 3 basic checks: length=5",
+          "Step 4 basic checks: length=5",
+          "Step 5 basic checks: length=5",
+          "Step 6 basic checks: length=5",
+          "Step 7 basic checks: length=5",
+          "Step 8 basic checks: length=5",
+          "Step 9 basic checks: length=5",
+          "Step 10 basic checks: length=5",
+          "Confidence below threshold 0.55: 0.275"
+        ]
+      }
+    },
+    "timestamp": 1769592707.7340999
   }
 ]

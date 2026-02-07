@@ -1,31 +1,31 @@
 import logging
+import json
+import os
 from dotenv import load_dotenv
-
-# Attempt to import LangChain LLMs; fall back to a simple mock if unavailable
-try:
-    from langchain_core.prompts import PromptTemplate
-    from langchain_community.llms import Ollama
-    LLM_AVAILABLE = True
-except Exception as e:
-    logging.warning(f"LLM libraries not installed or failed to import: {e}")
-    LLM_AVAILABLE = False
+from langchain_core.prompts import PromptTemplate
+from langchain_ollama import OllamaLLM
+import requests
 
 load_dotenv()
 
 # --- Logging Setup ---
 logging.basicConfig(
-    filename="agentic_ai_log.txt",  # Log file
-    level=logging.INFO,             # Log level
+    filename="agentic_ai_log.txt",
+    level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
-if LLM_AVAILABLE:
-    llm = Ollama(model="llama3.1")
+llm = OllamaLLM(model="mistral:latest")
 
-    template = """
+# Ask the LLM to return a JSON object describing the plan.
+template = """
 You are an intelligent Agentic AI responsible for planning UI actions.
 Given this screen observation: {screen_info}
-Plan the next action in one short sentence.
+Return a JSON object (only JSON) with the following fields:
+  - action: short action name (e.g., "click", "type", "navigate")
+  - target: target identifier or selector
+  - params: object with any action parameters (can be empty)
+Return a single JSON object and nothing else.
 """
 
     prompt = PromptTemplate(
@@ -35,14 +35,37 @@ Plan the next action in one short sentence.
 
     chain = prompt | llm
 
-    def generate_plan(screen_info: str):
-        result = chain.invoke({"screen_info": screen_info})
-        return result
-else:
-    # Lightweight fallback: return a simple, deterministic plan based on observed text
-    def generate_plan(screen_info: str):
-        logging.warning("Using mock generate_plan because LLM libs are not installed.")
-        # Use the first non-empty line as a hint for a click target
-        lines = [ln.strip() for ln in screen_info.splitlines() if ln.strip()]
-        target = lines[0][:80] if lines else "screen"
-        return f"click on {target}"
+# Optional URL to forward LLM JSON output to (e.g., agentic endpoint)
+AGENTIC_API_URL = os.getenv("AGENTIC_API_URL")
+
+
+def _post_to_agentic(json_payload: dict):
+    if not AGENTIC_API_URL:
+        return None
+    try:
+        r = requests.post(AGENTIC_API_URL, json=json_payload, timeout=10)
+        r.raise_for_status()
+        logging.info("Posted plan to agentic API %s: %s", AGENTIC_API_URL, r.status_code)
+        return r.json() if r.headers.get("content-type", "").startswith("application/json") else {"status_code": r.status_code}
+    except Exception as e:
+        logging.error("Failed to post plan to agentic API: %s", e)
+        return None
+
+
+def generate_plan(screen_info: str):
+    # produce text output from chain (expected to be JSON string)
+    result = chain.invoke({"screen_info": screen_info})
+    text = result if isinstance(result, str) else str(result)
+
+    try:
+        plan_json = json.loads(text)
+    except Exception:
+        # If the LLM didn't return strict JSON, wrap the raw text
+        logging.warning("LLM plan not JSON, returning raw text in 'raw' field")
+        plan_json = {"raw": text}
+
+    # Forward the JSON to configured agentic API if set
+    if isinstance(plan_json, dict):
+        _post_to_agentic(plan_json)
+
+    return plan_json
