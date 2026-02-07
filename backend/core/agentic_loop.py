@@ -2,7 +2,7 @@ import requests
 import logging
 import time
 
-from core.perceive import perceive
+from core.perceive import perceive, stream_vision
 from core.plan import plan
 from core.act import act_with_retry
 
@@ -52,3 +52,42 @@ def run_cycle(start_delay: float = 4.0, stop_at_end: bool = True):
         "action_result": action_result,
         "evaluation": evaluation
     }
+
+
+def run_streaming_cycle(max_events: int = 10):
+    """Start vision capture and process incoming per-frame perception results in a loop.
+
+    For each received `vision_data`, run planning and acting immediately. Stops early if
+    an action_plan contains `stop_vision`.
+    """
+    logging.info("Starting streaming cycle...")
+    start_vision()
+
+    results = []
+    try:
+        for item in stream_vision(max_events=max_events):
+            if not isinstance(item, dict):
+                continue
+            if item.get("error"):
+                logging.warning(f"Received stream error: {item}")
+                continue
+            vision_data = item.get("vision_data") or item
+            action_plan = plan(vision_data)
+            action_result = act_with_retry(action_plan, max_retries=3)
+
+            results.append({
+                "perception": vision_data,
+                "action_plan": action_plan,
+                "action_result": action_result
+            })
+
+            if action_plan.get("stop_vision", False):
+                logging.info("Action requested to stop vision. Stopping.")
+                stop_vision()
+                break
+
+    finally:
+        # Ensure vision is stopped
+        stop_vision()
+
+    return results
