@@ -1,6 +1,7 @@
 import requests
 import logging
 import time
+import json
 
 VISION_BASE_URL = "http://localhost:8001"  # Vision FastAPI service
 
@@ -58,6 +59,80 @@ def capture_snapshot(timeout=180, run_pipeline=True):
     except requests.RequestException as e:
         logging.error("Snapshot capture failed: %s", e)
         return {"error": "capture_failed", "detail": str(e)}
+
+
+def stream_vision(connect_timeout=5, max_events=None):
+    """Connect to the Vision SSE stream and yield parsed JSON events as they arrive.
+
+    Usage:
+        for item in stream_vision():
+            handle(item)
+    """
+    url = f"{VISION_BASE_URL}/vision/stream"
+    try:
+        with requests.get(url, stream=True, timeout=connect_timeout) as resp:
+            resp.raise_for_status()
+            event_count = 0
+            buffer = ""
+            for raw_line in resp.iter_lines(decode_unicode=True):
+                if raw_line is None:
+                    continue
+                line = raw_line.strip()
+                # SSE keep-alive comment
+                if line == "":
+                    # end of event, parse buffer if contains data
+                    if buffer.startswith("data:"):
+                        payload = buffer[len("data:"):].strip()
+                        try:
+                            data = json.loads(payload)
+                        except Exception:
+                            data = {"error": "invalid_json", "raw": payload}
+                        yield data
+                        event_count += 1
+                        if max_events and event_count >= max_events:
+                            break
+                    buffer = ""
+                    continue
+
+                # accumulate 'data:' lines (SSE may send multiple lines)
+                if line.startswith("data:"):
+                    buffer += line + "\n"
+                # ignore other SSE fields (id:, retry:, :)
+
+    except requests.RequestException as e:
+        logging.error("Failed to connect to vision stream: %s", e)
+        yield {"error": "stream_unavailable", "detail": str(e)}
+
+
+def start_and_stream(max_events=None, process_callback=None, connect_timeout=5):
+    """Convenience: start capture, then stream processed frames and optionally call a callback per event.
+
+    Returns a list of collected events if `process_callback` is None.
+    """
+    start_resp = start_capture()
+    session_id = None
+    if start_resp and isinstance(start_resp, dict):
+        session_id = start_resp.get("session_id")
+
+    collected = []
+    for item in stream_vision(connect_timeout=connect_timeout, max_events=max_events):
+        if process_callback:
+            try:
+                process_callback(item)
+            except Exception:
+                logging.exception("process_callback failed")
+        else:
+            collected.append(item)
+
+        # if the item contains an instruction to stop vision, break
+        try:
+            if isinstance(item, dict) and item.get("vision_data"):
+                # the pipeline result may contain a semantic_state with stop instructions
+                pass
+        except Exception:
+            pass
+
+    return collected
 
 def perceive(wait_seconds=3):
     """
