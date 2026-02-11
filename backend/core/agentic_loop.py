@@ -2,9 +2,9 @@ import requests
 import logging
 import time
 
-from core.perceive import perceive, stream_vision
-from core.plan import plan
-from core.act import act_with_retry
+from backend.core.perceive import perceive, stream_vision
+from backend.core.plan import plan
+from backend.core.act import act_with_retry
 
 VISION_BASE_URL = "http://localhost:8001"
 LLM_BASE_URL = "http://localhost:8002"  # LLM FastAPI service

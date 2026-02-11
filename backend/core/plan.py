@@ -1,5 +1,5 @@
 import logging
-from core.llm_agent import generate_plan
+from .llm_agent import generate_plan
 
 
 def plan(perception):
@@ -18,4 +18,3 @@ def plan(perception):
     logging.info(f"Plan result (JSON): {action_json}")
     print(f"🤖 LLM Plan (JSON): {action_json}")
     return action_json
-

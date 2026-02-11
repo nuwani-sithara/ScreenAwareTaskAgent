@@ -261,7 +261,7 @@ def run_interactive(show_validation: bool = False):
             # Send steps to agentic AI backend
             try:
                 import requests
-                resp = requests.post("http://localhost:8001/llm/steps", json=compact, timeout=10)
+                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=10)
                 print(f"Sent steps to agentic AI backend: {resp.status_code} {resp.text}")
             except Exception as e:
                 print(f"Failed to send steps to agentic AI backend: {e}")
