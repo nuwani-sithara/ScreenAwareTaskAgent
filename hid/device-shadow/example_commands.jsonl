@@ -1,0 +1,9 @@
+{"cmd":"ack"}
+{"cmd":"mouse_move","dx":250,"dy":250,"smooth":true,"duration":200}
+{"cmd":"mouse_click","button":"left"}
+{"cmd":"mouse_scroll","scroll":3}
+{"cmd":"mouse_drag","dx":300,"dy":200,"duration":600,"button":"left"}
+{"cmd":"mouse_drag","dx":200,"dy":300,"duration":600,"button":"left"}
+{"cmd":"type_text","text":"Automated input from HID agent."}
+{"cmd":"key_press","key":0xE3}
+{"cmd":"key_release","key":0xE3}

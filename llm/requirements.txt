@@ -1,0 +1,25 @@
+transformers
+torch
+sentencepiece
+# PyTorch and related libraries
+# For CUDA 12.1 support, use: 
+# pip install torch --index-url https://download.pytorch.org/whl/cu121
+# For CUDA 11.8 support, use:
+# pip install torch --index-url https://download.pytorch.org/whl/cu118
+# For CPU only (smaller download):
+torch
+
+# Hugging Face libraries
+transformers
+datasets
+tokenizers
+
+# Scientific computing
+numpy
+matplotlib
+
+# Utilities
+tqdm
+
+# Optional: HTTP client for Ollama server
+requests
