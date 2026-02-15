@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 # =========================
-# 🔢 VALID 2048 VALUES
+# VALID 2048 VALUES
 # =========================
 VALID_VALUES = {
     0, 2, 4, 8, 16, 32, 64,
@@ -20,7 +20,7 @@ def extract_tile_number(tile_img):
     h, w = tile_img.shape[:2]
 
     # =========================
-    # 🔹 INNER DIGIT CROP
+    # INNER DIGIT CROP
     # =========================
     crop = tile_img[
         int(h * 0.25):int(h * 0.75),
@@ -28,7 +28,7 @@ def extract_tile_number(tile_img):
     ]
 
     # =========================
-    # 🔹 PREPROCESS
+    # PREPROCESS
     # =========================
     gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
     gray = cv2.resize(gray, None, fx=4, fy=4, interpolation=cv2.INTER_CUBIC)
@@ -41,7 +41,7 @@ def extract_tile_number(tile_img):
     )
 
     # =========================
-    # 🔹 FIND DIGIT CONTOURS
+    # FIND DIGIT CONTOURS
     # =========================
     contours, _ = cv2.findContours(
         thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
@@ -87,7 +87,7 @@ def extract_tile_number(tile_img):
     return str(snap_to_2048(val))
 
 # =====================================================
-# 🟨 SCORE / BEST SCORE OCR
+# SCORE / BEST SCORE OCR
 # =====================================================
 def extract_score(image, pad=10) -> str:
     """

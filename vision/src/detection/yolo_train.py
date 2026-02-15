@@ -7,18 +7,30 @@ from ultralytics import YOLO
 import argparse
 import os
 
-DEFAULT_DATA = "data/dataset/data.yaml"
+DEFAULT_DATA = "data/dataset2/data.yaml"
 DEFAULT_MODEL = "yolov8n.pt"
 
 
-def train(data=DEFAULT_DATA, model=DEFAULT_MODEL, epochs=50, imgsz=640, batch=8, name="2048_ui"):
-    print("Training with:", data, model)
+def train(
+    data=DEFAULT_DATA,
+    model=DEFAULT_MODEL,
+    epochs=50,
+    imgsz=640,
+    batch=8,
+    project_name="2048_ui",
+    run_name="yolo_train"
+):
+    print("Training with:")
+    print("  data:", data)
+    print("  model:", model)
 
-    # Absolute path to the project root
+    # Absolute path to project root
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    # vision/runs/train (absolute path)
-    runs_dir = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "vision", "runs", "train"))
+    # vision/runs/<project_name>
+    runs_dir = os.path.abspath(
+        os.path.join(BASE_DIR, "..", "..", "vision", "runs", project_name)
+    )
     os.makedirs(runs_dir, exist_ok=True)
 
     print("Saving training results to:", runs_dir)
@@ -30,21 +42,26 @@ def train(data=DEFAULT_DATA, model=DEFAULT_MODEL, epochs=50, imgsz=640, batch=8,
         epochs=epochs,
         imgsz=imgsz,
         batch=batch,
-        name=name,
-        project=runs_dir   # <-- always correct
+        project=runs_dir,
+        name=run_name
     )
 
-    print(f"Training finished. Check {runs_dir}/ for results.")
+    print(f"Training finished. Check {runs_dir}/{run_name}/ for results.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+
     parser.add_argument("--data", default=DEFAULT_DATA)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--batch", type=int, default=8)
-    parser.add_argument("--name", default="2048_ui")
+
+    parser.add_argument("--project", default="2048_ui",
+                        help="Folder name under vision/runs/")
+    parser.add_argument("--name", default="yolo_train",
+                        help="Run name inside the project folder")
 
     args = parser.parse_args()
 
@@ -54,5 +71,6 @@ if __name__ == "__main__":
         epochs=args.epochs,
         imgsz=args.imgsz,
         batch=args.batch,
-        name=args.name
+        project_name=args.project,
+        run_name=args.name
     )

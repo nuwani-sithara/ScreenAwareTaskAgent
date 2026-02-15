@@ -38,7 +38,7 @@
 2025-12-04 23:29:06,981 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-04 23:29:07,308 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -48,7 +48,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-04 23:29:07,308 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-04 23:29:07,308 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-04 23:29:22,984 - INFO - Plan result (JSON): {'action': 'click', 'target': 'The AI will attempt to click on the "Login" button to proceed with authentication.'}
 2025-12-04 23:29:22,984 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'The AI will attempt to click on the "Login" button to proceed with authentication.'}
 2025-12-04 23:29:22,985 - INFO - Mock HID received command: {'action': 'click', 'target': 'The AI will attempt to click on the "Login" button to proceed with authentication.'}
@@ -58,7 +58,7 @@ Forgot Password? Recover
 
 2025-12-04 23:34:02,550 - INFO - === Starting Agentic AI cycle ===
 2025-12-04 23:34:02,551 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
-2025-12-04 23:34:02,959 - INFO - \U0001f4c4 OCR Extracted Text: x — @ agenticai task 2
+2025-12-04 23:34:02,959 - INFO - \U0001f4c4 OCR Extracted Text: x ï¿½ @ agenticai task 2
 
 BITRATES CHE Ke
 Pesto
@@ -69,7 +69,7 @@ D2 OO. OO. OO. 4
 Aen xn x. xn x. xn x.
 
 38
-2025-12-04 23:34:02,960 - INFO - Planning next action based on perception: {'screen_text': 'x — @ agenticai task 2\n\nBITRATES CHE Ke\nPesto\n<40 = 40 <30 <4 <0 <1)\n\nD2 OO. OO. OO. 4\n\nAen xn x. xn x. xn x.\n\n38'}
+2025-12-04 23:34:02,960 - INFO - Planning next action based on perception: {'screen_text': 'x ï¿½ @ agenticai task 2\n\nBITRATES CHE Ke\nPesto\n<40 = 40 <30 <4 <0 <1)\n\nD2 OO. OO. OO. 4\n\nAen xn x. xn x. xn x.\n\n38'}
 2025-12-04 23:34:13,564 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Focus on navigating to the "Aen xn x" section, likely a table or list, as it appears to be partially hidden behind another element.'}
 2025-12-04 23:34:13,565 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Focus on navigating to the "Aen xn x" section, likely a table or list, as it appears to be partially hidden behind another element.'}
 2025-12-04 23:34:13,565 - INFO - Mock HID received command: {'action': 'click', 'target': 'Focus on navigating to the "Aen xn x" section, likely a table or list, as it appears to be partially hidden behind another element.'}
@@ -93,7 +93,7 @@ Aen xn x. xn x. xn x.
 2025-12-04 23:55:09,830 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-04 23:55:10,208 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -103,7 +103,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-04 23:55:10,209 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-04 23:55:10,209 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-04 23:55:17,873 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" since the user\'s input for "Password" is incorrect.'}
 2025-12-04 23:55:17,873 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" since the user\'s input for "Password" is incorrect.'}
 2025-12-04 23:55:17,874 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" since the user\'s input for "Password" is incorrect.'}
@@ -116,7 +116,7 @@ Forgot Password? Recover
 2025-12-05 00:04:00,413 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-05 00:04:00,726 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -126,7 +126,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-05 00:04:00,727 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-05 00:04:00,727 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-05 00:04:15,291 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Login" button to proceed with authenticating the user\'s credentials.'}
 2025-12-05 00:04:15,292 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Login" button to proceed with authenticating the user\'s credentials.'}
 2025-12-05 00:04:15,292 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Login" button to proceed with authenticating the user\'s credentials.'}
@@ -139,7 +139,7 @@ Forgot Password? Recover
 2025-12-19 10:13:50,067 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-19 10:13:51,181 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -149,7 +149,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-19 10:13:51,182 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-19 10:13:51,182 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-19 10:14:15,719 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" as there is no indication that a valid login attempt has been made with the provided Email and Password.'}
 2025-12-19 10:14:15,731 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" as there is no indication that a valid login attempt has been made with the provided Email and Password.'}
 2025-12-19 10:14:15,732 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" as there is no indication that a valid login attempt has been made with the provided Email and Password.'}
@@ -162,7 +162,7 @@ Forgot Password? Recover
 2025-12-19 10:40:18,624 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-19 10:40:19,150 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -172,7 +172,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-19 10:40:19,151 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-19 10:40:19,151 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-19 10:40:39,196 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" to initiate a password recovery process.'}
 2025-12-19 10:40:39,196 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate a password recovery process.'}
 2025-12-19 10:40:39,197 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate a password recovery process.'}
@@ -185,7 +185,7 @@ Forgot Password? Recover
 2025-12-21 19:41:43,978 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-21 19:41:44,461 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -195,12 +195,12 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-21 19:41:44,462 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-21 19:41:44,462 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-21 19:41:59,753 - INFO - === Starting full Agentic AI loop ===
 2025-12-21 19:41:59,754 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-21 19:42:00,204 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -210,7 +210,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-21 19:42:00,205 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-21 19:42:00,205 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-21 19:42:12,344 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Submit the form with the entered email and password.'}
 2025-12-21 19:42:12,344 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Submit the form with the entered email and password.'}
 2025-12-21 19:42:12,344 - INFO - Mock HID received command: {'action': 'click', 'target': 'Submit the form with the entered email and password.'}
@@ -231,7 +231,7 @@ Forgot Password? Recover
 2025-12-21 19:50:57,392 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-21 19:50:57,734 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -241,7 +241,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-21 19:50:57,735 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-21 19:50:57,735 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-21 19:51:15,471 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will click on the "Forgot Password?" link.'}
 2025-12-21 19:51:15,472 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will click on the "Forgot Password?" link.'}
 2025-12-21 19:51:15,472 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will click on the "Forgot Password?" link.'}
@@ -254,7 +254,7 @@ Forgot Password? Recover
 2025-12-21 19:54:27,994 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-21 19:54:28,334 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -264,7 +264,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-21 19:54:28,335 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-21 19:54:28,335 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-21 19:54:32,243 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click the "Login" button to proceed.'}
 2025-12-21 19:54:32,244 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click the "Login" button to proceed.'}
 2025-12-21 19:54:32,244 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click the "Login" button to proceed.'}
@@ -277,7 +277,7 @@ Forgot Password? Recover
 2025-12-21 19:57:14,179 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-21 19:57:14,512 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -287,7 +287,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-21 19:57:14,513 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-21 19:57:14,513 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-21 19:57:18,548 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Submit the email and password for login.'}
 2025-12-21 19:57:18,548 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Submit the email and password for login.'}
 2025-12-21 19:57:18,548 - INFO - Mock HID received command: {'action': 'click', 'target': 'Submit the email and password for login.'}
@@ -300,7 +300,7 @@ Forgot Password? Recover
 2025-12-23 11:11:18,726 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 11:11:19,251 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -310,7 +310,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 11:11:19,252 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 11:11:19,252 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 11:11:45,591 - INFO - Plan result (JSON): {'action': 'click', 'target': 'The AI should plan its next action as "Click on \'Login\' button to initiate authentication process."'}
 2025-12-23 11:11:45,599 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'The AI should plan its next action as "Click on \'Login\' button to initiate authentication process."'}
 2025-12-23 11:11:45,599 - INFO - Mock HID received command: {'action': 'click', 'target': 'The AI should plan its next action as "Click on \'Login\' button to initiate authentication process."'}
@@ -323,7 +323,7 @@ Forgot Password? Recover
 2025-12-23 11:30:23,688 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 11:30:24,120 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -333,7 +333,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 11:30:24,122 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 11:30:24,122 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 11:30:43,352 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click the "Login" button.'}
 2025-12-23 11:30:43,353 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click the "Login" button.'}
 2025-12-23 11:30:43,353 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click the "Login" button.'}
@@ -345,7 +345,7 @@ Forgot Password? Recover
 2025-12-23 11:43:38,388 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 11:43:38,895 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -355,7 +355,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 11:43:38,896 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 11:43:38,896 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 11:44:00,940 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Login" button.'}
 2025-12-23 11:44:00,941 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Login" button.'}
 2025-12-23 11:44:00,941 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Login" button.'}
@@ -365,7 +365,7 @@ Forgot Password? Recover
 2025-12-23 11:49:17,784 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 11:49:18,244 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -375,7 +375,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 11:49:18,245 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 11:49:18,245 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 11:49:35,547 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" to initiate a password recovery process.'}
 2025-12-23 11:49:35,547 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate a password recovery process.'}
 2025-12-23 11:49:35,547 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate a password recovery process.'}
@@ -387,7 +387,7 @@ Forgot Password? Recover
 2025-12-23 11:51:59,517 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 11:51:59,864 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -397,7 +397,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 11:51:59,865 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 11:51:59,865 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 11:52:05,412 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password to initiate password recovery process.'}
 2025-12-23 11:52:05,413 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password to initiate password recovery process.'}
 2025-12-23 11:52:05,413 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password to initiate password recovery process.'}
@@ -408,7 +408,7 @@ Forgot Password? Recover
 2025-12-23 11:58:43,780 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 11:58:44,177 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -418,7 +418,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 11:58:44,178 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 11:58:44,178 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 11:59:00,802 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Login" button.'}
 2025-12-23 11:59:00,802 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Login" button.'}
 2025-12-23 11:59:00,802 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Login" button.'}
@@ -428,7 +428,7 @@ Forgot Password? Recover
 2025-12-23 12:02:23,316 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:02:23,693 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -438,7 +438,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:02:23,694 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:02:23,694 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:02:28,487 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Recover" to initiate the password recovery process.'}
 2025-12-23 12:02:28,487 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Recover" to initiate the password recovery process.'}
 2025-12-23 12:02:28,487 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Recover" to initiate the password recovery process.'}
@@ -448,7 +448,7 @@ Forgot Password? Recover
 2025-12-23 12:03:21,272 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:03:21,594 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -458,7 +458,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:03:21,595 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:03:21,595 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:03:26,682 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Login" button to proceed with authentication.'}
 2025-12-23 12:03:26,683 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Login" button to proceed with authentication.'}
 2025-12-23 12:03:26,683 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Login" button to proceed with authentication.'}
@@ -468,7 +468,7 @@ Forgot Password? Recover
 2025-12-23 12:03:40,941 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:03:41,242 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -478,7 +478,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:03:41,243 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:03:41,243 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:03:46,404 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" to initiate password recovery.'}
 2025-12-23 12:03:46,405 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate password recovery.'}
 2025-12-23 12:03:46,405 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate password recovery.'}
@@ -488,7 +488,7 @@ Forgot Password? Recover
 2025-12-23 12:03:58,058 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:03:58,395 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -498,7 +498,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:03:58,396 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:03:58,396 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:04:04,276 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" and wait for the subsequent form to load.'}
 2025-12-23 12:04:04,276 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" and wait for the subsequent form to load.'}
 2025-12-23 12:04:04,276 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" and wait for the subsequent form to load.'}
@@ -508,7 +508,7 @@ Forgot Password? Recover
 2025-12-23 12:13:32,163 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:13:32,513 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -518,7 +518,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:13:32,515 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:13:32,515 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:13:56,321 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will plan the action "Click on \'Login\'" to proceed with the user\'s authentication.'}
 2025-12-23 12:13:56,496 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will plan the action "Click on \'Login\'" to proceed with the user\'s authentication.'}
 2025-12-23 12:13:56,705 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will plan the action "Click on \'Login\'" to proceed with the user\'s authentication.'}
@@ -528,7 +528,7 @@ Forgot Password? Recover
 2025-12-23 12:21:48,312 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:21:48,673 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -538,7 +538,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:21:48,674 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:21:48,674 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:22:05,110 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Login" button to submit the user\'s credentials.'}
 2025-12-23 12:22:05,111 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Login" button to submit the user\'s credentials.'}
 2025-12-23 12:22:05,111 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Login" button to submit the user\'s credentials.'}
@@ -548,7 +548,7 @@ Forgot Password? Recover
 2025-12-23 12:28:49,429 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:28:49,780 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -558,7 +558,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:28:49,781 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:28:49,781 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:29:08,197 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Login" to proceed with authenticating the user\'s credentials.'}
 2025-12-23 12:29:08,198 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Login" to proceed with authenticating the user\'s credentials.'}
 2025-12-23 12:29:08,198 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Login" to proceed with authenticating the user\'s credentials.'}
@@ -568,7 +568,7 @@ Forgot Password? Recover
 2025-12-23 12:34:01,569 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:34:01,936 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -578,7 +578,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:34:01,937 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:34:01,937 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:34:08,432 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Submit the incomplete login form by clicking the "Login" button.'}
 2025-12-23 12:34:08,433 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Submit the incomplete login form by clicking the "Login" button.'}
 2025-12-23 12:34:08,433 - INFO - Mock HID received command: {'action': 'click', 'target': 'Submit the incomplete login form by clicking the "Login" button.'}
@@ -588,7 +588,7 @@ Forgot Password? Recover
 2025-12-23 12:36:48,647 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:36:48,944 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -598,7 +598,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:36:48,946 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:36:48,946 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:36:52,576 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click the "Login" button.'}
 2025-12-23 12:36:52,577 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click the "Login" button.'}
 2025-12-23 12:36:52,577 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click the "Login" button.'}
@@ -608,7 +608,7 @@ Forgot Password? Recover
 2025-12-23 12:37:11,910 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:37:12,227 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -618,7 +618,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:37:12,228 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:37:12,228 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:37:16,758 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" to initiate the password recovery process.'}
 2025-12-23 12:37:16,758 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate the password recovery process.'}
 2025-12-23 12:37:16,758 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" to initiate the password recovery process.'}
@@ -628,7 +628,7 @@ Forgot Password? Recover
 2025-12-23 12:38:21,259 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 12:38:21,617 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -638,7 +638,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 12:38:21,618 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 12:38:21,618 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 12:38:27,226 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password?" since the user has attempted to log in with an invalid password.'}
 2025-12-23 12:38:27,227 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password?" since the user has attempted to log in with an invalid password.'}
 2025-12-23 12:38:27,227 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password?" since the user has attempted to log in with an invalid password.'}
@@ -648,7 +648,7 @@ Forgot Password? Recover
 2025-12-23 13:02:29,868 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:02:30,214 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -658,7 +658,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:02:30,216 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:02:30,216 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:02:50,562 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Submit the login form with the provided Email and Password.'}
 2025-12-23 13:02:50,562 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Submit the login form with the provided Email and Password.'}
 2025-12-23 13:02:50,562 - INFO - Mock HID received command: {'action': 'click', 'target': 'Submit the login form with the provided Email and Password.'}
@@ -668,7 +668,7 @@ Forgot Password? Recover
 2025-12-23 13:03:59,897 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:04:00,278 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -678,7 +678,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:04:00,279 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:04:00,279 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:04:05,920 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will plan to click on "Forgot Password?" to trigger a password recovery process.'}
 2025-12-23 13:04:05,920 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will plan to click on "Forgot Password?" to trigger a password recovery process.'}
 2025-12-23 13:04:05,944 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will plan to click on "Forgot Password?" to trigger a password recovery process.'}
@@ -688,7 +688,7 @@ Forgot Password? Recover
 2025-12-23 13:12:44,184 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:12:44,518 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -698,7 +698,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:12:44,520 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:12:44,520 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:13:03,566 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Login" button.'}
 2025-12-23 13:13:03,566 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Login" button.'}
 2025-12-23 13:13:03,567 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Login" button.'}
@@ -708,7 +708,7 @@ Forgot Password? Recover
 2025-12-23 13:14:44,875 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:14:46,613 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -718,7 +718,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:14:46,614 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:14:46,614 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:14:51,692 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Submit the login form with the provided email and password.'}
 2025-12-23 13:14:51,692 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Submit the login form with the provided email and password.'}
 2025-12-23 13:14:51,693 - INFO - Mock HID received command: {'action': 'click', 'target': 'Submit the login form with the provided email and password.'}
@@ -728,7 +728,7 @@ Forgot Password? Recover
 2025-12-23 13:15:24,592 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:15:24,940 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -738,7 +738,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:15:24,941 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:15:24,941 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:15:31,805 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will simulate a keystroke by typing "Enter" after the email field to submit the login form.'}
 2025-12-23 13:15:31,805 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will simulate a keystroke by typing "Enter" after the email field to submit the login form.'}
 2025-12-23 13:15:31,806 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will simulate a keystroke by typing "Enter" after the email field to submit the login form.'}
@@ -748,7 +748,7 @@ Forgot Password? Recover
 2025-12-23 13:15:42,351 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:15:42,666 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -758,7 +758,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:15:42,667 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:15:42,667 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:15:46,835 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Login" button to proceed with authentication.'}
 2025-12-23 13:15:46,836 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Login" button to proceed with authentication.'}
 2025-12-23 13:15:46,836 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Login" button to proceed with authentication.'}
@@ -768,7 +768,7 @@ Forgot Password? Recover
 2025-12-23 13:16:01,620 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:16:01,921 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -778,7 +778,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:16:01,922 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:16:01,922 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:16:08,618 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will click on the "Forgot Password?" link to initiate the password recovery process.'}
 2025-12-23 13:16:08,619 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will click on the "Forgot Password?" link to initiate the password recovery process.'}
 2025-12-23 13:16:08,619 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will click on the "Forgot Password?" link to initiate the password recovery process.'}
@@ -788,7 +788,7 @@ Forgot Password? Recover
 2025-12-23 13:16:43,406 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:16:43,717 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -798,7 +798,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:16:43,718 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:16:43,718 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:16:49,708 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password?" since the password field already has a value and it\'s likely incorrect.'}
 2025-12-23 13:16:49,708 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password?" since the password field already has a value and it\'s likely incorrect.'}
 2025-12-23 13:16:49,708 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password?" since the password field already has a value and it\'s likely incorrect.'}
@@ -808,7 +808,7 @@ Forgot Password? Recover
 2025-12-23 13:17:46,892 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:17:47,217 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -818,7 +818,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:17:47,218 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:17:47,218 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:17:52,627 - INFO - Plan result (JSON): {'action': 'click', 'target': 'The AI will plan to click the "Login" button.'}
 2025-12-23 13:17:52,628 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'The AI will plan to click the "Login" button.'}
 2025-12-23 13:17:52,628 - INFO - Mock HID received command: {'action': 'click', 'target': 'The AI will plan to click the "Login" button.'}
@@ -828,7 +828,7 @@ Forgot Password? Recover
 2025-12-23 13:18:34,779 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:18:35,160 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -838,7 +838,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:18:35,161 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:18:35,161 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:18:39,286 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click the "Login" button.'}
 2025-12-23 13:18:39,286 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click the "Login" button.'}
 2025-12-23 13:18:39,286 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click the "Login" button.'}
@@ -848,7 +848,7 @@ Forgot Password? Recover
 2025-12-23 13:18:53,198 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:18:53,517 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -858,7 +858,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:18:53,518 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:18:53,518 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:18:59,485 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Recover" link to potentially facilitate password reset and prevent the user from entering incorrect credentials.'}
 2025-12-23 13:18:59,485 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Recover" link to potentially facilitate password reset and prevent the user from entering incorrect credentials.'}
 2025-12-23 13:18:59,485 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Recover" link to potentially facilitate password reset and prevent the user from entering incorrect credentials.'}
@@ -868,7 +868,7 @@ Forgot Password? Recover
 2025-12-23 13:19:40,285 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:19:40,583 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -878,7 +878,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:19:40,584 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:19:40,584 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:19:46,198 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password?" to initiate password recovery for the user.'}
 2025-12-23 13:19:46,198 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password?" to initiate password recovery for the user.'}
 2025-12-23 13:19:46,199 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password?" to initiate password recovery for the user.'}
@@ -888,7 +888,7 @@ Forgot Password? Recover
 2025-12-23 13:20:07,112 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:20:07,442 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -898,7 +898,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:20:07,444 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:20:07,444 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:20:12,842 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Login" button to proceed with authentication.'}
 2025-12-23 13:20:12,842 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Login" button to proceed with authentication.'}
 2025-12-23 13:20:12,842 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Login" button to proceed with authentication.'}
@@ -908,7 +908,7 @@ Forgot Password? Recover
 2025-12-23 13:20:21,885 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:20:22,231 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -918,7 +918,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:20:22,233 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:20:22,233 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:20:28,213 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password?" to recover access and initiate a password reset process.'}
 2025-12-23 13:20:28,214 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password?" to recover access and initiate a password reset process.'}
 2025-12-23 13:20:28,214 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password?" to recover access and initiate a password reset process.'}
@@ -928,7 +928,7 @@ Forgot Password? Recover
 2025-12-23 13:21:06,538 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:21:06,863 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -938,7 +938,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:21:06,864 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:21:06,864 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:21:12,231 - INFO - Plan result (JSON): {'action': 'click', 'target': 'The AI will click on the "Forgot Password?" button.'}
 2025-12-23 13:21:12,231 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'The AI will click on the "Forgot Password?" button.'}
 2025-12-23 13:21:12,231 - INFO - Mock HID received command: {'action': 'click', 'target': 'The AI will click on the "Forgot Password?" button.'}
@@ -948,7 +948,7 @@ Forgot Password? Recover
 2025-12-23 13:22:08,966 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:22:09,269 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -958,7 +958,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:22:09,270 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:22:09,270 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:22:15,713 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will click on the "Forget Password" link to verify if it triggers a password reset workflow.'}
 2025-12-23 13:22:15,714 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will click on the "Forget Password" link to verify if it triggers a password reset workflow.'}
 2025-12-23 13:22:15,714 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will click on the "Forget Password" link to verify if it triggers a password reset workflow.'}
@@ -968,7 +968,7 @@ Forgot Password? Recover
 2025-12-23 13:22:48,929 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:22:49,252 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -978,7 +978,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:22:49,254 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:22:49,254 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:22:53,948 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password?" to initiate the password recovery process.'}
 2025-12-23 13:22:53,949 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password?" to initiate the password recovery process.'}
 2025-12-23 13:22:53,949 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password?" to initiate the password recovery process.'}
@@ -988,7 +988,7 @@ Forgot Password? Recover
 2025-12-23 13:23:19,998 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:23:20,293 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -998,7 +998,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:23:20,294 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:23:20,294 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:23:25,128 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will submit the login form with the provided Email and Password credentials.'}
 2025-12-23 13:23:25,129 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will submit the login form with the provided Email and Password credentials.'}
 2025-12-23 13:23:25,129 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will submit the login form with the provided Email and Password credentials.'}
@@ -1008,7 +1008,7 @@ Forgot Password? Recover
 2025-12-23 13:23:42,771 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:23:43,066 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1018,7 +1018,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:23:43,067 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:23:43,067 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:23:51,021 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Clear the input field for "Email" as it contains incorrect input and prevent further submission of the incomplete login form.'}
 2025-12-23 13:23:51,022 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Clear the input field for "Email" as it contains incorrect input and prevent further submission of the incomplete login form.'}
 2025-12-23 13:23:51,022 - INFO - Mock HID received command: {'action': 'click', 'target': 'Clear the input field for "Email" as it contains incorrect input and prevent further submission of the incomplete login form.'}
@@ -1028,7 +1028,7 @@ Forgot Password? Recover
 2025-12-23 13:24:11,281 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:24:11,627 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1038,7 +1038,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:24:11,628 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:24:11,628 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:24:19,164 - INFO - Plan result (JSON): {'action': 'click', 'target': 'The next action should be "Click on \'Login\' button" to proceed with the authentication process.'}
 2025-12-23 13:24:19,165 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'The next action should be "Click on \'Login\' button" to proceed with the authentication process.'}
 2025-12-23 13:24:19,165 - INFO - Mock HID received command: {'action': 'click', 'target': 'The next action should be "Click on \'Login\' button" to proceed with the authentication process.'}
@@ -1048,7 +1048,7 @@ Forgot Password? Recover
 2025-12-23 13:24:33,515 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:24:33,844 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1058,7 +1058,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:24:33,846 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:24:33,846 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:24:38,811 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Recover" to initiate a password reset process.'}
 2025-12-23 13:24:38,812 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Recover" to initiate a password reset process.'}
 2025-12-23 13:24:38,812 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Recover" to initiate a password reset process.'}
@@ -1068,7 +1068,7 @@ Forgot Password? Recover
 2025-12-23 13:24:43,713 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:24:44,089 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1078,7 +1078,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:24:44,090 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:24:44,090 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:24:49,125 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will click on "Forgot Password?" and plan for a password recovery sequence.'}
 2025-12-23 13:24:49,125 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will click on "Forgot Password?" and plan for a password recovery sequence.'}
 2025-12-23 13:24:49,125 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will click on "Forgot Password?" and plan for a password recovery sequence.'}
@@ -1088,7 +1088,7 @@ Forgot Password? Recover
 2025-12-23 13:26:05,960 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:26:06,254 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1098,7 +1098,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:26:06,255 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:26:06,255 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:26:11,227 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Login" button to proceed with authentication.'}
 2025-12-23 13:26:11,228 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Login" button to proceed with authentication.'}
 2025-12-23 13:26:11,228 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Login" button to proceed with authentication.'}
@@ -1108,7 +1108,7 @@ Forgot Password? Recover
 2025-12-23 13:28:33,965 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:28:34,267 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1118,7 +1118,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:28:34,268 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:28:34,268 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:28:39,470 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will attempt to click on "Forgot Password?" as a potential next step.'}
 2025-12-23 13:28:39,471 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will attempt to click on "Forgot Password?" as a potential next step.'}
 2025-12-23 13:28:39,471 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will attempt to click on "Forgot Password?" as a potential next step.'}
@@ -1128,7 +1128,7 @@ Forgot Password? Recover
 2025-12-23 13:28:46,283 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:28:46,599 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1138,7 +1138,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:28:46,600 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:28:46,600 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:28:52,732 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on the "Recover" link under the password field to initiate password reset.'}
 2025-12-23 13:28:52,732 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on the "Recover" link under the password field to initiate password reset.'}
 2025-12-23 13:28:52,733 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on the "Recover" link under the password field to initiate password reset.'}
@@ -1148,7 +1148,7 @@ Forgot Password? Recover
 2025-12-23 13:32:51,982 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:32:52,315 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1158,7 +1158,7 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:32:52,316 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:32:52,316 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:32:56,990 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Forgot Password" to recover password functionality.'}
 2025-12-23 13:32:56,990 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Forgot Password" to recover password functionality.'}
 2025-12-23 13:32:56,990 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Forgot Password" to recover password functionality.'}
@@ -1168,7 +1168,7 @@ Forgot Password? Recover
 2025-12-23 13:33:08,383 - INFO - \U0001f441\ufe0f Perceiving screen with OCR...
 2025-12-23 13:33:08,684 - INFO - \U0001f4c4 OCR Extracted Text: Digi Ceylon Admin x +
 
-@ — &% dashboarddigiceylon.k
+@ ï¿½ &% dashboarddigiceylon.k
 
 Login
 
@@ -1178,10 +1178,60 @@ Email
 Password wet
 
 Forgot Password? Recover
-2025-12-23 13:33:08,685 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ — &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
+2025-12-23 13:33:08,685 - INFO - Planning next action based on perception: {'screen_text': 'Digi Ceylon Admin x +\n\n@ ï¿½ &% dashboarddigiceylon.k\n\nLogin\n\nPlease login to continue to your account.\n\nEmail\nPassword wet\n\nForgot Password? Recover'}
 2025-12-23 13:33:13,226 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password.'}
 2025-12-23 13:33:13,226 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password.'}
 2025-12-23 13:33:13,226 - INFO - Mock HID received command: {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password.'}
 2025-12-23 13:33:13,227 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password.'}}
 2025-12-23 13:33:13,227 - INFO - Action succeeded on attempt 1
 2025-12-23 13:33:13,227 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-05 15:48:23,116 - INFO - \u25b6\ufe0f Starting Vision capture loop...
+2026-01-05 15:48:25,171 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-05 15:48:34,298 - ERROR - Vision stop returned non-completed status: error
+2026-01-05 15:48:34,298 - ERROR - Perception error: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 15:48:34,298 - INFO - Planning next action based on perception: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 15:49:02,461 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}
+2026-01-05 15:49:02,462 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}
+2026-01-05 15:49:02,462 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}
+2026-01-05 15:49:02,462 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}}
+2026-01-05 15:49:02,463 - INFO - Action succeeded on attempt 1
+2026-01-05 15:49:02,463 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-05 16:02:19,538 - INFO - Starting Vision capture loop...
+2026-01-05 16:02:21,580 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-05 16:02:30,509 - ERROR - Vision stop returned non-completed status: error
+2026-01-05 16:02:30,509 - ERROR - Perception error: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 16:02:30,509 - INFO - Planning next action based on perception: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 16:02:44,919 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Load the login page to verify user credentials.'}
+2026-01-05 16:02:44,920 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Load the login page to verify user credentials.'}
+2026-01-05 16:02:44,920 - INFO - Mock HID received command: {'action': 'click', 'target': 'Load the login page to verify user credentials.'}
+2026-01-05 16:02:44,920 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': 'Load the login page to verify user credentials.'}}
+2026-01-05 16:02:44,920 - INFO - Action succeeded on attempt 1
+2026-01-05 16:02:44,920 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-05 16:02:44,921 - INFO - Stopping Vision capture loop...
+2026-01-28 12:59:49,179 - INFO - \u25b6\ufe0f Starting Vision capture loop...
+2026-01-28 12:59:51,337 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-28 13:00:20,060 - INFO - Perception data received
+2026-01-28 13:00:20,060 - INFO - Planning next action based on perception: {'vision_data': [{'frame_id': 1, 'elements': {'person': {'bbox': {'x_min': 266, 'y_min': 189, 'x_max': 639, 'y_max': 479}, 'confidence': 0.877697229385376, 'text': '', 'ocr_confidence': None}, 'cell phone': {'bbox': {'x_min': 530, 'y_min': 314, 'x_max': 616, 'y_max': 378}, 'confidence': 0.1546063870191574, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 357, 'y_min': 134, 'x_max': 490, 'y_max': 225}, 'confidence': 0.1264612376689911, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 2, 'elements': {'person': {'bbox': {'x_min': 276, 'y_min': 189, 'x_max': 639, 'y_max': 479}, 'confidence': 0.8802219033241272, 'text': '', 'ocr_confidence': None}, 'cell phone': {'bbox': {'x_min': 521, 'y_min': 319, 'x_max': 610, 'y_max': 385}, 'confidence': 0.13364368677139282, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 3, 'elements': {'person': {'bbox': {'x_min': 268, 'y_min': 192, 'x_max': 638, 'y_max': 479}, 'confidence': 0.8813700079917908, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 4, 'elements': {'person': {'bbox': {'x_min': 259, 'y_min': 192, 'x_max': 638, 'y_max': 479}, 'confidence': 0.8786289691925049, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 5, 'elements': {'person': {'bbox': {'x_min': 259, 'y_min': 194, 'x_max': 638, 'y_max': 479}, 'confidence': 0.8854374885559082, 'text': '', 'ocr_confidence': None}}}]}
+2026-01-28 13:00:20,392 - INFO - HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 404 Not Found"
+2026-01-28 13:32:55,706 - INFO - \u25b6\ufe0f Starting Vision capture loop...
+2026-01-28 13:32:57,821 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-28 13:33:21,989 - INFO - Perception data received
+2026-01-28 13:33:21,989 - INFO - Planning next action based on perception: {'vision_data': [{'frame_id': 1, 'elements': {'person': {'bbox': {'x_min': 246, 'y_min': 151, 'x_max': 634, 'y_max': 479}, 'confidence': 0.8903922438621521, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 354, 'y_min': 133, 'x_max': 492, 'y_max': 201}, 'confidence': 0.11515714973211288, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 2, 'elements': {'person': {'bbox': {'x_min': 246, 'y_min': 165, 'x_max': 626, 'y_max': 479}, 'confidence': 0.8733463883399963, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 355, 'y_min': 134, 'x_max': 494, 'y_max': 220}, 'confidence': 0.36374160647392273, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 3, 'elements': {'person': {'bbox': {'x_min': 248, 'y_min': 164, 'x_max': 628, 'y_max': 479}, 'confidence': 0.8961942195892334, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 355, 'y_min': 133, 'x_max': 493, 'y_max': 212}, 'confidence': 0.27759644389152527, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 4, 'elements': {'person': {'bbox': {'x_min': 248, 'y_min': 161, 'x_max': 629, 'y_max': 479}, 'confidence': 0.8781719207763672, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 355, 'y_min': 133, 'x_max': 492, 'y_max': 205}, 'confidence': 0.2980114221572876, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 5, 'elements': {'person': {'bbox': {'x_min': 246, 'y_min': 169, 'x_max': 634, 'y_max': 479}, 'confidence': 0.8693619966506958, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 355, 'y_min': 133, 'x_max': 491, 'y_max': 202}, 'confidence': 0.21350282430648804, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 6, 'elements': {'person': {'bbox': {'x_min': 241, 'y_min': 161, 'x_max': 634, 'y_max': 479}, 'confidence': 0.8406422138214111, 'text': '', 'ocr_confidence': None}, 'book': {'bbox': {'x_min': 355, 'y_min': 133, 'x_max': 491, 'y_max': 201}, 'confidence': 0.2741711735725403, 'text': '', 'ocr_confidence': None}}}]}
+2026-01-28 13:34:01,704 - INFO - HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2026-01-28 13:34:07,063 - INFO - Plan result (JSON): {'action': 'click', 'target': ' Click "Continue" to proceed with the next section or task.'}
+2026-01-28 13:34:07,063 - INFO - Acting on JSON plan: {'action': 'click', 'target': ' Click "Continue" to proceed with the next section or task.'}
+2026-01-28 13:34:07,065 - INFO - Mock HID received command: {'action': 'click', 'target': ' Click "Continue" to proceed with the next section or task.'}
+2026-01-28 13:34:07,065 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': ' Click "Continue" to proceed with the next section or task.'}}
+2026-01-28 13:34:07,066 - INFO - Action succeeded on attempt 1
+2026-01-28 13:34:07,066 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-28 13:55:45,882 - INFO - \u25b6\ufe0f Starting Vision capture loop...
+2026-01-28 13:55:48,282 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-28 13:55:59,256 - INFO - Perception data received
+2026-01-28 13:55:59,256 - INFO - Planning next action based on perception: {'vision_data': [{'frame_id': 1, 'elements': {'person': {'bbox': {'x_min': 256, 'y_min': 113, 'x_max': 638, 'y_max': 479}, 'confidence': 0.897484302520752, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 2, 'elements': {'person': {'bbox': {'x_min': 244, 'y_min': 124, 'x_max': 639, 'y_max': 479}, 'confidence': 0.8990299105644226, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 3, 'elements': {'person': {'bbox': {'x_min': 245, 'y_min': 124, 'x_max': 639, 'y_max': 479}, 'confidence': 0.9109460711479187, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 4, 'elements': {'person': {'bbox': {'x_min': 249, 'y_min': 123, 'x_max': 638, 'y_max': 479}, 'confidence': 0.8955371975898743, 'text': '', 'ocr_confidence': None}, 'cell phone': {'bbox': {'x_min': 310, 'y_min': 307, 'x_max': 380, 'y_max': 405}, 'confidence': 0.20601750910282135, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 5, 'elements': {'person': {'bbox': {'x_min': 247, 'y_min': 123, 'x_max': 638, 'y_max': 479}, 'confidence': 0.9011824131011963, 'text': '', 'ocr_confidence': None}}}, {'frame_id': 6, 'elements': {'person': {'bbox': {'x_min': 250, 'y_min': 121, 'x_max': 638, 'y_max': 479}, 'confidence': 0.8915057182312012, 'text': '', 'ocr_confidence': None}}}]}
+2026-01-28 13:56:41,705 - INFO - HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2026-01-28 13:56:52,893 - INFO - Plan result (JSON): {'action': 'click', 'target': '#login-button', 'params': {}}
+2026-01-28 13:56:52,926 - INFO - Acting on JSON plan: {'action': 'click', 'target': '#login-button', 'params': {}}
+2026-01-28 13:56:52,926 - INFO - Mock HID received command: {'action': 'click', 'target': '#login-button', 'params': {}}
+2026-01-28 13:56:52,927 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': '#login-button', 'params': {}}}
+2026-01-28 13:56:52,928 - INFO - Action succeeded on attempt 1
+2026-01-28 13:56:52,928 - INFO - \U0001f4ca Evaluation result: {'success': True}
