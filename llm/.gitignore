@@ -38,6 +38,8 @@ lightning_logs/
 data/
 *.jsonl
 *.csv
+
+# Ignore generated LLM results
 *.tsv
 *.parquet
 
@@ -49,6 +51,9 @@ data/
 *.log
 logs/
 tensorboard/
+
+interactive_results.json
+selection_report.json
 
 # IDE / Editor
 .vscode/
@@ -71,3 +76,4 @@ temp/
 # Environment variables
 .env
 .env.local
+
