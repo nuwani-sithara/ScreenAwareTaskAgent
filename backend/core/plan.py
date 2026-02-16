@@ -1,5 +1,5 @@
 import logging
-from core.llm_agent import generate_plan
+from .llm_agent import generate_plan
 
 
 def plan(perception):

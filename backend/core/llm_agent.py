@@ -28,12 +28,12 @@ Return a JSON object (only JSON) with the following fields:
 Return a single JSON object and nothing else.
 """
 
-    prompt = PromptTemplate(
-        template=template,
-        input_variables=["screen_info"]
-    )
+prompt = PromptTemplate(
+    template=template,
+    input_variables=["screen_info"]
+)
 
-    chain = prompt | llm
+chain = prompt | llm
 
 # Optional URL to forward LLM JSON output to (e.g., agentic endpoint)
 AGENTIC_API_URL = os.getenv("AGENTIC_API_URL")
