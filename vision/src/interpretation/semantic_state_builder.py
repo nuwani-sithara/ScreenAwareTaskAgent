@@ -6,7 +6,12 @@ Works with generalized UI elements instead of specific game elements.
 
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
-from ..perception import UIElement
+try:
+    # Works when running scripts directly from src/
+    from perception import UIElement
+except ImportError:
+    # Works when imported as part of the src package
+    from ..perception import UIElement
 
 
 @dataclass
