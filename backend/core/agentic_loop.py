@@ -126,6 +126,7 @@ def stop_vision():
     except Exception as e:
         logging.error(f"❌ Failed to stop vision service: {e}")
 
+<<<<<<< feature/llm-prompting
 def should_use_vision(user_task: str) -> bool:
     """
     Decide whether the task requires visual perception.
@@ -181,10 +182,37 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
 
     # 4️⃣ Act
     logging.info("🖱️ Acting on plan...")
+=======
+
+def run_cycle(start_delay: float = 4.0, stop_at_end: bool = True):
+    logging.info("🔄 Starting Agentic AI full cycle...")
+
+    # 1️⃣ Ensure vision is running (after a short delay)
+    if start_delay and start_delay > 0:
+        logging.info(f"⏳ Waiting {start_delay} seconds before starting vision...")
+        time.sleep(start_delay)
+
+    logging.info("📡 Step 1: Starting Vision")
+    start_vision()
+
+    # 2️⃣ Perceive
+    logging.info("👁️ Step 2: Perceiving environment...")
+    perception = perceive()
+    logging.debug(f"Perception Output: {perception}")
+
+    # 3️⃣ Plan
+    logging.info("🧠 Step 3: Planning action...")
+    action_plan = plan(perception)
+    logging.debug(f"Generated Action Plan: {action_plan}")
+
+    # 4️⃣ Act
+    logging.info("🖱️ Step 4: Acting on plan...")
+>>>>>>> develop
     action_result = act_with_retry(action_plan, max_retries=3)
     logging.debug(f"Action Result: {action_result}")
 
     # 5️⃣ Evaluate
+<<<<<<< feature/llm-prompting
     logging.info("📊 Evaluating result...")
     evaluation = {
         "success": action_result.get("status") == "success"
@@ -194,6 +222,21 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
 
     # 6️⃣ Stop vision only if it was started
     if use_vision and stop_at_end:
+=======
+    logging.info("📊 Step 5: Evaluating result...")
+    evaluation = {
+        "success": action_result.get("status") == "success"
+    }
+    logging.info(f"📊 Evaluation result: {evaluation}")
+
+    # 6️⃣ Agent decides to stop vision (example condition)
+    if action_plan.get("stop_vision", False):
+        logging.info("⚠️ Action plan requested to stop vision.")
+        stop_vision()
+
+    # Optionally ensure vision is stopped at the end of the cycle
+    if stop_at_end and not action_plan.get("stop_vision", False):
+>>>>>>> develop
         logging.info("🔚 Stopping vision at end of cycle.")
         stop_vision()
 
@@ -265,4 +308,8 @@ def run_streaming_cycle(max_events: int = 10):
         stop_vision()
 
     logging.info("✅ Streaming cycle completed.")
+<<<<<<< feature/llm-prompting
     return results
+=======
+    return results
+>>>>>>> develop

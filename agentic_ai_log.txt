@@ -1185,6 +1185,29 @@ Forgot Password? Recover
 2025-12-23 13:33:13,227 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': 'Click on "Recover" link under Forgot Password.'}}
 2025-12-23 13:33:13,227 - INFO - Action succeeded on attempt 1
 2025-12-23 13:33:13,227 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-05 15:48:23,116 - INFO - \u25b6\ufe0f Starting Vision capture loop...
+2026-01-05 15:48:25,171 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-05 15:48:34,298 - ERROR - Vision stop returned non-completed status: error
+2026-01-05 15:48:34,298 - ERROR - Perception error: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 15:48:34,298 - INFO - Planning next action based on perception: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 15:49:02,461 - INFO - Plan result (JSON): {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}
+2026-01-05 15:49:02,462 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}
+2026-01-05 15:49:02,462 - INFO - Mock HID received command: {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}
+2026-01-05 15:49:02,462 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': 'I will request user feedback by displaying a popup with the question "Are you satisfied with the search results?"'}}
+2026-01-05 15:49:02,463 - INFO - Action succeeded on attempt 1
+2026-01-05 15:49:02,463 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-05 16:02:19,538 - INFO - Starting Vision capture loop...
+2026-01-05 16:02:21,580 - INFO - Requesting vision perception (start -> wait -> stop)...
+2026-01-05 16:02:30,509 - ERROR - Vision stop returned non-completed status: error
+2026-01-05 16:02:30,509 - ERROR - Perception error: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 16:02:30,509 - INFO - Planning next action based on perception: {'error': 'not_completed', 'detail': {'status': 'error', 'detail': "[Errno 2] No such file or directory: 'C:\\\\ResearchRepo\\\\ScreenAwareTaskAgent\\\\ScreenAwareTaskAgent\\\\vision\\\\runs\\\\2048_ui\\\\yolo_train2\\\\weights\\\\best.pt'"}}
+2026-01-05 16:02:44,919 - INFO - Plan result (JSON): {'action': 'click', 'target': 'Load the login page to verify user credentials.'}
+2026-01-05 16:02:44,920 - INFO - Acting on JSON plan: {'action': 'click', 'target': 'Load the login page to verify user credentials.'}
+2026-01-05 16:02:44,920 - INFO - Mock HID received command: {'action': 'click', 'target': 'Load the login page to verify user credentials.'}
+2026-01-05 16:02:44,920 - INFO - Action result: {'status': 'success', 'command_executed': {'action': 'click', 'target': 'Load the login page to verify user credentials.'}}
+2026-01-05 16:02:44,920 - INFO - Action succeeded on attempt 1
+2026-01-05 16:02:44,920 - INFO - \U0001f4ca Evaluation result: {'success': True}
+2026-01-05 16:02:44,921 - INFO - Stopping Vision capture loop...
 2026-01-28 12:59:49,179 - INFO - \u25b6\ufe0f Starting Vision capture loop...
 2026-01-28 12:59:51,337 - INFO - Requesting vision perception (start -> wait -> stop)...
 2026-01-28 13:00:20,060 - INFO - Perception data received
