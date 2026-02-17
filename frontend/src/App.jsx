@@ -36,11 +36,20 @@ export default function App() {
   };
 
   // 🔹 Converts backend JSON → human-friendly message
-  const runBackendTask = async (task) => {
+  const runBackendTask = async () => {
   setThinking(true);
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/mock-loop");
+    const response = await fetch("http://127.0.0.1:8000/run-cycle", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        task: input   // 👈 send user input
+      })
+    });
+
     const data = await response.json();
 
     const success = data?.evaluation?.success;

@@ -100,4 +100,9 @@ tmp/
 # =====================================
 # Add any project-specific files or directories to ignore below
 /runs
+<<<<<<< feature/llm-prompting
+
+
+=======
 agentic_ai_log.txt
+>>>>>>> develop

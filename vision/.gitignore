@@ -1,5 +1,13 @@
 /venv
 /datasets
+/runs
+
+# Ignore all session data and frames
+data/
+data/sessions/
+data/sessions/*/raw_frames/*.jpg
+data/sessions/*/preprocessed_frames/*.jpg
+data/sessions/*/detected_images/*.jpg
 
 # Ignore all session data and frames
 /data/sessions/
