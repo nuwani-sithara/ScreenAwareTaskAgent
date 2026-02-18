@@ -13,33 +13,61 @@ This system enables external agents (LLMs, automation systems) to control a host
 ✅ **Zero Host Installation** - No drivers, no software, pure USB HID  
 ✅ **Agent-Driven Control** - High-level commands from LLMs/agents  
 ✅ **Human-Like Movement** - Realistic cursor interpolation and timing  
-✅ **Production Ready** - Error handling, reconnection, state tracking  
+✅ **Production Ready** - Error handling, ACK system, reconnection, state tracking  
 ✅ **Clean Architecture** - Modular, testable, maintainable  
 ✅ **Arduino Compatible** - Easy firmware flashing and modification  
+✅ **REST API** - HTTP endpoints for remote control  
+✅ **Advanced Input** - Drag, scroll, key combinations  
+✅ **ACK-Based Reliability** - Command confirmation and retry logic  
+✅ **Auto-Reconnect** - Handles device disconnections gracefully  
 
 ---
 
 ## 🏗️ Architecture
 
-```
-Agent (LLM/Planner)
-       ↓
-Device Shadow (Host Service)
-  ├─ Transport Layer (validate, sanitize, normalize)
-  ├─ Motion Engine (smooth movements)
-  ├─ Command Queue (sequential execution)
-  ├─ State Manager (tracking & stats)
-  └─ Serial HID (USB communication)
-       ↓
-ESP32-S3 Firmware
-  ├─ USB CDC Serial (commands)
-  ├─ USB HID (mouse + keyboard)
-  └─ Command Processor
-       ↓
-Host Operating System
+```mermaid
+graph TB
+    Agent[Agent / LLM] -->|HTTP REST| API[API Server :3015]
+    API -->|Commands| Shadow[Device Shadow]
+    
+    subgraph "Device Shadow Host Service"
+        Shadow -->|Validate| Validator
+        Validator -->|Sanitize| Sanitizer
+        Sanitizer -->|Normalize| Normalizer
+        Normalizer -->|Queue| Queue[Command Queue]
+        Queue -->|Smooth Motion| Engine[Mouse Engine]
+        Engine -->|Execute| Serial[Serial HID]
+        Serial -->|Track| State[Shadow State]
+    end
+    
+    Serial -->|USB Serial + ACK| ESP[ESP32-S3]
+    
+    subgraph "ESP32-S3 Firmware"
+        ESP -->|Parse JSON| Parser[Command Parser]
+        Parser -->|Route| Handler[Command Handlers]
+        Handler -->|HID Reports| HID[USB HID Stack]
+        Handler -->|ACK Response| ESP
+    end
+    
+    HID -->|USB HID| Host[Host Operating System]
+    Host -->|Mouse & Keyboard| UI[User Interface]
+    
+    style API fill:#e1f5ff
+    style Shadow fill:#fff3e0
+    style ESP fill:#f3e5f5
+    style Host fill:#e8f5e9
 ```
 
-See [shared/architecture.md](shared/architecture.md) for detailed architecture documentation.
+**Flow:**
+1. **Agent** sends high-level command via REST API
+2. **API Server** forwards to Device Shadow
+3. **Validation Pipeline** ensures command safety
+4. **Motion Engine** generates smooth human-like movements
+5. **Command Queue** sequences execution
+6. **Serial HID** sends JSON commands over USB CDC
+7. **ESP32-S3** parses commands and executes HID reports
+8. **ACK System** confirms execution back to host
+9. **Host OS** receives HID input events
 
 ---
 
@@ -47,33 +75,50 @@ See [shared/architecture.md](shared/architecture.md) for detailed architecture d
 
 ```
 hid/
-├── firmware/
-│   └── esp32s3_hid/          # ESP32-S3 Arduino firmware
+├── firmware/                 # ESP32-S3 Arduino firmware
+│   └── esp32s3_hid/
 │       ├── esp32s3_hid.ino   # Main firmware
 │       ├── hid_reports.h     # HID descriptors
 │       ├── protocol.h        # Protocol definitions
 │       └── README.md         # Firmware setup guide
 │
 ├── device-shadow/            # Host-side service (TypeScript)
-│   └── src/
-│       ├── index.ts          # Main orchestrator
-│       ├── transport/        # Validation, sanitization, normalization
-│       │   ├── validator.ts
-│       │   ├── sanitizer.ts
-│       │   └── normalizer.ts
-│       ├── motion/           # Motion smoothing
-│       │   └── mouseEngine.ts
-│       ├── queue/            # Command queueing
-│       │   └── commandQueue.ts
-│       ├── hid/              # Serial communication
-│       │   └── serialHID.ts
-│       └── state/            # State management
-│           └── shadowState.ts
+│   ├── src/
+│   │   ├── index.ts          # Main orchestrator
+│   │   ├── hid/              # Serial communication
+│   │   │   └── serialHID.ts
+│   │   ├── transport/        # Validation, sanitization, normalization
+│   │   │   ├── validator.ts
+│   │   │   ├── sanitizer.ts
+│   │   │   ├── normalizer.ts
+│   │   │   └── keycodes.ts   # HID keycode mappings
+│   │   ├── motion/           # Motion smoothing
+│   │   │   └── mouseEngine.ts
+│   │   ├── queue/            # Command queueing
+│   │   │   └── commandQueue.ts
+│   │   ├── state/            # State management
+│   │   │   └── shadowState.ts
+│   │   └── types/            # TypeScript types
+│   │       ├── protocol.ts   # Protocol interfaces
+│   │       ├── constants.ts  # Shared constants
+│   │       └── errors.ts     # Error classes
+│   ├── example.ts            # Example usage
+│   └── package.json
 │
-├── shared/                   # Documentation
+├── api-server/               # Production REST API server
+│   ├── src/
+│   │   └── server.ts         # Express server
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── README.md             # API documentation
+│
+├── shared/                   # Shared documentation
 │   ├── protocol.md           # Serial JSON protocol spec
-│   └── architecture.md       # Complete architecture doc
+│   └── architecture.md       # Architecture documentation
 │
+├── send_json_serial.py       # CLI tool for manual testing
+├── DEPLOYMENT_GUIDE.txt      # Deployment instructions
+├── QUICK_REFERENCE.md        # Quick command reference
 └── README.md                 # This file
 ```
 
@@ -200,13 +245,13 @@ node device-shadow/src/index.js
 
 ## 📡 Protocol
 
-All commands are **single-line JSON** over USB CDC Serial.
+All commands are **single-line JSON** over USB CDC Serial with ACK-based confirmation.
 
-### Command Examples
+### Core Commands
 
-**Move mouse:**
+**Move mouse (smooth):**
 ```json
-{"cmd":"mouse_move","dx":10,"dy":5}
+{"cmd":"mouse_move","dx":200,"dy":100,"smooth":true,"duration":500}
 ```
 
 **Click:**
@@ -214,19 +259,54 @@ All commands are **single-line JSON** over USB CDC Serial.
 {"cmd":"mouse_click","button":"left"}
 ```
 
+**Drag:**
+```json
+{"cmd":"mouse_drag","dx":300,"dy":150,"button":"left","duration":600}
+```
+
+**Scroll:**
+```json
+{"cmd":"mouse_scroll","deltaY":5}
+```
+
+**Key combination (Ctrl+C):**
+```json
+{"cmd":"key_combo","modifiers":["ctrl"],"key":"c"}
+```
+
 **Type text:**
 ```json
 {"cmd":"type_text","text":"Hello World"}
 ```
 
-**Scroll:**
+### ACK System
+
+Every command includes a unique ID and receives confirmation:
+
+**Command (sent by host):**
 ```json
-{"cmd":"mouse_scroll","scroll":3}
+{
+  "cmd": "mouse_move",
+  "dx": 100,
+  "dy": 50,
+  "meta": {
+    "commandId": "550e8400-e29b-41d4-a716-446655440000"
+  }
+}
 ```
 
-**Press key:**
+**ACK (sent by device):**
 ```json
-{"cmd":"key_press","key":4}
+{
+  "type": "ack",
+  "commandId": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "ok"
+}
+```
+
+**Ready signal (device ready for next command):**
+```json
+{"type":"readyForNext"}
 ```
 
 ### Response Format
@@ -242,6 +322,105 @@ All commands are **single-line JSON** over USB CDC Serial.
 ```
 
 See [shared/protocol.md](shared/protocol.md) for complete protocol specification.
+
+---
+
+## 🌐 REST API Usage
+
+For remote control and integration with other systems, use the API server:
+
+### Start API Server
+
+```bash
+cd api-server
+npm install
+npm run dev
+```
+
+Server runs on `http://localhost:3015`
+
+### Execute Commands via HTTP
+
+```bash
+# Mouse move
+curl -X POST http://localhost:3015/hid/command \
+  -H "Content-Type: application/json" \
+  -d '{"type":"mouse_move","payload":{"dx":100,"dy":50,"smooth":true}}'
+
+# Drag operation
+curl -X POST http://localhost:3015/hid/command \
+  -H "Content-Type: application/json" \
+  -d '{"type":"mouse_drag","payload":{"dx":200,"dy":100,"button":"left","duration":500}}'
+
+# Key combination (Ctrl+C)
+curl -X POST http://localhost:3015/hid/command \
+  -H "Content-Type: application/json" \
+  -d '{"type":"key_combo","payload":{"modifiers":["ctrl"],"key":"c"}}'
+
+# Check device status
+curl http://localhost:3015/hid/status
+```
+
+### Python Example
+
+```python
+import requests
+
+# Execute drag
+response = requests.post('http://localhost:3015/hid/command', json={
+    'type': 'mouse_drag',
+    'payload': {
+        'dx': 300,
+        'dy': 150,
+        'button': 'left',
+        'duration': 600
+    }
+})
+print(response.json())  # {'success': True, 'executionTime': '650ms'}
+
+# Get status
+status = requests.get('http://localhost:3015/hid/status').json()
+print(f"Device: {status['firmwareVersion']}, Uptime: {status['uptime']}ms")
+```
+
+See [api-server/README.md](api-server/README.md) for complete API documentation.
+
+---
+
+## 📚 Command Reference
+
+### Mouse Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mouse_move` | Move cursor | `{"cmd":"mouse_move","dx":100,"dy":50,"smooth":true}` |
+| `mouse_click` | Click button | `{"cmd":"mouse_click","button":"left"}` |
+| `mouse_drag` | Drag with button held | `{"cmd":"mouse_drag","dx":200,"dy":100,"button":"left"}` |
+| `mouse_scroll` | Scroll wheel | `{"cmd":"mouse_scroll","deltaY":5}` |
+| `mouse_down` | Press button | `{"cmd":"mouse_down","button":"left"}` |
+| `mouse_up` | Release button | `{"cmd":"mouse_up","button":"left"}` |
+
+### Keyboard Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `type_text` | Type string | `{"cmd":"type_text","text":"Hello"}` |
+| `key_combo` | Press key combination | `{"cmd":"key_combo","modifiers":["ctrl","shift"],"key":"t"}` |
+| `key_press` | Press key by HID code | `{"cmd":"key_press","key":0x04}` |
+| `key_release` | Release key | `{"cmd":"key_release","key":0x04}` |
+
+### Supported Modifiers
+
+- `ctrl` / `control`
+- `shift`
+- `alt` / `option`
+- `meta` / `win` / `cmd` / `gui`
+
+### Common Keys
+
+Letters (`a`-`z`), Numbers (`0`-`9`), Function keys (`f1`-`f12`), Special keys (`enter`, `escape`, `backspace`, `tab`, `space`), Arrow keys (`up`, `down`, `left`, `right`), Navigation (`home`, `end`, `pageup`, `pagedown`), and more.
+
+See [device-shadow/src/transport/keycodes.ts](device-shadow/src/transport/keycodes.ts) for complete key mapping.
 
 ---
 
@@ -474,8 +653,38 @@ For issues, questions, or contributions:
 
 ---
 
-**Last Updated:** December 18, 2025  
-**Version:** 1.0.0
+## 🚧 Roadmap
+
+### ✅ Completed (v2.0.0)
+
+- [x] Auto-handshake without manual reset
+- [x] Ping/pong heartbeat system
+- [x] Auto-reconnect with exponential backoff
+- [x] Drag operations with smooth interpolation
+- [x] Scroll support (vertical)
+- [x] Key combinations (Ctrl+C, Alt+Tab, etc.)
+- [x] ACK-based command confirmation
+- [x] Command retry logic
+- [x] Flow control with readyForNext signals
+- [x] Production REST API server
+- [x] TypeScript type system
+- [x] Structured error handling
+
+### 🔄 Future Enhancements
+
+- [ ] Horizontal scroll support (HID library limitation)
+- [ ] Consumer control keys (volume, media playback)
+- [ ] Configurable rate limiting
+- [ ] Authentication for API server
+- [ ] WebSocket support for real-time control
+- [ ] Multi-device support
+- [ ] Command batching optimization
+- [ ] Performance metrics dashboard
+
+---
+
+**Last Updated:** February 12, 2026  
+**Version:** 2.0.0
 
 ---
 

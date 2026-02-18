@@ -6,6 +6,7 @@ import pytesseract
 from pytesseract import Output
 import numpy as np
 
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 # optional EasyOCR fallback
 try:
     import easyocr

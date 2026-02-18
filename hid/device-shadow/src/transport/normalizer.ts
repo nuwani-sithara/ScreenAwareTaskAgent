@@ -7,6 +7,8 @@
  * - Ensures timing constraints
  */
 
+import { modifierNameToKeycode, keyToKeycode } from './keycodes';
+
 export interface NormalizedCommand {
   cmd: string;
   [key: string]: any;
@@ -26,6 +28,8 @@ export class Normalizer {
         return this.normalizeMouseScroll(command);
       case 'mouse_drag':
         return this.normalizeMouseDrag(command);
+      case 'key_combo':
+        return this.normalizeKeyCombo(command);
       default:
         // Most commands don't need normalization
         return [command];
@@ -119,6 +123,63 @@ export class Normalizer {
     return commands;
   }
   
+  /**
+   * Normalize key_combo into press sequence with proper timing
+   * 
+   * Sequence:
+   * 1. Press all modifiers (with 5ms delay between each)
+   * 2. Press main key (with 5ms delay)
+   * 3. Release main key (with 5ms delay)
+   * 4. Release all modifiers (with 5ms delay between each)
+   */
+  private static normalizeKeyCombo(cmd: any): NormalizedCommand[] {
+    const modifiers = cmd.modifiers || [];
+    const key = cmd.key;
+    const commands: NormalizedCommand[] = [];
+    
+    // Convert modifier names to keycodes
+    const modifierKeycodes = modifiers.map((mod: string) => modifierNameToKeycode(mod));
+    
+    // Convert main key name to keycode
+    const keyKeycode = keyToKeycode(key);
+    
+    // 1. Press all modifiers
+    for (const modKeycode of modifierKeycodes) {
+      commands.push({
+        cmd: 'key_press',
+        key: modKeycode,
+        _delay: 5
+      });
+    }
+    
+    // 2. Press main key
+    commands.push({
+      cmd: 'key_press',
+      key: keyKeycode,
+      _delay: 10  // Slightly longer delay for main key
+    });
+    
+    // 3. Release main key
+    commands.push({
+      cmd: 'key_release',
+      key: keyKeycode,
+      _delay: 5
+    });
+    
+    // 4. Release all modifiers (in reverse order)
+    for (let i = modifierKeycodes.length - 1; i >= 0; i--) {
+      commands.push({
+        cmd: 'key_release',
+        key: modifierKeycodes[i],
+        _delay: 5
+      });
+    }
+    
+    return commands;
+  }
+  
+  /**
+   * 
   /**
    * Utility: Clamp value between min and max
    */

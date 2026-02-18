@@ -27,7 +27,9 @@ export interface ExecutionState {
 export interface ConnectionState {
   connected: boolean;
   devicePath: string | null;
+  firmwareVersion: string | null;
   connectedSince: number | null;
+  lastHeartbeat: number | null;
   reconnectAttempts: number;
 }
 
@@ -50,23 +52,35 @@ export class ShadowState {
   private connection: ConnectionState = {
     connected: false,
     devicePath: null,
+    firmwareVersion: null,
     connectedSince: null,
+    lastHeartbeat: null,
     reconnectAttempts: 0
   };
   
   /**
    * Update connection state
    */
-  setConnected(connected: boolean, devicePath?: string): void {
+  setConnected(connected: boolean, devicePath?: string, firmwareVersion?: string): void {
     this.connection.connected = connected;
     
     if (connected) {
       this.connection.devicePath = devicePath || null;
+      this.connection.firmwareVersion = firmwareVersion || null;
       this.connection.connectedSince = Date.now();
+      this.connection.lastHeartbeat = Date.now();
       this.connection.reconnectAttempts = 0;
     } else {
       this.connection.connectedSince = null;
+      this.connection.lastHeartbeat = null;
     }
+  }
+  
+  /**
+   * Update heartbeat timestamp
+   */
+  updateHeartbeat(): void {
+    this.connection.lastHeartbeat = Date.now();
   }
   
   /**

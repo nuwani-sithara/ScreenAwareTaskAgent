@@ -8,6 +8,8 @@
  * - Security checks
  */
 
+import { isValidModifier, isValidKey } from './keycodes';
+
 export interface ValidationResult {
   valid: boolean;
   error?: string;
@@ -50,6 +52,8 @@ export class Validator {
         return this.validateKeyPress(command);
       case 'key_release':
         return this.validateKeyRelease(command);
+      case 'key_combo':
+        return this.validateKeyCombo(command);
       case 'type_text':
         return this.validateTypeText(command);
       case 'system':
@@ -116,14 +120,35 @@ export class Validator {
    * Validate mouse_scroll command
    */
   private static validateMouseScroll(cmd: any): ValidationResult {
+    // Support both legacy 'scroll' field and new 'deltaX'/'deltaY' fields
     const scroll = cmd.scroll;
+    const deltaX = cmd.deltaX;
+    const deltaY = cmd.deltaY;
     
-    if (typeof scroll !== 'number') {
-      return { valid: false, error: 'scroll must be a number' };
+    // At least one field must be present
+    if (scroll === undefined && deltaX === undefined && deltaY === undefined) {
+      return { valid: false, error: 'Must provide scroll, deltaY, or deltaX' };
     }
     
-    if (!Number.isFinite(scroll)) {
-      return { valid: false, error: 'scroll must be a finite number' };
+    // Validate scroll if present (legacy format)
+    if (scroll !== undefined) {
+      if (typeof scroll !== 'number' || !Number.isFinite(scroll)) {
+        return { valid: false, error: 'scroll must be a finite number' };
+      }
+    }
+    
+    // Validate deltaX if present
+    if (deltaX !== undefined) {
+      if (typeof deltaX !== 'number' || !Number.isFinite(deltaX)) {
+        return { valid: false, error: 'deltaX must be a finite number' };
+      }
+    }
+    
+    // Validate deltaY if present
+    if (deltaY !== undefined) {
+      if (typeof deltaY !== 'number' || !Number.isFinite(deltaY)) {
+        return { valid: false, error: 'deltaY must be a finite number' };
+      }
     }
     
     return { valid: true };
@@ -159,15 +184,23 @@ export class Validator {
   private static validateKeyPress(cmd: any): ValidationResult {
     const key = cmd.key;
     
-    if (typeof key !== 'number') {
-      return { valid: false, error: 'key must be a number (HID keycode)' };
+    // Accept both string key names and numeric keycodes
+    if (typeof key === 'string') {
+      // String keys will be converted by sanitizer
+      if (!key || key.length === 0) {
+        return { valid: false, error: 'key string cannot be empty' };
+      }
+      return { valid: true };
     }
     
-    if (!Number.isInteger(key) || key < 0 || key > 255) {
-      return { valid: false, error: 'key must be an integer between 0 and 255' };
+    if (typeof key === 'number') {
+      if (!Number.isInteger(key) || key < 0 || key > 255) {
+        return { valid: false, error: 'key must be an integer between 0 and 255' };
+      }
+      return { valid: true };
     }
     
-    return { valid: true };
+    return { valid: false, error: 'key must be a string (key name) or number (HID keycode)' };
   }
   
   /**
@@ -178,13 +211,58 @@ export class Validator {
     if (cmd.key !== undefined) {
       const key = cmd.key;
       
-      if (typeof key !== 'number') {
-        return { valid: false, error: 'key must be a number (HID keycode)' };
+      // Accept both string key names and numeric keycodes
+      if (typeof key === 'string') {
+        // String keys will be converted by sanitizer
+        if (!key || key.length === 0) {
+          return { valid: false, error: 'key string cannot be empty' };
+        }
+        return { valid: true };
       }
       
-      if (!Number.isInteger(key) || key < 0 || key > 255) {
-        return { valid: false, error: 'key must be an integer between 0 and 255' };
+      if (typeof key === 'number') {
+        if (!Number.isInteger(key) || key < 0 || key > 255) {
+          return { valid: false, error: 'key must be an integer between 0 and 255' };
+        }
+        return { valid: true };
       }
+      
+      return { valid: false, error: 'key must be a string (key name) or number (HID keycode)' };
+    }
+    
+    return { valid: true };
+  }
+  
+  /**
+   * Validate key_combo command
+   */
+  private static validateKeyCombo(cmd: any): ValidationResult {
+    const modifiers = cmd.modifiers;
+    const key = cmd.key;
+    
+    // Modifiers must be an array (can be empty)
+    if (!Array.isArray(modifiers)) {
+      return { valid: false, error: 'modifiers must be an array' };
+    }
+    
+    // Validate each modifier name
+    for (const mod of modifiers) {
+      if (typeof mod !== 'string') {
+        return { valid: false, error: 'Each modifier must be a string' };
+      }
+      if (!isValidModifier(mod)) {
+        return { valid: false, error: `Invalid modifier: ${mod}` };
+      }
+    }
+    
+    // Key must be a string
+    if (typeof key !== 'string') {
+      return { valid: false, error: 'key must be a string' };
+    }
+    
+    // Validate key name
+    if (!isValidKey(key)) {
+      return { valid: false, error: `Invalid key: ${key}` };
     }
     
     return { valid: true };
