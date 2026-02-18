@@ -117,4 +117,49 @@ export class MouseEngine {
   static randomDelay(min: number = 50, max: number = 200): number {
     return Math.round(min + Math.random() * (max - min));
   }
+  
+  /**
+   * Generate drag operation command sequence
+   * Returns array of commands: button down -> smooth movement -> button up
+   * 
+   * @param dx - Total X movement
+   * @param dy - Total Y movement
+   * @param button - Mouse button to use ('left', 'right', 'middle')
+   * @param duration - Total drag duration in milliseconds (default: auto)
+   */
+  static generateDragSequence(
+    dx: number,
+    dy: number,
+    button: 'left' | 'right' | 'middle' = 'left',
+    duration?: number
+  ): any[] {
+    const sequence: any[] = [];
+    
+    // 1. Press button
+    sequence.push({
+      cmd: 'mouse_down',
+      button: button,
+      _delay: 10
+    });
+    
+    // 2. Generate smooth movement path
+    const moveSteps = this.generateSmoothMovement(dx, dy, duration);
+    for (const step of moveSteps) {
+      sequence.push({
+        cmd: 'mouse_move',
+        dx: step.dx,
+        dy: step.dy,
+        _delay: step.delay
+      });
+    }
+    
+    // 3. Release button (with small delay before release for realism)
+    sequence.push({
+      cmd: 'mouse_up',
+      button: button,
+      _delay: 20
+    });
+    
+    return sequence;
+  }
 }

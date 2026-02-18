@@ -39,7 +39,9 @@ export class DeviceShadow {
     
     try {
       await this.hid.connect();
-      this.state.setConnected(true);
+      const firmwareVersion = this.hid.getFirmwareVersion();
+      const portPath = this.hid.getPortPath();
+      this.state.setConnected(true, portPath || undefined, firmwareVersion || undefined);
       console.log('[DeviceShadow] Connected successfully');
     } catch (error: any) {
       console.error('[DeviceShadow] Connection failed:', error.message);
@@ -69,6 +71,7 @@ export class DeviceShadow {
       // Step 4: Handle special cases (motion smoothing)
       let executionSteps: any[] = [];
 
+      // Use MouseEngine for smooth mouse_move with smooth flag
       if (cmd.cmd === 'mouse_move' && cmd.smooth) {
         const steps = MouseEngine.generateSmoothMovement(
           cmd.dx,
@@ -82,7 +85,18 @@ export class DeviceShadow {
           dy: step.dy,
           _delay: step.delay
         }));
-      } else {
+      }
+      // Use MouseEngine for mouse_drag to generate smooth drag path
+      else if (cmd.cmd === 'mouse_drag') {
+        const dragSteps = MouseEngine.generateDragSequence(
+          cmd.dx,
+          cmd.dy,
+          cmd.button || 'left',
+          cmd.duration
+        );
+        executionSteps = dragSteps;
+      }
+      else {
         executionSteps = primitives;
       }
 
@@ -125,14 +139,21 @@ export class DeviceShadow {
       delete command._delay;
     }
     
+    // Debug log for scroll commands
+    if (command.cmd === 'mouse_scroll') {
+      console.log(`[DeviceShadow] Executing scroll command:`, JSON.stringify(command));
+    }
+    
     try {
       const response = await this.hid.sendCommand(command);
       
       if (response.status === 'ok') {
         this.state.recordExecution(command, 'ok');
       } else {
-        this.state.recordExecution(command, 'error', response.msg);
-        throw new Error(`Device returned error: ${response.error} - ${response.msg}`);
+        // Handle both AckMessage and HIDResponse types
+        const errorMsg = ('message' in response ? response.message : (response as any).msg) || 'Command failed';
+        this.state.recordExecution(command, 'error', errorMsg);
+        throw new Error(`Device returned error: ${errorMsg}`);
       }
     } catch (error: any) {
       this.state.recordExecution(command, 'error', error.message);
@@ -156,7 +177,9 @@ export class DeviceShadow {
     
     try {
       await this.hid.reconnect();
-      this.state.setConnected(true);
+      const firmwareVersion = this.hid.getFirmwareVersion();
+      const portPath = this.hid.getPortPath();
+      this.state.setConnected(true, portPath || undefined, firmwareVersion || undefined);
       console.log('[DeviceShadow] Reconnected successfully');
     } catch (error: any) {
       console.error('[DeviceShadow] Reconnection failed:', error.message);
