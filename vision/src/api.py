@@ -50,10 +50,11 @@ def _new_session(prefix: str = "session") -> Dict[str, Any]:
     preproc_dir = os.path.join(root, "preprocessed_frames")
     coarse_dir = os.path.join(root, "coarse_bboxes")
     refined_dir = os.path.join(root, "refined_bboxes")
+    refined_debug_dir = os.path.join(refined_dir, "debug")
     final_dir = os.path.join(root, "final_elements")
     proc_dir = os.path.join(root, "processing")
 
-    for d in [raw_dir, preproc_dir, coarse_dir, refined_dir, final_dir, proc_dir]:
+    for d in [raw_dir, preproc_dir, coarse_dir, refined_dir, refined_debug_dir, final_dir, proc_dir]:
         os.makedirs(d, exist_ok=True)
 
     return {
@@ -63,17 +64,35 @@ def _new_session(prefix: str = "session") -> Dict[str, Any]:
         "preproc_dir": preproc_dir,
         "coarse_dir": coarse_dir,
         "refined_dir": refined_dir,
+        "refined_debug_dir": refined_debug_dir,
         "final_dir": final_dir,
         "proc_dir": proc_dir,
         "created_at": time.time(),
     }
 
 
-def _init_vlm_client(provider: str, local_model: str, no_vlm: bool):
+def _init_vlm_client(provider: str, local_model: str, no_vlm: bool, ollama_base_url: Optional[str] = None):
     if no_vlm:
         return None
-    kwargs = {"model_name": local_model} if provider == "local" else {}
+    kwargs = {"model_name": local_model} if provider in {"local", "ollama"} else {}
+    if provider == "ollama" and ollama_base_url:
+        kwargs["base_url"] = ollama_base_url
     return get_vlm_client(provider, **kwargs)
+
+
+def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
+    vis = image.copy()
+    h, w = vis.shape[:2]
+    for item in refined_bboxes:
+        x1, y1, x2, y2 = item["bbox"]
+        cv2.rectangle(
+            vis,
+            (int(x1 * w), int(y1 * h)),
+            (int(x2 * w), int(y2 * h)),
+            (0, 255, 0),
+            2,
+        )
+    cv2.imwrite(out_path, vis)
 
 
 def _capture_single_frame(camera_index: int = 0):
@@ -149,6 +168,8 @@ def _run_pipeline_for_frame(frame_path: str, session: Dict[str, Any], vlm_client
     refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
     with open(refined_json_path, "w", encoding="utf-8") as f:
         json.dump({"bboxes": refined_bboxes}, f, indent=2)
+    debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
+    _write_refined_debug_image(image, refined_bboxes, debug_image_path)
 
     # Enrich with element metadata (local VLM or fallback no-vlm)
     final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
@@ -290,6 +311,7 @@ def start_vision(
     save_interval: float = 1.0,
     provider: str = "local",
     local_model: str = "llava-hf/llava-1.5-7b-hf",
+    ollama_base_url: Optional[str] = None,
     no_vlm: bool = False,
 ):
     """Start continuous capture + processing session."""
@@ -303,7 +325,12 @@ def start_vision(
             }
 
     try:
-        vlm_client = _init_vlm_client(provider=provider, local_model=local_model, no_vlm=no_vlm)
+        vlm_client = _init_vlm_client(
+            provider=provider,
+            local_model=local_model,
+            no_vlm=no_vlm,
+            ollama_base_url=ollama_base_url,
+        )
     except Exception as e:
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
@@ -314,6 +341,7 @@ def start_vision(
             "save_interval": save_interval,
             "provider": provider,
             "local_model": local_model,
+            "ollama_base_url": ollama_base_url,
             "no_vlm": no_vlm,
             "vlm_client": vlm_client,
         }
@@ -341,6 +369,7 @@ def start_vision(
         "save_interval": save_interval,
         "provider": provider,
         "local_model": local_model,
+        "ollama_base_url": ollama_base_url,
         "no_vlm": no_vlm,
         "session_root": session["root"],
     }
@@ -376,6 +405,7 @@ def stop_vision(session_id: Optional[str] = None):
         "preprocessed_frames": len(list(Path(session["preproc_dir"]).glob("*.jpg"))),
         "coarse_json": len(list(Path(session["coarse_dir"]).glob("*.json"))),
         "refined_json": len(list(Path(session["refined_dir"]).glob("*.json"))),
+        "refined_debug_images": len(list(Path(session["refined_debug_dir"]).glob("*.jpg"))),
         "final_json": len(list(Path(session["final_dir"]).glob("*.json"))),
     }
 
@@ -390,6 +420,7 @@ def capture_once(
     camera_index: int = 0,
     provider: str = "local",
     local_model: str = "llava-hf/llava-1.5-7b-hf",
+    ollama_base_url: Optional[str] = None,
     no_vlm: bool = False,
 ):
     """Single-shot capture and pipeline execution. Returns final JSON."""
@@ -398,7 +429,12 @@ def capture_once(
         return {"status": "error", "detail": f"Failed to capture frame from camera {camera_index}"}
 
     try:
-        vlm_client = _init_vlm_client(provider=provider, local_model=local_model, no_vlm=no_vlm)
+        vlm_client = _init_vlm_client(
+            provider=provider,
+            local_model=local_model,
+            no_vlm=no_vlm,
+            ollama_base_url=ollama_base_url,
+        )
     except Exception as e:
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 

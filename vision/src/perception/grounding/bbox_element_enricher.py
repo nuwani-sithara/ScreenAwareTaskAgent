@@ -137,8 +137,9 @@ def main():
     parser.add_argument("--image-dir", default="data/preprocessed_frames")
     parser.add_argument("--refined-dir", default="data/refined_bboxes")
     parser.add_argument("--out-dir", default="data/final_elements")
-    parser.add_argument("--provider", default="local", choices=["local", "claude", "gpt4v"])
+    parser.add_argument("--provider", default="local", choices=["local", "claude", "gpt4v", "ollama"])
     parser.add_argument("--local-model", default="llava-hf/llava-1.5-7b-hf")
+    parser.add_argument("--ollama-model", default="llava:7b")
     parser.add_argument("--no-vlm", action="store_true", help="Skip VLM classification and output unknown types.")
     args = parser.parse_args()
 
@@ -149,7 +150,12 @@ def main():
         sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
         from perception.vlm import get_vlm_client
 
-        kwargs = {"model_name": args.local_model} if args.provider == "local" else {}
+        if args.provider == "local":
+            kwargs = {"model_name": args.local_model}
+        elif args.provider == "ollama":
+            kwargs = {"model_name": args.ollama_model}
+        else:
+            kwargs = {}
         vlm_client = get_vlm_client(args.provider, **kwargs)
 
     image_dir = Path(args.image_dir)
@@ -174,4 +180,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

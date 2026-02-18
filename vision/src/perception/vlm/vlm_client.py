@@ -10,6 +10,7 @@ import json
 from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 from io import BytesIO
+from urllib import request, error
 import cv2
 import numpy as np
 
@@ -263,12 +264,73 @@ class LocalVLMClient(VLMClient):
             )
 
 
+class OllamaVLMClient(VLMClient):
+    """Local Ollama VLM client using the Ollama HTTP API."""
+
+    def __init__(
+        self,
+        model_name: str = "llava:7b",
+        base_url: Optional[str] = None,
+        timeout_seconds: float = 120.0,
+    ):
+        super().__init__(None, model_name)
+        self.base_url = (base_url or os.getenv("OLLAMA_BASE_URL") or "http://127.0.0.1:11434").rstrip("/")
+        self.timeout_seconds = timeout_seconds
+
+    def analyze_ui(self, image_path: str, prompt: Optional[str] = None, **kwargs) -> UIAnalysisResult:
+        prompt = prompt or get_ui_discovery_prompt()
+
+        try:
+            image_data = self.encode_image_to_base64(image_path)
+            width, height = self.get_image_dimensions(image_path)
+
+            payload = {
+                "model": self.model_name,
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt,
+                        "images": [image_data],
+                    }
+                ],
+                "stream": False,
+                "options": {"temperature": 0},
+            }
+
+            req = request.Request(
+                url=f"{self.base_url}/api/chat",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+
+            with request.urlopen(req, timeout=self.timeout_seconds) as resp:
+                body = resp.read().decode("utf-8")
+
+            data = json.loads(body)
+            response_text = data.get("message", {}).get("content", "")
+            return self.parser.parse_vlm_response(response_text, width, height)
+
+        except error.URLError as e:
+            return UIAnalysisResult(
+                elements=[],
+                parse_successful=False,
+                parse_error=f"Ollama connection error: {e}",
+            )
+        except Exception as e:
+            return UIAnalysisResult(
+                elements=[],
+                parse_successful=False,
+                parse_error=f"Ollama VLM error: {e}",
+            )
+
+
 def get_vlm_client(provider: str = "claude", **kwargs) -> VLMClient:
     """
     Factory function to get VLM client.
     
     Args:
-        provider: "claude", "gpt4v", or "local"
+        provider: "claude", "gpt4v", "local", or "ollama"
         **kwargs: Provider-specific arguments
     
     Returns:
@@ -282,5 +344,7 @@ def get_vlm_client(provider: str = "claude", **kwargs) -> VLMClient:
         return GPT4VClient(**kwargs)
     elif provider == "local":
         return LocalVLMClient(**kwargs)
+    elif provider == "ollama":
+        return OllamaVLMClient(**kwargs)
     else:
         raise ValueError(f"Unknown VLM provider: {provider}")
