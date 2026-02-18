@@ -1,6 +1,7 @@
 /venv
 /datasets
 /runs
+/data
 
 # Ignore all session data and frames
 data/

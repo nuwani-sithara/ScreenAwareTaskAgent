@@ -3,6 +3,24 @@ import os
 import time
 import platform
 
+def _gui_available():
+    """
+    Check whether OpenCV highgui window functions are available.
+    Returns False for headless builds.
+    """
+    try:
+        test = cv2.imread("debug_ocr_input.png")
+        if test is None:
+            # tiny dummy image if file not present
+            import numpy as np
+            test = np.zeros((2, 2, 3), dtype=np.uint8)
+        cv2.imshow("cv2_gui_test", test)
+        cv2.waitKey(1)
+        cv2.destroyWindow("cv2_gui_test")
+        return True
+    except Exception:
+        return False
+
 def list_available_cameras(max_index=5):
     """
     Returns a list of available camera indexes and shows a brief preview.
@@ -12,6 +30,8 @@ def list_available_cameras(max_index=5):
 
     backend = cv2.CAP_DSHOW if platform.system() == "Windows" else 0
 
+    gui_ok = _gui_available()
+
     for i in range(max_index):
         cap = cv2.VideoCapture(i, backend)
         if cap.isOpened():
@@ -19,9 +39,10 @@ def list_available_cameras(max_index=5):
             if ret:
                 available_cameras.append(i)
                 print(f"Camera index {i} is available")
-                cv2.imshow(f"Preview Camera {i}", frame)
-                cv2.waitKey(1000)  # show preview for 1 second
-                cv2.destroyWindow(f"Preview Camera {i}")
+                if gui_ok:
+                    cv2.imshow(f"Preview Camera {i}", frame)
+                    cv2.waitKey(1000)  # show preview for 1 second
+                    cv2.destroyWindow(f"Preview Camera {i}")
             cap.release()
         else:
             print(f"Camera index {i} not available")
@@ -46,6 +67,7 @@ def select_camera(available_cameras):
 
 def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="auto", interval=1):
     os.makedirs(save_dir, exist_ok=True)
+    gui_ok = _gui_available()
 
     # Auto-select camera if index not provided
     if camera_index is None:
@@ -64,45 +86,59 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
 
     print(f"\nWebcam Connected (Camera Index: {camera_index})")
     print(f"Mode: {mode.upper()} | Interval: {interval}s")
-    print("Press 'q' to stop.\n")
+    if gui_ok:
+        print("Press 'q' to stop.\n")
+    else:
+        print("GUI preview disabled (headless OpenCV). Use Ctrl+C to stop.\n")
 
     last_saved = 0
     count = 0
 
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            print("Failed to read frame. Retrying...")
-            time.sleep(0.2)
-            continue
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                print("Failed to read frame. Retrying...")
+                time.sleep(0.2)
+                continue
 
-        cv2.imshow("Camera Capture", frame)
+            if gui_ok:
+                cv2.imshow("Camera Capture", frame)
 
-        # AUTO MODE
-        if mode == "auto":
-            now = time.time()
-            if now - last_saved >= interval:
-                filename = os.path.join(save_dir, f"frame_{int(now)}.jpg")
-                cv2.imwrite(filename, frame)
-                last_saved = now
-                count += 1
-                print(f"Saved: {filename}")
+            # AUTO MODE
+            if mode == "auto":
+                now = time.time()
+                if now - last_saved >= interval:
+                    filename = os.path.join(save_dir, f"frame_{int(now)}.jpg")
+                    cv2.imwrite(filename, frame)
+                    last_saved = now
+                    count += 1
+                    print(f"Saved: {filename}")
 
-        # SELECTIVE MODE
-        if mode == "selective":
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('s'):
-                filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
-                cv2.imwrite(filename, frame)
-                count += 1
-                print(f"Manually saved: {filename}")
-        # EXIT
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            # SELECTIVE MODE
+            if mode == "selective":
+                if gui_ok:
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == ord('s'):
+                        filename = os.path.join(save_dir, f"frame_{int(time.time())}.jpg")
+                        cv2.imwrite(filename, frame)
+                        count += 1
+                        print(f"Manually saved: {filename}")
+                else:
+                    print("Selective mode requires GUI preview. Use mode='auto' in headless OpenCV.")
+                    break
+
+            # EXIT
+            if gui_ok and (cv2.waitKey(1) & 0xFF == ord('q')):
+                break
+
+    except KeyboardInterrupt:
+        print("\nCapture interrupted by user.")
 
     print(f"\nCapture stopped. Total saved: {count}")
     cap.release()
-    cv2.destroyAllWindows()
+    if gui_ok:
+        cv2.destroyAllWindows()
 
 def start_webcam_stream(camera_index=0):
     """

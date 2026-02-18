@@ -6,59 +6,51 @@ Prompt templates for VLM-based UI detection and analysis.
 from typing import Optional
 
 UI_DISCOVERY_PROMPT = """
-You are an expert UI/UX analyst and visual interpreter.
+You are an expert visual UI parser for agent automation.
 
-Your task: Detect and identify ALL visible UI elements in the provided screenshot.
+Task:
+Detect ALL VISIBLE on-screen UI elements in the screenshot. Prioritize recall:
+include small icons, toolbar items, tabs, toggles, chips, links, badges, table rows,
+cards, list items, text labels, and form controls.
 
-For each element, analyze and extract:
-1. **Type**: button, input_field, text, label, icon, dropdown, checkbox, radio, menu, tab, modal, dialog, etc.
-2. **Label/Text**: The visible text or descriptive label
-3. **Description**: Purpose or role (e.g., "submit button", "search input", "close dialog")
-4. **State**: If applicable (e.g., active, disabled, hover, focused)
-5. **Bounding Box**: Approximate location as [x_min, y_min, x_max, y_max] (use 0-1 normalized coordinates or pixel coords)
-6. **Confidence**: Your confidence level (0-1) in the detection
+Rules:
+1. Return ONLY valid JSON (no markdown, no prose).
+2. Detect visible elements only. Do not hallucinate hidden/off-screen elements.
+3. Bounding boxes must be tight and axis-aligned.
+4. Use [x_min, y_min, x_max, y_max] with x_min < x_max and y_min < y_max.
+5. Coordinates may be normalized (0-1) or pixels. Be internally consistent.
+6. Read and include visible text exactly when possible.
+7. Keep confidence realistic (0.0-1.0).
+8. If unsure of class, use type "unknown" but still include the element.
 
-Return output as a JSON array with structure:
-```json
+For each element include:
+- id
+- type (button, input_field, text, label, icon, dropdown, checkbox, radio, menu, tab, modal, dialog, link, card, list_item, image, unknown)
+- label
+- description
+- state
+- bbox
+- confidence
+
+Output schema:
 {
   "elements": [
-    {{
+    {
       "id": "element_1",
       "type": "button",
       "label": "Login",
-      "description": "Primary action button for user authentication",
-      "state": "active",
-      "bbox": [0.35, 0.7, 0.65, 0.85],
+      "description": "Primary authentication action",
+      "state": "enabled",
+      "bbox": [0.35, 0.70, 0.65, 0.85],
       "confidence": 0.95
-    }},
-    {{
-      "id": "element_2",
-      "type": "input_field",
-      "label": "Username",
-      "description": "Text input for username entry",
-      "state": "focused",
-      "bbox": [0.1, 0.3, 0.9, 0.45],
-      "confidence": 0.92
-    }}
+    }
   ],
-  "page_structure": {{
-    "title": "Login Screen",
-    "layout": "centered form",
-    "background_color": "light",
-    "density": "normal"
-  }}
+  "page_structure": {
+    "title": "short title",
+    "layout": "brief layout description",
+    "density": "sparse|normal|dense"
+  }
 }
-```
-
-**Important Guidelines:**
-- Identify ALL visible UI elements (don't skip any)
-- Use normalized coordinates (0-1) if image dimensions are unknown
-- Order elements top-to-bottom, left-to-right
-- Include invisible but important elements (e.g., hidden menus, collapsed sections)
-- If text is cut off or partially visible, still extract what you can see
-- Rate your confidence based on clarity and distinctiveness
-
-Return ONLY valid JSON. Do not include markdown or explanations.
 """
 
 ELEMENT_REFINEMENT_PROMPT = """
@@ -114,10 +106,18 @@ Return as JSON highlighting the differences.
 """
 
 
-def get_ui_discovery_prompt(image_context: Optional[str] = None) -> str:
+def get_ui_discovery_prompt(
+    image_context: Optional[str] = None,
+    screen_region: Optional[str] = None,
+) -> str:
     """Get the main UI discovery prompt, with optional context."""
+    extra_context = []
     if image_context:
-        return f"{UI_DISCOVERY_PROMPT}\n\nContext about this image: {image_context}"
+        extra_context.append(f"Context: {image_context}")
+    if screen_region:
+        extra_context.append(f"Analyze this region only: {screen_region}")
+    if extra_context:
+        return f"{UI_DISCOVERY_PROMPT}\n\n" + "\n".join(extra_context)
     return UI_DISCOVERY_PROMPT
 
 
