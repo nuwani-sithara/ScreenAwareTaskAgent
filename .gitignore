@@ -103,5 +103,6 @@ tmp/
 # Add any project-specific files or directories to ignore below
 /runs
 
-
+# Agentic AI logs
 agentic_ai_log.txt
+

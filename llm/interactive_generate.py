@@ -65,6 +65,40 @@ def select_steps(original, rewritten):
     return rewritten.get("steps", []), "rewritten"
 
 
+def remove_duplicate_steps(steps):
+    """Remove duplicate steps based on action similarity.
+    
+    Keeps the first occurrence of each unique action.
+    Uses normalized text comparison to catch near-duplicates.
+    """
+    if not steps:
+        return steps
+    
+    seen_actions = set()
+    unique_steps = []
+    
+    for step in steps:
+        if isinstance(step, dict):
+            action = step.get("action", "").strip().lower()
+        else:
+            action = str(step).strip().lower()
+        
+        # Normalize: remove extra spaces, punctuation
+        normalized = re.sub(r'[^\w\s]', '', action)
+        normalized = re.sub(r'\s+', ' ', normalized).strip()
+        
+        if normalized and normalized not in seen_actions:
+            seen_actions.add(normalized)
+            unique_steps.append(step)
+    
+    # Renumber steps sequentially
+    for i, step in enumerate(unique_steps, 1):
+        if isinstance(step, dict):
+            step["step"] = i
+    
+    return unique_steps
+
+
 def force_imperative(steps):
     """Heuristic fixer: ensure each step `action` starts with a verb.
     This is a lightweight fallback when the validator fails.
@@ -111,8 +145,9 @@ def run_interactive(show_validation: bool = False):
         return
     strict_prompt = (
         f"You are an expert UI automation agent. Given the instruction: '{instr}', "
-        "return a concise, numbered list of UI steps to accomplish the task. "
-        "Each step should start with a strong action verb.\n"
+        "return a concise, numbered list of UNIQUE UI steps to accomplish the task. "
+        "Each step should start with a strong action verb and be DIFFERENT from other steps. "
+        "DO NOT repeat the same action twice.\n"
         "Example:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:"
     )
     print("Generating with Ollama (strict prompt)...")
@@ -232,9 +267,18 @@ def run_interactive(show_validation: bool = False):
             isinstance(s, dict) and ("model" in s.get("action", "") or "created_at" in s.get("action", ""))
             for s in display_steps):
             display_steps, display_source = original_summary["steps"], "original-forced"
+        
+        # Remove duplicate steps
+        original_count = len(display_steps)
+        display_steps = remove_duplicate_steps(display_steps)
+        if len(display_steps) < original_count:
+            removed_count = original_count - len(display_steps)
+            print(f"🔍 Removed {removed_count} duplicate step(s)")
     except Exception:
         display_steps, display_source = rewritten_steps, "rewritten"
     print(f"\n--- Chosen Steps ({display_source}) ---")
+    if not display_steps:
+        print("(No steps extracted)")
     for i, s in enumerate(display_steps, 1):
         if isinstance(s, dict):
             action = s.get("action", "")
@@ -262,10 +306,24 @@ def run_interactive(show_validation: bool = False):
             # Send steps to agentic AI backend (optional - backend must be running)
             try:
                 import requests
-                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=5)
-                print(f"✅ Sent steps to agentic AI backend: {resp.status_code}")
+                print("📤 Sending steps to backend & waiting for execution...")
+                # Increased timeout since backend executes the full agentic loop (vision + planning + HID)
+                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=120)
+                if resp.status_code == 200:
+                    result = resp.json()
+                    if result.get("status") == "executed":
+                        print(f"✅ Steps sent & executed by agentic AI backend!")
+                        exec_result = result.get("execution_result", {})
+                        exec_success = exec_result.get("evaluation", {}).get("success", False)
+                        print(f"   Execution success: {exec_success}")
+                    else:
+                        print(f"✅ Sent steps to agentic AI backend: {resp.status_code}")
+                else:
+                    print(f"⚠️  Backend responded with status: {resp.status_code}")
             except requests.exceptions.ConnectionError:
                 print("⚠️  Backend not running at localhost:8000 - steps saved locally only")
+            except requests.exceptions.Timeout:
+                print("⚠️  Backend execution timed out (>120s) - steps were sent but execution may still be running")
             except Exception as e:
                 print(f"⚠️  Failed to send steps to backend: {type(e).__name__}")
         print(f"Appended chosen steps to {ESP32_OUT}")
