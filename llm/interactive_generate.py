@@ -234,13 +234,14 @@ def run_interactive(show_validation: bool = False):
             display_steps, display_source = original_summary["steps"], "original-forced"
     except Exception:
         display_steps, display_source = rewritten_steps, "rewritten"
-    print(f"--- Chosen Steps ({display_source}) ---")
-    for s in display_steps:
+    print(f"\n--- Chosen Steps ({display_source}) ---")
+    for i, s in enumerate(display_steps, 1):
         if isinstance(s, dict):
-            print(s.get("step"), s.get("action"))
+            action = s.get("action", "")
+            print(f"{i}. {action}")
         else:
-            print(s)
-    print(f"Saved result to {OUT_PATH}")
+            print(f"{i}. {s}")
+    print(f"\nSaved result to {OUT_PATH}")
     try:
         ESP32_OUT.parent.mkdir(parents=True, exist_ok=True)
         with ESP32_OUT.open("a", encoding="utf-8") as ef:
@@ -258,13 +259,15 @@ def run_interactive(show_validation: bool = False):
             }
             line = json.dumps(compact, ensure_ascii=False)
             ef.write(line + "\n")
-            # Send steps to agentic AI backend
+            # Send steps to agentic AI backend (optional - backend must be running)
             try:
                 import requests
-                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=10)
-                print(f"Sent steps to agentic AI backend: {resp.status_code} {resp.text}")
+                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=5)
+                print(f"✅ Sent steps to agentic AI backend: {resp.status_code}")
+            except requests.exceptions.ConnectionError:
+                print("⚠️  Backend not running at localhost:8000 - steps saved locally only")
             except Exception as e:
-                print(f"Failed to send steps to agentic AI backend: {e}")
+                print(f"⚠️  Failed to send steps to backend: {type(e).__name__}")
         print(f"Appended chosen steps to {ESP32_OUT}")
         # Also write a human-readable display JSONL line for quick review on host
         try:

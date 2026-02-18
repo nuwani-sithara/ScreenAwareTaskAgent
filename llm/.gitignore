@@ -42,6 +42,11 @@ data/
 # Ignore generated LLM results
 *.tsv
 *.parquet
+esp32_steps.jsonl
+esp32_display.jsonl
+hybrid_results_pretty.jsonl
+hybrid_report.csv
+generated_ollama_pretty.jsonl
 
 # Keep important dataset files (uncomment specific files if needed)
 !automation_dataset.jsonl

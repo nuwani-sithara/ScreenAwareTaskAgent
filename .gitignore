@@ -62,6 +62,8 @@ coverage.xml
 .cache
 .pytest_cache/
 junit.xml
+test_*.py
+*_test.py
 
 # Jupyter Notebooks
 .ipynb_checkpoints
@@ -100,9 +102,6 @@ tmp/
 # =====================================
 # Add any project-specific files or directories to ignore below
 /runs
-<<<<<<< feature/llm-prompting
 
 
-=======
 agentic_ai_log.txt
->>>>>>> develop
