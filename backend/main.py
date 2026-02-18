@@ -41,7 +41,7 @@ def read_root():
     return {"message": "ScreenPilot backend is running 🚀"}
 
 
-# 🔥 Main Agentic Loop Endpoint
+# Main Agentic Loop Endpoint
 @app.post("/run-cycle")
 def run_agentic_cycle(request: TaskRequest):
     logging.info(f"📝 Received Task From Frontend: {request.task}")
