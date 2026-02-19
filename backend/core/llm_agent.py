@@ -123,9 +123,9 @@ AGENTIC_API_URL = os.getenv("AGENTIC_API_URL")
 
 
 # --- API Forwarding ---
-def _post_to_agentic(json_payload: dict):
+def _post_to_agentic(screen_info: str):
 
-    AGENTIC_API_URL= "http://localhost:8002/llm/steps"
+    AGENTIC_API_URL = "http://localhost:8000/llm/steps"
 
     if not AGENTIC_API_URL:
         logger.info("No agentic API URL configured — skipping post")
@@ -134,20 +134,22 @@ def _post_to_agentic(json_payload: dict):
     logger.info("Posting plan to agentic API")
 
     try:
-        r = requests.post(AGENTIC_API_URL, json=json_payload, timeout=10)
-        r.raise_for_status()
-
-        logger.info(
-            "Agentic API success | Status: %s",
-            r.status_code
+        response = requests.post(
+            AGENTIC_API_URL,
+            json={"instruction": screen_info},  # important fix
+            timeout=120
         )
 
-        if r.headers.get("content-type", "").startswith("application/json"):
-            return r.json()
+        logger.info("Status Code: %s", response.status_code)
 
-        return {"status_code": r.status_code}
+        # 🔥 Get JSON body
+        response_json = response.json()
 
-    except Exception as e:
+        logger.info("Plan posted to agentic API response body: %s", response_json)
+
+        return response_json
+
+    except Exception:
         logger.exception("Failed posting to agentic API")
         return None
 
@@ -159,30 +161,30 @@ def generate_plan(screen_info: str):
     logger.info("Plan generation started")
     logger.info("Screen info received: %s", screen_info)
 
-    try:
-        result = chain.invoke({"screen_info": screen_info})
+    # try:
+    #     result = chain.invoke({"screen_info": screen_info})
 
-        text = result if isinstance(result, str) else str(result)
-        logger.info("Raw LLM output: %s", text)
+    #     text = result if isinstance(result, str) else str(result)
+    #     logger.info("Raw LLM output: %s", text)
 
-    except Exception:
-        logger.exception("LLM invocation failed")
-        return {"error": "LLM failure"}
+    # except Exception:
+    #     logger.exception("LLM invocation failed")
+    #     return {"error": "LLM failure"}
 
-    # JSON parsing
-    try:
-        plan_json = json.loads(text)
-        logger.info("JSON parsing successful")
+    # # JSON parsing
+    # try:
+    #     plan_json = json.loads(text)
+    #     logger.info("JSON parsing successful")
 
-    except Exception:
-        logger.warning("LLM output not valid JSON — wrapping raw text")
-        plan_json = {"raw": text}
+    # except Exception:
+    #     logger.warning("LLM output not valid JSON — wrapping raw text")
+    #     plan_json = {"raw": text}
 
     # API forwarding
-    if isinstance(plan_json, dict):
-        _post_to_agentic(plan_json)
+    result= _post_to_agentic(screen_info)
+    logger.info("Plan posted to agentic API: %s", result)
 
     elapsed = round(time.time() - start_time, 2)
     logger.info("Plan generation completed in %ss", elapsed)
 
-    return plan_json
+    return result
