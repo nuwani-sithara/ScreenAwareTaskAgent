@@ -6,6 +6,7 @@ __pycache__/
 *$py.class
 *.log
 *.DS_Store
+agentic_ai_log.txt
 .env
 venv/
 .env.local
@@ -101,7 +102,11 @@ tmp/
 # 📁 Project-specific
 # =====================================
 # Add any project-specific files or directories to ignore below
+<<<<<<< Updated upstream
 /runs
 
 
 agentic_ai_log.txt
+=======
+/runs
+>>>>>>> Stashed changes

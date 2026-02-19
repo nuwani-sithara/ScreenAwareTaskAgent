@@ -49,6 +49,7 @@ from pydantic import BaseModel
 import logging
 
 from backend.core.agentic_loop import run_cycle
+from llm.interactive_generate import run_interactive
 
 # ------------------------------------
 # Logging Setup
@@ -102,9 +103,31 @@ def run_agentic_cycle(request: TaskRequest):
 @app.post("/llm/steps")
 async def receive_llm_steps(request: Request):
     try:
-        steps = await request.json()
-        logging.info(f"Received LLM steps: {steps}")
-        return {"status": "received", "steps": steps}
+        payload = await request.json()
+        logging.info(f"📥 Received payload: {payload}")
+
+        if isinstance(payload, str):
+            instruction = payload
+        elif isinstance(payload, dict):
+            instruction = payload.get("instruction")
+        else:
+            return {"error": "Invalid payload format"}
+
+        if not instruction:
+            return {"error": "No instruction provided"}
+
+        result = run_interactive(instruction=instruction)
+
+        generated = result.get("generated", {})
+        filtered = {
+            "instruction": generated.get("instruction"),
+            "category": generated.get("category")
+        }
+
+        logging.info("📤 Filtered response: %s", filtered)
+
+        return filtered
+
     except Exception as e:
-        logging.error(f"Failed to process LLM steps: {e}")
+        logging.exception("Failed to process LLM steps")
         return {"status": "error", "detail": str(e)}
