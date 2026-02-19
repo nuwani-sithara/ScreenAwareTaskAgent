@@ -11,7 +11,10 @@ except Exception:
     from llm.simple_rewriter import rewrite_steps as flan_rewrite
 
 from llm.step_validators import StepQualityValidator
+import logging
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 OUT_PATH = Path("llm/interactive_results.json")
 ESP32_OUT = Path("llm/esp32_steps.jsonl")
@@ -80,23 +83,31 @@ def remove_duplicate_steps(steps):
     for step in steps:
         if isinstance(step, dict):
             action = step.get("action", "").strip().lower()
+            description = step.get("description", "").strip().lower()
+            # Use both action and description for better duplicate detection
+            key = f"{action}|{description}"
         else:
-            action = str(step).strip().lower()
+            key = str(step).strip().lower()
         
         # Normalize: remove extra spaces, punctuation
-        normalized = re.sub(r'[^\w\s]', '', action)
+        normalized = re.sub(r'[^\w\s|]', '', key)
         normalized = re.sub(r'\s+', ' ', normalized).strip()
         
         if normalized and normalized not in seen_actions:
             seen_actions.add(normalized)
             unique_steps.append(step)
     
-    # Renumber steps sequentially
+    # Renumber steps sequentially starting from 1
+    renumbered_steps = []
     for i, step in enumerate(unique_steps, 1):
         if isinstance(step, dict):
-            step["step"] = i
+            new_step = step.copy()
+            new_step["step"] = i
+            renumbered_steps.append(new_step)
+        else:
+            renumbered_steps.append(step)
     
-    return unique_steps
+    return renumbered_steps
 
 
 def force_imperative(steps):
@@ -138,11 +149,18 @@ def force_imperative(steps):
     return fixed
 
 
-def run_interactive(show_validation: bool = False):
-    instr = input("Enter instruction: ")
+def run_interactive(instruction: str | None = None, show_validation: bool = False):
+    if instruction is None:
+        instr = input("Enter instruction: ")
+    else:
+        instr = instruction
+
     if not instr.strip():
-        print("No instruction provided")
+        logger.warning("No instruction provided")
         return
+
+    logger.info("Starting interactive run for instruction: %s", instr)
+
     strict_prompt = (
         f"You are an expert UI automation agent. Given the instruction: '{instr}', "
         "return a concise, numbered list of UNIQUE UI steps to accomplish the task. "
@@ -150,19 +168,23 @@ def run_interactive(show_validation: bool = False):
         "DO NOT repeat the same action twice.\n"
         "Example:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:"
     )
-    print("Generating with Ollama (strict prompt)...")
+
+    logger.info("Generating steps with Ollama...")
     gen = ollama_adapter.generate_and_format(strict_prompt)
     raw_text = gen.get("cleaned_text") or gen.get("raw_output") or ""
-    # If the adapter reported an error or the output contains an Ollama failure,
-    # don't treat the error text as steps — abort early to avoid saving garbage.
     error_msg = gen.get("error") or ""
-    if not error_msg and isinstance(raw_text, str) and ("Ollama run failed" in raw_text or "returned non-zero exit status" in raw_text):
+    if not error_msg and isinstance(raw_text, str) and (
+        "Ollama run failed" in raw_text or "returned non-zero exit status" in raw_text
+    ):
         error_msg = raw_text.strip()
+
     if error_msg:
-        print("Ollama generation failed; not saving steps. See adapter output for details.")
-        print(f"Error message: {error_msg}")
-        print(f"Raw Ollama output: {raw_text}")
+        logger.error("Ollama generation failed; not saving steps.")
+        logger.error("Error message: %s", error_msg)
+        logger.debug("Raw Ollama output: %s", raw_text)
         return
+
+    # Attempt to parse JSON chunks from output
     responses = []
     try:
         for m in re.finditer(r"\{.*?\}\s*", raw_text, re.S):
@@ -175,57 +197,91 @@ def run_interactive(show_validation: bool = False):
                 continue
     except Exception:
         responses = []
+
     if responses:
         cleaned = ''.join(responses).strip()
         orig_steps = ollama_adapter._extract_steps_from_text(cleaned)
+        logger.info("Extracted %d original steps from JSON responses", len(orig_steps))
     else:
         orig_steps = gen.get("steps") or []
-    print("Rewriting with Flan‑T5 (or fallback)...")
+        logger.info("Extracted %d original steps from raw text", len(orig_steps))
+
+    logger.info("Rewriting steps with Flan‑T5 (or fallback)...")
     rewritten_text = flan_rewrite(raw_text) if callable(flan_rewrite) else raw_text
+
     try:
         rewritten_steps = ollama_adapter._extract_steps_from_text(rewritten_text)
+        logger.info("Extracted %d rewritten steps", len(rewritten_steps))
     except Exception:
-        rewritten_steps = [{"step": i + 1, "action": s.strip(), "description": f"Step {i+1}: {s.strip()}"} for i, s in enumerate([l for l in rewritten_text.splitlines() if l.strip()])]
+        rewritten_steps = [
+            {"step": i + 1, "action": s.strip(), "description": f"Step {i+1}: {s.strip()}"}
+            for i, s in enumerate([l for l in rewritten_text.splitlines() if l.strip()])
+        ]
+        logger.warning("Fallback extraction used; %d steps created", len(rewritten_steps))
+
     validator = StepQualityValidator()
+
     q_orig = validator.evaluate(orig_steps, instr)
     q_rew = validator.evaluate(rewritten_steps, instr)
+
+    logger.info("Original steps quality: %s", q_orig)
+    logger.info("Rewritten steps quality: %s", q_rew)
+
     try:
         alg_orig = validator.validate_algorithm(instr, orig_steps)
     except Exception:
         alg_orig = {"confidence": 0.0}
+        logger.warning("Original algorithmic validation failed")
+
     try:
         alg_rew = validator.validate_algorithm(instr, rewritten_steps)
     except Exception:
         alg_rew = {"confidence": 0.0}
+        logger.warning("Rewritten algorithmic validation failed")
+
     try:
         abstract_steps = summarize_steps(rewritten_steps)
+        logger.info("Abstracted %d steps", len(abstract_steps))
     except Exception:
         abstract_steps = []
-    # If both algorithmic validators fail, attempt a lightweight imperative fix and re-validate
+        logger.warning("Failed to summarize steps")
+
+    # Attempt imperative fix if both validators fail
     try:
         if (not alg_orig.get("is_valid", False)) and (not alg_rew.get("is_valid", False)):
+            logger.info("Both algorithmic validators failed; attempting imperative fix")
             fixed = force_imperative(rewritten_steps)
             fixed_q = validator.evaluate(fixed, instr)
             fixed_alg = validator.validate_algorithm(instr, fixed)
             if fixed_alg.get("is_valid", False):
-                # Accept the fixed steps in place of rewritten_steps
                 rewritten_steps = fixed
-                rewritten_summary = {"steps": rewritten_steps, "quality": fixed_q.get("quality_score", 0.0), "confidence": fixed_alg.get("confidence", 0.0)}
-                # update result fields so saved output reflects the fix
-                result["rewritten_steps"] = rewritten_steps
-                result["validation"]["rewritten_quality"] = fixed_q
-                result["validation"]["rewritten_algorithmic"] = fixed_alg
+                logger.info("Imperative fix applied successfully | Confidence: %s", fixed_alg.get("confidence", 0.0))
+                result = {
+                    "rewritten_steps": rewritten_steps,
+                    "validation": {
+                        "rewritten_quality": fixed_q,
+                        "rewritten_algorithmic": fixed_alg
+                    }
+                }
     except Exception:
-        pass
+        logger.exception("Imperative fix attempt failed")
+
     result = {
         "instruction": instr,
         "generated": gen,
         "rewritten_text": rewritten_text,
         "rewritten_steps": rewritten_steps,
         "abstract_steps": abstract_steps,
-        "validation": {"original_quality": q_orig, "rewritten_quality": q_rew, "original_algorithmic": alg_orig, "rewritten_algorithmic": alg_rew},
+        "validation": {
+            "original_quality": q_orig,
+            "rewritten_quality": q_rew,
+            "original_algorithmic": alg_orig,
+            "rewritten_algorithmic": alg_rew
+        },
         "timestamp": time.time(),
     }
+
+    logger.info("run_interactive completed | Total steps: %d", len(rewritten_steps))
     # Sanitize validation details to avoid exposing internal boolean flags like hasVerb
     def _sanitize_validation(res):
         try:
@@ -276,15 +332,38 @@ def run_interactive(show_validation: bool = False):
             print(f"🔍 Removed {removed_count} duplicate step(s)")
     except Exception:
         display_steps, display_source = rewritten_steps, "rewritten"
+    
+    # Debug: Log step count before printing
+    logger.info(f"Displaying {len(display_steps)} steps (source: {display_source})")
+    
     print(f"\n--- Chosen Steps ({display_source}) ---")
     if not display_steps:
         print("(No steps extracted)")
-    for i, s in enumerate(display_steps, 1):
-        if isinstance(s, dict):
-            action = s.get("action", "")
-            print(f"{i}. {action}")
-        else:
-            print(f"{i}. {s}")
+    else:
+        for i, s in enumerate(display_steps, 1):
+            if isinstance(s, dict):
+                action = s.get("action", "").strip()
+                description = s.get("description", "").strip()
+                
+                # Clean up action: remove leading numbers and "Step X:" prefixes
+                action = re.sub(r'^\d+\.\s*', '', action)  # Remove "1. " prefix
+                action = re.sub(r'^Step\s+\d+:\s*', '', action, flags=re.IGNORECASE)  # Remove "Step 1:" prefix
+                
+                # Only show description if it's meaningfully different from action
+                # Clean description similarly
+                clean_desc = re.sub(r'^\d+\.\s*', '', description)
+                clean_desc = re.sub(r'^Step\s+\d+:\s*', '', clean_desc, flags=re.IGNORECASE)
+                
+                # Check if description adds value
+                if clean_desc and clean_desc.lower() != action.lower() and len(clean_desc) > len(action) + 10:
+                    print(f"{i}. {action}")
+                    print(f"   → {clean_desc}")
+                else:
+                    print(f"{i}. {action}")
+            else:
+                step_text = str(s).strip()
+                step_text = re.sub(r'^\d+\.\s*', '', step_text)
+                print(f"{i}. {step_text}")
     print(f"\nSaved result to {OUT_PATH}")
     try:
         ESP32_OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -308,7 +387,8 @@ def run_interactive(show_validation: bool = False):
                 import requests
                 print("📤 Sending steps to backend & waiting for execution...")
                 # Increased timeout since backend executes the full agentic loop (vision + planning + HID)
-                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=120)
+                # Backend planning calls Ollama LLM which can take 60-120s, plus vision/execution overhead
+                resp = requests.post("http://localhost:8000/llm/steps", json=compact, timeout=300)
                 if resp.status_code == 200:
                     result = resp.json()
                     if result.get("status") == "executed":
@@ -323,7 +403,7 @@ def run_interactive(show_validation: bool = False):
             except requests.exceptions.ConnectionError:
                 print("⚠️  Backend not running at localhost:8000 - steps saved locally only")
             except requests.exceptions.Timeout:
-                print("⚠️  Backend execution timed out (>120s) - steps were sent but execution may still be running")
+                print("⚠️  Backend execution timed out (>300s) - steps were sent but execution may still be running")
             except Exception as e:
                 print(f"⚠️  Failed to send steps to backend: {type(e).__name__}")
         print(f"Appended chosen steps to {ESP32_OUT}")
@@ -363,6 +443,8 @@ def run_interactive(show_validation: bool = False):
                 print("Failed to print validation:", e)
     except Exception as e:
         print("Failed to update selection report:", e)
+    
+    return result
 
 
 if __name__ == "__main__":

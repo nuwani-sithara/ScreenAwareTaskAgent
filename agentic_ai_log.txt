@@ -3245,3 +3245,1617 @@ requests.exceptions.ConnectionError: HTTPConnectionPool(host='localhost', port=8
 2026-02-18 19:43:03,320 | INFO | LLM initialized successfully
 2026-02-18 19:48:01,680 | INFO | === Agentic AI System Started ===
 2026-02-18 19:48:01,732 | INFO | LLM initialized successfully
+2026-02-19 11:14:33,920 | INFO | === Agentic AI System Started ===
+2026-02-19 11:14:33,949 | INFO | LLM initialized successfully
+2026-02-19 11:22:12,634 | INFO | === Agentic AI System Started ===
+2026-02-19 11:22:12,664 | INFO | LLM initialized successfully
+2026-02-19 11:22:27,455 | INFO | === Agentic AI System Started ===
+2026-02-19 11:22:27,488 | INFO | LLM initialized successfully
+2026-02-19 11:24:18,365 | INFO | === Agentic AI System Started ===
+2026-02-19 11:24:18,415 | INFO | LLM initialized successfully
+2026-02-19 11:24:56,313 | INFO | === Agentic AI System Started ===
+2026-02-19 11:24:56,364 | INFO | LLM initialized successfully
+2026-02-19 11:25:36,969 | INFO | === Agentic AI System Started ===
+2026-02-19 11:25:37,044 | INFO | LLM initialized successfully
+2026-02-19 11:27:16,092 | INFO | \U0001f4e5 Received payload: {'instruction': 'add product to the cart', 'chosen': 'rewritten', 'steps': [{'step': 1, 'action': '1. Launch the application (or navigate to the website)', 'description': 'Step 1: 1. Launch the application (or navigate to the website)'}, {'step': 2, 'action': 'Locate the desired product and select it (e.g., click on the product image, press the product name or add-to-cart button)', 'description': 'Step 2: Locate the desired product and select it (e.g., click on the product image, press the product name or add-to-cart button)'}, {'step': 3, 'action': "Initiate the 'Add to Cart' action (e.g., click 'Add to Cart' button or follow a link to the shopping cart)", 'description': "Step 3: Initiate the 'Add to Cart' action (e.g., click 'Add to Cart' button or follow a link to the shopping cart)"}, {'step': 4, 'action': 'Verify successful addition of the product to the cart (e.g., check for a notification, message or observe an updated cart total or quantity)', 'description': 'Step 4: Verify successful addition of the product to the cart (e.g., check for a notification, message or observe an updated cart total or quantity)'}, {'step': 5, 'action': "If necessary, proceed to view the cart (e.g., navigate to the cart page, click 'View Cart')", 'description': "Step 5: If necessary, proceed to view the cart (e.g., navigate to the cart page, click 'View Cart')"}, {'step': 6, 'action': 'Confirm that the product is present in the cart (e.g., check for the product name or image in the cart list)', 'description': 'Step 6: Confirm that the product is present in the cart (e.g., check for the product name or image in the cart list)'}, {'step': 7, 'action': 'Close the cart (or continue shopping) as desired', 'description': 'Step 7: Close the cart (or continue shopping) as desired'}], 'timestamp': 1771480633.9807384}
+2026-02-19 11:27:16,095 | INFO | Starting interactive run for instruction: add product to the cart
+2026-02-19 11:27:16,096 | INFO | Generating steps with Ollama...
+2026-02-19 11:27:41,799 | INFO | Extracted 5 original steps from JSON responses
+2026-02-19 11:27:41,799 | INFO | Rewriting steps with Flan\u2011T5 (or fallback)...
+2026-02-19 11:27:41,801 | INFO | Extracted 68 rewritten steps
+2026-02-19 11:27:41,802 | INFO | Original steps quality: {'quality_score': 0.6, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:27:41,802 | INFO | Rewritten steps quality: {'quality_score': 0.0, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', '29 steps are very short', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Expand very short steps with concrete actionable details', 'Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:27:41,804 | INFO | Abstracted 68 steps
+2026-02-19 11:27:41,804 | INFO | Both algorithmic validators failed; attempting imperative fix
+2026-02-19 11:27:41,807 | INFO | Imperative fix applied successfully | Confidence: 0.583
+2026-02-19 11:27:41,807 | INFO | run_interactive completed | Total steps: 68
+2026-02-19 11:29:38,757 | INFO | === Agentic AI System Started ===
+2026-02-19 11:29:38,805 | INFO | LLM initialized successfully
+2026-02-19 11:29:44,139 | INFO | \U0001f4e4 Filtered response: {'instruction': "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UNIQUE UI steps to accomplish the task. Each step should start with a strong action verb and be DIFFERENT from other steps. DO NOT repeat the same action twice.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:", 'category': 'general_software'}
+2026-02-19 11:29:44,185 | INFO | \U0001f4e5 Received payload: {'instruction': 'add product to the cart', 'chosen': 'original-forced', 'steps': [{'step': 1, 'action': 'Navigate to the product page', 'description': 'Step 1: Navigate to the product page'}, {'step': 2, 'action': "Find and click the 'Add to Cart' button", 'description': "Step 2: Find and click the 'Add to Cart' button"}, {'step': 3, 'action': 'View cart (to confirm product addition)', 'description': 'Step 3: View cart (to confirm product addition)'}, {'step': 4, 'action': "Proceed to checkout (if necessary, depending on the website's design)", 'description': "Step 4: Proceed to checkout (if necessary, depending on the website's design)"}, {'step': 5, 'action': 'Complete the checkout process or continue shopping as desired.', 'description': 'Step 5: Complete the checkout process or continue shopping as desired.'}], 'timestamp': 1771480662.09351}
+2026-02-19 11:29:44,185 | INFO | Starting interactive run for instruction: add product to the cart
+2026-02-19 11:29:44,185 | INFO | Generating steps with Ollama...
+2026-02-19 11:30:22,117 | INFO | Extracted 7 original steps from JSON responses
+2026-02-19 11:30:22,117 | INFO | Rewriting steps with Flan\u2011T5 (or fallback)...
+2026-02-19 11:30:22,122 | INFO | Extracted 92 rewritten steps
+2026-02-19 11:30:22,125 | INFO | Original steps quality: {'quality_score': 0.686, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:30:22,125 | INFO | Rewritten steps quality: {'quality_score': 0.0, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', '31 steps are very short', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Expand very short steps with concrete actionable details', 'Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:30:22,132 | INFO | Abstracted 92 steps
+2026-02-19 11:30:22,132 | INFO | run_interactive completed | Total steps: 92
+2026-02-19 11:32:24,652 | INFO | \U0001f4e4 Filtered response: {'instruction': "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UNIQUE UI steps to accomplish the task. Each step should start with a strong action verb and be DIFFERENT from other steps. DO NOT repeat the same action twice.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:", 'category': 'general_software'}
+2026-02-19 11:32:24,656 | INFO | \U0001f4e5 Received payload: {'instruction': 'add product to the cart', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application', 'description': 'Step 1: Launch the application'}, {'step': 2, 'action': 'Navigate to the product page', 'description': 'Step 2: Navigate to the product page'}, {'step': 3, 'action': "Locate and click on the 'Add to Cart' button", 'description': "Step 3: Locate and click on the 'Add to Cart' button"}, {'step': 4, 'action': 'Verify that the product has been added to the cart', 'description': 'Step 4: Verify that the product has been added to the cart'}, {'step': 5, 'action': 'Proceed to the cart by clicking on the cart icon or relevant navigation element', 'description': 'Step 5: Proceed to the cart by clicking on the cart icon or relevant navigation element'}, {'step': 6, 'action': 'Confirm the presence of the selected product in the cart', 'description': 'Step 6: Confirm the presence of the selected product in the cart'}, {'step': 7, 'action': 'Perform final confirmation (if required) before completing the transaction', 'description': 'Step 7: Perform final confirmation (if required) before completing the transaction'}], 'timestamp': 1771480822.612512}
+2026-02-19 11:32:24,657 | INFO | Starting interactive run for instruction: add product to the cart
+2026-02-19 11:32:24,657 | INFO | Generating steps with Ollama...
+2026-02-19 11:33:08,062 | INFO | Extracted 6 original steps from JSON responses
+2026-02-19 11:33:08,062 | INFO | Rewriting steps with Flan\u2011T5 (or fallback)...
+2026-02-19 11:33:08,067 | INFO | Extracted 103 rewritten steps
+2026-02-19 11:33:08,068 | INFO | Original steps quality: {'quality_score': 0.7, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:33:08,068 | INFO | Rewritten steps quality: {'quality_score': 0.0, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', '30 steps are very short', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Expand very short steps with concrete actionable details', 'Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:33:08,072 | INFO | Abstracted 103 steps
+2026-02-19 11:33:08,072 | INFO | run_interactive completed | Total steps: 103
+2026-02-19 11:35:10,273 | INFO | \U0001f4e4 Filtered response: {'instruction': "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UNIQUE UI steps to accomplish the task. Each step should start with a strong action verb and be DIFFERENT from other steps. DO NOT repeat the same action twice.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:", 'category': 'general_software'}
+2026-02-19 11:35:10,275 | INFO | \U0001f4e5 Received payload: {'instruction': 'add product to the cart', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application', 'description': 'Step 1: Launch the application'}, {'step': 2, 'action': 'Navigate to the product page', 'description': 'Step 2: Navigate to the product page'}, {'step': 3, 'action': "Find and click on the 'Add to Cart' button", 'description': "Step 3: Find and click on the 'Add to Cart' button"}, {'step': 4, 'action': 'Verify that the product has been added to the cart', 'description': 'Step 4: Verify that the product has been added to the cart'}, {'step': 5, 'action': 'Proceed to the cart by clicking on the relevant navigation element (e.g., cart icon)', 'description': 'Step 5: Proceed to the cart by clicking on the relevant navigation element (e.g., cart icon)'}, {'step': 6, 'action': "Confirm or complete the addition of the product to the cart if necessary (this step may not be required depending on the application's design)", 'description': "Step 6: Confirm or complete the addition of the product to the cart if necessary (this step may not be required depending on the application's design)"}], 'timestamp': 1771480861.7550504}
+2026-02-19 11:35:10,275 | INFO | Starting interactive run for instruction: add product to the cart
+2026-02-19 11:35:10,275 | INFO | Generating steps with Ollama...
+2026-02-19 11:35:47,624 | INFO | Extracted 6 original steps from JSON responses
+2026-02-19 11:35:47,624 | INFO | Rewriting steps with Flan\u2011T5 (or fallback)...
+2026-02-19 11:35:47,631 | INFO | Extracted 73 rewritten steps
+2026-02-19 11:35:47,632 | INFO | Original steps quality: {'quality_score': 0.75, 'issues': [], 'warnings': ['Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:35:47,633 | INFO | Rewritten steps quality: {'quality_score': 0.0, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', '29 steps are very short', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Expand very short steps with concrete actionable details', 'Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:35:47,643 | INFO | Abstracted 73 steps
+2026-02-19 11:35:47,643 | INFO | run_interactive completed | Total steps: 73
+2026-02-19 11:37:50,108 | INFO | \U0001f4e4 Filtered response: {'instruction': "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UNIQUE UI steps to accomplish the task. Each step should start with a strong action verb and be DIFFERENT from other steps. DO NOT repeat the same action twice.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:", 'category': 'general_software'}
+2026-02-19 11:37:50,137 | INFO | \U0001f4e5 Received payload: {'instruction': 'add product to the cart', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Navigate to the product page', 'description': 'Step 1: Navigate to the product page'}, {'step': 2, 'action': "Locate the 'Add to Cart' button", 'description': "Step 2: Locate the 'Add to Cart' button"}, {'step': 3, 'action': "Click or Tap on the 'Add to Cart' button", 'description': "Step 3: Click or Tap on the 'Add to Cart' button"}, {'step': 4, 'action': 'Check for product in the cart', 'description': 'Step 4: Check for product in the cart'}, {'step': 5, 'action': 'Verify that the product has been successfully added (optional)', 'description': 'Step 5: Verify that the product has been successfully added (optional)'}, {'step': 6, 'action': 'Proceed to checkout or continue shopping as desired', 'description': 'Step 6: Proceed to checkout or continue shopping as desired'}], 'timestamp': 1771481148.0550802}
+2026-02-19 11:37:50,137 | INFO | Starting interactive run for instruction: add product to the cart
+2026-02-19 11:37:50,137 | INFO | Generating steps with Ollama...
+2026-02-19 11:37:57,926 | INFO | === Agentic AI System Started ===
+2026-02-19 11:37:58,028 | INFO | LLM initialized successfully
+2026-02-19 11:38:14,700 | INFO | Extracted 5 original steps from JSON responses
+2026-02-19 11:38:14,701 | INFO | Rewriting steps with Flan\u2011T5 (or fallback)...
+2026-02-19 11:38:14,703 | INFO | Extracted 59 rewritten steps
+2026-02-19 11:38:14,757 | INFO | Original steps quality: {'quality_score': 0.72, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:38:14,757 | INFO | Rewritten steps quality: {'quality_score': 0.0, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', '20 steps are very short', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Expand very short steps with concrete actionable details', 'Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:38:14,759 | INFO | Abstracted 59 steps
+2026-02-19 11:38:14,759 | INFO | run_interactive completed | Total steps: 59
+
+
+
+
+
+
+
+
+
+
+
+
+2026-02-19 11:39:10,378 | INFO | === Agentic AI System Started ===
+2026-02-19 11:39:10,414 | INFO | LLM initialized successfully
+2026-02-19 11:40:17,019 | INFO | \U0001f4e4 Filtered response: {'instruction': "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UNIQUE UI steps to accomplish the task. Each step should start with a strong action verb and be DIFFERENT from other steps. DO NOT repeat the same action twice.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:", 'category': 'general_software'}
+2026-02-19 11:40:17,025 | INFO | \U0001f4e5 Received payload: {'instruction': 'add product to the cart', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application (on your device or browser)', 'description': 'Step 1: Launch the application (on your device or browser)'}, {'step': 2, 'action': 'Navigate to the product page', 'description': 'Step 2: Navigate to the product page'}, {'step': 3, 'action': "Find and interact with the 'Add to Cart' button", 'description': "Step 3: Find and interact with the 'Add to Cart' button"}, {'step': 4, 'action': 'Verify that the product has been added to the cart (this step is important to confirm the action was successful)', 'description': 'Step 4: Verify that the product has been added to the cart (this step is important to confirm the action was successful)'}, {'step': 5, 'action': 'Access the shopping cart or view basket', 'description': 'Step 5: Access the shopping cart or view basket'}, {'step': 6, 'action': 'Confirm that the product is present in the cart (again, this step ensures the correct product was added and not a similar one)', 'description': 'Step 6: Confirm that the product is present in the cart (again, this step ensures the correct product was added and not a similar one)'}], 'timestamp': 1771480988.1844194}
+2026-02-19 11:40:17,026 | INFO | Starting interactive run for instruction: add product to the cart
+2026-02-19 11:40:17,026 | INFO | Generating steps with Ollama...
+2026-02-19 11:41:20,014 | INFO | Extracted 6 original steps from JSON responses
+2026-02-19 11:41:20,014 | INFO | Rewriting steps with Flan\u2011T5 (or fallback)...
+2026-02-19 11:41:20,037 | INFO | Extracted 116 rewritten steps
+2026-02-19 11:41:20,038 | INFO | Original steps quality: {'quality_score': 0.65, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:41:20,038 | INFO | Rewritten steps quality: {'quality_score': 0.0, 'issues': [], 'warnings': ['Many steps do not begin with an action verb', '41 steps are very short', 'Steps lack transitional words (then/after/next) to indicate flow'], 'suggestions': ['Expand very short steps with concrete actionable details', 'Start steps with an action verb (e.g., "click", "open", "select")']}
+2026-02-19 11:41:20,044 | INFO | Abstracted 116 steps
+2026-02-19 11:41:20,044 | INFO | Both algorithmic validators failed; attempting imperative fix
+2026-02-19 11:41:20,050 | INFO | Imperative fix applied successfully | Confidence: 0.593
+2026-02-19 11:41:20,051 | INFO | run_interactive completed | Total steps: 116
+2026-02-19 11:43:22,427 | INFO | \U0001f4e4 Filtered response: {'instruction': "You are an expert UI automation agent. Given the instruction: 'add product to the cart', return a concise, numbered list of UNIQUE UI steps to accomplish the task. Each step should start with a strong action verb and be DIFFERENT from other steps. DO NOT repeat the same action twice.\nExample:\n1. Open the app\n2. Click 'Add to Cart'\n3. Confirm purchase\n\nSteps:", 'category': 'general_software'}
+2026-02-19 11:43:32,187 | INFO | === Agentic AI System Started ===
+2026-02-19 11:43:32,230 | INFO | LLM initialized successfully
+2026-02-19 11:43:32,242 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart', 'chosen': 'original-forced', 'steps': [{'step': 1, 'action': 'Launch the application', 'description': 'Step 1: Launch the application'}, {'step': 2, 'action': 'Navigate to the product page', 'description': 'Step 2: Navigate to the product page'}, {'step': 3, 'action': "Locate and click on the 'Add to Cart' button or option", 'description': "Step 3: Locate and click on the 'Add to Cart' button or option"}, {'step': 4, 'action': 'Verify that the product has been added to the cart (this is an implicit confirmation, if the UI shows the product in the cart)', 'description': 'Step 4: Verify that the product has been added to the cart (this is an implicit confirmation, if the UI shows the product in the cart)'}, {'step': 5, 'action': 'Proceed to the cart or view cart section (if separate from the product page)', 'description': 'Step 5: Proceed to the cart or view cart section (if separate from the product page)'}, {'step': 6, 'action': 'Confirm the product quantity and total cost (ensure the correct product was added and the price is as expected)', 'description': 'Step 6: Confirm the product quantity and total cost (ensure the correct product was added and the price is as expected)'}, {'step': 7, 'action': 'Complete the purchase or finalize the order (if necessary, provide required information for shipping and payment)', 'description': 'Step 7: Complete the purchase or finalize the order (if necessary, provide required information for shipping and payment)'}, {'step': 8, 'action': 'Receive a confirmation message or email indicating successful addition to cart or completion of the order.', 'description': 'Step 8: Receive a confirmation message or email indicating successful addition to cart or completion of the order.'}], 'timestamp': 1771481431.6184273}
+2026-02-19 11:43:32,242 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:43:32,242 | INFO | \U0001f4cb Steps to execute: 8 steps
+2026-02-19 11:43:32,243 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:43:32,243 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:43:32,243 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:43:32,243 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:43:32,243 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:43:32,243 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:43:32,243 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:43:32,244 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:43:32,244 | INFO | Plan generation started
+2026-02-19 11:43:32,244 | INFO | Screen info received: add product to the cart
+2026-02-19 11:43:32,244 | INFO | Posting plan to agentic API
+2026-02-19 11:45:34,293 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 11:45:41,782 | INFO | Plan posted to agentic API: None
+2026-02-19 11:45:41,783 | INFO | Plan generation completed in 129.54s
+2026-02-19 11:45:41,783 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 11:45:41,783 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 11:45:41,784 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 11:45:41,784 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 11:45:41,784 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 11:45:41,784 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 11:45:41,785 | INFO | Action succeeded on attempt 1
+2026-02-19 11:45:41,785 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 11:45:41,785 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 11:45:41,785 | INFO | \u2705 Cycle completed.
+2026-02-19 11:45:41,785 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 11:45:41,788 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Navigate to the product page', 'description': 'Step 1: Navigate to the product page'}, {'step': 2, 'action': "Find and click the 'Add to Cart' button", 'description': "Step 2: Find and click the 'Add to Cart' button"}, {'step': 3, 'action': 'Verify that the product has been added to the cart', 'description': 'Step 3: Verify that the product has been added to the cart'}, {'step': 4, 'action': 'Proceed to the shopping cart', 'description': 'Step 4: Proceed to the shopping cart'}, {'step': 5, 'action': 'Click on the option to finalize or confirm the purchase', 'description': 'Step 5: Click on the option to finalize or confirm the purchase'}], 'timestamp': 1771481294.9463212}
+2026-02-19 11:45:41,788 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:45:41,788 | INFO | \U0001f4cb Steps to execute: 5 steps
+2026-02-19 11:45:41,788 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:45:41,788 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:45:41,788 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:45:41,788 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:45:41,788 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:45:41,789 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:45:41,789 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:45:41,789 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:45:41,789 | INFO | Plan generation started
+2026-02-19 11:45:41,789 | INFO | Screen info received: add product to the cart
+2026-02-19 11:45:41,790 | INFO | Posting plan to agentic API
+2026-02-19 11:47:43,854 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 11:47:43,857 | INFO | Plan posted to agentic API: None
+2026-02-19 11:47:43,857 | INFO | Plan generation completed in 122.07s
+2026-02-19 11:47:43,857 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 11:47:43,858 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 11:47:43,858 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 11:47:43,858 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 11:47:43,859 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 11:47:43,859 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 11:47:43,860 | INFO | Action succeeded on attempt 1
+2026-02-19 11:47:43,860 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 11:47:43,860 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 11:47:43,860 | INFO | \u2705 Cycle completed.
+2026-02-19 11:47:43,860 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 11:47:43,862 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart', 'chosen': 'original-forced', 'steps': [{'step': 1, 'action': 'Navigate to the product page (using browser or app)', 'description': 'Step 1: Navigate to the product page (using browser or app)'}, {'step': 2, 'action': "Locate and select the 'Add to Cart' button", 'description': "Step 2: Locate and select the 'Add to Cart' button"}, {'step': 3, 'action': 'Verify that the product has been added to the cart (check for visual cues like a cart icon, number of items, etc.)', 'description': 'Step 3: Verify that the product has been added to the cart (check for visual cues like a cart icon, number of items, etc.)'}, {'step': 4, 'action': 'Access the shopping cart (click on the cart icon, navigate to cart section, etc.)', 'description': 'Step 4: Access the shopping cart (click on the cart icon, navigate to cart section, etc.)'}, {'step': 5, 'action': 'Confirm that the selected product is present in the cart', 'description': 'Step 5: Confirm that the selected product is present in the cart'}, {'step': 6, 'action': "Proceed to checkout or complete purchase (depending on the website's design)", 'description': "Step 6: Proceed to checkout or complete purchase (depending on the website's design)"}], 'timestamp': 1771481480.3373582}
+2026-02-19 11:47:43,862 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:47:43,863 | INFO | \U0001f4cb Steps to execute: 6 steps
+2026-02-19 11:47:43,863 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:47:43,863 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:47:43,863 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:47:43,863 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:47:43,863 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:47:43,864 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:47:43,864 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:47:43,864 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:47:43,864 | INFO | Plan generation started
+2026-02-19 11:47:43,864 | INFO | Screen info received: add product to the cart
+2026-02-19 11:47:43,865 | INFO | Posting plan to agentic API
+2026-02-19 11:49:45,919 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 11:49:45,921 | INFO | Plan posted to agentic API: None
+2026-02-19 11:49:45,922 | INFO | Plan generation completed in 122.06s
+2026-02-19 11:49:45,922 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 11:49:45,922 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 11:49:45,924 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 11:49:45,924 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 11:49:45,925 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 11:49:45,926 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 11:49:45,926 | INFO | Action succeeded on attempt 1
+2026-02-19 11:49:45,927 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 11:49:45,927 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 11:49:45,927 | INFO | \u2705 Cycle completed.
+2026-02-19 11:49:45,927 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 11:49:45,945 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart'}
+2026-02-19 11:49:45,945 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 11:49:45,945 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:49:45,946 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 11:49:45,946 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:49:45,946 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:49:45,946 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:49:45,946 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:49:45,947 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:49:45,954 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:49:45,954 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:49:45,955 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:49:45,955 | INFO | Plan generation started
+2026-02-19 11:49:45,955 | INFO | Screen info received: add product to the cart
+2026-02-19 11:49:45,955 | INFO | Posting plan to agentic API
+2026-02-19 11:51:47,996 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 11:51:47,997 | INFO | Plan posted to agentic API: None
+2026-02-19 11:51:47,997 | INFO | Plan generation completed in 122.04s
+2026-02-19 11:51:47,997 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 11:51:47,997 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 11:51:47,998 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 11:51:47,998 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 11:51:47,998 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 11:51:47,998 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 11:51:47,998 | INFO | Action succeeded on attempt 1
+2026-02-19 11:51:48,000 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 11:51:48,000 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 11:51:48,000 | INFO | \u2705 Cycle completed.
+2026-02-19 11:51:48,000 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 11:51:48,002 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart'}
+2026-02-19 11:51:48,002 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 11:51:48,002 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:51:48,003 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 11:51:48,003 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:51:48,003 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:51:48,003 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:51:48,003 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:51:48,003 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:51:48,004 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:51:48,004 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:51:48,004 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:51:48,004 | INFO | Plan generation started
+2026-02-19 11:51:48,004 | INFO | Screen info received: add product to the cart
+2026-02-19 11:51:48,004 | INFO | Posting plan to agentic API
+2026-02-19 11:53:50,071 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 11:53:50,073 | INFO | Plan posted to agentic API: None
+2026-02-19 11:53:50,074 | INFO | Plan generation completed in 122.07s
+2026-02-19 11:53:50,074 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 11:53:50,074 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 11:53:50,074 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 11:53:50,074 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 11:53:50,075 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 11:53:50,075 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 11:53:50,075 | INFO | Action succeeded on attempt 1
+2026-02-19 11:53:50,075 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 11:53:50,076 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 11:53:50,076 | INFO | \u2705 Cycle completed.
+2026-02-19 11:53:50,076 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 11:53:50,077 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart'}
+2026-02-19 11:53:50,077 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 11:53:50,077 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:53:50,077 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 11:53:50,077 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:53:50,077 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:53:50,077 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:53:50,078 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:53:50,078 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:53:50,078 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:53:50,078 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:53:50,078 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:53:50,078 | INFO | Plan generation started
+2026-02-19 11:53:50,079 | INFO | Screen info received: add product to the cart
+2026-02-19 11:53:50,079 | INFO | Posting plan to agentic API
+2026-02-19 11:55:52,164 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 11:55:52,166 | INFO | Plan posted to agentic API: None
+2026-02-19 11:55:52,166 | INFO | Plan generation completed in 122.09s
+2026-02-19 11:55:52,166 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 11:55:52,166 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 11:55:52,167 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 11:55:52,167 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 11:55:52,167 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 11:55:52,167 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 11:55:52,168 | INFO | Action succeeded on attempt 1
+2026-02-19 11:55:52,168 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 11:55:52,168 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 11:55:52,168 | INFO | \u2705 Cycle completed.
+2026-02-19 11:55:52,168 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 11:55:52,172 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'add product to the cart'}
+2026-02-19 11:55:52,172 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 11:55:52,172 | INFO | \U0001f680 Executing task via agentic loop: add product to the cart
+2026-02-19 11:55:52,172 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 11:55:52,172 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'add product to the cart'
+2026-02-19 11:55:52,172 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:55:52,172 | INFO | \U0001f441\ufe0f Vision required: False
+2026-02-19 11:55:52,172 | INFO | \U0001f6ab Vision not required for this task. Skipping perception.
+2026-02-19 11:55:52,172 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:55:52,173 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:55:52,173 | INFO | \U0001f6ab No perception data provided (vision skipped)
+2026-02-19 11:55:52,173 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+add product to the cart
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:55:52,173 | INFO | Plan generation started
+2026-02-19 11:55:52,173 | INFO | Screen info received: add product to the cart
+2026-02-19 11:55:52,173 | INFO | Posting plan to agentic API
+2026-02-19 11:56:40,482 | INFO | === Agentic AI System Started ===
+2026-02-19 11:56:40,507 | INFO | LLM initialized successfully
+2026-02-19 11:56:53,031 | INFO | === Agentic AI System Started ===
+2026-02-19 11:56:53,071 | INFO | LLM initialized successfully
+2026-02-19 11:58:31,889 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'please test this login screen', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application', 'description': 'Step 1: Launch the application'}, {'step': 2, 'action': 'Navigate to the Login screen', 'description': 'Step 2: Navigate to the Login screen'}, {'step': 3, 'action': 'Enter correct username in the username field', 'description': 'Step 3: Enter correct username in the username field'}, {'step': 4, 'action': 'Enter correct password in the password field', 'description': 'Step 4: Enter correct password in the password field'}, {'step': 5, 'action': "Click the 'Login' or 'Sign In' button (whichever is applicable)", 'description': "Step 5: Click the 'Login' or 'Sign In' button (whichever is applicable)"}, {'step': 6, 'action': "Verify that the user has been successfully logged in, for example by checking if the user's name is displayed on the main screen.", 'description': "Step 6: Verify that the user has been successfully logged in, for example by checking if the user's name is displayed on the main screen."}, {'step': 7, 'action': 'Close the application if necessary, to simulate a successful login and logout cycle.', 'description': 'Step 7: Close the application if necessary, to simulate a successful login and logout cycle.'}], 'timestamp': 1771482509.8070374}
+2026-02-19 11:58:31,892 | INFO | \U0001f680 Executing task via agentic loop: please test this login screen
+2026-02-19 11:58:31,892 | INFO | \U0001f4cb Steps to execute: 7 steps
+2026-02-19 11:58:31,892 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please test this login screen'
+2026-02-19 11:58:31,892 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 11:58:31,892 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 11:58:31,892 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 11:58:33,906 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 11:58:33,906 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 11:58:38,021 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 11:58:38,022 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 11:58:38,022 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 11:58:42,111 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 11:58:49,201 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 11:58:49,201 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 11:58:49,201 | INFO | \U0001f9e0 Planning action...
+2026-02-19 11:58:49,203 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 11:58:49,203 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 11:58:49,203 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+please test this login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 11:58:49,204 | INFO | Plan generation started
+2026-02-19 11:58:49,204 | INFO | Screen info received: please test this login screen
+2026-02-19 11:58:49,204 | INFO | Posting plan to agentic API
+2026-02-19 12:00:51,284 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 12:00:51,454 | INFO | Plan posted to agentic API: None
+2026-02-19 12:00:51,455 | INFO | Plan generation completed in 122.25s
+2026-02-19 12:00:51,455 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 12:00:51,456 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 12:00:51,456 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:00:51,456 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 12:00:51,460 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 12:00:51,460 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 12:00:51,461 | INFO | Action succeeded on attempt 1
+2026-02-19 12:00:51,461 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:00:51,461 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:00:51,462 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:00:51,462 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:00:55,552 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:00:55,554 | INFO | \u2705 Cycle completed.
+2026-02-19 12:00:55,554 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:00:55,565 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'please test this login screen'}
+2026-02-19 12:00:55,566 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 12:00:55,566 | INFO | \U0001f680 Executing task via agentic loop: please test this login screen
+2026-02-19 12:00:55,566 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 12:00:55,566 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please test this login screen'
+2026-02-19 12:00:55,566 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:00:55,566 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:00:55,566 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:00:57,572 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:00:57,573 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:01:01,637 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:01:01,637 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:01:01,637 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:01:05,719 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:01:12,793 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:01:12,794 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:01:12,794 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:01:12,795 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:01:12,795 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:01:12,795 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+please test this login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:01:12,795 | INFO | Plan generation started
+2026-02-19 12:01:12,796 | INFO | Screen info received: please test this login screen
+2026-02-19 12:01:12,796 | INFO | Posting plan to agentic API
+2026-02-19 12:03:14,858 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 12:03:16,903 | INFO | Plan posted to agentic API: None
+2026-02-19 12:03:16,904 | INFO | Plan generation completed in 124.11s
+2026-02-19 12:03:16,904 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 12:03:16,904 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 12:03:16,905 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:03:16,905 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 12:03:16,906 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 12:03:16,906 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 12:03:16,907 | INFO | Action succeeded on attempt 1
+2026-02-19 12:03:16,907 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:03:16,907 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:03:16,908 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:03:16,908 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:03:20,976 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:03:20,977 | INFO | \u2705 Cycle completed.
+2026-02-19 12:03:20,977 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:03:20,982 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'please test this login screen'}
+2026-02-19 12:03:20,982 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 12:03:20,982 | INFO | \U0001f680 Executing task via agentic loop: please test this login screen
+2026-02-19 12:03:20,984 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 12:03:20,984 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please test this login screen'
+2026-02-19 12:03:20,984 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:03:20,984 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:03:20,985 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:03:22,993 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:03:22,993 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:03:27,077 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:03:27,078 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:03:27,078 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:03:31,154 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:03:38,234 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:03:38,234 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:03:38,234 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:03:38,235 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:03:38,235 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:03:38,235 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+please test this login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:03:38,235 | INFO | Plan generation started
+2026-02-19 12:03:38,235 | INFO | Screen info received: please test this login screen
+2026-02-19 12:03:38,235 | INFO | Posting plan to agentic API
+2026-02-19 12:05:40,310 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    response = requests.post(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 12:05:40,319 | INFO | Plan posted to agentic API: None
+2026-02-19 12:05:40,319 | INFO | Plan generation completed in 122.08s
+2026-02-19 12:05:40,320 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 12:05:40,320 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 12:05:40,320 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:05:40,321 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 12:05:40,321 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 12:05:40,323 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 12:05:40,323 | INFO | Action succeeded on attempt 1
+2026-02-19 12:05:40,323 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:05:40,324 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:05:40,324 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:05:40,324 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:05:44,407 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:05:44,408 | INFO | \u2705 Cycle completed.
+2026-02-19 12:05:44,408 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:05:44,415 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'please test this login screen'}
+2026-02-19 12:05:44,416 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 12:05:44,416 | INFO | \U0001f680 Executing task via agentic loop: please test this login screen
+2026-02-19 12:05:44,416 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 12:05:44,416 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please test this login screen'
+2026-02-19 12:05:44,416 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:05:44,417 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:05:44,417 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:05:46,418 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:05:46,418 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:05:50,522 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:05:50,523 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:05:50,523 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:05:54,610 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:06:01,739 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:06:01,739 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:06:01,739 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:06:01,740 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:06:01,740 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:06:01,740 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+please test this login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:06:01,740 | INFO | Plan generation started
+2026-02-19 12:06:01,741 | INFO | Screen info received: please test this login screen
+2026-02-19 12:06:01,741 | INFO | Posting plan to agentic API
+2026-02-19 12:08:03,826 | ERROR | Failed posting to agentic API
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 534, in _make_request
+    response = conn.getresponse()
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connection.py", line 571, in getresponse
+    httplib_response = super().getresponse()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 1375, in getresponse
+    response.begin()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\http\client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "C:\Users\Tharushi\AppData\Local\Programs\Python\Python310\lib\socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\retry.py", line 490, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\util\util.py", line 39, in reraise
+    raise value
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\urllib3\connectionpool.py", line 367, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\backend\core\llm_agent.py", line 137, in _post_to_agentic
+    return None
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\SLIIT\Y4S1\RP\Project _works\ScreenAwareTaskAgent\venv\lib\site-packages\requests\adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+2026-02-19 12:08:03,843 | INFO | Plan posted to agentic API: None
+2026-02-19 12:08:03,844 | INFO | Plan generation completed in 122.1s
+2026-02-19 12:08:03,844 | WARNING | \u26a0\ufe0f LLM returned non-dict plan; wrapping into dict
+2026-02-19 12:08:03,844 | INFO | \u2705 Plan result (JSON): {'raw_plan': 'None'}
+2026-02-19 12:08:03,844 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:08:03,845 | INFO | Acting on JSON plan: {'raw_plan': 'None'}
+2026-02-19 12:08:03,845 | INFO | Mock HID received command: {'raw_plan': 'None'}
+2026-02-19 12:08:03,846 | INFO | Action result: {'status': 'success', 'command_executed': {'raw_plan': 'None'}}
+2026-02-19 12:08:03,846 | INFO | Action succeeded on attempt 1
+2026-02-19 12:08:03,847 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:08:03,847 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:08:03,847 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:08:03,847 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:08:07,920 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:08:07,920 | INFO | \u2705 Cycle completed.
+2026-02-19 12:08:07,921 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:08:22,003 | INFO | === Agentic AI System Started ===
+2026-02-19 12:08:22,033 | INFO | LLM initialized successfully
+2026-02-19 12:08:22,072 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'please test this login screen'}
+2026-02-19 12:08:22,072 | WARNING | \u26a0\ufe0f No steps provided, will attempt execution anyway
+2026-02-19 12:08:22,072 | INFO | \U0001f680 Executing task via agentic loop: please test this login screen
+2026-02-19 12:08:22,072 | INFO | \U0001f4cb Steps to execute: 0 steps
+2026-02-19 12:08:22,072 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please test this login screen'
+2026-02-19 12:08:22,072 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:08:22,073 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:08:22,073 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:08:24,074 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:08:24,074 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:08:28,131 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:08:28,131 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:08:28,131 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:08:32,201 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:09:02,719 | INFO | === Agentic AI System Started ===
+2026-02-19 12:09:02,750 | INFO | LLM initialized successfully
+2026-02-19 12:11:21,461 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'please test this login screen', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application (ensure the correct version if multiple are available)', 'description': 'Step 1: Launch the application (ensure the correct version if multiple are available)'}, {'step': 2, 'action': 'Navigate to the login screen (if necessary, bypass any welcome or introductory screens)', 'description': 'Step 2: Navigate to the login screen (if necessary, bypass any welcome or introductory screens)'}, {'step': 3, 'action': 'Enter a valid username in the appropriate input field', 'description': 'Step 3: Enter a valid username in the appropriate input field'}, {'step': 4, 'action': 'Enter a valid password in the appropriate input field', 'description': 'Step 4: Enter a valid password in the appropriate input field'}, {'step': 5, 'action': "Initiate the login process (typically a button labeled 'Login', 'Sign In', or similar)", 'description': "Step 5: Initiate the login process (typically a button labeled 'Login', 'Sign In', or similar)"}, {'step': 6, 'action': 'Verify successful login by checking for elements unique to the post-login interface (e.g., user profile, welcome message)', 'description': 'Step 6: Verify successful login by checking for elements unique to the post-login interface (e.g., user profile, welcome message)'}, {'step': 7, 'action': 'If an error occurs during login, capture and document the error message for further investigation', 'description': 'Step 7: If an error occurs during login, capture and document the error message for further investigation'}, {'step': 8, 'action': 'Record any relevant performance metrics (e.g., time taken to load the login screen, time taken to perform each step)', 'description': 'Step 8: Record any relevant performance metrics (e.g., time taken to load the login screen, time taken to perform each step)'}], 'timestamp': 1771483279.3798654}
+2026-02-19 12:11:21,463 | INFO | \U0001f680 Executing task via agentic loop: please test this login screen
+2026-02-19 12:11:21,464 | INFO | \U0001f4cb Steps to execute: 8 steps
+2026-02-19 12:11:21,464 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please test this login screen'
+2026-02-19 12:11:21,464 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:11:21,465 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:11:21,465 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:11:23,472 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:11:23,472 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:11:27,558 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:11:27,558 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:11:27,559 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:11:31,653 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:11:38,755 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:11:38,756 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:11:38,756 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:11:38,757 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:11:38,758 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:11:38,758 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+please test this login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:11:38,759 | INFO | Plan generation started
+2026-02-19 12:11:38,759 | INFO | Screen info received: please test this login screen
+2026-02-19 12:12:06,075 | INFO | HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2026-02-19 12:12:46,522 | INFO | Raw LLM output:  {
+  "action": "type",
+  "target": "#username",
+  "params": {"value": "your_username"}
+},
+{
+  "action": "type",
+  "target": "#password",
+  "params": {"value": "your_password"}
+},
+{
+  "action": "click"
+2026-02-19 12:12:46,522 | WARNING | LLM output not valid JSON � wrapping raw text
+2026-02-19 12:12:46,522 | INFO | Plan generation completed in 67.76s
+2026-02-19 12:12:46,523 | INFO | \u2705 Plan result (JSON): {'raw': ' {\n  "action": "type",\n  "target": "#username",\n  "params": {"value": "your_username"}\n},\n{\n  "action": "type",\n  "target": "#password",\n  "params": {"value": "your_password"}\n},\n{\n  "action": "click",\n  "target": "#login-button"\n}'}
+2026-02-19 12:12:46,523 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:12:46,523 | INFO | Acting on JSON plan: {'raw': ' {\n  "action": "type",\n  "target": "#username",\n  "params": {"value": "your_username"}\n},\n{\n  "action": "type",\n  "target": "#password",\n  "params": {"value": "your_password"}\n},\n{\n  "action": "click",\n  "target": "#login-button"\n}'}
+2026-02-19 12:12:46,556 | INFO | Mock HID received command: {'raw': ' {\n  "action": "type",\n  "target": "#username",\n  "params": {"value": "your_username"}\n},\n{\n  "action": "type",\n  "target": "#password",\n  "params": {"value": "your_password"}\n},\n{\n  "action": "click",\n  "target": "#login-button"\n}'}
+2026-02-19 12:12:46,557 | INFO | Action result: {'status': 'success', 'command_executed': {'raw': ' {\n  "action": "type",\n  "target": "#username",\n  "params": {"value": "your_username"}\n},\n{\n  "action": "type",\n  "target": "#password",\n  "params": {"value": "your_password"}\n},\n{\n  "action": "click",\n  "target": "#login-button"\n}'}}
+2026-02-19 12:12:46,557 | INFO | Action succeeded on attempt 1
+2026-02-19 12:12:46,558 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:12:46,558 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:12:46,558 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:12:46,558 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:12:50,629 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:12:50,629 | INFO | \u2705 Cycle completed.
+2026-02-19 12:12:50,630 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:18:39,684 | INFO | === Agentic AI System Started ===
+2026-02-19 12:18:39,736 | INFO | LLM initialized successfully
+2026-02-19 12:20:02,025 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'test the login screen', 'chosen': 'rewritten', 'steps': [{'step': 1, 'action': '1. Launch the application', 'description': 'Step 1: 1. Launch the application'}, {'step': 2, 'action': 'Navigate to the login screen (if necessary)', 'description': 'Step 2: Navigate to the login screen (if necessary)'}, {'step': 3, 'action': 'Enter valid credentials into the username and password fields', 'description': 'Step 3: Enter valid credentials into the username and password fields'}, {'step': 4, 'action': "Initiate the login process by clicking/tapping the 'Login', 'Sign In', or equivalent button", 'description': "Step 4: Initiate the login process by clicking/tapping the 'Login', 'Sign In', or equivalent button"}, {'step': 5, 'action': 'Verify that the user is successfully logged in by checking for elements that are only visible after a successful login, such as a welcome message or account details.', 'description': 'Step 5: Verify that the user is successfully logged in by checking for elements that are only visible after a successful login, such as a welcome message or account details.'}, {'step': 6, 'action': '(Optional) Assert that any error messages do not appear if incorrect credentials were provided during the login attempt', 'description': 'Step 6: (Optional) Assert that any error messages do not appear if incorrect credentials were provided during the login attempt'}], 'timestamp': 1771483799.9170392}
+2026-02-19 12:20:02,026 | INFO | \U0001f680 Executing task via agentic loop: test the login screen
+2026-02-19 12:20:02,026 | INFO | \U0001f4cb Steps to execute: 6 steps
+2026-02-19 12:20:02,026 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'test the login screen'
+2026-02-19 12:20:02,027 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:20:02,027 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:20:02,027 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:20:04,039 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:20:04,039 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:20:08,123 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:20:08,123 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:20:08,125 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:20:12,198 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:20:19,347 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:20:19,348 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:20:19,348 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:20:19,348 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:20:19,348 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:20:19,349 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+test the login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:20:19,349 | INFO | Plan generation started
+2026-02-19 12:20:19,349 | INFO | Screen info received: test the login screen
+2026-02-19 12:20:43,930 | INFO | HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2026-02-19 12:20:56,973 | INFO | Raw LLM output:  {
+  "action": "navigate",
+  "target": ".login-screen",
+  "params": {}
+}
+2026-02-19 12:20:56,973 | INFO | JSON parsing successful
+2026-02-19 12:20:56,973 | INFO | Plan generation completed in 37.62s
+2026-02-19 12:20:56,974 | INFO | \u2705 Plan result (JSON): {'action': 'navigate', 'target': '.login-screen', 'params': {}}
+2026-02-19 12:20:56,975 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:20:56,975 | INFO | Acting on JSON plan: {'action': 'navigate', 'target': '.login-screen', 'params': {}}
+2026-02-19 12:20:56,976 | INFO | Mock HID received command: {'action': 'navigate', 'target': '.login-screen', 'params': {}}
+2026-02-19 12:20:56,977 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'navigate', 'target': '.login-screen', 'params': {}}}
+2026-02-19 12:20:56,978 | INFO | Action succeeded on attempt 1
+2026-02-19 12:20:56,978 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:20:56,978 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:20:56,979 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:20:56,979 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:21:01,067 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:21:01,068 | INFO | \u2705 Cycle completed.
+2026-02-19 12:21:01,068 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:22:20,763 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'test the login screen', 'chosen': 'rewritten', 'steps': [{'step': 1, 'action': '1. Launch the application', 'description': 'Step 1: 1. Launch the application'}, {'step': 2, 'action': 'Navigate to the login screen', 'description': 'Step 2: Navigate to the login screen'}, {'step': 3, 'action': 'Enter correct username and password in the respective fields', 'description': 'Step 3: Enter correct username and password in the respective fields'}, {'step': 4, 'action': "Tap or click on the 'Login' or 'Submit' button (depending on the interface design)", 'description': "Step 4: Tap or click on the 'Login' or 'Submit' button (depending on the interface design)"}, {'step': 5, 'action': 'Verify that the user is successfully logged in by checking for elements only accessible to authenticated users, such as account details or restricted features.', 'description': 'Step 5: Verify that the user is successfully logged in by checking for elements only accessible to authenticated users, such as account details or restricted features.'}, {'step': 6, 'action': 'Close the login modal/screen if it was temporarily opened and not part of the main application UI', 'description': 'Step 6: Close the login modal/screen if it was temporarily opened and not part of the main application UI'}], 'timestamp': 1771483938.680671}
+2026-02-19 12:22:20,764 | INFO | \U0001f680 Executing task via agentic loop: test the login screen
+2026-02-19 12:22:20,764 | INFO | \U0001f4cb Steps to execute: 6 steps
+2026-02-19 12:22:20,764 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'test the login screen'
+2026-02-19 12:22:20,764 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:22:20,764 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:22:20,764 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:22:22,769 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:22:22,769 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:22:26,851 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:22:26,852 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:22:26,852 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:22:30,952 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:22:38,061 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:22:38,061 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:22:38,062 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:22:38,063 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:22:38,063 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:22:38,065 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+test the login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:22:38,065 | INFO | Plan generation started
+2026-02-19 12:22:38,065 | INFO | Screen info received: test the login screen
+2026-02-19 12:23:02,593 | INFO | HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2026-02-19 12:23:11,606 | INFO | Raw LLM output:  {
+  "action": "navigate",
+  "target": "#login-screen",
+  "params": {}
+}
+2026-02-19 12:23:11,606 | INFO | JSON parsing successful
+2026-02-19 12:23:11,607 | INFO | Plan generation completed in 33.54s
+2026-02-19 12:23:11,607 | INFO | \u2705 Plan result (JSON): {'action': 'navigate', 'target': '#login-screen', 'params': {}}
+2026-02-19 12:23:11,607 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:23:11,607 | INFO | Acting on JSON plan: {'action': 'navigate', 'target': '#login-screen', 'params': {}}
+2026-02-19 12:23:11,608 | INFO | Mock HID received command: {'action': 'navigate', 'target': '#login-screen', 'params': {}}
+2026-02-19 12:23:11,608 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'navigate', 'target': '#login-screen', 'params': {}}}
+2026-02-19 12:23:11,608 | INFO | Action succeeded on attempt 1
+2026-02-19 12:23:11,608 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:23:11,609 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:23:11,609 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:23:11,609 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:23:15,660 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:23:15,660 | INFO | \u2705 Cycle completed.
+2026-02-19 12:23:15,660 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:23:27,095 | INFO | === Agentic AI System Started ===
+2026-02-19 12:23:27,122 | INFO | LLM initialized successfully
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2026-02-19 12:32:59,529 | INFO | === Agentic AI System Started ===
+2026-02-19 12:32:59,556 | INFO | LLM initialized successfully
+2026-02-19 12:34:48,926 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'test the login screen', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application', 'description': 'Step 1: Launch the application'}, {'step': 2, 'action': 'Navigate to the login screen', 'description': 'Step 2: Navigate to the login screen'}, {'step': 3, 'action': 'Enter correct username and password', 'description': 'Step 3: Enter correct username and password'}, {'step': 4, 'action': 'Tap/Click on the login button or submit button', 'description': 'Step 4: Tap/Click on the login button or submit button'}, {'step': 5, 'action': 'Verify that the user is successfully logged in (this could involve checking for a specific element, screen title change, or any other indicator that confirms successful login)', 'description': 'Step 5: Verify that the user is successfully logged in (this could involve checking for a specific element, screen title change, or any other indicator that confirms successful login)'}, {'step': 6, 'action': 'If required, handle any potential error messages during the login process and verify their correctness', 'description': 'Step 6: If required, handle any potential error messages during the login process and verify their correctness'}, {'step': 7, 'action': 'Perform any additional tests such as testing the forgotten password link or multi-factor authentication if applicable', 'description': 'Step 7: Perform any additional tests such as testing the forgotten password link or multi-factor authentication if applicable'}, {'step': 8, 'action': 'Log out of the application to prepare for subsequent tests or clean up.', 'description': 'Step 8: Log out of the application to prepare for subsequent tests or clean up.'}], 'timestamp': 1771484686.682407}
+2026-02-19 12:34:48,970 | INFO | \U0001f680 Executing task via agentic loop: test the login screen
+2026-02-19 12:34:48,971 | INFO | \U0001f4cb Steps to execute: 8 steps
+2026-02-19 12:34:48,971 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'test the login screen'
+2026-02-19 12:34:48,971 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-02-19 12:34:48,971 | INFO | \U0001f441\ufe0f Vision required: True
+2026-02-19 12:34:48,971 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-02-19 12:34:50,977 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-02-19 12:34:50,977 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:34:55,065 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:34:55,066 | INFO | \U0001f441\ufe0f Perceiving environment...
+2026-02-19 12:34:55,066 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:34:59,181 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:35:06,271 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:35:06,272 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:35:06,272 | INFO | \U0001f9e0 Planning action...
+2026-02-19 12:35:06,273 | INFO | \U0001f9e0 Planning phase started
+2026-02-19 12:35:06,273 | INFO | \U0001f441\ufe0f Using perception data for planning
+2026-02-19 12:35:06,274 | INFO | \U0001f4e8 LLM Prompt:
+
+You are an AI automation agent.
+
+User Task:
+test the login screen
+
+Screen Text (OCR Output):
+No screen data available
+
+Instructions:
+- Decide the next best action.
+- Return ONLY valid JSON.
+- Format:
+{
+    "action": "<click/type/scroll/wait/etc>",
+    "target": "<UI element or description>",
+    "stop_vision": false
+}
+
+2026-02-19 12:35:06,274 | INFO | Plan generation started
+2026-02-19 12:35:06,275 | INFO | Screen info received: test the login screen
+2026-02-19 12:35:28,938 | INFO | HTTP Request: POST http://127.0.0.1:11434/api/generate "HTTP/1.1 200 OK"
+2026-02-19 12:35:38,059 | INFO | Raw LLM output:  {
+  "action": "navigate",
+  "target": "#login-page",
+  "params": {}
+}
+2026-02-19 12:35:38,060 | INFO | JSON parsing successful
+2026-02-19 12:35:38,060 | INFO | Plan generation completed in 31.79s
+2026-02-19 12:35:38,060 | INFO | \u2705 Plan result (JSON): {'action': 'navigate', 'target': '#login-page', 'params': {}}
+2026-02-19 12:35:38,061 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-02-19 12:35:38,061 | INFO | Acting on JSON plan: {'action': 'navigate', 'target': '#login-page', 'params': {}}
+2026-02-19 12:35:38,062 | INFO | Mock HID received command: {'action': 'navigate', 'target': '#login-page', 'params': {}}
+2026-02-19 12:35:38,063 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'navigate', 'target': '#login-page', 'params': {}}}
+2026-02-19 12:35:38,063 | INFO | Action succeeded on attempt 1
+2026-02-19 12:35:38,063 | INFO | \U0001f4ca Evaluating result...
+2026-02-19 12:35:38,064 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-02-19 12:35:38,064 | INFO | \U0001f51a Stopping vision at end of cycle.
+2026-02-19 12:35:38,064 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:35:42,096 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:35:42,097 | INFO | \u2705 Cycle completed.
+2026-02-19 12:35:42,097 | INFO | \u2705 Execution completed. Result: {'success': True}
+2026-02-19 12:41:02,142 | INFO | === Agentic AI System Started ===
+2026-02-19 12:41:02,174 | INFO | LLM initialized successfully
+
+
+
+
+
+
+
+
+
+
+
+2026-02-19 12:44:18,732 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:44:25,868 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:44:25,868 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:44:25,868 | INFO | \u2705 Step 3 completed: success
+2026-02-19 12:44:25,869 | INFO | \U0001f4cc Step 4/7: Tap/Click the 'Login' or 'Submit' button (depending on the UI design)
+2026-02-19 12:44:25,869 | INFO | \U0001f5b1\ufe0f Executing step 4...
+2026-02-19 12:44:25,869 | INFO | Acting on JSON plan: {'action': "Tap/Click the 'Login' or 'Submit' button (depending on the UI design)", 'target': "Step 4: Tap/Click the 'Login' or 'Submit' button (depending on the UI design)", 'params': {}, 'step_number': 4, 'total_steps': 7}
+2026-02-19 12:44:25,869 | INFO | Mock HID received command: {'action': "Tap/Click the 'Login' or 'Submit' button (depending on the UI design)", 'target': "Step 4: Tap/Click the 'Login' or 'Submit' button (depending on the UI design)", 'params': {}, 'step_number': 4, 'total_steps': 7}
+2026-02-19 12:44:25,870 | INFO | Action result: {'status': 'success', 'command_executed': {'action': "Tap/Click the 'Login' or 'Submit' button (depending on the UI design)", 'target': "Step 4: Tap/Click the 'Login' or 'Submit' button (depending on the UI design)", 'params': {}, 'step_number': 4, 'total_steps': 7}}
+2026-02-19 12:44:25,870 | INFO | Action succeeded on attempt 1
+2026-02-19 12:44:26,882 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:44:30,968 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:44:38,080 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:44:38,081 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:44:38,081 | INFO | \u2705 Step 4 completed: success
+2026-02-19 12:44:38,081 | INFO | \U0001f4cc Step 5/7: Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)
+2026-02-19 12:44:38,081 | INFO | \U0001f5b1\ufe0f Executing step 5...
+2026-02-19 12:44:38,081 | INFO | Acting on JSON plan: {'action': 'Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)', 'target': 'Step 5: Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)', 'params': {}, 'step_number': 5, 'total_steps': 7}
+2026-02-19 12:44:38,082 | INFO | Mock HID received command: {'action': 'Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)', 'target': 'Step 5: Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)', 'params': {}, 'step_number': 5, 'total_steps': 7}
+2026-02-19 12:44:38,083 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)', 'target': 'Step 5: Verify successful login by checking for elements that are visible only after a successful login (e.g., user profile, welcome message, etc.)', 'params': {}, 'step_number': 5, 'total_steps': 7}}
+2026-02-19 12:44:38,083 | INFO | Action succeeded on attempt 1
+2026-02-19 12:44:39,098 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:44:43,209 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:44:50,307 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:44:50,308 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:44:50,308 | INFO | \u2705 Step 5 completed: success
+2026-02-19 12:44:50,308 | INFO | \U0001f4cc Step 6/7: If unsuccessful login occurs, verify appropriate error messages are displayed.
+2026-02-19 12:44:50,308 | INFO | \U0001f5b1\ufe0f Executing step 6...
+2026-02-19 12:44:50,308 | INFO | Acting on JSON plan: {'action': 'If unsuccessful login occurs, verify appropriate error messages are displayed.', 'target': 'Step 6: If unsuccessful login occurs, verify appropriate error messages are displayed.', 'params': {}, 'step_number': 6, 'total_steps': 7}
+2026-02-19 12:44:50,309 | INFO | Mock HID received command: {'action': 'If unsuccessful login occurs, verify appropriate error messages are displayed.', 'target': 'Step 6: If unsuccessful login occurs, verify appropriate error messages are displayed.', 'params': {}, 'step_number': 6, 'total_steps': 7}
+2026-02-19 12:44:50,309 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'If unsuccessful login occurs, verify appropriate error messages are displayed.', 'target': 'Step 6: If unsuccessful login occurs, verify appropriate error messages are displayed.', 'params': {}, 'step_number': 6, 'total_steps': 7}}
+2026-02-19 12:44:50,309 | INFO | Action succeeded on attempt 1
+2026-02-19 12:44:51,316 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:44:55,425 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:45:02,543 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:45:02,543 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:45:02,543 | INFO | \u2705 Step 6 completed: success
+2026-02-19 12:45:02,544 | INFO | \U0001f4cc Step 7/7: Record the status of the test case (pass/fail) in the test report.
+2026-02-19 12:45:02,544 | INFO | \U0001f5b1\ufe0f Executing step 7...
+2026-02-19 12:45:02,544 | INFO | Acting on JSON plan: {'action': 'Record the status of the test case (pass/fail) in the test report.', 'target': 'Step 7: Record the status of the test case (pass/fail) in the test report.', 'params': {}, 'step_number': 7, 'total_steps': 7}
+2026-02-19 12:45:02,544 | INFO | Mock HID received command: {'action': 'Record the status of the test case (pass/fail) in the test report.', 'target': 'Step 7: Record the status of the test case (pass/fail) in the test report.', 'params': {}, 'step_number': 7, 'total_steps': 7}
+2026-02-19 12:45:02,545 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'Record the status of the test case (pass/fail) in the test report.', 'target': 'Step 7: Record the status of the test case (pass/fail) in the test report.', 'params': {}, 'step_number': 7, 'total_steps': 7}}
+2026-02-19 12:45:02,545 | INFO | Action succeeded on attempt 1
+2026-02-19 12:45:02,545 | INFO | \u2705 Step 7 completed: success
+2026-02-19 12:45:02,545 | INFO | \U0001f51a Stopping vision service...
+2026-02-19 12:45:02,546 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:45:06,601 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:45:06,601 | INFO | \U0001f4ca Execution complete: 7/7 steps successful
+2026-02-19 12:45:06,601 | INFO | \u2705 Execution completed. Success: True
+
+
+
+
+
+
+
+
+
+
+
+
+2026-02-19 12:46:38,881 | INFO | === Agentic AI System Started ===
+2026-02-19 12:46:38,920 | INFO | LLM initialized successfully
+2026-02-19 12:47:41,384 | INFO | \U0001f4e5 Received LLM steps payload: {'instruction': 'test the login screen', 'chosen': 'original', 'steps': [{'step': 1, 'action': 'Launch the application', 'description': 'Step 1: Launch the application'}, {'step': 2, 'action': 'Navigate to the login screen', 'description': 'Step 2: Navigate to the login screen'}, {'step': 3, 'action': 'Enter valid credentials (username and password) in the respective fields', 'description': 'Step 3: Enter valid credentials (username and password) in the respective fields'}, {'step': 4, 'action': "Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'description': "Step 4: Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form"}, {'step': 5, 'action': 'Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'description': 'Step 5: Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information'}, {'step': 6, 'action': '(Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'description': 'Step 6: (Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly'}, {'step': 7, 'action': '(Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'description': 'Step 7: (Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses'}], 'timestamp': 1771485459.331239}
+2026-02-19 12:47:41,385 | INFO | \U0001f3af Mode: Executing 7 predefined steps
+2026-02-19 12:47:41,385 | INFO | \U0001f3af Executing 7 predefined steps for: 'test the login screen'
+2026-02-19 12:47:41,385 | INFO | \U0001f4e1 Starting vision service for step execution...
+2026-02-19 12:47:41,385 | INFO | \u27a1\ufe0f Sending request to START vision service...
+2026-02-19 12:47:45,459 | ERROR | \u274c Failed to start vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:47:47,467 | INFO | \U0001f441\ufe0f Capturing initial screen state...
+2026-02-19 12:47:47,467 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:47:51,543 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:47:58,622 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:47:58,622 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:47:58,622 | INFO | \U0001f4cc Step 1/7: Launch the application
+2026-02-19 12:47:58,622 | INFO | \U0001f5b1\ufe0f Executing step 1...
+2026-02-19 12:47:58,622 | INFO | Acting on JSON plan: {'action': 'Launch the application', 'target': 'Step 1: Launch the application', 'params': {}, 'step_number': 1, 'total_steps': 7}
+2026-02-19 12:47:58,683 | INFO | Mock HID received command: {'action': 'Launch the application', 'target': 'Step 1: Launch the application', 'params': {}, 'step_number': 1, 'total_steps': 7}
+2026-02-19 12:47:58,683 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'Launch the application', 'target': 'Step 1: Launch the application', 'params': {}, 'step_number': 1, 'total_steps': 7}}
+2026-02-19 12:47:58,683 | INFO | Action succeeded on attempt 1
+2026-02-19 12:47:59,695 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:48:03,782 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:10,861 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:10,861 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:48:10,861 | INFO | \u2705 Step 1 completed: success
+2026-02-19 12:48:10,861 | INFO | \U0001f4cc Step 2/7: Navigate to the login screen
+2026-02-19 12:48:10,861 | INFO | \U0001f5b1\ufe0f Executing step 2...
+2026-02-19 12:48:10,861 | INFO | Acting on JSON plan: {'action': 'Navigate to the login screen', 'target': 'Step 2: Navigate to the login screen', 'params': {}, 'step_number': 2, 'total_steps': 7}
+2026-02-19 12:48:10,862 | INFO | Mock HID received command: {'action': 'Navigate to the login screen', 'target': 'Step 2: Navigate to the login screen', 'params': {}, 'step_number': 2, 'total_steps': 7}
+2026-02-19 12:48:10,862 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'Navigate to the login screen', 'target': 'Step 2: Navigate to the login screen', 'params': {}, 'step_number': 2, 'total_steps': 7}}
+2026-02-19 12:48:10,862 | INFO | Action succeeded on attempt 1
+2026-02-19 12:48:11,877 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:48:15,946 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:23,024 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:23,024 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:48:23,024 | INFO | \u2705 Step 2 completed: success
+2026-02-19 12:48:23,024 | INFO | \U0001f4cc Step 3/7: Enter valid credentials (username and password) in the respective fields
+2026-02-19 12:48:23,024 | INFO | \U0001f5b1\ufe0f Executing step 3...
+2026-02-19 12:48:23,024 | INFO | Acting on JSON plan: {'action': 'Enter valid credentials (username and password) in the respective fields', 'target': 'Step 3: Enter valid credentials (username and password) in the respective fields', 'params': {}, 'step_number': 3, 'total_steps': 7}
+2026-02-19 12:48:23,025 | INFO | Mock HID received command: {'action': 'Enter valid credentials (username and password) in the respective fields', 'target': 'Step 3: Enter valid credentials (username and password) in the respective fields', 'params': {}, 'step_number': 3, 'total_steps': 7}
+2026-02-19 12:48:23,025 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'Enter valid credentials (username and password) in the respective fields', 'target': 'Step 3: Enter valid credentials (username and password) in the respective fields', 'params': {}, 'step_number': 3, 'total_steps': 7}}
+2026-02-19 12:48:23,025 | INFO | Action succeeded on attempt 1
+2026-02-19 12:48:24,025 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:48:28,099 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:35,207 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:35,207 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:48:35,207 | INFO | \u2705 Step 3 completed: success
+2026-02-19 12:48:35,207 | INFO | \U0001f4cc Step 4/7: Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form
+2026-02-19 12:48:35,207 | INFO | \U0001f5b1\ufe0f Executing step 4...
+2026-02-19 12:48:35,207 | INFO | Acting on JSON plan: {'action': "Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'target': "Step 4: Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'params': {}, 'step_number': 4, 'total_steps': 7}
+2026-02-19 12:48:35,208 | INFO | Mock HID received command: {'action': "Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'target': "Step 4: Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'params': {}, 'step_number': 4, 'total_steps': 7}
+2026-02-19 12:48:35,208 | INFO | Action result: {'status': 'success', 'command_executed': {'action': "Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'target': "Step 4: Tap or click on the 'Login', 'Sign In', or equivalent button to submit the form", 'params': {}, 'step_number': 4, 'total_steps': 7}}
+2026-02-19 12:48:35,208 | INFO | Action succeeded on attempt 1
+2026-02-19 12:48:36,218 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:48:40,296 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:47,412 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:47,412 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:48:47,412 | INFO | \u2705 Step 4 completed: success
+2026-02-19 12:48:47,412 | INFO | \U0001f4cc Step 5/7: Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information
+2026-02-19 12:48:47,412 | INFO | \U0001f5b1\ufe0f Executing step 5...
+2026-02-19 12:48:47,412 | INFO | Acting on JSON plan: {'action': 'Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'target': 'Step 5: Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'params': {}, 'step_number': 5, 'total_steps': 7}
+2026-02-19 12:48:47,413 | INFO | Mock HID received command: {'action': 'Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'target': 'Step 5: Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'params': {}, 'step_number': 5, 'total_steps': 7}
+2026-02-19 12:48:47,413 | INFO | Action result: {'status': 'success', 'command_executed': {'action': 'Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'target': 'Step 5: Verify that the login is successful by checking for elements specific to the authenticated user interface, such as a welcome message or profile information', 'params': {}, 'step_number': 5, 'total_steps': 7}}
+2026-02-19 12:48:47,413 | INFO | Action succeeded on attempt 1
+2026-02-19 12:48:48,427 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:48:52,484 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:59,574 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:48:59,574 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:48:59,574 | INFO | \u2705 Step 5 completed: success
+2026-02-19 12:48:59,574 | INFO | \U0001f4cc Step 6/7: (Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly
+2026-02-19 12:48:59,945 | INFO | \U0001f5b1\ufe0f Executing step 6...
+2026-02-19 12:48:59,946 | INFO | Acting on JSON plan: {'action': '(Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'target': 'Step 6: (Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'params': {}, 'step_number': 6, 'total_steps': 7}
+2026-02-19 12:48:59,946 | INFO | Mock HID received command: {'action': '(Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'target': 'Step 6: (Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'params': {}, 'step_number': 6, 'total_steps': 7}
+2026-02-19 12:48:59,947 | INFO | Action result: {'status': 'success', 'command_executed': {'action': '(Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'target': 'Step 6: (Optional) Handle any potential error messages or incorrect credentials attempts and repeat steps 2-5 accordingly', 'params': {}, 'step_number': 6, 'total_steps': 7}}
+2026-02-19 12:48:59,947 | INFO | Action succeeded on attempt 1
+2026-02-19 12:49:00,955 | INFO | Requesting vision perception (start -> wait -> stop)...
+2026-02-19 12:49:05,041 | ERROR | Failed to start vision capture: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/start (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:49:12,161 | ERROR | Vision stop request failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:49:12,161 | ERROR | Perception error: {'error': 'vision_unavailable', 'detail': 'HTTPConnectionPool(host=\'localhost\', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host=\'localhost\', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))'}
+2026-02-19 12:49:12,161 | INFO | \u2705 Step 6 completed: success
+2026-02-19 12:49:12,162 | INFO | \U0001f4cc Step 7/7: (Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses
+2026-02-19 12:49:12,162 | INFO | \U0001f5b1\ufe0f Executing step 7...
+2026-02-19 12:49:12,162 | INFO | Acting on JSON plan: {'action': '(Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'target': 'Step 7: (Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'params': {}, 'step_number': 7, 'total_steps': 7}
+2026-02-19 12:49:12,162 | INFO | Mock HID received command: {'action': '(Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'target': 'Step 7: (Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'params': {}, 'step_number': 7, 'total_steps': 7}
+2026-02-19 12:49:12,163 | INFO | Action result: {'status': 'success', 'command_executed': {'action': '(Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'target': 'Step 7: (Optional) Test negative scenarios like entering invalid credentials, leaving fields empty, or using special characters to check for appropriate system responses', 'params': {}, 'step_number': 7, 'total_steps': 7}}
+2026-02-19 12:49:12,163 | INFO | Action succeeded on attempt 1
+2026-02-19 12:49:12,163 | INFO | \u2705 Step 7 completed: success
+2026-02-19 12:49:12,163 | INFO | \U0001f51a Stopping vision service...
+2026-02-19 12:49:12,163 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-02-19 12:49:16,227 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /vision/stop (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8001): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+2026-02-19 12:49:16,227 | INFO | \U0001f4ca Execution complete: 7/7 steps successful
+2026-02-19 12:49:16,227 | INFO | \u2705 Execution completed. Success: True

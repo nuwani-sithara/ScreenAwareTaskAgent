@@ -73,7 +73,7 @@ Instructions:
     # --------------------------------------
     # Call LLM
     # --------------------------------------
-    action_json = generate_plan(structured_prompt)
+    action_json = generate_plan(user_task)
 
     # --------------------------------------
     # Safety: Ensure dict output
