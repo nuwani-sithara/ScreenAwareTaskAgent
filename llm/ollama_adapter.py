@@ -39,7 +39,21 @@ def _extract_steps_from_text(output_text: str) -> List[Dict]:
         except Exception:
             continue
 
-    # 2) Try numbered lists like '1. Do X' or '2) Do Y'
+    # 2) Try inline numbered steps FIRST (e.g., "1. Do X 2. Do Y 3. Do Z")
+    # This handles output where all steps are on one line
+    if not steps:
+        inline_matches = re.findall(r'(\d+)\.\s*(.+?)(?=\s+\d+\.|$)', text, re.DOTALL)
+        if inline_matches and len(inline_matches) > 1:  # Must have at least 2 steps to be inline format
+            for num, action in inline_matches:
+                try:
+                    n = int(num)
+                    a = action.strip()
+                    if a:
+                        steps.append({"step": n, "action": a, "description": f"Step {n}: {a}"})
+                except Exception:
+                    continue
+    
+    # 3) Try numbered lists on separate lines like '1. Do X' or '2) Do Y'
     if not steps:
         numbered = re.findall(r"(?m)^\s*(\d+)[\.)]\s*(.*?)(?=^\s*\d+[\.)]\s*|\Z)", text, re.S)
         if numbered:
@@ -51,32 +65,6 @@ def _extract_steps_from_text(output_text: str) -> List[Dict]:
                         steps.append({"step": n, "action": a, "description": f"Step {n}: {a}"})
                 except Exception:
                     continue
-    
-    # 2b) Try inline numbered steps (e.g., "Do X 2. Do Y 3. Do Z")
-    if not steps:
-        # Match patterns like "text 2. more text 3. even more" where numbers appear mid-string
-        inline_pattern = r"(?:^|(?<=\d\.)\s*)([^\.]+?)(?:\s+(\d+)\.|$)"
-        parts = re.split(r'\s+(\d+)\.', text)
-        if len(parts) > 2:  # Has inline numbering
-            temp_steps = []
-            i = 0
-            while i < len(parts):
-                if i == 0 and parts[i].strip():
-                    # First part before any number
-                    temp_steps.append((1, parts[i].strip()))
-                    i += 1
-                elif i + 1 < len(parts) and parts[i].isdigit():
-                    # Found a number followed by text
-                    num = int(parts[i])
-                    action = parts[i + 1].strip()
-                    if action:
-                        temp_steps.append((num, action))
-                    i += 2
-                else:
-                    i += 1
-            if temp_steps:
-                for n, a in temp_steps:
-                    steps.append({"step": n, "action": a, "description": f"Step {n}: {a}"})
 
 
     # 3) Bullet lists

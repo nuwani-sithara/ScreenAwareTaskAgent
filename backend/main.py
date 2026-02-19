@@ -48,8 +48,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import logging
 
-from backend.core.agentic_loop import run_cycle
-from llm.interactive_generate import run_interactive
+from backend.core.agentic_loop import run_cycle, execute_steps
 
 # ------------------------------------
 # Logging Setup
@@ -98,36 +97,41 @@ def run_agentic_cycle(request: TaskRequest):
 
 
 # ------------------------------------
-# Optional LLM Steps Receiver
+# Optional LLM Steps Receiver & Executor
 # ------------------------------------
 @app.post("/llm/steps")
 async def receive_llm_steps(request: Request):
+    """Receive LLM-generated steps and execute them via agentic loop."""
     try:
         payload = await request.json()
-        logging.info(f"📥 Received payload: {payload}")
+        logging.info(f"📥 Received LLM steps payload: {payload}")
 
-        if isinstance(payload, str):
-            instruction = payload
-        elif isinstance(payload, dict):
-            instruction = payload.get("instruction")
-        else:
-            return {"error": "Invalid payload format"}
-
+        instruction = payload.get("instruction", "")
+        steps = payload.get("steps", [])
+        
         if not instruction:
-            return {"error": "No instruction provided"}
-
-        result = run_interactive(instruction=instruction)
-
-        generated = result.get("generated", {})
-        filtered = {
-            "instruction": generated.get("instruction"),
-            "category": generated.get("category")
+            return {"status": "error", "detail": "No instruction provided"}
+        
+        # Decide execution mode
+        if steps and len(steps) > 0:
+            # Mode 1: Execute provided steps (step-by-step execution)
+            logging.info(f"🎯 Mode: Executing {len(steps)} predefined steps")
+            execution_result = execute_steps(steps, instruction, use_vision=True)
+        else:
+            # Mode 2: No steps provided, use autonomous agentic loop
+            logging.warning("⚠️ No steps provided, using autonomous agentic loop")
+            logging.info(f"🚀 Executing task via autonomous agentic loop: {instruction}")
+            execution_result = run_cycle(user_task=instruction)
+        
+        logging.info(f"✅ Execution completed. Success: {execution_result.get('evaluation', {}).get('success', False)}")
+        
+        return {
+            "status": "executed",
+            "instruction": instruction,
+            "steps_count": len(steps),
+            "execution_result": execution_result
         }
 
-        logging.info("📤 Filtered response: %s", filtered)
-
-        return filtered
-
     except Exception as e:
-        logging.exception("Failed to process LLM steps")
+        logging.exception("❌ Failed to execute LLM steps")
         return {"status": "error", "detail": str(e)}

@@ -209,6 +209,106 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
     }
 
 
+def execute_steps(steps: list, instruction: str, use_vision: bool = True):
+    """
+    Execute a predefined list of steps (from LLM planner) instead of doing real-time planning.
+    
+    Args:
+        steps: List of step dicts with 'action' and 'description' fields
+        instruction: Original user instruction
+        use_vision: Whether to use vision for perception
+    
+    Returns:
+        Dict with execution results for each step
+    """
+    logging.info(f"🎯 Executing {len(steps)} predefined steps for: '{instruction}'")
+    
+    results = []
+    perception = None
+    
+    # Start vision if needed
+    if use_vision:
+        logging.info("📡 Starting vision service for step execution...")
+        start_vision()
+        time.sleep(2)  # Allow vision to initialize
+        
+        # Get initial perception
+        logging.info("👁️ Capturing initial screen state...")
+        perception = perceive()
+    
+    # Execute each step
+    for i, step in enumerate(steps, 1):
+        step_action = step.get("action", "").strip()
+        step_desc = step.get("description", "").strip()
+        
+        logging.info(f"📌 Step {i}/{len(steps)}: {step_action}")
+        
+        try:
+            # Convert step description into action plan format
+            # The act module expects: {"action": "...", "target": "...", "params": {}}
+            action_plan = {
+                "action": step_action,
+                "target": step_desc or step_action,
+                "params": {},
+                "step_number": i,
+                "total_steps": len(steps)
+            }
+            
+            # Execute the action
+            logging.info(f"🖱️ Executing step {i}...")
+            action_result = act_with_retry(action_plan, max_retries=2)
+            
+            # Optionally get updated perception after action
+            if use_vision and i < len(steps):  # Skip on last step
+                time.sleep(1)  # Wait for UI to update
+                perception = perceive()
+            
+            step_result = {
+                "step": i,
+                "action": step_action,
+                "description": step_desc,
+                "action_result": action_result,
+                "success": action_result.get("status") == "success"
+            }
+            
+            results.append(step_result)
+            logging.info(f"✅ Step {i} completed: {action_result.get('status')}")
+            
+        except Exception as e:
+            logging.error(f"❌ Step {i} failed: {e}")
+            results.append({
+                "step": i,
+                "action": step_action,
+                "description": step_desc,
+                "error": str(e),
+                "success": False
+            })
+    
+    # Stop vision
+    if use_vision:
+        logging.info("🔚 Stopping vision service...")
+        stop_vision()
+    
+    # Overall evaluation
+    successful_steps = sum(1 for r in results if r.get("success", False))
+    overall_success = successful_steps == len(steps)
+    
+    logging.info(f"📊 Execution complete: {successful_steps}/{len(steps)} steps successful")
+    
+    return {
+        "instruction": instruction,
+        "total_steps": len(steps),
+        "steps_executed": len(results),
+        "successful_steps": successful_steps,
+        "overall_success": overall_success,
+        "step_results": results,
+        "evaluation": {
+            "success": overall_success,
+            "completion_rate": successful_steps / len(steps) if steps else 0
+        }
+    }
+
+
 def run_streaming_cycle(user_task: str, max_events: int = 10):
     """Start vision capture and process incoming per-frame perception results in a loop.
     For each received `vision_data`, run planning and acting immediately.

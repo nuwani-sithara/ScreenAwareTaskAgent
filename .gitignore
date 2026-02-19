@@ -102,11 +102,7 @@ tmp/
 # 📁 Project-specific
 # =====================================
 # Add any project-specific files or directories to ignore below
-<<<<<<< Updated upstream
 /runs
 
-
+# Agentic AI logs
 agentic_ai_log.txt
-=======
-/runs
->>>>>>> Stashed changes

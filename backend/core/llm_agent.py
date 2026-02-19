@@ -124,19 +124,24 @@ AGENTIC_API_URL = os.getenv("AGENTIC_API_URL")
 
 # --- API Forwarding ---
 def _post_to_agentic(screen_info: str):
+    """
+    DISABLED: This was causing circular API calls when backend planning tried to POST 
+    back to itself at localhost:8000/llm/steps, creating infinite recursion.
+    """
+    # AGENTIC_API_URL = "http://localhost:8000/llm/steps"  # DISABLED - causes recursion
 
-    AGENTIC_API_URL = "http://localhost:8000/llm/steps"
+    AGENTIC_API_URL = os.getenv("AGENTIC_API_URL")  # Use env var or None
 
     if not AGENTIC_API_URL:
-        logger.info("No agentic API URL configured — skipping post")
+        logger.debug("No agentic API URL configured — skipping post")
         return None
 
-    logger.info("Posting plan to agentic API")
+    logger.info("Posting plan to agentic API: %s", AGENTIC_API_URL)
 
     try:
         response = requests.post(
             AGENTIC_API_URL,
-            json={"instruction": screen_info},  # important fix
+            json={"instruction": screen_info},
             timeout=120
         )
 
@@ -161,30 +166,32 @@ def generate_plan(screen_info: str):
     logger.info("Plan generation started")
     logger.info("Screen info received: %s", screen_info)
 
-    # try:
-    #     result = chain.invoke({"screen_info": screen_info})
+    try:
+        result = chain.invoke({"screen_info": screen_info})
 
-    #     text = result if isinstance(result, str) else str(result)
-    #     logger.info("Raw LLM output: %s", text)
+        text = result if isinstance(result, str) else str(result)
+        logger.info("Raw LLM output: %s", text[:200])  # Log first 200 chars
 
-    # except Exception:
-    #     logger.exception("LLM invocation failed")
-    #     return {"error": "LLM failure"}
+    except Exception:
+        logger.exception("LLM invocation failed")
+        return {"error": "LLM failure"}
 
-    # # JSON parsing
-    # try:
-    #     plan_json = json.loads(text)
-    #     logger.info("JSON parsing successful")
+    # JSON parsing
+    try:
+        plan_json = json.loads(text)
+        logger.info("JSON parsing successful")
 
-    # except Exception:
-    #     logger.warning("LLM output not valid JSON — wrapping raw text")
-    #     plan_json = {"raw": text}
+    except Exception:
+        logger.warning("LLM output not valid JSON — wrapping raw text")
+        plan_json = {"raw": text}
 
-    # API forwarding
-    result= _post_to_agentic(screen_info)
-    logger.info("Plan posted to agentic API: %s", result)
+    # Optional: API forwarding (disabled by default to prevent recursion)
+    # Only forwards if AGENTIC_API_URL environment variable is explicitly set
+    if os.getenv("AGENTIC_API_URL"):
+        api_result = _post_to_agentic(screen_info)
+        logger.debug("Plan forwarded to external API: %s", api_result)
 
     elapsed = round(time.time() - start_time, 2)
     logger.info("Plan generation completed in %ss", elapsed)
 
-    return result
+    return plan_json
