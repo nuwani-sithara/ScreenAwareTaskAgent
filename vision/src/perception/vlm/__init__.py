@@ -6,6 +6,7 @@ from .vlm_client import (
     ClaudeVLMClient,
     GPT4VClient,
     LocalVLMClient,
+    OllamaVLMClient,
     get_vlm_client
 )
 from .ui_parser import UIElement, UIAnalysisResult, UIParser
@@ -21,6 +22,7 @@ __all__ = [
     "ClaudeVLMClient",
     "GPT4VClient",
     "LocalVLMClient",
+    "OllamaVLMClient",
     "get_vlm_client",
     "UIElement",
     "UIAnalysisResult",

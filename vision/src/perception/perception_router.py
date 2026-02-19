@@ -7,10 +7,17 @@ Decides between VLM (zero-shot), YOLO (fast-path), or hybrid approaches.
 import os
 import cv2
 import numpy as np
+import tempfile
 from typing import Optional, Tuple, List, Dict, Any
 from pathlib import Path
 
-from .vlm import VLMClient, UIElement, UIAnalysisResult, get_vlm_client
+from .vlm import (
+    VLMClient,
+    UIElement,
+    UIAnalysisResult,
+    get_vlm_client,
+    get_ui_discovery_prompt,
+)
 from .grounding import BBoxRefiner, OverlapResolver
 
 
@@ -45,6 +52,8 @@ class PerceptionRouter:
         self.use_vlm = use_vlm
         self.use_yolo = use_yolo
         self.yolo_model_path = yolo_model_path
+        self.vlm_init_error: Optional[str] = None
+        self.yolo_init_error: Optional[str] = None
         
         # Initialize components
         self.vlm_client: Optional[VLMClient] = None
@@ -58,7 +67,8 @@ class PerceptionRouter:
                 vlm_kwargs = vlm_kwargs or {}
                 self.vlm_client = get_vlm_client(vlm_provider, **vlm_kwargs)
             except Exception as e:
-                print(f"Warning: Failed to initialize VLM client: {e}")
+                self.vlm_init_error = str(e)
+                print(f"Warning: Failed to initialize VLM client: {self.vlm_init_error}")
                 self.use_vlm = False
         
         # Initialize YOLO if enabled
@@ -67,7 +77,8 @@ class PerceptionRouter:
                 from ultralytics import YOLO
                 self.yolo_model = YOLO(yolo_model_path)
             except Exception as e:
-                print(f"Warning: Failed to load YOLO model: {e}")
+                self.yolo_init_error = str(e)
+                print(f"Warning: Failed to load YOLO model: {self.yolo_init_error}")
                 self.use_yolo = False
 
     def detect_with_yolo(self, image_path: str,
@@ -152,6 +163,121 @@ class PerceptionRouter:
         
         return self.vlm_client.analyze_ui(image_path, prompt)
 
+    @staticmethod
+    def _bbox_iou(b1: Tuple[float, float, float, float],
+                  b2: Tuple[float, float, float, float]) -> float:
+        x1 = max(b1[0], b2[0])
+        y1 = max(b1[1], b2[1])
+        x2 = min(b1[2], b2[2])
+        y2 = min(b1[3], b2[3])
+        if x2 <= x1 or y2 <= y1:
+            return 0.0
+        inter = (x2 - x1) * (y2 - y1)
+        a1 = max(0.0, b1[2] - b1[0]) * max(0.0, b1[3] - b1[1])
+        a2 = max(0.0, b2[2] - b2[0]) * max(0.0, b2[3] - b2[1])
+        denom = a1 + a2 - inter
+        return inter / denom if denom > 0 else 0.0
+
+    def _deduplicate_elements(self,
+                              elements: List[UIElement],
+                              iou_threshold: float = 0.75) -> List[UIElement]:
+        if not elements:
+            return []
+
+        # Keep highest confidence first.
+        sorted_elements = sorted(elements, key=lambda e: e.confidence, reverse=True)
+        deduped: List[UIElement] = []
+
+        for cand in sorted_elements:
+            is_duplicate = False
+            for kept in deduped:
+                same_type = cand.type == kept.type
+                if same_type and self._bbox_iou(cand.bbox, kept.bbox) >= iou_threshold:
+                    is_duplicate = True
+                    break
+            if not is_duplicate:
+                deduped.append(cand)
+
+        return deduped
+
+    def _map_tile_bbox_to_global(self,
+                                 tile_bbox: Tuple[float, float, float, float],
+                                 x0: int, y0: int,
+                                 tile_w: int, tile_h: int,
+                                 full_w: int, full_h: int) -> Tuple[float, float, float, float]:
+        x_min, y_min, x_max, y_max = tile_bbox
+        gx_min = (x0 + (x_min * tile_w)) / full_w
+        gy_min = (y0 + (y_min * tile_h)) / full_h
+        gx_max = (x0 + (x_max * tile_w)) / full_w
+        gy_max = (y0 + (y_max * tile_h)) / full_h
+
+        gx_min, gx_max = sorted((max(0.0, min(1.0, gx_min)), max(0.0, min(1.0, gx_max))))
+        gy_min, gy_max = sorted((max(0.0, min(1.0, gy_min)), max(0.0, min(1.0, gy_max))))
+        return gx_min, gy_min, gx_max, gy_max
+
+    def detect_with_vlm_multi_pass(self,
+                                   image_path: str,
+                                   prompt: Optional[str] = None,
+                                   use_tiling: bool = True,
+                                   tile_grid: Tuple[int, int] = (2, 2)) -> UIAnalysisResult:
+        """
+        Multi-pass VLM detection: full-image pass plus optional tiled pass.
+        Improves recall of small or dense UI elements.
+        """
+        base_result = self.detect_with_vlm(image_path, prompt)
+        if not use_tiling:
+            return base_result
+
+        image = cv2.imread(image_path)
+        if image is None:
+            return base_result
+
+        full_h, full_w = image.shape[:2]
+        rows, cols = tile_grid
+        if rows <= 1 and cols <= 1:
+            return base_result
+
+        combined_elements = list(base_result.elements)
+        tile_h = full_h // rows
+        tile_w = full_w // cols
+
+        for r in range(rows):
+            for c in range(cols):
+                x0 = c * tile_w
+                y0 = r * tile_h
+                x1 = full_w if c == cols - 1 else (c + 1) * tile_w
+                y1 = full_h if r == rows - 1 else (r + 1) * tile_h
+                tile = image[y0:y1, x0:x1]
+                if tile.size == 0:
+                    continue
+
+                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                    tile_path = tmp.name
+                try:
+                    cv2.imwrite(tile_path, tile)
+                    tile_prompt = prompt or get_ui_discovery_prompt(
+                        screen_region=f"tile row {r + 1}/{rows}, column {c + 1}/{cols}"
+                    )
+                    tile_result = self.detect_with_vlm(tile_path, tile_prompt)
+                    for elem in tile_result.elements:
+                        elem.bbox = self._map_tile_bbox_to_global(
+                            elem.bbox, x0, y0, (x1 - x0), (y1 - y0), full_w, full_h
+                        )
+                        elem.id = f"{elem.id}_tile_{r}_{c}"
+                        combined_elements.append(elem)
+                finally:
+                    if os.path.exists(tile_path):
+                        os.remove(tile_path)
+
+        combined_elements = self._deduplicate_elements(combined_elements)
+        return UIAnalysisResult(
+            elements=combined_elements,
+            page_structure=base_result.page_structure,
+            parse_successful=base_result.parse_successful,
+            parse_error=base_result.parse_error,
+            raw_response=base_result.raw_response
+        )
+
     def refine_detections(self, image_path: str,
                          result: UIAnalysisResult,
                          use_edge_snap: bool = True,
@@ -209,7 +335,7 @@ class PerceptionRouter:
                     bboxes_list,
                     ids_list,
                     iou_threshold=overlap_threshold,
-                    strategy="merge"
+                    strategy="keep_largest"
                 )
                 
                 # Update elements with resolved bboxes
@@ -221,19 +347,8 @@ class PerceptionRouter:
                         elem.bbox = bbox
                         refined_elements.append(elem)
             
-            # Filter nested elements
-            bboxes_list = [elem.bbox for elem in refined_elements]
-            ids_list = [elem.id for elem in refined_elements]
-            
-            if len(bboxes_list) > 1:
-                filtered_bboxes, filtered_ids = self.overlap_resolver.filter_nested(
-                    bboxes_list,
-                    ids_list,
-                    nesting_threshold=0.8
-                )
-                
-                id_set = set(filtered_ids)
-                refined_elements = [elem for elem in refined_elements if elem.id in id_set]
+            # Preserve nested elements by default for better recall.
+            # Many valid UI elements are intentionally nested (icon in button, text in card).
             
             return UIAnalysisResult(
                 elements=refined_elements,
@@ -277,7 +392,12 @@ class PerceptionRouter:
         
         # Execute strategy
         if strategy == "vlm" and self.use_vlm:
-            result = self.detect_with_vlm(image_path, vlm_prompt)
+            result = self.detect_with_vlm_multi_pass(
+                image_path=image_path,
+                prompt=vlm_prompt,
+                use_tiling=True,
+                tile_grid=(2, 2),
+            )
         
         elif strategy == "yolo" and self.use_yolo:
             result = self.detect_with_yolo(image_path, conf_threshold=yolo_conf)
@@ -293,17 +413,40 @@ class PerceptionRouter:
                 else:
                     # Fall back to VLM
                     if self.use_vlm:
-                        result = self.detect_with_vlm(image_path, vlm_prompt)
+                        result = self.detect_with_vlm_multi_pass(
+                            image_path=image_path,
+                            prompt=vlm_prompt,
+                            use_tiling=True,
+                            tile_grid=(2, 2),
+                        )
             else:
                 # YOLO disabled, use VLM
                 if self.use_vlm:
-                    result = self.detect_with_vlm(image_path, vlm_prompt)
+                    result = self.detect_with_vlm_multi_pass(
+                        image_path=image_path,
+                        prompt=vlm_prompt,
+                        use_tiling=True,
+                        tile_grid=(2, 2),
+                    )
         
         if result is None:
+            reason = "Detection failed: no valid strategy or model"
+            if strategy == "vlm" and not self.use_vlm and self.vlm_init_error:
+                reason = f"VLM unavailable: {self.vlm_init_error}"
+            elif strategy == "yolo" and not self.use_yolo and self.yolo_init_error:
+                reason = f"YOLO unavailable: {self.yolo_init_error}"
+            elif strategy == "hybrid":
+                messages = []
+                if not self.use_yolo and self.yolo_init_error:
+                    messages.append(f"YOLO unavailable: {self.yolo_init_error}")
+                if not self.use_vlm and self.vlm_init_error:
+                    messages.append(f"VLM unavailable: {self.vlm_init_error}")
+                if messages:
+                    reason = " | ".join(messages)
             return UIAnalysisResult(
                 elements=[],
                 parse_successful=False,
-                parse_error="Detection failed: no valid strategy or model"
+                parse_error=reason
             )
         
         # Refine detections

@@ -10,6 +10,7 @@ import json
 from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 from io import BytesIO
+from urllib import request, error
 import cv2
 import numpy as np
 
@@ -181,7 +182,7 @@ class GPT4VClient(VLMClient):
 class LocalVLMClient(VLMClient):
     """Local VLM client using open-source models (e.g., LLaVA, Qwen)."""
 
-    def __init__(self, model_name: str = "llava-1.5-7b-hf"):
+    def __init__(self, model_name: str = "llava-hf/llava-1.5-7b-hf"):
         super().__init__(None, model_name)
         try:
             from transformers import AutoProcessor, AutoModelForCausalLM
@@ -189,13 +190,38 @@ class LocalVLMClient(VLMClient):
             
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
             self.processor = AutoProcessor.from_pretrained(model_name)
-            self.model = AutoModelForCausalLM.from_pretrained(
-                model_name,
-                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-                device_map="auto"
-            )
+            dtype = torch.float16 if self.device == "cuda" else torch.float32
+
+            # Most text-only/causal models
+            try:
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    torch_dtype=dtype,
+                    device_map="auto"
+                )
+            except Exception:
+                # Vision-language checkpoints (e.g., LLaVA) require different model classes.
+                try:
+                    from transformers import AutoModelForVision2Seq
+                    self.model = AutoModelForVision2Seq.from_pretrained(
+                        model_name,
+                        torch_dtype=dtype,
+                        device_map="auto"
+                    )
+                except Exception:
+                    from transformers import LlavaForConditionalGeneration
+                    self.model = LlavaForConditionalGeneration.from_pretrained(
+                        model_name,
+                        torch_dtype=dtype,
+                        device_map="auto"
+                    )
         except ImportError:
-            raise ImportError("transformers package not installed. Install with: pip install transformers torch")
+            raise ImportError(
+                "transformers/torch not installed. Install with: "
+                "pip install torch torchvision transformers sentencepiece accelerate"
+            )
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize local model '{model_name}': {e}")
 
     def analyze_ui(self, image_path: str, prompt: Optional[str] = None, 
                    **kwargs) -> UIAnalysisResult:
@@ -209,6 +235,9 @@ class LocalVLMClient(VLMClient):
             # Load and prepare image
             image = Image.open(image_path).convert("RGB")
             width, height = image.size
+
+            if "llava" in self.model_name.lower() and "<image>" not in prompt:
+                prompt = f"<image>\n{prompt}"
             
             # Prepare inputs
             inputs = self.processor(text=prompt, images=image, return_tensors="pt")
@@ -235,12 +264,73 @@ class LocalVLMClient(VLMClient):
             )
 
 
+class OllamaVLMClient(VLMClient):
+    """Local Ollama VLM client using the Ollama HTTP API."""
+
+    def __init__(
+        self,
+        model_name: str = "llava:7b",
+        base_url: Optional[str] = None,
+        timeout_seconds: float = 120.0,
+    ):
+        super().__init__(None, model_name)
+        self.base_url = (base_url or os.getenv("OLLAMA_BASE_URL") or "http://127.0.0.1:11434").rstrip("/")
+        self.timeout_seconds = timeout_seconds
+
+    def analyze_ui(self, image_path: str, prompt: Optional[str] = None, **kwargs) -> UIAnalysisResult:
+        prompt = prompt or get_ui_discovery_prompt()
+
+        try:
+            image_data = self.encode_image_to_base64(image_path)
+            width, height = self.get_image_dimensions(image_path)
+
+            payload = {
+                "model": self.model_name,
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt,
+                        "images": [image_data],
+                    }
+                ],
+                "stream": False,
+                "options": {"temperature": 0},
+            }
+
+            req = request.Request(
+                url=f"{self.base_url}/api/chat",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+
+            with request.urlopen(req, timeout=self.timeout_seconds) as resp:
+                body = resp.read().decode("utf-8")
+
+            data = json.loads(body)
+            response_text = data.get("message", {}).get("content", "")
+            return self.parser.parse_vlm_response(response_text, width, height)
+
+        except error.URLError as e:
+            return UIAnalysisResult(
+                elements=[],
+                parse_successful=False,
+                parse_error=f"Ollama connection error: {e}",
+            )
+        except Exception as e:
+            return UIAnalysisResult(
+                elements=[],
+                parse_successful=False,
+                parse_error=f"Ollama VLM error: {e}",
+            )
+
+
 def get_vlm_client(provider: str = "claude", **kwargs) -> VLMClient:
     """
     Factory function to get VLM client.
     
     Args:
-        provider: "claude", "gpt4v", or "local"
+        provider: "claude", "gpt4v", "local", or "ollama"
         **kwargs: Provider-specific arguments
     
     Returns:
@@ -254,5 +344,7 @@ def get_vlm_client(provider: str = "claude", **kwargs) -> VLMClient:
         return GPT4VClient(**kwargs)
     elif provider == "local":
         return LocalVLMClient(**kwargs)
+    elif provider == "ollama":
+        return OllamaVLMClient(**kwargs)
     else:
         raise ValueError(f"Unknown VLM provider: {provider}")
