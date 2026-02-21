@@ -112,7 +112,7 @@ LLM_BASE_URL = "http://localhost:8002"  # LLM FastAPI service
 def start_vision():
     logging.info("➡️ Sending request to START vision service...")
     try:
-        response = requests.post(f"{VISION_BASE_URL}/vision/start")
+        response = requests.post(f"{VISION_BASE_URL}/vision/start?provider=ollama&local_model=llava:7b&save_interval=1.0")
         logging.info(f"✅ Vision start response status: {response.status_code}")
     except Exception as e:
         logging.error(f"❌ Failed to start vision service: {e}")
@@ -177,7 +177,7 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
 
     # 3️⃣ Plan (Pass perception OR None)
     logging.info("🧠 Planning action...")
-    action_plan = plan(perception, user_task=user_task)
+    action_plan = plan(user_task=user_task, perception=perception)
     logging.debug(f"Generated Action Plan: {action_plan}")
 
     # 4️⃣ Act
