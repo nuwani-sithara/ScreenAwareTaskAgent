@@ -1,4 +1,4 @@
-from core.hid_mock import send_hid_command
+from backend.core.hid_mock import send_hid_command
 import logging
 
 def act(action_plan_json: dict):

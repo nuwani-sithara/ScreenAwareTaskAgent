@@ -38,8 +38,15 @@ lightning_logs/
 data/
 *.jsonl
 *.csv
+
+# Ignore generated LLM results
 *.tsv
 *.parquet
+esp32_steps.jsonl
+esp32_display.jsonl
+hybrid_results_pretty.jsonl
+hybrid_report.csv
+generated_ollama_pretty.jsonl
 
 # Keep important dataset files (uncomment specific files if needed)
 !automation_dataset.jsonl
@@ -49,6 +56,9 @@ data/
 *.log
 logs/
 tensorboard/
+
+interactive_results.json
+selection_report.json
 
 # IDE / Editor
 .vscode/
@@ -71,3 +81,4 @@ temp/
 # Environment variables
 .env
 .env.local
+

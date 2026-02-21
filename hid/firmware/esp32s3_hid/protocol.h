@@ -9,6 +9,22 @@
 #define PROTOCOL_H
 
 // ============================================================================
+// FIRMWARE VERSION
+// ============================================================================
+
+#define FIRMWARE_VERSION "2.0.0"
+
+// ============================================================================
+// MESSAGE TYPES (for handshake/control messages)
+// ============================================================================
+
+#define MSG_HELLO        "hello"
+#define MSG_PING         "ping"
+#define MSG_PONG         "pong"
+#define MSG_ACK          "ack"
+#define MSG_READY_FOR_NEXT "readyForNext"
+
+// ============================================================================
 // COMMAND TYPES
 // ============================================================================
 
@@ -16,6 +32,7 @@
 #define CMD_MOUSE_MOVE   "mouse_move"
 #define CMD_MOUSE_CLICK  "mouse_click"
 #define CMD_MOUSE_SCROLL "mouse_scroll"
+#define CMD_MOUSE_DRAG   "mouse_drag"
 // Mouse button press/release (for drag operations)
 #define CMD_MOUSE_DOWN   "mouse_down"
 #define CMD_MOUSE_UP     "mouse_up"
@@ -24,12 +41,10 @@
 #define CMD_KEY_PRESS    "key_press"
 #define CMD_KEY_RELEASE  "key_release"
 #define CMD_TYPE_TEXT    "type_text"
+#define CMD_KEY_COMBO    "key_combo"
 
 // System commands
 #define CMD_SYSTEM       "system"
-#define CMD_PING         "ping"
-// Handshake ACK from host
-#define CMD_ACK          "ack"
 
 // ============================================================================
 // RESPONSE STATUS CODES
@@ -54,8 +69,28 @@
 // ============================================================================
 
 /**
- * All commands are sent as single-line JSON terminated by \n
- * All responses are single-line JSON terminated by \n
+ * All messages are sent as single-line JSON terminated by \n
+ * 
+ * HANDSHAKE MESSAGES:
+ * 
+ * Hello (sent by device on boot):
+ *   { "type": "hello", "status": "ready", "firmwareVersion": "2.0.0" }
+ * 
+ * Ping (sent by host to check connectivity):
+ *   { "type": "ping" }
+ * 
+ * Pong (sent by device in response to ping):
+ *   { "type": "pong" }
+ * 
+ * ACK (sent by device after executing a command):
+ *   { "type": "ack", "commandId": "<uuid>", "status": "ok" }
+ * All commands must include a "meta" field with commandId:
+ *   { "cmd": "<command>", "meta": { "commandId": "<uuid>" }, ... }
+ * 
+ *   { "type": "ack", "commandId": "<uuid>", "status": "error", "message": "<error>" }
+ * 
+ * Ready for Next (sent by device when ready to accept next command):
+ *   { "type": "readyForNext" }
  * 
  * COMMAND FORMATS:
  * 
@@ -67,6 +102,18 @@
  * 
  * Mouse Scroll:
  *   { "cmd": "mouse_scroll", "scroll": <int> }
+ *   { "cmd": "mouse_scroll", "deltaY": <int> }
+ *   { "cmd": "mouse_scroll", "deltaX": <int>, "deltaY": <int> }
+ * 
+ * Mouse Drag:
+ *   { "cmd": "mouse_drag", "dx": <int>, "dy": <int>, "button": "left"|"right"|"middle", "duration": <int> }
+ * 
+ * Mouse Press:
+ *   { "cmd": "mouse_down", "button": "left"|"right"|"middle" }
+ * 
+ * Mouse Release:
+ *   { "cmd": "mouse_up", "button": "left"|"right"|"middle" }
+ *   { "cmd": "mouse_up" }  // Release all buttons
  * 
  * Key Press:
  *   { "cmd": "key_press", "key": <keycode> }
@@ -78,11 +125,12 @@
  * Type Text:
  *   { "cmd": "type_text", "text": "<string>" }
  * 
+ * Key Combination:
+ *   { "cmd": "key_combo", "modifiers": ["ctrl", "shift", "alt", "meta"], "key": "<char>" }
+ *   { "cmd": "key_combo", "modifiers": ["ctrl"], "key": "c" }
+ * 
  * System Control:
  *   { "cmd": "system", "code": <int> }
- * 
- * Ping:
- *   { "cmd": "ping" }
  * 
  * RESPONSE FORMATS:
  * 
@@ -91,9 +139,6 @@
  * 
  * Error:
  *   { "status": "error", "error": "<error_type>", "msg": "<message>" }
- * 
- * Ready (on startup):
- *   { "status": "ready", "device": "ESP32-S3 HID Interface" }
  */
 
 #endif // PROTOCOL_H

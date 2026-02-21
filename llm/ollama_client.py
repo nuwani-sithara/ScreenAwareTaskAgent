@@ -9,11 +9,33 @@ This module attempts to use Ollama HTTP API at http://127.0.0.1:11434/api/genera
 and falls back to the `ollama` CLI when HTTP is not available.
 """
 import json
+import re
 import shlex
 import subprocess
 from typing import Optional
 
 DEFAULT_HTTP_URL = "http://127.0.0.1:11434/api/generate"
+
+
+def _strip_ansi_codes(text: str) -> str:
+    """Remove ANSI escape codes and spinner characters from text."""
+    # Remove CSI sequences: ESC [ ... (letter)
+    text = re.sub(r'\x1b\[[0-9;?]*[a-zA-Z]', '', text)
+    # Remove OSC sequences: ESC ] ... (BEL or ESC \)
+    text = re.sub(r'\x1b\].*?(\x07|\x1b\\)', '', text)
+    # Remove other escape sequences
+    text = re.sub(r'\x1b[=>]', '', text)
+    # Remove CSI-like sequences without ESC: [?digits+letter or [letter
+    text = re.sub(r'\[(?:\??\d+;?)*[a-zA-Z]', '', text)
+    # Remove remaining bracket sequences (aggressive cleanup)
+    text = re.sub(r'\[\d*[A-Z]', '', text)
+    # Clean up any remaining ]]] or similar artifacts
+    text = re.sub(r'\]{2,}', '', text)
+    # Remove Braille pattern characters used for spinners (U+2800 to U+28FF)
+    text = re.sub(r'[\u2800-\u28FF]', '', text)
+    # Clean up excessive whitespace
+    text = re.sub(r'\s+', ' ', text)
+    return text
 
 
 class OllamaClient:
@@ -43,7 +65,7 @@ class OllamaClient:
                 pass
         # CLI fallback
         try:
-            out = subprocess.check_output([self.cli_cmd, 'list'], stderr=subprocess.STDOUT, universal_newlines=True)
+            out = subprocess.check_output([self.cli_cmd, 'list'], stderr=subprocess.STDOUT, encoding='utf-8', errors='replace')
             return out.splitlines()
         except Exception:
             return []
@@ -92,9 +114,10 @@ class OllamaClient:
         # CLI fallback: use `ollama run MODEL PROMPT` (run returns text by default)
         try:
             # Put prompt as a single argument
-            cmd = [self.cli_cmd, 'run', model, prompt, '--format', 'text']
-            out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, universal_newlines=True)
-            text = out.strip()
+            cmd = [self.cli_cmd, 'run', model, prompt]
+            out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, encoding='utf-8', errors='replace')
+            # Strip ANSI escape codes from terminal output
+            text = _strip_ansi_codes(out).strip()
             # Attempt to parse streaming JSON lines produced by some Ollama models
             parts = []
             for line in text.splitlines():

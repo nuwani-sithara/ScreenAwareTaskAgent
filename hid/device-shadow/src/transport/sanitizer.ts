@@ -5,7 +5,10 @@
  * - Clamps values to safe ranges
  * - Removes potentially harmful data
  * - Ensures HID protocol compliance
+ * - Converts string key names to numeric keycodes
  */
+
+import { keyToKeycode, isValidKey } from './keycodes';
 
 export class Sanitizer {
   
@@ -22,6 +25,10 @@ export class Sanitizer {
         return this.sanitizeMouseScroll(sanitized);
       case 'mouse_drag':
         return this.sanitizeMouseDrag(sanitized);
+      case 'key_press':
+        return this.sanitizeKeyPress(sanitized);
+      case 'key_release':
+        return this.sanitizeKeyRelease(sanitized);
       case 'type_text':
         return this.sanitizeTypeText(sanitized);
       default:
@@ -85,6 +92,48 @@ export class Sanitizer {
     }
     
     cmd.text = text;
+    return cmd;
+  }
+  
+  /**
+   * Sanitize key_press command
+   * Converts string key names to numeric HID keycodes
+   */
+  private static sanitizeKeyPress(cmd: any): any {
+    // If key is a string, convert to keycode
+    if (typeof cmd.key === 'string') {
+      if (isValidKey(cmd.key)) {
+        cmd.key = keyToKeycode(cmd.key);
+      } else {
+        throw new Error(`Unknown key name: ${cmd.key}`);
+      }
+    }
+    
+    // Ensure key is an integer in valid range
+    cmd.key = Math.round(this.clamp(cmd.key, 0, 255));
+    
+    return cmd;
+  }
+  
+  /**
+   * Sanitize key_release command
+   * Converts string key names to numeric HID keycodes
+   */
+  private static sanitizeKeyRelease(cmd: any): any {
+    // If key is provided and is a string, convert to keycode
+    if (cmd.key !== undefined && typeof cmd.key === 'string') {
+      if (isValidKey(cmd.key)) {
+        cmd.key = keyToKeycode(cmd.key);
+      } else {
+        throw new Error(`Unknown key name: ${cmd.key}`);
+      }
+    }
+    
+    // Ensure key is an integer in valid range (if provided)
+    if (cmd.key !== undefined) {
+      cmd.key = Math.round(this.clamp(cmd.key, 0, 255));
+    }
+    
     return cmd;
   }
   
