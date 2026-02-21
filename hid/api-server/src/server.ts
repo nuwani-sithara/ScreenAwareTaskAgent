@@ -14,7 +14,7 @@ import cors from 'cors';
 import { DeviceShadow } from '../../device-shadow/src/index';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3015;
 
 // Middleware
 app.use(cors());
