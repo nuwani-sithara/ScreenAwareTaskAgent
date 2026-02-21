@@ -84,42 +84,78 @@ def enrich_frame(
         refined = json.load(f)
     boxes = refined.get("bboxes", [])
 
+    # Ollama can be too slow when called once per box on dense UIs.
+    # Keep a small call budget and short timeout so final JSON is always emitted.
+    is_ollama_client = (
+        vlm_client is not None and vlm_client.__class__.__name__ == "OllamaVLMClient"
+    )
+    original_timeout = None
+    if is_ollama_client and hasattr(vlm_client, "timeout_seconds"):
+        try:
+            original_timeout = float(vlm_client.timeout_seconds)
+            vlm_client.timeout_seconds = min(original_timeout, 12.0)
+        except Exception:
+            original_timeout = None
+    max_vlm_calls = 3 if is_ollama_client else len(boxes)
+    vlm_calls_used = 0
+
     elements: List[Dict[str, Any]] = []
-    for idx, item in enumerate(boxes):
-        bbox = tuple(item.get("bbox", [0, 0, 1, 1]))
-        x1, y1, x2, y2 = _to_pixel_bbox(bbox, w, h)
-        crop = image[y1:y2, x1:x2]
+    try:
+        for idx, item in enumerate(boxes):
+            bbox = tuple(item.get("bbox", [0, 0, 1, 1]))
+            x1, y1, x2, y2 = _to_pixel_bbox(bbox, w, h)
+            crop = image[y1:y2, x1:x2]
 
-        meta = {
-            "type": "unknown",
-            "label": "",
-            "description": "No VLM available",
-            "state": "unknown",
-            "confidence": float(item.get("confidence", 0.5)),
-        }
-
-        if vlm_client is not None and crop.size > 0:
-            with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-                crop_path = tmp.name
-            try:
-                cv2.imwrite(crop_path, crop)
-                meta = _classify_crop_with_vlm(vlm_client, crop_path)
-            finally:
-                if os.path.exists(crop_path):
-                    os.remove(crop_path)
-
-        elements.append(
-            {
-                "id": f"elem_{idx}",
-                "type": meta["type"],
-                "label": meta["label"],
-                "description": meta["description"],
-                "state": meta["state"],
-                "bbox": list(bbox),
-                "confidence": meta["confidence"],
-                "source": item.get("source", "refined_bbox"),
+            meta = {
+                "type": "unknown",
+                "label": "",
+                "description": "No VLM available",
+                "state": "unknown",
+                "confidence": float(item.get("confidence", 0.5)),
             }
-        )
+
+            should_call_vlm = (
+                vlm_client is not None and crop.size > 0 and vlm_calls_used < max_vlm_calls
+            )
+            if should_call_vlm:
+                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                    crop_path = tmp.name
+                try:
+                    cv2.imwrite(crop_path, crop)
+                    meta = _classify_crop_with_vlm(vlm_client, crop_path)
+                except Exception:
+                    meta = {
+                        "type": "unknown",
+                        "label": "",
+                        "description": "VLM classification failed",
+                        "state": "unknown",
+                        "confidence": 0.1,
+                    }
+                finally:
+                    if os.path.exists(crop_path):
+                        os.remove(crop_path)
+                vlm_calls_used += 1
+            elif is_ollama_client:
+                meta["description"] = "Skipped VLM classification (Ollama call budget)"
+
+            elements.append(
+                {
+                    "id": f"elem_{idx}",
+                    "type": meta["type"],
+                    "label": meta["label"],
+                    "description": meta["description"],
+                    "state": meta["state"],
+                    "bbox": list(bbox),
+                    "confidence": meta["confidence"],
+                    "source": item.get("source", "refined_bbox"),
+                }
+            )
+    finally:
+        if original_timeout is not None and hasattr(vlm_client, "timeout_seconds"):
+            try:
+                vlm_client.timeout_seconds = original_timeout
+            except Exception:
+                pass
 
     payload = {
         "image": str(image_path),
