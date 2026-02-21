@@ -93,7 +93,7 @@ def _extract_steps_from_text(output_text: str) -> List[Dict]:
     return ordered
 
 
-def generate_and_format(instruction: str, model: str = "mistral", client: OllamaClient = None) -> Dict:
+def generate_and_format(instruction: str, model: str = "mistral", client: OllamaClient = None, max_tokens: int = 100, timeout: int = 30) -> Dict:
     """Generate using Ollama and format to project schema.
 
     Returns a dict suitable for saving into pretty JSON logs.
@@ -103,7 +103,7 @@ def generate_and_format(instruction: str, model: str = "mistral", client: Ollama
         cat = "game_2048"
 
     client = client or OllamaClient()
-    raw = client.generate(instruction, model=model)
+    raw = client.generate(instruction, model=model, max_tokens=max_tokens, timeout=timeout)
     steps = _extract_steps_from_text(raw)
 
     result = {
