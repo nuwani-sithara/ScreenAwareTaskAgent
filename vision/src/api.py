@@ -40,6 +40,7 @@ current_session: Optional[Dict[str, Any]] = None
 processing_queue: "queue.Queue[Dict[str, Any]]" = queue.Queue()
 processed_queue: "queue.Queue[Dict[str, Any]]" = queue.Queue()
 session_lock = threading.Lock()
+processing_inflight: Dict[str, int] = {}
 
 
 def _new_session(prefix: str = "session") -> Dict[str, Any]:
@@ -112,7 +113,13 @@ def _capture_single_frame(camera_index: int = 0):
     return frame
 
 
-def _run_pipeline_for_frame(frame_path: str, session: Dict[str, Any], vlm_client=None) -> Dict[str, Any]:
+def _run_pipeline_for_frame(
+    frame_path: str,
+    session: Dict[str, Any],
+    vlm_client=None,
+    ollama_call_budget: Optional[int] = None,
+    ollama_timeout_seconds: Optional[float] = None,
+) -> Dict[str, Any]:
     """
     Run: preprocess -> coarse bbox -> refine bbox -> enrich elements.
     Stores artifacts under session folders and returns final JSON payload.
@@ -178,6 +185,8 @@ def _run_pipeline_for_frame(frame_path: str, session: Dict[str, Any], vlm_client
         refined_bbox_path=Path(refined_json_path),
         out_path=Path(final_json_path),
         vlm_client=vlm_client,
+        ollama_call_budget=ollama_call_budget,
+        ollama_timeout_seconds=ollama_timeout_seconds,
     )
 
     with open(final_json_path, "r", encoding="utf-8") as f:
@@ -263,7 +272,7 @@ def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float =
 
 def processing_worker():
     """Background worker that processes enqueued frames."""
-    global current_session
+    global current_session, processing_inflight
     logging.info("Processing worker started")
 
     while True:
@@ -280,6 +289,9 @@ def processing_worker():
 
         try:
             with session_lock:
+                processing_inflight[session_id] = processing_inflight.get(session_id, 0) + 1
+
+            with session_lock:
                 session = current_session if current_session and current_session.get("id") == session_id else None
 
             if not session:
@@ -289,6 +301,8 @@ def processing_worker():
                 frame_path=frame_path,
                 session=session,
                 vlm_client=session.get("vlm_client"),
+                ollama_call_budget=session.get("ollama_call_budget"),
+                ollama_timeout_seconds=session.get("ollama_timeout_seconds"),
             )
             processed_queue.put(result)
 
@@ -303,6 +317,12 @@ def processing_worker():
                     "detail": str(e),
                 }
             )
+        finally:
+            with session_lock:
+                if session_id in processing_inflight:
+                    processing_inflight[session_id] = max(0, processing_inflight[session_id] - 1)
+                    if processing_inflight[session_id] == 0:
+                        del processing_inflight[session_id]
 
 
 @app.post("/vision/start")
@@ -312,6 +332,8 @@ def start_vision(
     provider: str = "local",
     local_model: str = "llava-hf/llava-1.5-7b-hf",
     ollama_base_url: Optional[str] = None,
+    ollama_call_budget: int = 2,
+    ollama_timeout_seconds: float = 45.0,
     no_vlm: bool = False,
 ):
     """Start continuous capture + processing session."""
@@ -342,6 +364,8 @@ def start_vision(
             "provider": provider,
             "local_model": local_model,
             "ollama_base_url": ollama_base_url,
+            "ollama_call_budget": ollama_call_budget,
+            "ollama_timeout_seconds": ollama_timeout_seconds,
             "no_vlm": no_vlm,
             "vlm_client": vlm_client,
         }
@@ -370,13 +394,19 @@ def start_vision(
         "provider": provider,
         "local_model": local_model,
         "ollama_base_url": ollama_base_url,
+        "ollama_call_budget": ollama_call_budget,
+        "ollama_timeout_seconds": ollama_timeout_seconds,
         "no_vlm": no_vlm,
         "session_root": session["root"],
     }
 
 
 @app.post("/vision/stop")
-def stop_vision(session_id: Optional[str] = None):
+def stop_vision(
+    session_id: Optional[str] = None,
+    wait_for_processing: bool = True,
+    processing_timeout: float = 30.0,
+):
     """Stop continuous capture session."""
     global capture_running, capture_thread, current_session
 
@@ -396,6 +426,20 @@ def stop_vision(session_id: Optional[str] = None):
 
     if capture_thread and capture_thread.is_alive():
         capture_thread.join(timeout=10)
+
+    if wait_for_processing:
+        deadline = time.time() + max(0.0, processing_timeout)
+        while time.time() < deadline:
+            with session_lock:
+                inflight = processing_inflight.get(session["id"], 0)
+            with processing_queue.mutex:
+                queued_for_session = sum(
+                    1 for item in list(processing_queue.queue)
+                    if item.get("session_id") == session["id"]
+                )
+            if inflight == 0 and queued_for_session == 0:
+                break
+            time.sleep(0.1)
 
     summary = {
         "status": "stopped",
@@ -421,6 +465,8 @@ def capture_once(
     provider: str = "local",
     local_model: str = "llava-hf/llava-1.5-7b-hf",
     ollama_base_url: Optional[str] = None,
+    ollama_call_budget: int = 3,
+    ollama_timeout_seconds: float = 60.0,
     no_vlm: bool = False,
 ):
     """Single-shot capture and pipeline execution. Returns final JSON."""
@@ -444,7 +490,13 @@ def capture_once(
     cv2.imwrite(frame_path, frame)
 
     try:
-        result = _run_pipeline_for_frame(frame_path=frame_path, session=session, vlm_client=vlm_client)
+        result = _run_pipeline_for_frame(
+            frame_path=frame_path,
+            session=session,
+            vlm_client=vlm_client,
+            ollama_call_budget=ollama_call_budget,
+            ollama_timeout_seconds=ollama_timeout_seconds,
+        )
         return result
     except Exception as e:
         logging.exception("Single-shot pipeline failed")

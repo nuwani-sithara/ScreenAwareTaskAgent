@@ -294,6 +294,7 @@ class OllamaVLMClient(VLMClient):
                     }
                 ],
                 "stream": False,
+                "format": "json",
                 "options": {"temperature": 0},
             }
 
