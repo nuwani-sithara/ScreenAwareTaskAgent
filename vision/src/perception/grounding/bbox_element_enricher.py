@@ -12,9 +12,10 @@ Output:
 import argparse
 import json
 import os
+import re
 import tempfile
 from pathlib import Path
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 
 import cv2
 
@@ -51,6 +52,36 @@ def _classify_crop_with_vlm(vlm_client, crop_path: str) -> Dict[str, Any]:
     )
     result = vlm_client.analyze_ui(crop_path, prompt=prompt)
     if not result.parse_successful or not result.elements:
+        # Fallback parse: accept partial JSON without strict bbox fields.
+        raw = getattr(result, "raw_response", None)
+        if raw:
+            try:
+                text = re.sub(r"```json\s*", "", raw)
+                text = re.sub(r"```", "", text)
+                match = re.search(r"\{.*\}", text, re.DOTALL)
+                parsed = json.loads(match.group(0) if match else text)
+                if isinstance(parsed, dict) and "elements" in parsed and isinstance(parsed["elements"], list) and parsed["elements"]:
+                    parsed = parsed["elements"][0]
+                if isinstance(parsed, dict):
+                    ptype = _safe_str(parsed.get("type", "unknown")) or "unknown"
+                    plabel = _safe_str(parsed.get("label", ""))
+                    pdesc = _safe_str(parsed.get("description", ""))
+                    pstate = _safe_str(parsed.get("state", "unknown")) or "unknown"
+                    pconf = parsed.get("confidence", 0.35)
+                    try:
+                        pconf = float(pconf)
+                    except Exception:
+                        pconf = 0.35
+                    pconf = max(0.0, min(1.0, pconf))
+                    return {
+                        "type": ptype,
+                        "label": plabel,
+                        "description": pdesc,
+                        "state": pstate,
+                        "confidence": pconf,
+                    }
+            except Exception:
+                pass
         return {
             "type": "unknown",
             "label": "",
@@ -74,6 +105,8 @@ def enrich_frame(
     refined_bbox_path: Path,
     out_path: Path,
     vlm_client=None,
+    ollama_call_budget: Optional[int] = None,
+    ollama_timeout_seconds: Optional[float] = None,
 ) -> None:
     image = cv2.imread(str(image_path))
     if image is None:
@@ -84,42 +117,85 @@ def enrich_frame(
         refined = json.load(f)
     boxes = refined.get("bboxes", [])
 
+    # Ollama can be too slow when called once per box on dense UIs.
+    # Use configurable budget/timeout so final JSON is still emitted.
+    is_ollama_client = (
+        vlm_client is not None and vlm_client.__class__.__name__ == "OllamaVLMClient"
+    )
+    original_timeout = None
+    if is_ollama_client and hasattr(vlm_client, "timeout_seconds"):
+        try:
+            original_timeout = float(vlm_client.timeout_seconds)
+            if ollama_timeout_seconds is not None:
+                vlm_client.timeout_seconds = max(1.0, float(ollama_timeout_seconds))
+        except Exception:
+            original_timeout = None
+    if is_ollama_client:
+        if ollama_call_budget is None:
+            max_vlm_calls = 3
+        else:
+            max_vlm_calls = max(0, int(ollama_call_budget))
+    else:
+        max_vlm_calls = len(boxes)
+    vlm_calls_used = 0
+
     elements: List[Dict[str, Any]] = []
-    for idx, item in enumerate(boxes):
-        bbox = tuple(item.get("bbox", [0, 0, 1, 1]))
-        x1, y1, x2, y2 = _to_pixel_bbox(bbox, w, h)
-        crop = image[y1:y2, x1:x2]
+    try:
+        for idx, item in enumerate(boxes):
+            bbox = tuple(item.get("bbox", [0, 0, 1, 1]))
+            x1, y1, x2, y2 = _to_pixel_bbox(bbox, w, h)
+            crop = image[y1:y2, x1:x2]
 
-        meta = {
-            "type": "unknown",
-            "label": "",
-            "description": "No VLM available",
-            "state": "unknown",
-            "confidence": float(item.get("confidence", 0.5)),
-        }
-
-        if vlm_client is not None and crop.size > 0:
-            with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-                crop_path = tmp.name
-            try:
-                cv2.imwrite(crop_path, crop)
-                meta = _classify_crop_with_vlm(vlm_client, crop_path)
-            finally:
-                if os.path.exists(crop_path):
-                    os.remove(crop_path)
-
-        elements.append(
-            {
-                "id": f"elem_{idx}",
-                "type": meta["type"],
-                "label": meta["label"],
-                "description": meta["description"],
-                "state": meta["state"],
-                "bbox": list(bbox),
-                "confidence": meta["confidence"],
-                "source": item.get("source", "refined_bbox"),
+            meta = {
+                "type": "unknown",
+                "label": "",
+                "description": "No VLM available",
+                "state": "unknown",
+                "confidence": float(item.get("confidence", 0.5)),
             }
-        )
+
+            should_call_vlm = (
+                vlm_client is not None and crop.size > 0 and vlm_calls_used < max_vlm_calls
+            )
+            if should_call_vlm:
+                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                    crop_path = tmp.name
+                try:
+                    cv2.imwrite(crop_path, crop)
+                    meta = _classify_crop_with_vlm(vlm_client, crop_path)
+                except Exception:
+                    meta = {
+                        "type": "unknown",
+                        "label": "",
+                        "description": "VLM classification failed",
+                        "state": "unknown",
+                        "confidence": 0.1,
+                    }
+                finally:
+                    if os.path.exists(crop_path):
+                        os.remove(crop_path)
+                vlm_calls_used += 1
+            elif is_ollama_client:
+                meta["description"] = "Skipped VLM classification (Ollama call budget)"
+
+            elements.append(
+                {
+                    "id": f"elem_{idx}",
+                    "type": meta["type"],
+                    "label": meta["label"],
+                    "description": meta["description"],
+                    "state": meta["state"],
+                    "bbox": list(bbox),
+                    "confidence": meta["confidence"],
+                    "source": item.get("source", "refined_bbox"),
+                }
+            )
+    finally:
+        if original_timeout is not None and hasattr(vlm_client, "timeout_seconds"):
+            try:
+                vlm_client.timeout_seconds = original_timeout
+            except Exception:
+                pass
 
     payload = {
         "image": str(image_path),

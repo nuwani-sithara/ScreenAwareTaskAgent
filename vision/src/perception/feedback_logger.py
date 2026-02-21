@@ -2,9 +2,15 @@
 """
 Weak supervision feedback logging.
 Store successful detections to build self-improving dataset.
+
+Additions (streaming / session support):
+- log_streaming_event()  : lightweight per-frame entry during streaming
+- log_session_summary()  : persist the final SessionAggregator document
+- log_vlm_batch_result() : record batch-classification outcomes for quality tracking
 """
 
 import json
+import logging
 import os
 from typing import List, Dict, Optional, Any
 from datetime import datetime
@@ -12,6 +18,8 @@ from pathlib import Path
 import hashlib
 
 from .vlm import UIElement
+
+_log = logging.getLogger(__name__)
 
 
 class FeedbackLogger:
@@ -303,3 +311,135 @@ class FeedbackLogger:
             )),
             "stats": self.get_element_statistics()
         }
+
+    # ------------------------------------------------------------------
+    # Streaming / session helpers
+    # ------------------------------------------------------------------
+
+    def log_streaming_event(
+        self,
+        session_id: str,
+        frame_index: int,
+        image_path: str,
+        elements: List[UIElement],
+        delta: Optional[Dict[str, Any]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        """
+        Log a single streaming frame as a lightweight event.
+
+        Parameters
+        ----------
+        session_id:   Streaming session identifier.
+        frame_index:  Zero-based index of this frame within the session.
+        image_path:   Filesystem path of the captured frame.
+        elements:     UI elements detected in this frame.
+        delta:        Optional change delta relative to the previous frame.
+        metadata:     Arbitrary key-value metadata.
+
+        Returns
+        -------
+        str
+            Event ID.
+        """
+        event: Dict[str, Any] = {
+            "event_type":   "streaming_frame",
+            "session_id":   session_id,
+            "frame_index":  frame_index,
+            "timestamp":    datetime.now().isoformat(),
+            "image_path":   str(image_path),
+            "num_elements": len(elements),
+            "elements":     [e.to_dict() for e in elements],
+            "metadata":     metadata or {},
+        }
+        if delta:
+            event["delta"] = delta
+
+        self.current_session_log.append(event)
+        event_id = hashlib.md5(str(event).encode()).hexdigest()[:16]
+        _log.debug(
+            "Streaming frame logged: session=%s  frame=%d  elements=%d",
+            session_id, frame_index, len(elements),
+        )
+        return event_id
+
+    def log_session_summary(
+        self,
+        session_doc: Dict[str, Any],
+        filename: Optional[str] = None,
+    ) -> str:
+        """
+        Persist the final session document produced by
+        :class:`~session_aggregator.SessionAggregator`.
+
+        The file is written to ``<feedback_dir>/sessions/`` and can be used
+        later for replay, debugging, or training-data extraction.
+
+        Parameters
+        ----------
+        session_doc:
+            The dict returned by ``SessionAggregator.finalize()``.
+        filename:
+            Override the auto-generated filename.
+
+        Returns
+        -------
+        str
+            Absolute path to the saved file.
+        """
+        sid = session_doc.get("session_id", "unknown")
+        if filename is None:
+            filename = f"session_{sid}_{int(datetime.now().timestamp())}.json"
+
+        path = os.path.join(self.session_dir, filename)
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(session_doc, fh, indent=2, default=str)
+
+        _log.info(
+            "Session summary logged: %s  screens=%s",
+            path, session_doc.get("screen_count", "?"),
+        )
+        return path
+
+    def log_vlm_batch_result(
+        self,
+        image_path: str,
+        frame_hash: str,
+        num_elements_sent: int,
+        num_elements_classified: int,
+        used_cache: bool,
+        used_fallback: bool,
+        provider: str = "",
+    ) -> None:
+        """
+        Record the outcome of a VLM batch-classification call.
+
+        Used to monitor hit-rates, fallback frequency, and cache efficiency.
+
+        Parameters
+        ----------
+        image_path:              Path to the classified frame.
+        frame_hash:              SHA-256 hash of the frame.
+        num_elements_sent:       Elements sent to the VLM.
+        num_elements_classified: Elements successfully classified.
+        used_cache:              Whether the result was served from cache.
+        used_fallback:           Whether the fallback classifier was invoked.
+        provider:                VLM provider name (e.g. "ollama").
+        """
+        record = {
+            "event_type":             "vlm_batch_classification",
+            "timestamp":              datetime.now().isoformat(),
+            "image_path":             str(image_path),
+            "frame_hash":             frame_hash,
+            "num_elements_sent":      num_elements_sent,
+            "num_elements_classified": num_elements_classified,
+            "used_cache":             used_cache,
+            "used_fallback":          used_fallback,
+            "provider":               provider,
+        }
+        self.current_session_log.append(record)
+        _log.debug(
+            "VLM batch: %d/%d classified  cache=%s  fallback=%s  provider=%s",
+            num_elements_classified, num_elements_sent,
+            used_cache, used_fallback, provider,
+        )

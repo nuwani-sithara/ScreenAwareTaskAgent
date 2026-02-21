@@ -452,7 +452,32 @@ class PerceptionRouter:
         # Refine detections
         if refine and result.elements:
             result = self.refine_detections(image_path, result)
-        
+
+        # ------------------------------------------------------------------
+        # Single-call batch VLM classification (ISSUE 1 fix)
+        #
+        # After spatial detection (YOLO or VLM discovery), run one VLM call
+        # to classify ALL elements. This replaces per-element VLM calls that
+        # previously exceeded the model call budget.
+        # ------------------------------------------------------------------
+        if result.elements and self.vlm_client is not None:
+            needs_batch = any(
+                e.type in ("unknown", "") or e.confidence < 0.4
+                for e in result.elements
+            )
+            if needs_batch:
+                try:
+                    result.elements = self.vlm_client.classify_elements_batch(
+                        image_path=image_path,
+                        elements=result.elements,
+                        max_retries=2,
+                        timeout_seconds=getattr(self.vlm_client, "timeout_seconds", 60.0),
+                    )
+                except NotImplementedError:
+                    pass   # provider doesn't support batch; keep existing classifications
+                except Exception as exc:
+                    print(f"Warning: batch classification failed: {exc}")
+
         return result
 
     def detect_changes(self, image_path_1: str, image_path_2: str,

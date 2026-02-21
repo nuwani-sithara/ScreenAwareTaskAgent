@@ -17,7 +17,8 @@ from src.preprocessing.preprocess import preprocess_all
 from src.perception.grounding.coarse_bbox_generator import generate_coarse_bboxes
 from src.perception.grounding.bbox_refiner import BBoxRefiner
 from src.perception.grounding.bbox_element_enricher import enrich_frame
-from src.perception.vlm import get_vlm_client
+from src.perception.vlm import get_vlm_client, UIElement
+from src.session_aggregator import SessionAggregator
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,9 +41,10 @@ current_session: Optional[Dict[str, Any]] = None
 processing_queue: "queue.Queue[Dict[str, Any]]" = queue.Queue()
 processed_queue: "queue.Queue[Dict[str, Any]]" = queue.Queue()
 session_lock = threading.Lock()
+processing_inflight: Dict[str, int] = {}
 
 
-def _new_session(prefix: str = "session") -> Dict[str, Any]:
+def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, Any]:
     session_id = f"{prefix}_{int(time.time())}_{uuid.uuid4().hex[:6]}"
     root = os.path.join(SESSIONS_DIR, session_id)
 
@@ -57,7 +59,7 @@ def _new_session(prefix: str = "session") -> Dict[str, Any]:
     for d in [raw_dir, preproc_dir, coarse_dir, refined_dir, refined_debug_dir, final_dir, proc_dir]:
         os.makedirs(d, exist_ok=True)
 
-    return {
+    session: Dict[str, Any] = {
         "id": session_id,
         "root": root,
         "raw_dir": raw_dir,
@@ -68,7 +70,17 @@ def _new_session(prefix: str = "session") -> Dict[str, Any]:
         "final_dir": final_dir,
         "proc_dir": proc_dir,
         "created_at": time.time(),
+        "aggregator": None,
     }
+    if aggregate:
+        agg = SessionAggregator(
+            output_dir=root,
+            detect_deltas=True,
+            dedup_frames=True,
+        )
+        agg.start(session_id=session_id)
+        session["aggregator"] = agg
+    return session
 
 
 def _init_vlm_client(provider: str, local_model: str, no_vlm: bool, ollama_base_url: Optional[str] = None):
@@ -112,10 +124,20 @@ def _capture_single_frame(camera_index: int = 0):
     return frame
 
 
-def _run_pipeline_for_frame(frame_path: str, session: Dict[str, Any], vlm_client=None) -> Dict[str, Any]:
+def _run_pipeline_for_frame(
+    frame_path: str,
+    session: Dict[str, Any],
+    vlm_client=None,
+    ollama_timeout_seconds: Optional[float] = None,
+) -> Dict[str, Any]:
     """
-    Run: preprocess -> coarse bbox -> refine bbox -> enrich elements.
-    Stores artifacts under session folders and returns final JSON payload.
+    Run full pipeline for one frame:
+      preprocess → coarse bbox → refine bbox → enrich (layout/fallback) →
+      VLM single-call batch classification → save final JSON.
+
+    VLM classification uses ``classify_elements_batch()`` which issues ONE
+    call per frame regardless of element count, eliminating the per-element
+    budget problem.
     """
     frame_name = Path(frame_path).name
     frame_stem = Path(frame_path).stem
@@ -171,17 +193,43 @@ def _run_pipeline_for_frame(frame_path: str, session: Dict[str, Any], vlm_client
     debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
     _write_refined_debug_image(image, refined_bboxes, debug_image_path)
 
-    # Enrich with element metadata (local VLM or fallback no-vlm)
+    # Enrich elements using layout heuristics only (no per-element VLM calls).
+    # VLM classification is done below in a single batch call.
     final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
     enrich_frame(
         image_path=Path(session_preprocessed),
         refined_bbox_path=Path(refined_json_path),
         out_path=Path(final_json_path),
-        vlm_client=vlm_client,
+        vlm_client=None,          # disable per-element VLM inside enrich_frame
+        ollama_call_budget=0,
+        ollama_timeout_seconds=ollama_timeout_seconds,
     )
 
-    with open(final_json_path, "r", encoding="utf-8") as f:
-        payload = json.load(f)
+    # Single-call batch VLM classification (ISSUE 1 fix).
+    # Converts all "unknown" / low-confidence elements in ONE model call.
+    if vlm_client is not None:
+        with open(final_json_path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+
+        raw_elements = payload.get("elements", [])
+        if raw_elements:
+            ui_elements = [UIElement.from_dict(e) for e in raw_elements]
+            try:
+                ui_elements = vlm_client.classify_elements_batch(
+                    image_path=session_preprocessed,
+                    elements=ui_elements,
+                    max_retries=2,
+                    timeout_seconds=ollama_timeout_seconds or 60.0,
+                )
+                payload["elements"] = [e.to_dict() for e in ui_elements]
+            except Exception as exc:
+                logging.warning("Batch VLM classification failed: %s", exc)
+
+        with open(final_json_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2)
+    else:
+        with open(final_json_path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
 
     return {
         "status": "completed",
@@ -263,7 +311,7 @@ def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float =
 
 def processing_worker():
     """Background worker that processes enqueued frames."""
-    global current_session
+    global current_session, processing_inflight
     logging.info("Processing worker started")
 
     while True:
@@ -280,6 +328,9 @@ def processing_worker():
 
         try:
             with session_lock:
+                processing_inflight[session_id] = processing_inflight.get(session_id, 0) + 1
+
+            with session_lock:
                 session = current_session if current_session and current_session.get("id") == session_id else None
 
             if not session:
@@ -289,7 +340,17 @@ def processing_worker():
                 frame_path=frame_path,
                 session=session,
                 vlm_client=session.get("vlm_client"),
+                ollama_timeout_seconds=session.get("ollama_timeout_seconds"),
             )
+
+            # Append to SessionAggregator (streaming session JSON)
+            agg = session.get("aggregator")
+            if agg is not None and agg.is_active:
+                try:
+                    agg.append_frame(frame_path, result)
+                except Exception as _agg_exc:
+                    logging.warning("SessionAggregator.append_frame failed: %s", _agg_exc)
+
             processed_queue.put(result)
 
         except Exception as e:
@@ -303,18 +364,118 @@ def processing_worker():
                     "detail": str(e),
                 }
             )
+        finally:
+            with session_lock:
+                if session_id in processing_inflight:
+                    processing_inflight[session_id] = max(0, processing_inflight[session_id] - 1)
+                    if processing_inflight[session_id] == 0:
+                        del processing_inflight[session_id]
+
+
+@app.get("/vision/diagnose")
+def vision_diagnose():
+    """
+    Run pre-flight checks and report what is available:
+    camera, VLM providers, installed packages.
+    """
+    results: Dict[str, Any] = {}
+
+    # --- camera probe ---
+    camera_ok = False
+    try:
+        import cv2 as _cv2
+        backend = _cv2.CAP_DSHOW if os.name == "nt" else 0
+        cap = _cv2.VideoCapture(1, backend)
+        camera_ok = cap.isOpened()
+        cap.release()
+    except Exception as _exc:
+        results["camera_error"] = str(_exc)
+    results["camera_index_1_available"] = camera_ok
+
+    # --- VLM provider availability ---
+    providers: Dict[str, Any] = {}
+
+    # ollama
+    try:
+        from urllib import request as _req
+        r = _req.urlopen("http://127.0.0.1:11434/api/tags", timeout=3)
+        import json as _json
+        tags = _json.loads(r.read())
+        providers["ollama"] = {
+            "available": True,
+            "models": [m["name"] for m in tags.get("models", [])],
+        }
+    except Exception as _exc:
+        providers["ollama"] = {"available": False, "reason": str(_exc)}
+
+    # torch / local
+    try:
+        import torch  # type: ignore
+        providers["local"] = {"available": True, "cuda": torch.cuda.is_available()}
+    except ImportError:
+        providers["local"] = {"available": False, "reason": "torch not installed"}
+
+    # anthropic
+    try:
+        import anthropic  # type: ignore  # noqa: F401
+        providers["claude"] = {
+            "available": True,
+            "api_key_set": bool(os.getenv("ANTHROPIC_API_KEY")),
+        }
+    except ImportError:
+        providers["claude"] = {"available": False, "reason": "anthropic not installed"}
+
+    # openai
+    try:
+        import openai  # type: ignore  # noqa: F401
+        providers["gpt4v"] = {
+            "available": True,
+            "api_key_set": bool(os.getenv("OPENAI_API_KEY")),
+        }
+    except ImportError:
+        providers["gpt4v"] = {"available": False, "reason": "openai not installed"}
+
+    results["vlm_providers"] = providers
+
+    # --- recommended start params ---
+    recommended_provider = "no_vlm"
+    if providers.get("ollama", {}).get("available"):
+        ollama_models = providers["ollama"].get("models", [])
+        recommended_provider = f"ollama  (models: {', '.join(ollama_models) or 'none pulled yet'})"
+    elif providers.get("claude", {}).get("api_key_set"):
+        recommended_provider = "claude"
+    elif providers.get("gpt4v", {}).get("api_key_set"):
+        recommended_provider = "gpt4v"
+    elif providers.get("local", {}).get("available"):
+        recommended_provider = "local"
+
+    results["recommended_provider"] = recommended_provider
+    results["recommended_start_params"] = (
+        "POST /vision/start?camera_index=1&save_interval=1"
+        "&provider=ollama&no_vlm=false"
+        if providers.get("ollama", {}).get("available")
+        else "POST /vision/start?camera_index=1&save_interval=1&no_vlm=true"
+    )
+
+    return results
 
 
 @app.post("/vision/start")
 def start_vision(
-    camera_index: int = 0,
+    camera_index: int = 1,
     save_interval: float = 1.0,
-    provider: str = "local",
-    local_model: str = "llava-hf/llava-1.5-7b-hf",
+    provider: str = "ollama",
+    local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
+    ollama_timeout_seconds: float = 45.0,
     no_vlm: bool = False,
 ):
-    """Start continuous capture + processing session."""
+    """Start continuous capture + processing session.
+
+    Each processed frame is appended to a SessionAggregator.  When the
+    session is stopped via ``/vision/stop`` a single ``session_summary.json``
+    is written to the session root directory.
+    """
     global capture_running, capture_thread, processing_thread, current_session
 
     with session_lock:
@@ -334,7 +495,7 @@ def start_vision(
     except Exception as e:
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
-    session = _new_session(prefix="session")
+    session = _new_session(prefix="session", aggregate=True)
     session.update(
         {
             "camera_index": camera_index,
@@ -342,6 +503,7 @@ def start_vision(
             "provider": provider,
             "local_model": local_model,
             "ollama_base_url": ollama_base_url,
+            "ollama_timeout_seconds": ollama_timeout_seconds,
             "no_vlm": no_vlm,
             "vlm_client": vlm_client,
         }
@@ -370,13 +532,18 @@ def start_vision(
         "provider": provider,
         "local_model": local_model,
         "ollama_base_url": ollama_base_url,
+        "ollama_timeout_seconds": ollama_timeout_seconds,
         "no_vlm": no_vlm,
         "session_root": session["root"],
     }
 
 
 @app.post("/vision/stop")
-def stop_vision(session_id: Optional[str] = None):
+def stop_vision(
+    session_id: Optional[str] = None,
+    wait_for_processing: bool = True,
+    processing_timeout: float = 30.0,
+):
     """Stop continuous capture session."""
     global capture_running, capture_thread, current_session
 
@@ -397,16 +564,47 @@ def stop_vision(session_id: Optional[str] = None):
     if capture_thread and capture_thread.is_alive():
         capture_thread.join(timeout=10)
 
+    if wait_for_processing:
+        deadline = time.time() + max(0.0, processing_timeout)
+        while time.time() < deadline:
+            with session_lock:
+                inflight = processing_inflight.get(session["id"], 0)
+            with processing_queue.mutex:
+                queued_for_session = sum(
+                    1 for item in list(processing_queue.queue)
+                    if item.get("session_id") == session["id"]
+                )
+            if inflight == 0 and queued_for_session == 0:
+                break
+            time.sleep(0.1)
+
+    # Finalise SessionAggregator → writes session_summary.json
+    session_summary_path: Optional[str] = None
+    session_doc: Optional[Dict[str, Any]] = None
+    agg = session.get("aggregator")
+    if agg is not None and agg.is_active:
+        try:
+            session_doc = agg.finalize(save=True)
+            session_summary_path = str(
+                Path(session["root"]) / f"{agg.session_id}_summary.json"
+            )
+            logging.info(
+                "Session summary saved: %s  screens=%d",
+                session_summary_path, session_doc.get("screen_count", 0),
+            )
+        except Exception as _fin_exc:
+            logging.warning("SessionAggregator.finalize failed: %s", _fin_exc)
+
     summary = {
         "status": "stopped",
         "session_id": session["id"],
         "session_root": session["root"],
+        "session_summary_path": session_summary_path,
         "raw_frames": len(list(Path(session["raw_dir"]).glob("*.jpg"))),
         "preprocessed_frames": len(list(Path(session["preproc_dir"]).glob("*.jpg"))),
-        "coarse_json": len(list(Path(session["coarse_dir"]).glob("*.json"))),
-        "refined_json": len(list(Path(session["refined_dir"]).glob("*.json"))),
-        "refined_debug_images": len(list(Path(session["refined_debug_dir"]).glob("*.jpg"))),
         "final_json": len(list(Path(session["final_dir"]).glob("*.json"))),
+        # Full aggregated session document — one JSON with all screen data
+        "session_data": session_doc,
     }
 
     with session_lock:
@@ -417,13 +615,17 @@ def stop_vision(session_id: Optional[str] = None):
 
 @app.post("/vision/capture")
 def capture_once(
-    camera_index: int = 0,
-    provider: str = "local",
-    local_model: str = "llava-hf/llava-1.5-7b-hf",
+    camera_index: int = 1,
+    provider: str = "ollama",
+    local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
+    ollama_timeout_seconds: float = 60.0,
     no_vlm: bool = False,
 ):
-    """Single-shot capture and pipeline execution. Returns final JSON."""
+    """Single-shot capture and pipeline execution. Returns final JSON.
+
+    VLM classification uses a single batch call for all detected elements.
+    """
     frame = _capture_single_frame(camera_index=camera_index)
     if frame is None:
         return {"status": "error", "detail": f"Failed to capture frame from camera {camera_index}"}
@@ -444,7 +646,12 @@ def capture_once(
     cv2.imwrite(frame_path, frame)
 
     try:
-        result = _run_pipeline_for_frame(frame_path=frame_path, session=session, vlm_client=vlm_client)
+        result = _run_pipeline_for_frame(
+            frame_path=frame_path,
+            session=session,
+            vlm_client=vlm_client,
+            ollama_timeout_seconds=ollama_timeout_seconds,
+        )
         return result
     except Exception as e:
         logging.exception("Single-shot pipeline failed")
