@@ -74,22 +74,62 @@ export class Normalizer {
 
   /**
    * Normalize mouse_scroll into one or more wheel reports
+   * Supports both legacy 'scroll' field and new 'deltaX'/'deltaY' fields
    */
   private static normalizeMouseScroll(cmd: any): NormalizedCommand[] {
-    const scroll = cmd.scroll;
-
-    if (Math.abs(scroll) <= 127) return [cmd];
-
-    const commands: NormalizedCommand[] = [];
-    let remaining = scroll;
-
-    while (remaining !== 0) {
-      const step = this.clamp(remaining, -127, 127);
-      commands.push({ cmd: 'mouse_scroll', scroll: step });
-      remaining -= step;
+    // Handle deltaY (vertical scroll - preferred)
+    if (cmd.deltaY !== undefined && cmd.deltaY !== null && !isNaN(cmd.deltaY)) {
+      const deltaY = cmd.deltaY;
+      if (Math.abs(deltaY) <= 127) return [cmd];
+      
+      const commands: NormalizedCommand[] = [];
+      let remaining = deltaY;
+      
+      while (remaining !== 0) {
+        const step = this.clamp(remaining, -127, 127);
+        commands.push({ cmd: 'mouse_scroll', deltaY: step, deltaX: cmd.deltaX || 0 });
+        remaining -= step;
+      }
+      
+      return commands;
     }
-
-    return commands;
+    
+    // Handle deltaX (horizontal scroll alone)
+    if (cmd.deltaX !== undefined && cmd.deltaX !== null && !isNaN(cmd.deltaX)) {
+      const deltaX = cmd.deltaX;
+      if (Math.abs(deltaX) <= 127) return [cmd];
+      
+      const commands: NormalizedCommand[] = [];
+      let remaining = deltaX;
+      
+      while (remaining !== 0) {
+        const step = this.clamp(remaining, -127, 127);
+        commands.push({ cmd: 'mouse_scroll', deltaX: step, deltaY: 0 });
+        remaining -= step;
+      }
+      
+      return commands;
+    }
+    
+    // Handle legacy scroll field (fallback)
+    if (cmd.scroll !== undefined && cmd.scroll !== null && !isNaN(cmd.scroll)) {
+      const scroll = cmd.scroll;
+      if (Math.abs(scroll) <= 127) return [cmd];
+      
+      const commands: NormalizedCommand[] = [];
+      let remaining = scroll;
+      
+      while (remaining !== 0) {
+        const step = this.clamp(remaining, -127, 127);
+        commands.push({ cmd: 'mouse_scroll', scroll: step });
+        remaining -= step;
+      }
+      
+      return commands;
+    }
+    
+    // No valid scroll field - return command as-is (will fail validation later)
+    return [cmd];
   }
 
   /**
