@@ -220,9 +220,14 @@ class SessionAggregator:
         self._seen_hashes.add(frame_hash)
 
         # --- extract elements ---
-        elements: List[Dict[str, Any]] = []
-        if pipeline_result.get("success"):
-            elements = pipeline_result.get("detection", {}).get("elements", [])
+        # pipeline_result["vision_data"] holds the enriched frame payload:
+        #   {"image": "<preprocessed_path>", "element_count": N, "elements": [...]}
+        vision_data: Dict[str, Any] = pipeline_result.get("vision_data", {})
+        elements: List[Dict[str, Any]] = vision_data.get("elements", [])
+
+        # Prefer the preprocessed image path stored in vision_data so the
+        # session summary points to the cleaner, normalised frame.
+        record_image_path = vision_data.get("image") or str(image_path)
 
         # --- delta detection ---
         delta_dict: Optional[Dict[str, Any]] = None
@@ -235,7 +240,7 @@ class SessionAggregator:
         record = ScreenRecord(
             screen_index   = len(self._screens),
             timestamp      = datetime.now().isoformat(),
-            image_path     = str(image_path),
+            image_path     = record_image_path,
             frame_hash     = frame_hash,
             elements       = elements,
             semantic_state = pipeline_result.get("semantic_state"),
@@ -275,7 +280,7 @@ class SessionAggregator:
         document = self._build_document()
 
         if save:
-            path = self.output_dir / f"session_{self._session_id}_summary.json"
+            path = self.output_dir / f"{self._session_id}_summary.json"
             with open(path, "w", encoding="utf-8") as fh:
                 json.dump(document, fh, indent=2, default=str)
             logger.info("Session saved: %s  (%d screens)", path, len(self._screens))

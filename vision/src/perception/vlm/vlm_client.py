@@ -259,7 +259,8 @@ class VLMClient(ABC):
             "    {\n"
             '      "id": "<same id as input>",\n'
             '      "type": "<button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|link|card|list_item|image|unknown>",\n'
-            '      "label": "<short visible text or description>",\n'
+            '      "label": "<short visible text or purpose, empty string if none>",\n'
+            '      "description": "<one sentence describing what this element does or shows>",\n'
             '      "state": "<enabled|disabled|focused|checked|unchecked|normal>",\n'
             '      "confidence": <0.0-1.0>\n'
             "    }\n"
@@ -268,9 +269,10 @@ class VLMClient(ABC):
             "Elements to classify:\n"
             f"{element_list_json}\n\n"
             "Rules:\n"
-            "1. Return ONLY the JSON object â€“ no prose, no markdown fences.\n"
+            "1. Return ONLY the JSON object - no prose, no markdown fences.\n"
             "2. Include every element id from the input list.\n"
             "3. confidence reflects how certain you are about the type.\n"
+            "4. description should be a concise, meaningful sentence; never leave it as 'No VLM available'.\n"
         )
 
         # --- retry loop ---
@@ -323,6 +325,12 @@ class VLMClient(ABC):
             "single-call batch classification is unavailable."
         )
 
+    _STALE_DESCRIPTIONS: frozenset = frozenset({
+        "No VLM available",
+        "VLM classification failed",
+        "Skipped VLM classification (Ollama call budget)",
+    })
+
     @staticmethod
     def _apply_classifications(
         elements: List[UIElement],
@@ -330,6 +338,7 @@ class VLMClient(ABC):
     ) -> List[UIElement]:
         """Merge classification results back onto the UIElement list."""
         id_map: Dict[str, Dict[str, Any]] = {c["id"]: c for c in classifications}
+        stale = VLMClient._STALE_DESCRIPTIONS
         for elem in elements:
             cls = id_map.get(elem.id)
             if cls:
@@ -337,6 +346,12 @@ class VLMClient(ABC):
                 elem.label       = cls.get("label",      elem.label)
                 elem.state       = cls.get("state",      elem.state)
                 elem.confidence  = float(cls.get("confidence", elem.confidence))
+                # Apply description from VLM; clear stale placeholders set by enrich_frame
+                vlm_desc = cls.get("description", "")
+                if vlm_desc:
+                    elem.description = vlm_desc
+                elif elem.description in stale:
+                    elem.description = ""
         return elements
 
     # ------------------------------------------------------------------
@@ -531,6 +546,95 @@ class LocalVLMClient(VLMClient):
         data = self.parser.extract_json_from_response(response_text)
         if not _validate_batch_response(data):
             raise ValueError("Local VLM batch response failed schema validation")
+        return data["elements"]
+
+
+class OllamaVLMClient(VLMClient):
+    """
+    Local Ollama VLM client using the Ollama HTTP API.
+
+    Implements both:
+      - analyze_ui()          : full zero-shot element discovery
+      - _do_batch_classify()  : single-call batch classification (ISSUE 1 fix)
+    """
+
+    def __init__(
+        self,
+        model_name: str = "llava:7b",
+        base_url: Optional[str] = None,
+        timeout_seconds: float = 120.0,
+    ):
+        super().__init__(None, model_name)
+        self.base_url = (
+            base_url or os.getenv("OLLAMA_BASE_URL") or "http://127.0.0.1:11434"
+        ).rstrip("/")
+        self.timeout_seconds = timeout_seconds
+
+    # ------------------------------------------------------------------
+    # Low-level HTTP helper
+    # ------------------------------------------------------------------
+
+    def _ollama_chat(self, prompt: str, image_data: str, timeout: float) -> str:
+        """Send a single chat request to Ollama and return the content string."""
+        from urllib import request as urllib_request, error as urllib_error
+        payload = {
+            "model": self.model_name,
+            "messages": [{"role": "user", "content": prompt, "images": [image_data]}],
+            "stream": False,
+            "format": "json",
+            "options": {"temperature": 0},
+        }
+        req = urllib_request.Request(
+            url=f"{self.base_url}/api/chat",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib_request.urlopen(req, timeout=timeout) as resp:
+            body = resp.read().decode("utf-8")
+        data = json.loads(body)
+        return data.get("message", {}).get("content", "")
+
+    # ------------------------------------------------------------------
+    # Full discovery
+    # ------------------------------------------------------------------
+
+    def analyze_ui(self, image_path: str, prompt: Optional[str] = None, **kwargs) -> UIAnalysisResult:
+        """Detect all UI elements in one full-image VLM call."""
+        prompt = prompt or get_ui_discovery_prompt()
+        try:
+            image_data = self.encode_image_to_base64(image_path)
+            width, height = self.get_image_dimensions(image_path)
+            response_text = self._ollama_chat(prompt, image_data, self.timeout_seconds)
+            return self.parser.parse_vlm_response(response_text, width, height)
+        except Exception as exc:
+            return UIAnalysisResult(
+                elements=[], parse_successful=False,
+                parse_error=f"Ollama VLM error: {exc}",
+            )
+
+    # ------------------------------------------------------------------
+    # Single-call batch classification (ISSUE 1 fix)
+    # ------------------------------------------------------------------
+
+    def _do_batch_classify(
+        self,
+        image_path: str,
+        prompt: str,
+        timeout_seconds: float,
+    ) -> Optional[List[Dict[str, Any]]]:
+        """Issue ONE Ollama call with the full image + all element bboxes."""
+        image_data = self.encode_image_to_base64(image_path)
+        response_text = self._ollama_chat(prompt, image_data, timeout_seconds)
+        try:
+            data = self.parser.extract_json_from_response(response_text)
+        except Exception as exc:
+            raise ValueError(f"JSON extraction failed: {exc}") from exc
+        if not _validate_batch_response(data):
+            raise ValueError(
+                f"Batch response failed schema validation. "
+                f"Got keys: {list(data.keys()) if isinstance(data, dict) else type(data)}"
+            )
         return data["elements"]
 
 
