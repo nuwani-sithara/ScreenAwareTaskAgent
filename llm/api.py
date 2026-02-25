@@ -17,6 +17,7 @@ import asyncio
 from llm.interactive_generate import run_interactive
 from llm.ollama_adapter import generate_and_format
 from llm.ollama_client import OllamaClient
+from llm.hid_step_generator import HIDStepGenerator, generate_hid_steps_from_visual
 
 logging.basicConfig(
     level=logging.INFO,
@@ -80,6 +81,12 @@ class SimpleGenerateRequest(BaseModel):
     model: Optional[str] = "mistral"
     max_tokens: Optional[int] = 512
 
+class VisualHIDRequest(BaseModel):
+    instruction: str
+    visual_data: Dict[str, Any]
+    model: Optional[str] = "mistral"
+    max_tokens: Optional[int] = 300
+
 class HealthResponse(BaseModel):
     status: str
     service: str
@@ -90,7 +97,8 @@ class HealthResponse(BaseModel):
 
 @app.get("/", response_model=Dict[str, Any])
 def root():
-    """API documentation endpoint"""
+    """API documentatiogenerate_hid": "Generate HID commands from instruction + visual data",
+            "POST /llm/n endpoint"""
     return {
         "service": "LLM Step Generation Service",
         "version": "2.0.0",
@@ -181,6 +189,97 @@ def generate_steps(gen_request: GenerateRequest, request: Request):
         raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
 
 
+@app.post("/llm/generate_hid", response_model=Dict[str, Any])
+def generate_hid_commands(request: VisualHIDRequest):
+    """
+    Generate HID protocol commands from visual perception + user instruction.
+    This is the main endpoint for screen-aware task automation.
+    
+    Request:
+    {
+        "instruction": "Click the Send button",
+        "visual_data": {
+            "session_data": {
+                "screens": [...]
+            }
+        },
+        "model": "mistral",
+        "max_tokens": 300
+    }
+    
+    Response:
+    {
+        "status": "success",
+        "instruction": "...",
+        "hid_commands": [
+            {"cmd":"mouse_move","meta":{"commandId":"uuid"},"dx":100,"dy":200},
+            {"cmd":"mouse_click","meta":{"commandId":"uuid"},"button":"left"}
+        ],
+        "total_commands": 2,
+        "visual_summary": "...",
+        "timestamp": "..."
+    }
+    """
+    try:
+        if not request.instruction or not request.instruction.strip():
+            raise HTTPException(status_code=400, detail="Instruction cannot be empty")
+        
+        if not request.visual_data:
+            raise HTTPException(status_code=400, detail="Visual data cannot be empty")
+        
+        logger.info(f"📥 HID generation request: {request.instruction[:80]}...")
+        
+        start_time = time.time()
+        
+        # Generate HID commands using two-stage pipeline
+        result = generate_hid_steps_from_visual(
+            instruction=request.instruction,
+            visual_data=request.visual_data,
+            model=request.model
+        )
+        
+        execution_time = time.time() - start_time
+        
+        # Check for errors
+        if result.get("status") == "error":
+            logger.error(f"❌ HID generation failed: {result.get('error')}")
+            raise HTTPException(status_code=500, detail=result.get("error"))
+        
+        action_steps = result.get("action_steps", [])
+        hid_commands = result.get("hid_commands", [])
+        
+        logger.info(f"✅ Generated {len(action_steps)} actions → {len(hid_commands)} HID commands in {execution_time:.2f}s")
+        
+        # Log action steps for debugging
+        if action_steps:
+            logger.info("📝 Action Steps:")
+            for action in action_steps[:5]:  # Log first 5
+                logger.info(f"  Step {action.get('step')}: {action.get('action')} - {action.get('target')}")
+        
+        # Log commands for debugging
+        if hid_commands:
+            logger.info("📋 HID Commands:")
+            for cmd in hid_commands[:5]:  # Log first 5
+                logger.info(f"  {cmd.get('cmd')}: {cmd}")
+        
+        return {
+            "status": "success",
+            "instruction": result.get("instruction"),
+            "rewritten_steps": result.get("rewritten_steps"),
+            "action_steps": action_steps,  # Stage 1 output
+            "hid_commands": hid_commands,   # Stage 2 output
+            "total_commands": result.get("total_commands"),
+            "timestamp": result.get("timestamp"),
+            "execution_time": f"{execution_time:.2f}s"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("HID generation failed")
+        raise HTTPException(status_code=500, detail=f"HID generation failed: {str(e)}")
+
+
 @app.post("/llm/simple", response_model=Dict[str, Any])
 def simple_generate(request: SimpleGenerateRequest):
     """
@@ -268,13 +367,14 @@ def get_status():
         "service": "LLM Step Generation Service",
         "version": "2.0.0",
         "status": "running",
-        "endpoints_available": 4,
+        "endpoints_available": 5,
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "features": {
             "full_pipeline": True,
             "validation": True,
             "rewriting": True,
-            "simple_generation": True
+            "simple_generation": True,
+            "visual_hid_generation": True
         }
     }
 
