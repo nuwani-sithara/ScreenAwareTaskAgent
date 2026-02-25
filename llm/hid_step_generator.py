@@ -108,15 +108,203 @@ class HIDStepGenerator:
         type_priority = {"button": 0, "input_field": 1, "text": 2, "checkbox": 3, "dropdown": 4, "unknown": 5}
         interactive_elements.sort(key=lambda x: (type_priority.get(x["type"], 99), -x["confidence"]))
         
-        # Build context string with clear positioning
+        # Build context string with clear positioning and natural language
         for i, elem in enumerate(interactive_elements[:10], 1):  # Top 10 elements
             center_x = elem["x"]
             center_y = elem["y"]
+            elem_type = elem['type']
+            label = elem['label']
             
-            context += f"{i}. {elem['type'].upper()}: '{elem['label']}' at position ({center_x}, {center_y})\n"
-            context += f"   Position: ({center_x}, {center_y}), State: {elem['state']}, Confidence: {elem['confidence']:.2f}\n"
+            # Use natural language descriptions that match user instructions
+            if elem_type in ["input", "input_field"]:
+                natural_desc = f"'{label}' input field"
+            elif elem_type == "button":
+                natural_desc = f"'{label}' button"
+            elif elem_type == "text":
+                natural_desc = f"Text: '{label}'"
+            elif elem_type == "checkbox":
+                natural_desc = f"'{label}' checkbox"
+            elif elem_type == "dropdown":
+                natural_desc = f"'{label}' dropdown"
+            else:
+                natural_desc = f"{elem_type}: '{label}'"
+            
+            context += f"{i}. {natural_desc} at position ({center_x}, {center_y})\n"
         
         return context
+    
+    def validate_instruction_with_visual_context(
+        self, 
+        instruction: str, 
+        visual_data: Dict[str, Any],
+        model: str = "mistral"
+    ) -> Dict[str, Any]:
+        """
+        Validate if the user's instruction matches the current visual context.
+        Uses LLM to check if required UI elements are present.
+        
+        Args:
+            instruction: User's task instruction
+            visual_data: Visual perception data
+            model: LLM model to use
+            
+        Returns:
+            {
+                "is_valid": bool,
+                "confidence": float,
+                "reason": str,
+                "suggested_actions": List[str],  # If invalid, suggest next steps
+                "missing_elements": List[str]
+            }
+        """
+        
+        visual_context = self._build_visual_context(visual_data)
+        
+        # Build validation prompt
+        validation_prompt = f"""You are a UI validation assistant. Analyze if the user's instruction matches the current screen content.
+
+CURRENT SCREEN ELEMENTS:
+{visual_context}
+
+USER INSTRUCTION:
+{instruction}
+
+TASK:
+Determine if the instruction can be completed with the currently visible elements.
+Match elements by their PURPOSE and LABEL, not exact wording:
+- "Username field" matches "Username input field"
+- "Password field" matches "Password input field"  
+- "Login button" matches "Login button"
+- "Click Send" matches "Send button"
+
+Respond ONLY with valid JSON (no comments, no markdown):
+{{
+    "is_valid": true/false,
+    "confidence": 0.0-1.0,
+    "reason": "Brief explanation",
+    "missing_elements": ["list of missing elements if any"],
+    "suggested_actions": ["scroll_down", "scroll_up", "wait_for_load", etc. - if elements not found"]
+}}
+
+RULES:
+- Set is_valid=true if ALL required elements are present (even with slightly different wording)
+- Set is_valid=false ONLY if key elements are completely missing from the screen
+- Be FLEXIBLE with element names: "Username" and "Username field" and "Username input" all refer to the same thing
+- confidence=1.0 means absolutely certain, 0.5 means uncertain
+- suggested_actions should help find missing elements (e.g., "scroll_down" if buttons might be below)
+
+JSON Response:"""
+
+        try:
+            logger.info("🔍 Validating instruction against visual context...")
+            logger.debug(f"Visual Context:\n{visual_context}")
+            
+            # Get LLM validation
+            response = self.client.generate(
+                model=model,
+                prompt=validation_prompt,
+                max_tokens=500,
+                temperature=0.3  # Lower temperature for more deterministic validation
+            )
+            
+            # Clean and parse response
+            response_text = response.strip()
+            
+            # Strip markdown code blocks if present
+            if "```json" in response_text:
+                response_text = response_text.split("```json")[1].split("```")[0].strip()
+            elif "```" in response_text:
+                response_text = response_text.split("```")[1].split("```")[0].strip()
+            
+            # Strip JSON comments (// and /* */)
+            import re
+            response_text = re.sub(r'//.*?$', '', response_text, flags=re.MULTILINE)
+            response_text = re.sub(r'/\*.*?\*/', '', response_text, flags=re.DOTALL)
+            
+            validation_result = json.loads(response_text)
+            
+            is_valid = validation_result.get("is_valid", False)
+            confidence = validation_result.get("confidence", 0.5)
+            reason = validation_result.get("reason", "")
+            
+            if is_valid:
+                logger.info(f"✅ Validation PASSED (confidence: {confidence:.2f}): {reason}")
+            else:
+                logger.warning(f"⚠️ Validation FAILED (confidence: {confidence:.2f}): {reason}")
+                missing = validation_result.get("missing_elements", [])
+                suggested = validation_result.get("suggested_actions", [])
+                logger.info(f"   Missing: {missing}")
+                logger.info(f"   Suggested: {suggested}")
+            
+            return validation_result
+            
+        except json.JSONDecodeError as e:
+            logger.warning(f"Failed to parse validation response: {e}")
+            # Default to proceeding with caution
+            return {
+                "is_valid": True,  # Assume valid to not block workflow
+                "confidence": 0.3,
+                "reason": "Unable to validate - proceeding with caution",
+                "missing_elements": [],
+                "suggested_actions": []
+            }
+        except Exception as e:
+            logger.exception("Validation error")
+            return {
+                "is_valid": True,
+                "confidence": 0.3,
+                "reason": f"Validation error: {str(e)}",
+                "missing_elements": [],
+                "suggested_actions": []
+            }
+    
+    def _format_action_steps(self, action_steps: List[Dict[str, Any]]) -> List[str]:
+        """
+        Format action steps into human-readable descriptions
+        
+        Args:
+            action_steps: List of structured actions from Stage 1
+        
+        Returns:
+            List of formatted step descriptions
+        """
+        formatted_steps = []
+        
+        for action in action_steps:
+            step_num = action.get("step", 0)
+            action_type = action.get("action", "").lower()
+            target = action.get("target", "")
+            
+            # Build human-readable description
+            if action_type == "click":
+                description = f"Step {step_num}: Click {target}"
+                    
+            elif action_type == "type_text":
+                text = action.get("text", "")
+                description = f"Step {step_num}: Type '{text}'"
+                if target:
+                    description += f" in {target}"
+                    
+            elif action_type == "press_key":
+                key = action.get("key", "")
+                description = f"Step {step_num}: Press {key.upper()} key"
+                    
+            elif action_type == "wait":
+                duration = action.get("duration_ms", 0)
+                description = f"Step {step_num}: Wait {duration}ms"
+                
+            elif action_type == "navigate":
+                nav_target = action.get("target", "")
+                description = f"Step {step_num}: Navigate to {nav_target}"
+                
+            else:
+                description = f"Step {step_num}: {action_type}"
+                if target:
+                    description += f" - {target}"
+            
+            formatted_steps.append(description)
+        
+        return formatted_steps
     
     def _generate_command_id(self) -> str:
         """Generate a UUID for command tracking"""
@@ -570,11 +758,13 @@ Output JSON array:"""
         instruction: str,
         visual_data: Dict[str, Any],
         model: str = "mistral",
-        max_tokens: int = 500
+        max_tokens: int = 500,
+        skip_validation: bool = False
     ) -> Dict[str, Any]:
         """
         Main entry point: Generate HID commands using two-stage pipeline
         
+        Stage 0: Validate instruction matches visual context (optional)
         Stage 1: Generate structured action steps (JSON)
         Stage 2: Convert actions to HID protocol commands
         
@@ -583,12 +773,14 @@ Output JSON array:"""
             visual_data: Visual perception output with screen elements
             model: LLM model to use
             max_tokens: Max tokens for generation
+            skip_validation: Skip validation check (default: False)
         
         Returns:
             {
-                "status": "success",
+                "status": "success" | "validation_failed" | "error",
                 "instruction": "...",
                 "visual_summary": "...",
+                "validation": {...},  # Validation result if performed
                 "action_steps": [...],  # Stage 1 output
                 "hid_commands": [...],   # Stage 2 output
                 "total_commands": N,
@@ -598,6 +790,32 @@ Output JSON array:"""
         
         try:
             visual_context = self._build_visual_context(visual_data)
+            
+            # Stage 0: Validate instruction matches visual context
+            validation_result = None
+            if not skip_validation:
+                validation_result = self.validate_instruction_with_visual_context(
+                    instruction=instruction,
+                    visual_data=visual_data,
+                    model=model
+                )
+                
+                # If validation failed with high confidence, suggest navigation
+                if not validation_result.get("is_valid") and validation_result.get("confidence", 0) >= 0.7:
+                    logger.warning("⚠️ Validation failed - suggesting navigation actions")
+                    return {
+                        "status": "validation_failed",
+                        "instruction": instruction,
+                        "visual_summary": visual_context[:500],
+                        "validation": validation_result,
+                        "steps_description": [],
+                        "action_steps": [],
+                        "hid_commands": [],
+                        "total_commands": 0,
+                        "timestamp": datetime.utcnow().isoformat(),
+                        "message": f"Required elements not found on screen. {validation_result.get('reason', '')}",
+                        "suggested_actions": validation_result.get("suggested_actions", [])
+                    }
             
             # Stage 1: Generate structured action steps
             action_steps = self.generate_action_steps(
@@ -614,6 +832,8 @@ Output JSON array:"""
                     "error": "Failed to generate action steps",
                     "instruction": instruction,
                     "visual_summary": visual_context[:500],
+                    "validation": validation_result,
+                    "steps_description": [],
                     "action_steps": [],
                     "hid_commands": [],
                     "total_commands": 0,
@@ -623,17 +843,25 @@ Output JSON array:"""
             # Stage 2: Convert actions to HID commands
             hid_commands = self.convert_actions_to_hid(action_steps)
             
+            # Format action steps into human-readable descriptions
+            steps_description = self._format_action_steps(action_steps)
+            
             result = {
                 "status": "success",
                 "instruction": instruction,
                 "visual_summary": visual_context[:500],
+                "validation": validation_result,  # Include validation result
+                "steps_description": steps_description,  # Human-readable steps
                 "action_steps": action_steps,  # Include intermediate representation
                 "hid_commands": hid_commands,
                 "total_commands": len(hid_commands),
                 "timestamp": datetime.utcnow().isoformat()
             }
             
-            logger.info(f"✅ Two-stage pipeline complete: {len(action_steps)} actions → {len(hid_commands)} HID commands")
+            if validation_result:
+                logger.info(f"✅ Three-stage pipeline complete: Validation → {len(action_steps)} actions → {len(hid_commands)} HID commands")
+            else:
+                logger.info(f"✅ Two-stage pipeline complete: {len(action_steps)} actions → {len(hid_commands)} HID commands")
             
             return result
             
@@ -643,6 +871,8 @@ Output JSON array:"""
                 "status": "error",
                 "error": str(e),
                 "instruction": instruction,
+                "validation": None,
+                "steps_description": [],
                 "action_steps": [],
                 "hid_commands": [],
                 "total_commands": 0,
@@ -658,7 +888,8 @@ def generate_hid_steps_from_visual(
     instruction: str,
     visual_data: Dict[str, Any],
     model: str = "mistral",
-    client: Optional[OllamaClient] = None
+    client: Optional[OllamaClient] = None,
+    skip_validation: bool = False
 ) -> Dict[str, Any]:
     """
     Convenience function to generate HID steps.
@@ -667,14 +898,15 @@ def generate_hid_steps_from_visual(
         result = generate_hid_steps_from_visual(
             instruction="Click the Send button",
             visual_data=perception_output,
-            model="mistral"
+            model="mistral",
+            skip_validation=False  # Set to True to skip validation
         )
         
         hid_commands = result["hid_commands"]
         # Send to HID device
     """
     generator = HIDStepGenerator(client=client)
-    return generator.generate_hid_steps(instruction, visual_data, model)
+    return generator.generate_hid_steps(instruction, visual_data, model, skip_validation=skip_validation)
 
 
 if __name__ == "__main__":
