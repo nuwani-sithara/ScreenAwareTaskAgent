@@ -86,6 +86,7 @@ class VisualHIDRequest(BaseModel):
     visual_data: Dict[str, Any]
     model: Optional[str] = "mistral"
     max_tokens: Optional[int] = 300
+    skip_validation: Optional[bool] = False  # Skip validation check
 
 class HealthResponse(BaseModel):
     status: str
@@ -231,28 +232,57 @@ def generate_hid_commands(request: VisualHIDRequest):
         
         start_time = time.time()
         
-        # Generate HID commands using two-stage pipeline
+        # Generate HID commands using two-stage pipeline (with validation)
         result = generate_hid_steps_from_visual(
             instruction=request.instruction,
             visual_data=request.visual_data,
-            model=request.model
+            model=request.model,
+            skip_validation=request.skip_validation
         )
         
         execution_time = time.time() - start_time
         
-        # Check for errors
+        # Check for validation failure
+        if result.get("status") == "validation_failed":
+            validation = result.get("validation", {})
+            logger.warning(f"⚠️ Validation failed: {result.get('message')}")
+            logger.info(f"   Missing elements: {validation.get('missing_elements', [])}")
+            logger.info(f"   Suggested actions: {result.get('suggested_actions', [])}")
+            
+            return {
+                "status": "validation_failed",
+                "instruction": result.get("instruction"),
+                "message": result.get("message"),
+                "validation": validation,
+                "suggested_actions": result.get("suggested_actions", []),
+                "rewritten_steps": [],
+                "action_steps": [],
+                "hid_commands": [],
+                "total_commands": 0,
+                "timestamp": result.get("timestamp"),
+                "execution_time": f"{execution_time:.2f}s"
+            }
+        
+        # Check for other errors
         if result.get("status") == "error":
             logger.error(f"❌ HID generation failed: {result.get('error')}")
             raise HTTPException(status_code=500, detail=result.get("error"))
         
         action_steps = result.get("action_steps", [])
         hid_commands = result.get("hid_commands", [])
+        rewritten_steps = result.get("rewritten_steps", [])
         
         logger.info(f"✅ Generated {len(action_steps)} actions → {len(hid_commands)} HID commands in {execution_time:.2f}s")
         
+        # Log rewritten steps for debugging
+        if rewritten_steps:
+            logger.info("📋 Rewritten Steps:")
+            for step in rewritten_steps[:10]:  # Log first 10
+                logger.info(f"  {step.get('step')}. {step.get('action')}: {step.get('description')}")
+        
         # Log action steps for debugging
         if action_steps:
-            logger.info("📝 Action Steps:")
+            logger.info("📝 Action Steps (JSON):")
             for action in action_steps[:5]:  # Log first 5
                 logger.info(f"  Step {action.get('step')}: {action.get('action')} - {action.get('target')}")
         
@@ -265,7 +295,8 @@ def generate_hid_commands(request: VisualHIDRequest):
         return {
             "status": "success",
             "instruction": result.get("instruction"),
-            "rewritten_steps": result.get("rewritten_steps"),
+            "validation": result.get("validation"),  # Validation result
+            "rewritten_steps": rewritten_steps,  # Human-readable structured steps
             "action_steps": action_steps,  # Stage 1 output
             "hid_commands": hid_commands,   # Stage 2 output
             "total_commands": result.get("total_commands"),

@@ -2,7 +2,16 @@
 
 ## Overview
 
-The LLM Service is a **FastAPI-based microservice** that converts natural language instructions and visual perception data into executable HID (Human Interface Device) protocol commands. It uses a **two-stage pipeline** architecture for improved reliability and debuggability.
+
+The LLM Service is a **FastAPI-based microservice** that converts natural language instructions and visual perception data into executable HID (Human Interface Device) protocol commands. The workflow is now unified and robust:
+
+- **LLM output is always post-processed** into concise, structured `rewritten_steps` (step, action, description) for clarity and consistency.
+- **Unified entry point**: All step generation (API, internal, or test) uses the same logic via `generate_hid_steps_from_visual` (see `llm/hid_step_generator.py`).
+- **Validation**: Every request validates the instruction against the visual context using the LLM.
+- **Action steps and HID commands**: Always generated from the same post-processed, validated pipeline.
+- **rewritten_steps**: Always concise, never verbose, regardless of LLM output verbosity.
+
+This ensures that all outputs (API, CLI, or internal) are consistent, concise, and reliable.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -18,27 +27,20 @@ The LLM Service is a **FastAPI-based microservice** that converts natural langua
 │  ┌───────────────────────────────────────────────────────────┐    │
 │  │              HID Step Generator (Core Logic)               │    │
 │  │                                                            │    │
-│  │  ┌──────────────────────────────────────────────────┐    │    │
-│  │  │  Stage 1: Action Planning                        │    │    │
-│  │  │  ────────────────────────────────                │    │    │
-│  │  │  • Parses visual context                         │    │    │
-│  │  │  • Builds LLM prompt                             │    │    │
-│  │  │  • Generates structured JSON actions             │    │    │
-│  │  │                                                   │    │    │
-│  │  │  Input:  Visual data + Instruction               │    │    │
-│  │  │  Output: [{"action": "click", "x": 863, ...}]  │    │    │
-│  │  └──────────────────────────────────────────────────┘    │    │
-│  │                        ↓                                  │    │
-│  │  ┌──────────────────────────────────────────────────┐    │    │
-│  │  │  Stage 2: HID Command Generation                 │    │    │
-│  │  │  ────────────────────────────────────            │    │    │
-│  │  │  • Converts actions to HID protocol              │    │    │
-│  │  │  • Generates UUIDs for command tracking          │    │    │
-│  │  │  • Handles key mappings (tab=0x2B, etc.)        │    │    │
-│  │  │                                                   │    │    │
-│  │  │  Input:  Action steps                            │    │    │
-│  │  │  Output: [{"cmd": "mouse_move", "dx": 863...}] │    │    │
-│  │  └──────────────────────────────────────────────────┘    │    │
+│  │  ┌──────────────────────────────────────────────────────────────┐    │    │
+│  │  │  Unified LLM Step Generation Pipeline                       │    │    │
+│  │  │  ────────────────────────────────────────────────────────── │    │    │
+│  │  │  • Validates instruction with visual context (LLM)          │    │    │
+│  │  │  • Generates LLM steps (may be verbose)                     │    │    │
+│  │  │  • Post-processes LLM steps into concise rewritten_steps     │    │    │
+│  │  │  • Generates action_steps and HID commands from rewritten    │    │    │
+│  │  │  • Output is always:                                        │    │    │
+│  │  │      - validation (LLM-based)                               │    │    │
+│  │  │      - rewritten_steps (concise, structured)                │    │    │
+│  │  │      - action_steps (detailed, for HID conversion)          │    │    │
+│  │  │      - hid_commands (protocol commands)                     │    │    │
+│  │  └──────────────────────────────────────────────────────────────┘    │    │
+│  │  Output: [{"step": 1, "action": "click", "description": "Click Login button"}, ...] │    │    │
 │  └───────────────────────────────────────────────────────────┘    │
 │                              ↓                                      │
 │  ┌───────────────────────────────────────────────────────────┐    │
