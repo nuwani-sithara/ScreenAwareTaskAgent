@@ -11,7 +11,6 @@ Purpose:
 This module is intentionally detector-independent.
 """
 
-import os
 import json
 import cv2
 import numpy as np
@@ -45,6 +44,12 @@ class BBoxRefiner:
     def __init__(self, edge_detection_method: str = "canny"):
         self.edge_detection_method = edge_detection_method
         self.min_edge_confidence = 0.06
+
+    def _auto_canny(self, gray: np.ndarray) -> np.ndarray:
+        median = float(np.median(gray))
+        lower = int(max(10, 0.66 * median))
+        upper = int(min(240, 1.33 * median + 25))
+        return cv2.Canny(gray, lower, max(lower + 1, upper))
 
     # ---------- Coordinate utils ----------
 
@@ -109,46 +114,52 @@ class BBoxRefiner:
         if len(region.shape) == 3:
             region = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
 
+        region = cv2.GaussianBlur(region, (3, 3), 0)
+
         if self.edge_detection_method == "canny":
-            edges = cv2.Canny(region, 50, 150)
+            edge_map = self._auto_canny(region)
         else:
             sobelx = cv2.Sobel(region, cv2.CV_64F, 1, 0, ksize=3)
             sobely = cv2.Sobel(region, cv2.CV_64F, 0, 1, ksize=3)
-            edges = np.sqrt(sobelx ** 2 + sobely ** 2).astype(np.uint8)
-            edges = cv2.threshold(edges, 50, 255, cv2.THRESH_BINARY)[1]
+            grad = np.sqrt(sobelx ** 2 + sobely ** 2).astype(np.uint8)
+            edge_map = cv2.threshold(grad, 40, 255, cv2.THRESH_BINARY)[1]
 
-        # Smooth broken UI edges before projection analysis.
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        edges = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel, iterations=1)
+        text_control_mask = cv2.adaptiveThreshold(
+            region,
+            255,
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY_INV,
+            17,
+            3,
+        )
 
-        # Find likely boundaries via edge projections.
-        v_proj = np.sum(edges > 0, axis=0).astype(np.float32)
-        h_proj = np.sum(edges > 0, axis=1).astype(np.float32)
+        edges = cv2.bitwise_or(edge_map, text_control_mask)
+        edges = cv2.morphologyEx(
+            edges,
+            cv2.MORPH_CLOSE,
+            cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)),
+            iterations=1,
+        )
 
-        if v_proj.max() <= 0 or h_proj.max() <= 0:
+        non_zero = cv2.findNonZero(edges)
+        if non_zero is None:
             return EdgeInfo(y_min, y_max, x_min, x_max, 0.0)
 
-        v_norm = v_proj / (v_proj.max() + 1e-6)
-        h_norm = h_proj / (h_proj.max() + 1e-6)
+        rx, ry, rw, rh = cv2.boundingRect(non_zero)
+        pad = 1
+        rx = max(0, rx - pad)
+        ry = max(0, ry - pad)
+        rw = min(region.shape[1] - rx, rw + 2 * pad)
+        rh = min(region.shape[0] - ry, rh + 2 * pad)
 
-        # Search from each side for first strong boundary response.
-        edge_thr = 0.25
+        snapped_x_min = max(0, x_min + rx)
+        snapped_y_min = max(0, y_min + ry)
+        snapped_x_max = min(width, snapped_x_min + rw)
+        snapped_y_max = min(height, snapped_y_min + rh)
 
-        left_rel = int(np.argmax(v_norm >= edge_thr)) if np.any(v_norm >= edge_thr) else 0
-        right_candidates = np.where(v_norm >= edge_thr)[0]
-        right_rel = int(right_candidates[-1]) if len(right_candidates) > 0 else (len(v_norm) - 1)
-
-        top_rel = int(np.argmax(h_norm >= edge_thr)) if np.any(h_norm >= edge_thr) else 0
-        bottom_candidates = np.where(h_norm >= edge_thr)[0]
-        bottom_rel = int(bottom_candidates[-1]) if len(bottom_candidates) > 0 else (len(h_norm) - 1)
-
-        snapped_x_min = max(0, x_min + left_rel)
-        snapped_y_min = max(0, y_min + top_rel)
-        snapped_x_max = min(width, x_min + right_rel)
-        snapped_y_max = min(height, y_min + bottom_rel)
-
-        edge_density = np.sum(edges > 0) / edges.size
-        confidence = min(1.0, edge_density * 8)
+        edge_density = float(np.sum(edges > 0)) / float(edges.size)
+        box_fill = (rw * rh) / float(max(1, region.shape[0] * region.shape[1]))
+        confidence = min(1.0, (edge_density * 2.2) + (0.35 * box_fill))
 
         # Reject degenerate boxes.
         if (snapped_x_max - snapped_x_min) < 3 or (snapped_y_max - snapped_y_min) < 3:
@@ -189,9 +200,10 @@ class BBoxRefiner:
     ) -> Tuple[float, float, float, float]:
 
         height, width = image.shape[:2]
-        x_min, y_min, x_max, y_max = self.denormalize_bbox(
+        orig_x_min, orig_y_min, orig_x_max, orig_y_max = self.denormalize_bbox(
             bbox_normalized, width, height
         )
+        x_min, y_min, x_max, y_max = orig_x_min, orig_y_min, orig_x_max, orig_y_max
 
         if (x_max - x_min) < 5 or (y_max - y_min) < 5:
             return bbox_normalized
@@ -201,12 +213,23 @@ class BBoxRefiner:
                 image, (x_min, y_min, x_max, y_max)
             )
             if edge and edge.confidence >= self.min_edge_confidence:
-                x_min, y_min, x_max, y_max = (
+                new_x_min, new_y_min, new_x_max, new_y_max = (
                     edge.left,
                     edge.top,
                     edge.right,
                     edge.bottom,
                 )
+                old_area = max(1, (orig_x_max - orig_x_min) * (orig_y_max - orig_y_min))
+                new_area = max(1, (new_x_max - new_x_min) * (new_y_max - new_y_min))
+                area_ratio = new_area / float(old_area)
+                # Avoid collapsing valid controls/text to tiny fragments.
+                if area_ratio >= 0.20 or edge.confidence >= 0.35:
+                    x_min, y_min, x_max, y_max = (
+                        new_x_min,
+                        new_y_min,
+                        new_x_max,
+                        new_y_max,
+                    )
 
         if use_grid_snap:
             x_min, y_min, x_max, y_max = self.snap_to_grid(
@@ -226,7 +249,7 @@ class BBoxRefiner:
         if x_min >= x_max or y_min >= y_max:
             return False
         area = (x_max - x_min) * (y_max - y_min)
-        return area >= 0.0001
+        return area >= 0.00003
 
 
 # =========================
