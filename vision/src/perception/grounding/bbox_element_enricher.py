@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 
 import cv2
+import numpy as np
 
 
 def _to_pixel_bbox(
@@ -39,16 +40,100 @@ def _safe_str(v: Any) -> str:
     return "" if v is None else str(v)
 
 
-def _classify_crop_with_vlm(vlm_client, crop_path: str) -> Dict[str, Any]:
+def _expand_bbox_norm(
+    bbox_norm: Tuple[float, float, float, float],
+    pad_ratio: float = 0.08,
+) -> Tuple[float, float, float, float]:
+    x1, y1, x2, y2 = bbox_norm
+    bw = max(1e-6, x2 - x1)
+    bh = max(1e-6, y2 - y1)
+    padx = bw * pad_ratio
+    pady = bh * pad_ratio
+    return (
+        max(0.0, x1 - padx),
+        max(0.0, y1 - pady),
+        min(1.0, x2 + padx),
+        min(1.0, y2 + pady),
+    )
+
+
+def _prepare_crop_for_vlm(crop: np.ndarray, min_side: int = 224) -> np.ndarray:
+    if crop.size == 0:
+        return crop
+    h, w = crop.shape[:2]
+    if min(h, w) >= min_side:
+        return crop
+    scale = float(min_side) / float(max(1, min(h, w)))
+    new_w = max(1, int(round(w * scale)))
+    new_h = max(1, int(round(h * scale)))
+    return cv2.resize(crop, (new_w, new_h), interpolation=cv2.INTER_CUBIC)
+
+
+def _heuristic_meta(crop: np.ndarray, source: str = "") -> Dict[str, Any]:
+    if crop.size == 0:
+        return {
+            "type": "unknown",
+            "label": "",
+            "description": "Empty crop",
+            "state": "unknown",
+            "confidence": 0.1,
+        }
+
+    h, w = crop.shape[:2]
+    area = h * w
+    ar = w / max(1.0, h)
+    gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY) if len(crop.shape) == 3 else crop
+    edges = cv2.Canny(gray, 50, 150)
+    edge_density = float(np.sum(edges > 0)) / float(max(1, area))
+    text_mask = cv2.adaptiveThreshold(
+        gray,
+        255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY_INV,
+        17,
+        3,
+    )
+    text_density = float(np.sum(text_mask > 0)) / float(max(1, area))
+
+    if source == "layout_text":
+        element_type = "text"
+    elif source == "layout_form":
+        element_type = "input_field" if ar >= 2.0 else "button"
+    elif ar >= 2.2 and h <= 120:
+        element_type = "input_field" if edge_density < 0.14 else "button"
+    elif 1.5 <= ar < 2.2 and h <= 90 and edge_density >= 0.08:
+        element_type = "button"
+    elif text_density > 0.20 and edge_density < 0.22:
+        element_type = "text"
+    elif source == "layout_edge" and area > 120000 and edge_density < 0.10:
+        element_type = "image"
+    else:
+        element_type = "unknown"
+
+    return {
+        "type": element_type,
+        "label": "",
+        "description": "Heuristic classification",
+        "state": "normal" if element_type != "unknown" else "unknown",
+        "confidence": 0.35 if element_type != "unknown" else 0.15,
+    }
+
+
+def _classify_crop_with_vlm(
+    vlm_client,
+    crop_path: str,
+    type_hint: str = "unknown",
+) -> Dict[str, Any]:
     """
     Ask VLM to classify one cropped UI region.
     Returns fallback values on parse/model failure.
     """
     prompt = (
-        "You are classifying a single cropped UI element.\n"
+        "You are classifying a single cropped UI element from a screenshot.\n"
         "Return ONLY valid JSON in this exact schema:\n"
         "{\"elements\":[{\"id\":\"elem_0\",\"type\":\"button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|modal|dialog|link|card|list_item|image|unknown\",\"label\":\"...\",\"description\":\"...\",\"state\":\"normal|active|disabled|focused|selected|unknown\",\"bbox\":[0,0,1,1],\"confidence\":0.0}]}\n"
-        "Rules: return exactly one element; if unsure use type=unknown."
+        f"Hint from detector: likely {type_hint}.\n"
+        "Rules: return exactly one element, prioritize visible text as label, and choose input_field/button/text when applicable."
     )
     result = vlm_client.analyze_ui(crop_path, prompt=prompt)
     if not result.parse_successful or not result.elements:
@@ -132,7 +217,7 @@ def enrich_frame(
             original_timeout = None
     if is_ollama_client:
         if ollama_call_budget is None:
-            max_vlm_calls = 3
+            max_vlm_calls = len(boxes)
         else:
             max_vlm_calls = max(0, int(ollama_call_budget))
     else:
@@ -143,15 +228,18 @@ def enrich_frame(
     try:
         for idx, item in enumerate(boxes):
             bbox = tuple(item.get("bbox", [0, 0, 1, 1]))
-            x1, y1, x2, y2 = _to_pixel_bbox(bbox, w, h)
+            expanded_bbox = _expand_bbox_norm(bbox, pad_ratio=0.10)
+            x1, y1, x2, y2 = _to_pixel_bbox(expanded_bbox, w, h)
             crop = image[y1:y2, x1:x2]
+            crop = _prepare_crop_for_vlm(crop, min_side=224)
+            heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
 
             meta = {
-                "type": "unknown",
-                "label": "",
+                "type": heuristic["type"],
+                "label": heuristic["label"],
                 "description": "No VLM available",
-                "state": "unknown",
-                "confidence": float(item.get("confidence", 0.5)),
+                "state": heuristic["state"],
+                "confidence": max(float(item.get("confidence", 0.5)), float(heuristic["confidence"])),
             }
 
             should_call_vlm = (
@@ -162,14 +250,18 @@ def enrich_frame(
                     crop_path = tmp.name
                 try:
                     cv2.imwrite(crop_path, crop)
-                    meta = _classify_crop_with_vlm(vlm_client, crop_path)
+                    meta = _classify_crop_with_vlm(
+                        vlm_client,
+                        crop_path,
+                        type_hint=heuristic["type"],
+                    )
                 except Exception:
                     meta = {
-                        "type": "unknown",
-                        "label": "",
+                        "type": heuristic["type"],
+                        "label": heuristic["label"],
                         "description": "VLM classification failed",
-                        "state": "unknown",
-                        "confidence": 0.1,
+                        "state": heuristic["state"],
+                        "confidence": max(0.1, float(heuristic["confidence"])),
                     }
                 finally:
                     if os.path.exists(crop_path):
@@ -216,6 +308,18 @@ def main():
     parser.add_argument("--provider", default="local", choices=["local", "claude", "gpt4v", "ollama"])
     parser.add_argument("--local-model", default="llava-hf/llava-1.5-7b-hf")
     parser.add_argument("--ollama-model", default="llava:7b")
+    parser.add_argument(
+        "--ollama-call-budget",
+        type=int,
+        default=None,
+        help="Max element crops to send to Ollama per frame (default: all).",
+    )
+    parser.add_argument(
+        "--ollama-timeout-seconds",
+        type=float,
+        default=None,
+        help="Optional temporary Ollama timeout while enriching one frame.",
+    )
     parser.add_argument("--no-vlm", action="store_true", help="Skip VLM classification and output unknown types.")
     args = parser.parse_args()
 
@@ -250,7 +354,14 @@ def main():
             continue
 
         out_path = out_dir / f"{f.stem}.json"
-        enrich_frame(image_path, f, out_path, vlm_client=vlm_client)
+        enrich_frame(
+            image_path,
+            f,
+            out_path,
+            vlm_client=vlm_client,
+            ollama_call_budget=args.ollama_call_budget,
+            ollama_timeout_seconds=args.ollama_timeout_seconds,
+        )
         print(f"[BBoxEnricher] Wrote {out_path.name}")
 
 
