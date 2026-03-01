@@ -53,10 +53,23 @@ export class Sanitizer {
   /**
    * Sanitize mouse_scroll command
    * Clamps scroll amount to reasonable range
+   * Supports both legacy 'scroll' field and new 'deltaX'/'deltaY' fields
    */
   private static sanitizeMouseScroll(cmd: any): any {
-    // Clamp scroll to reasonable range
-    cmd.scroll = Math.round(this.clamp(cmd.scroll, -10, 10));
+    // Handle legacy scroll field
+    if (cmd.scroll !== undefined) {
+      cmd.scroll = Math.round(this.clamp(cmd.scroll, -10, 10));
+    }
+    
+    // Handle deltaY (vertical scroll)
+    if (cmd.deltaY !== undefined) {
+      cmd.deltaY = Math.round(this.clamp(cmd.deltaY, -10, 10));
+    }
+    
+    // Handle deltaX (horizontal scroll)
+    if (cmd.deltaX !== undefined) {
+      cmd.deltaX = Math.round(this.clamp(cmd.deltaX, -10, 10));
+    }
     
     return cmd;
   }

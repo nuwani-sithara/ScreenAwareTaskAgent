@@ -70,30 +70,50 @@ class OllamaClient:
         except Exception:
             return []
 
-    def generate(self, prompt: str, model: str = "mistral", max_tokens: int = 512, **kwargs) -> str:
+    def generate(self, prompt: str, model: str = "mistral", max_tokens: int = 100, timeout: int = 30, **kwargs) -> str:
         """Generate text using Ollama model.
 
         Tries HTTP API first, then CLI fallback.
         Returns generated text (string).
         """
+        import logging
+        logger = logging.getLogger(__name__)
+        
         # Try HTTP
         self._ensure_requests()
         body = {
             "model": model,
             "prompt": prompt,
-            "max_tokens": max_tokens
+            "stream": False,  # Disable streaming for simpler/faster response
+            "options": {
+                "num_predict": max_tokens,  # Limit token generation (reduced to 150)
+                "temperature": 0.3,  # Lower temperature for faster, more deterministic output
+                "top_p": 0.5,  # Restrict token selection for speed
+                "top_k": 20,  # Limit vocabulary for faster generation
+                "repeat_penalty": 1.2,  # Discourage repetition
+                "num_ctx": 512,  # Reduce context window for speed
+                "stop": ["\n\n\n", "Example:", "Note:", "Additional", "Remember"]  # Stop early
+            }
         }
         body.update(kwargs)
+        
+        import time
+        start = time.time()
+        logger.info(f"📡 Sending to Ollama: max_tokens={max_tokens}, temp=0.3, top_p=0.5")
 
         if self._requests:
             try:
                 # Ollama may return chunked/streaming responses; for simplicity send as regular request
-                r = self._requests.post(self.http_url, json=body, timeout=20)
+                r = self._requests.post(self.http_url, json=body, timeout=timeout)
                 if r.ok:
                     try:
                         data = r.json()
-                        # expected shape may vary; try common fields
+                        # Ollama with stream=false returns {"response": "text"}
                         if isinstance(data, dict):
+                            if 'response' in data:
+                                elapsed = time.time() - start
+                                logger.info(f"✅ Ollama responded in {elapsed:.2f}s")
+                                return data['response']
                             if 'text' in data:
                                 return data['text']
                             # sometimes 'choices' list
