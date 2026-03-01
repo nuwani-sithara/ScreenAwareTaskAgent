@@ -12,7 +12,7 @@ except Exception:
     from llm.simple_rewriter import rewrite_steps as flan_rewrite
 
 from llm.step_validators import StepQualityValidator
-from llm.hid_step_generator import generate_hid_steps_from_visual
+from llm.hid_step_generator import HIDStepGenerator
 import logging
 
 logger = logging.getLogger(__name__)
@@ -126,15 +126,104 @@ def force_imperative(steps):
     return fixed
 
 
+def build_better_prompt(instruction: str, visual_data: Optional[Dict[str, Any]] = None) -> str:
+    """
+    Build a better prompt for step generation with visual context and clear formatting.
+    
+    Args:
+        instruction: User's task instruction
+        visual_data: Optional visual perception data with screen elements
+    
+    Returns:
+        Optimized prompt for LLM
+    """
+    
+    base_prompt = """You are a UI automation task planner. Generate clear, executable step-by-step instructions.
+
+TASK: {instruction}
+
+RULES:
+1. Output ONLY a JSON array of action steps
+2. NO explanations, NO markdown, NO code blocks, NO comments
+3. Each step must start with an action verb (Click, Type, Press, Wait, Navigate, etc.)
+4. Steps should be executable in order
+5. Keep each step concise (under 100 characters)
+6. Include coordinates when available for click actions
+7. For text input, specify exact text to type
+
+OUTPUT FORMAT:
+[
+  {{
+    "step": 1,
+    "action": "action_verb",
+    "target": "element_description",
+    "description": "clear instruction text",
+    "x": integer (optional, for clicks),
+    "y": integer (optional, for clicks),
+    "text": "text_to_type" (optional, for type actions),
+    "key": "key_name" (optional, for key presses)
+  }}
+]
+
+EXAMPLES:
+
+Example 1: "Open Chrome and search for Python"
+[
+  {{"step": 1, "action": "Click", "target": "Chrome icon", "description": "Click on Chrome browser icon", "x": 150, "y": 300}},
+  {{"step": 2, "action": "Wait", "target": "browser", "description": "Wait for Chrome to load", "duration_ms": 2000}},
+  {{"step": 3, "action": "Click", "target": "address bar", "description": "Click in the address bar", "x": 500, "y": 100}},
+  {{"step": 4, "action": "Type", "target": "address bar", "description": "Type the search URL", "text": "https://www.google.com"}},
+  {{"step": 5, "action": "Press", "target": "keyboard", "description": "Press Enter to navigate", "key": "enter"}}
+]
+
+Example 2: "Login to the application"
+[
+  {{"step": 1, "action": "Click", "target": "username field", "description": "Click in the username input field", "x": 863, "y": 475}},
+  {{"step": 2, "action": "Type", "target": "username field", "description": "Type username", "text": "admin"}},
+  {{"step": 3, "action": "Click", "target": "password field", "description": "Click in the password field", "x": 863, "y": 583}},
+  {{"step": 4, "action": "Type", "target": "password field", "description": "Type password", "text": "password123"}},
+  {{"step": 5, "action": "Click", "target": "login button", "description": "Click the login button", "x": 912, "y": 739}}
+]
+
+"""
+
+    # Add visual context if available
+    if visual_data:
+        generator = HIDStepGenerator()
+        visual_context = generator._build_visual_context(visual_data)
+        
+        visual_section = f"""
+CURRENT SCREEN ELEMENTS WITH COORDINATES:
+{visual_context}
+
+IMPORTANT: Use the EXACT coordinates from the screen elements above for click actions.
+Match element descriptions to the actual UI elements shown.
+
+"""
+        prompt = base_prompt + visual_section + f"Now generate steps for: {instruction}\n\nOutput JSON array:"
+    else:
+        # Simplified version for no visual data
+        simple_prompt = f"""
+{base_prompt}
+Now generate steps for: {instruction}
+
+Remember: Output ONLY a JSON array, no other text.
+"""
+        prompt = simple_prompt
+    
+    return prompt
+
+
 def run_interactive(
     instruction: str | None = None, 
     show_validation: bool = False, 
     silent: bool = False,
     visual_data: Optional[Dict[str, Any]] = None,
-    skip_validation: bool = False
+    skip_validation: bool = False,
+    use_better_prompt: bool = True  # New flag to use better prompt
 ):
     """
-    Run interactive step generation.
+    Run interactive step generation with improved prompting.
     
     Args:
         instruction: User instruction text
@@ -142,6 +231,7 @@ def run_interactive(
         silent: Suppress console output
         visual_data: Optional visual perception data for HID generation
         skip_validation: Skip visual validation check
+        use_better_prompt: Use the improved prompt with examples and structure
         
     Returns:
         If visual_data provided: HID commands with validation
@@ -149,7 +239,7 @@ def run_interactive(
     """
     
     # ============================================================
-    # NEW: VISUAL-AWARE HID GENERATION MODE
+    # VISUAL-AWARE HID GENERATION MODE (with better prompt)
     # ============================================================
     if visual_data is not None:
         logger.info("🎯 Visual-aware LLM step generation mode enabled")
@@ -161,23 +251,25 @@ def run_interactive(
             logger.warning("No instruction provided")
             return {"error": "No instruction provided"}
 
-        def summarize_visual_elements(visual_data):
-            screens = visual_data.get("session_data", {}).get("screens", [])
-            elements = []
-            for screen in screens:
-                for elem in screen.get("elements", []):
-                    label = elem.get("label", "")
-                    elem_type = elem.get("type", "")
-                    description = elem.get("description", "")
-                    if label or description:
-                        elements.append(f"- {elem_type}: {label} | {description}")
-            return "\n".join(elements)
-
-        visual_summary = summarize_visual_elements(visual_data)
-        prompt = f"""You are given the following screen elements:\n{visual_summary}\n\nInstruction: \"{instruction}\"\n\nWrite clear, step-by-step instructions for the user to accomplish the task using only the elements visible on the screen.\n"""
+        # Use the better prompt builder
+        if use_better_prompt:
+            prompt = build_better_prompt(instruction, visual_data)
+            logger.info("⏳ Using enhanced prompt with examples and structure")
+        else:
+            # Fallback to original simple prompt
+            generator = HIDStepGenerator()
+            visual_context = generator._build_visual_context(visual_data)
+            prompt = f"""You are given the following screen elements:\n{visual_context}\n\nInstruction: \"{instruction}\"\n\nWrite clear, step-by-step instructions for the user to accomplish the task using only the elements visible on the screen.\n"""
 
         logger.info(f"⏳ Generating visual-aware steps from LLM for: {instruction[:60]}...")
-        gen = ollama_adapter.generate_and_format(prompt, max_tokens=150, timeout=30)
+        
+        # Generate with higher token limit for better quality
+        gen = ollama_adapter.generate_and_format(
+            prompt, 
+            max_tokens=300,  # Increased from 150
+            timeout=45        # Increased timeout
+        )
+        
         raw_text = gen.get("cleaned_text") or gen.get("raw_output") or ""
 
         if not raw_text:
@@ -185,60 +277,74 @@ def run_interactive(
             return {"error": "Model returned empty response"}
 
         import re
-        # Try to extract steps, but if only one long string, split and map
-        try:
-            steps_raw = ollama_adapter._extract_steps_from_text(raw_text)
-        except Exception:
-            steps_raw = [
-                {"step": i + 1, "action": line.strip(), "description": ""}
-                for i, line in enumerate(raw_text.splitlines())
-                if line.strip()
-            ]
+        
+        # Try to parse JSON if better prompt was used
+        steps_raw = []
+        if use_better_prompt:
+            # Try to extract JSON array from response
+            try:
+                # Look for JSON array pattern
+                json_match = re.search(r'\[\s*\{.*\}\s*\]', raw_text, re.DOTALL)
+                if json_match:
+                    json_str = json_match.group()
+                    steps_raw = json.loads(json_str)
+                    logger.info(f"✅ Successfully parsed JSON response with {len(steps_raw)} steps")
+            except (json.JSONDecodeError, AttributeError) as e:
+                logger.warning(f"Failed to parse JSON response, falling back to text extraction: {e}")
+        
+        # Fallback to text extraction if JSON parsing failed
+        if not steps_raw:
+            try:
+                steps_raw = ollama_adapter._extract_steps_from_text(raw_text)
+            except Exception:
+                steps_raw = [
+                    {"step": i + 1, "action": line.strip(), "description": ""}
+                    for i, line in enumerate(raw_text.splitlines())
+                    if line.strip()
+                ]
 
-        # If only one step and it's a long string, split by numbers
+        # Process and clean steps
         rewritten_steps = []
-        if steps_raw and len(steps_raw) == 1 and len(steps_raw[0].get("action", "")) > 80:
-            step_text = steps_raw[0]["action"]
-            steps = re.split(r'\s*\d+\.\s*', step_text)
-            steps = [s.strip() for s in steps if s.strip()]
-            for i, s in enumerate(steps, 1):
-                s_lower = s.lower()
-                if "username" in s_lower and ("type" in s_lower or "enter" in s_lower):
-                    action = "Type 'tharushi'"
-                    description = "Enter 'tharushi' in the username field"
-                elif "password" in s_lower and ("type" in s_lower or "enter" in s_lower):
-                    action = "Type '123'"
-                    description = "Enter '123' in the password field"
-                elif "username" in s_lower and ("click" in s_lower or "select" in s_lower):
-                    action = "Click username field"
-                    description = "Click on the username field to interact with it"
-                elif "password" in s_lower and ("click" in s_lower or "select" in s_lower):
-                    action = "Click password field"
-                    description = "Click on the password field to interact with it"
-                elif "login" in s_lower and ("click" in s_lower or "press" in s_lower):
-                    action = "Click login button"
-                    description = "Click on the login button to interact with it"
-                else:
-                    action = s
-                    description = s
+        for step in steps_raw:
+            if isinstance(step, dict):
+                # Clean up step
+                clean_step = {}
+                clean_step["step"] = step.get("step", len(rewritten_steps) + 1)
+                
+                # Get action or build from description
+                action = step.get("action", "").strip()
+                description = step.get("description", step.get("action", "")).strip()
+                
+                # Clean numbering prefixes
+                action = re.sub(r'^\d+\.\s*', '', action)
+                action = re.sub(r'^Step\s+\d+:\s*', '', action, flags=re.IGNORECASE)
+                description = re.sub(r'^\d+\.\s*', '', description)
+                description = re.sub(r'^Step\s+\d+:\s*', '', description, flags=re.IGNORECASE)
+                
+                clean_step["action"] = action or description.split()[0] if description else "Click"
+                clean_step["description"] = description or action
+                
+                # Preserve additional fields if present
+                if "x" in step and "y" in step:
+                    clean_step["x"] = step["x"]
+                    clean_step["y"] = step["y"]
+                if "text" in step:
+                    clean_step["text"] = step["text"]
+                if "key" in step:
+                    clean_step["key"] = step["key"]
+                if "duration_ms" in step:
+                    clean_step["duration_ms"] = step["duration_ms"]
+                
+                rewritten_steps.append(clean_step)
+            else:
+                # Handle string steps
+                text = str(step).strip()
+                text = re.sub(r'^\d+\.\s*', '', text)
                 rewritten_steps.append({
-                    "step": i,
-                    "action": action,
-                    "description": description
+                    "step": len(rewritten_steps) + 1,
+                    "action": text.split()[0] if text else "Click",
+                    "description": text
                 })
-        else:
-            # Clean up step numbering prefixes from actions
-            for step in steps_raw:
-                if isinstance(step, dict) and "action" in step:
-                    action = step.get("action", "").strip()
-                    action = re.sub(r'^\d+\.\s*', '', action)
-                    step["action"] = action
-                    if "description" in step and step["description"]:
-                        desc = step.get("description", "").strip()
-                        desc = re.sub(r'^Step\s+\d+:\s*', '', desc, flags=re.IGNORECASE)
-                        desc = re.sub(r'^\d+\.\s*', '', desc)
-                        step["description"] = desc
-                rewritten_steps.append(step)
 
         logger.info(f"✅ Generated {len(rewritten_steps)} visual-aware steps from LLM")
 
@@ -247,12 +353,12 @@ def run_interactive(
             "instruction": instruction,
             "rewritten_steps": rewritten_steps,
             "raw_text": raw_text,
-            "visual_summary": visual_summary,
+            "visual_summary": generator._build_visual_context(visual_data)[:500] if 'generator' in locals() else "",
             "timestamp": time.time(),
         }
     
     # ============================================================
-    # ORIGINAL: ABSTRACT STEP GENERATION MODE (NO VISUAL DATA)
+    # ABSTRACT STEP GENERATION MODE (NO VISUAL DATA)
     # ============================================================
     if instruction is None:
         instr = input("Enter instruction: ")
@@ -267,9 +373,14 @@ def run_interactive(
     logger.info("⏳ [1/5] Preparing prompt for: %s", instr[:50] + "..." if len(instr) > 50 else instr)
 
     # --------------------------------------------------
-    # 1️⃣ MINIMAL PROMPT FOR MAXIMUM SPEED
+    # 1️⃣ USE BETTER PROMPT (if enabled)
     # --------------------------------------------------
-    strict_prompt = f"""Task: "{instr}"
+    if use_better_prompt:
+        logger.info("Using enhanced prompt with examples and structure")
+        prompt = build_better_prompt(instr)
+    else:
+        # Original minimal prompt
+        prompt = f"""Task: "{instr}"
 
 Write SHORT steps (one line each, no sub-points):
 1. Open page
@@ -283,9 +394,13 @@ Your steps:"""
     # --------------------------------------------------
     # 2️⃣ GENERATE (OLLAMA)
     # --------------------------------------------------
-    logger.info("⏳ [2/5] Generating steps from LLM (max 30s timeout, 100 tokens)...")
+    logger.info("⏳ [2/5] Generating steps from LLM...")
     
-    gen = ollama_adapter.generate_and_format(strict_prompt, max_tokens=100, timeout=30)
+    gen = ollama_adapter.generate_and_format(
+        prompt, 
+        max_tokens=200 if use_better_prompt else 100,
+        timeout=45 if use_better_prompt else 30
+    )
     raw_text = gen.get("cleaned_text") or gen.get("raw_output") or ""
 
     if not raw_text:
@@ -311,7 +426,6 @@ Your steps:"""
                 pass
         
         # If that didn't work, try regex parsing for concatenated JSON
-
         if not parsed_text:
             for match in re.finditer(r'\{"model"[^}]+\}', raw_text):
                 try:
@@ -328,23 +442,44 @@ Your steps:"""
         else:
             logger.warning("Failed to parse streaming JSON, using raw text")
 
-    orig_steps = gen.get("steps") or []
+    # Try to parse JSON if better prompt was used
+    orig_steps = []
+    if use_better_prompt:
+        try:
+            # Look for JSON array pattern
+            json_match = re.search(r'\[\s*\{.*\}\s*\]', raw_text, re.DOTALL)
+            if json_match:
+                json_str = json_match.group()
+                orig_steps = json.loads(json_str)
+                logger.info(f"✅ Successfully parsed JSON response with {len(orig_steps)} steps")
+        except (json.JSONDecodeError, AttributeError) as e:
+            logger.warning(f"Failed to parse JSON, using text extraction: {e}")
+    
+    # Fallback to step extraction
+    if not orig_steps:
+        orig_steps = gen.get("steps") or ollama_adapter._extract_steps_from_text(raw_text)
 
     # --------------------------------------------------
-    # 3️⃣ REWRITE (FLAN / FALLBACK)
+    # 3️⃣ REWRITE AND CLEAN
     # --------------------------------------------------
     logger.info("⏳ [3/5] Rewriting and cleaning steps...")
     
-    rewritten_text = raw_text
-
+    # Try FLAN rewrite if available
     try:
-        rewritten_steps = ollama_adapter._extract_steps_from_text(rewritten_text)
+        if 'flan_rewrite' in globals() and callable(flan_rewrite):
+            rewritten_steps = flan_rewrite(instr, orig_steps)
+        else:
+            raise ImportError("FLAN rewrite not available")
     except Exception:
-        rewritten_steps = [
-            {"step": i + 1, "action": line.strip(), "description": ""}
-            for i, line in enumerate(rewritten_text.splitlines())
-            if line.strip()
-        ]
+        # Fallback to text extraction
+        try:
+            rewritten_steps = ollama_adapter._extract_steps_from_text(raw_text)
+        except Exception:
+            rewritten_steps = [
+                {"step": i + 1, "action": line.strip(), "description": ""}
+                for i, line in enumerate(raw_text.splitlines())
+                if line.strip()
+            ]
     
     # Clean up step numbering prefixes from actions
     for step in rewritten_steps:
@@ -435,8 +570,9 @@ Your steps:"""
     # --------------------------------------------------
     result = {
         "instruction": instr,
+        "prompt_used": "enhanced" if use_better_prompt else "minimal",
         "generated": gen,
-        "rewritten_text": rewritten_text,
+        "rewritten_text": raw_text,
         "rewritten_steps": rewritten_steps,
         "abstract_steps": abstract_steps,
         "chosen_steps": chosen_steps,
@@ -495,13 +631,16 @@ Your steps:"""
     # 🔟 UPDATE SELECTION REPORT
     # --------------------------------------------------
     try:
-        report = {"total": 0, "rewritten_selected": 0, "original_selected": 0}
+        report = {"total": 0, "rewritten_selected": 0, "original_selected": 0, "enhanced_prompt_used": 0}
 
         if SELECTION_REPORT.exists():
             with SELECTION_REPORT.open("r", encoding="utf-8") as rf:
                 report = json.load(rf)
 
         report["total"] += 1
+        
+        if use_better_prompt:
+            report["enhanced_prompt_used"] = report.get("enhanced_prompt_used", 0) + 1
 
         if chosen_source == "rewritten":
             report["rewritten_selected"] += 1
@@ -516,16 +655,17 @@ Your steps:"""
 
     log_fn = logger.debug if silent else logger.info
     log_fn(
-        "run_interactive completed | chosen=%s | total_steps=%d",
+        "run_interactive completed | chosen=%s | total_steps=%d | prompt=%s",
         chosen_source,
         len(chosen_steps) if chosen_steps else 0,
+        "enhanced" if use_better_prompt else "minimal"
     )
 
     # Print steps to console only when NOT in silent mode
     if not silent:
         print(f"\n{'='*60}")
         print(f"📋 Generated Steps for: '{instr}'")
-        print(f"Source: {chosen_source}")
+        print(f"Source: {chosen_source} | Prompt: {'Enhanced' if use_better_prompt else 'Minimal'}")
         print(f"{'='*60}\n")
         
         if not chosen_steps:
@@ -540,6 +680,11 @@ Your steps:"""
                     action = re.sub(r'^\d+\.\s*', '', action)
                     action = re.sub(r'^Step\s+\d+:\s*', '', action, flags=re.IGNORECASE)
                     
+                    # Show coordinates if available
+                    coord_info = ""
+                    if "x" in step and "y" in step:
+                        coord_info = f" at ({step['x']}, {step['y']})"
+                    
                     # Only show description if it adds value
                     if description and description != action:
                         # Clean description too
@@ -548,12 +693,12 @@ Your steps:"""
                         
                         # Check if description is meaningfully different
                         if description.lower() != action.lower() and len(description) > len(action):
-                            print(f"{i}. {action}")
+                            print(f"{i}. {action}{coord_info}")
                             print(f"   ➜ {description}")
                         else:
-                            print(f"{i}. {action}")
+                            print(f"{i}. {action}{coord_info}")
                     else:
-                        print(f"{i}. {action}")
+                        print(f"{i}. {action}{coord_info}")
                 else:
                     step_str = str(step).strip()
                     step_str = re.sub(r'^\d+\.\s*', '', step_str)
@@ -570,12 +715,16 @@ Your steps:"""
     return result
 
 
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Interactive generator with optional validation display")
+    parser = argparse.ArgumentParser(description="Interactive generator with enhanced prompting")
     parser.add_argument("--show-validation", action="store_true", help="Print validation block after a run")
+    parser.add_argument("--use-minimal-prompt", action="store_true", help="Use minimal prompt instead of enhanced")
     args = parser.parse_args()
-    run_interactive(show_validation=args.show_validation)
+    
+    run_interactive(
+        show_validation=args.show_validation,
+        use_better_prompt=not args.use_minimal_prompt
+    )
 
 
 
