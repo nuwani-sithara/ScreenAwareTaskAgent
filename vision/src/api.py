@@ -182,7 +182,7 @@ def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
     cv2.imwrite(out_path, vis)
 
 
-def _capture_single_frame(camera_index: int = 0):
+def _capture_single_frame(camera_index: int = 1):
     backend = cv2.CAP_DSHOW if os.name == "nt" else 0
     cap = cv2.VideoCapture(camera_index, backend)
     if not cap.isOpened():
@@ -591,7 +591,7 @@ def vision_diagnose():
 
 @app.post("/vision/start")
 def start_vision(
-    camera_index: int = 0,
+    camera_index: int = 1,
     save_interval: float = 1.0,
     provider: str = "ollama",
     local_model: str = "llava:7b",
@@ -776,7 +776,7 @@ def stop_vision(
 
 @app.post("/vision/capture")
 def capture_once(
-    camera_index: int = 0,
+    camera_index: int = 1,
     provider: str = "ollama",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
