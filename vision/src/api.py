@@ -10,7 +10,7 @@ import queue
 import shutil
 import json
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List, Tuple
 
 from src.capture.webcam_capture import start_webcam_stream
 from src.preprocessing.preprocess import preprocess_all
@@ -42,6 +42,7 @@ processing_queue: "queue.Queue[Dict[str, Any]]" = queue.Queue()
 processed_queue: "queue.Queue[Dict[str, Any]]" = queue.Queue()
 session_lock = threading.Lock()
 processing_inflight: Dict[str, int] = {}
+sessions_by_id: Dict[str, Dict[str, Any]] = {}
 
 
 def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, Any]:
@@ -92,6 +93,80 @@ def _init_vlm_client(provider: str, local_model: str, no_vlm: bool, ollama_base_
     return get_vlm_client(provider, **kwargs)
 
 
+def _bbox_iou_norm(a: Tuple[float, float, float, float], b: Tuple[float, float, float, float]) -> float:
+    ax1, ay1, ax2, ay2 = a
+    bx1, by1, bx2, by2 = b
+    x1, y1 = max(ax1, bx1), max(ay1, by1)
+    x2, y2 = min(ax2, bx2), min(ay2, by2)
+    if x2 <= x1 or y2 <= y1:
+        return 0.0
+    inter = (x2 - x1) * (y2 - y1)
+    a_area = max(0.0, ax2 - ax1) * max(0.0, ay2 - ay1)
+    b_area = max(0.0, bx2 - bx1) * max(0.0, by2 - by1)
+    denom = a_area + b_area - inter
+    return inter / denom if denom > 0 else 0.0
+
+
+def _bbox_contained_ratio_norm(inner: Tuple[float, float, float, float], outer: Tuple[float, float, float, float]) -> float:
+    ix1, iy1, ix2, iy2 = inner
+    ox1, oy1, ox2, oy2 = outer
+    x1, y1 = max(ix1, ox1), max(iy1, oy1)
+    x2, y2 = min(ix2, ox2), min(iy2, oy2)
+    if x2 <= x1 or y2 <= y1:
+        return 0.0
+    inter = (x2 - x1) * (y2 - y1)
+    inner_area = max(1e-9, (ix2 - ix1) * (iy2 - iy1))
+    return inter / inner_area
+
+
+def _dedupe_and_rank_refined_bboxes(
+    boxes: List[Dict[str, Any]],
+    max_elements: int,
+) -> List[Dict[str, Any]]:
+    if not boxes:
+        return []
+
+    source_weight = {
+        "layout_form": 1.00,
+        "layout_text": 0.95,
+        "layout_adaptive": 0.85,
+        "layout_edge": 0.75,
+        "layout": 0.70,
+    }
+
+    def _score(item: Dict[str, Any]) -> float:
+        bbox = item.get("bbox", [0, 0, 1, 1])
+        x1, y1, x2, y2 = bbox
+        area = max(1e-9, (x2 - x1) * (y2 - y1))
+        conf = float(item.get("confidence", 0.5))
+        sw = source_weight.get(str(item.get("source", "layout")), 0.65)
+        return (0.65 * conf) + (0.35 * sw) - (0.05 * area)
+
+    ranked = sorted(boxes, key=_score, reverse=True)
+    kept: List[Dict[str, Any]] = []
+
+    for candidate in ranked:
+        cb = tuple(candidate.get("bbox", [0, 0, 1, 1]))
+        c_source = str(candidate.get("source", "layout"))
+        skip = False
+        for existing in kept:
+            eb = tuple(existing.get("bbox", [0, 0, 1, 1]))
+            iou = _bbox_iou_norm(cb, eb)
+            contained = _bbox_contained_ratio_norm(cb, eb)
+            if iou >= 0.82:
+                skip = True
+                break
+            if contained >= 0.97 and c_source not in {"layout_text", "layout_form"}:
+                skip = True
+                break
+        if not skip:
+            kept.append(candidate)
+        if len(kept) >= max_elements:
+            break
+
+    return kept
+
+
 def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
     vis = image.copy()
     h, w = vis.shape[:2]
@@ -124,11 +199,60 @@ def _capture_single_frame(camera_index: int = 0):
     return frame
 
 
+def _process_single_frame_item(
+    session: Dict[str, Any],
+    session_id: str,
+    frame_path: str,
+) -> Dict[str, Any]:
+    result = _run_pipeline_for_frame(
+        frame_path=frame_path,
+        session=session,
+        vlm_client=session.get("vlm_client"),
+        ollama_timeout_seconds=session.get("ollama_timeout_seconds"),
+        coarse_max_boxes=int(session.get("coarse_max_boxes", 180)),
+        refined_max_elements=int(session.get("refined_max_elements", 120)),
+        vlm_batch_max_elements=int(session.get("vlm_batch_max_elements", 90)),
+    )
+
+    agg = session.get("aggregator")
+    if agg is not None and agg.is_active:
+        try:
+            agg.append_frame(frame_path, result)
+        except Exception as _agg_exc:
+            logging.warning("SessionAggregator.append_frame failed: %s", _agg_exc)
+
+    processed_queue.put(result)
+    return result
+
+
+def _pull_next_queued_item_for_session(session_id: str) -> Optional[Dict[str, Any]]:
+    deferred: List[Dict[str, Any]] = []
+    target: Optional[Dict[str, Any]] = None
+
+    while True:
+        try:
+            item = processing_queue.get_nowait()
+        except queue.Empty:
+            break
+        if target is None and item.get("session_id") == session_id:
+            target = item
+            break
+        deferred.append(item)
+
+    for item in deferred:
+        processing_queue.put(item)
+
+    return target
+
+
 def _run_pipeline_for_frame(
     frame_path: str,
     session: Dict[str, Any],
     vlm_client=None,
     ollama_timeout_seconds: Optional[float] = None,
+    coarse_max_boxes: int = 180,
+    refined_max_elements: int = 120,
+    vlm_batch_max_elements: int = 90,
 ) -> Dict[str, Any]:
     """
     Run full pipeline for one frame:
@@ -163,7 +287,7 @@ def _run_pipeline_for_frame(
         raise RuntimeError(f"Failed to read preprocessed frame: {preprocessed_image}")
 
     # Coarse bboxes
-    coarse_bboxes = generate_coarse_bboxes(image)
+    coarse_bboxes = generate_coarse_bboxes(image, max_boxes=max(20, int(coarse_max_boxes)))
     coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
     with open(coarse_json_path, "w", encoding="utf-8") as f:
         json.dump({"bboxes": coarse_bboxes}, f, indent=2)
@@ -186,6 +310,11 @@ def _run_pipeline_for_frame(
                     "confidence": item.get("confidence", 0.5),
                 }
             )
+
+    refined_bboxes = _dedupe_and_rank_refined_bboxes(
+        refined_bboxes,
+        max_elements=max(20, int(refined_max_elements)),
+    )
 
     refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
     with open(refined_json_path, "w", encoding="utf-8") as f:
@@ -215,12 +344,26 @@ def _run_pipeline_for_frame(
         if raw_elements:
             ui_elements = [UIElement.from_dict(e) for e in raw_elements]
             try:
-                ui_elements = vlm_client.classify_elements_batch(
-                    image_path=session_preprocessed,
-                    elements=ui_elements,
-                    max_retries=2,
-                    timeout_seconds=ollama_timeout_seconds or 60.0,
-                )
+                batch_limit = max(20, int(vlm_batch_max_elements))
+                if len(ui_elements) <= batch_limit:
+                    ui_elements = vlm_client.classify_elements_batch(
+                        image_path=session_preprocessed,
+                        elements=ui_elements,
+                        max_retries=2,
+                        timeout_seconds=ollama_timeout_seconds or 60.0,
+                    )
+                else:
+                    merged: List[UIElement] = []
+                    for start in range(0, len(ui_elements), batch_limit):
+                        chunk = ui_elements[start:start + batch_limit]
+                        chunk = vlm_client.classify_elements_batch(
+                            image_path=session_preprocessed,
+                            elements=chunk,
+                            max_retries=2,
+                            timeout_seconds=ollama_timeout_seconds or 60.0,
+                        )
+                        merged.extend(chunk)
+                    ui_elements = merged
                 payload["elements"] = [e.to_dict() for e in ui_elements]
             except Exception as exc:
                 logging.warning("Batch VLM classification failed: %s", exc)
@@ -331,27 +474,13 @@ def processing_worker():
                 processing_inflight[session_id] = processing_inflight.get(session_id, 0) + 1
 
             with session_lock:
-                session = current_session if current_session and current_session.get("id") == session_id else None
+                session = sessions_by_id.get(session_id)
 
             if not session:
+                logging.warning("Dropping frame for unknown session_id=%s", session_id)
                 continue
 
-            result = _run_pipeline_for_frame(
-                frame_path=frame_path,
-                session=session,
-                vlm_client=session.get("vlm_client"),
-                ollama_timeout_seconds=session.get("ollama_timeout_seconds"),
-            )
-
-            # Append to SessionAggregator (streaming session JSON)
-            agg = session.get("aggregator")
-            if agg is not None and agg.is_active:
-                try:
-                    agg.append_frame(frame_path, result)
-                except Exception as _agg_exc:
-                    logging.warning("SessionAggregator.append_frame failed: %s", _agg_exc)
-
-            processed_queue.put(result)
+            _process_single_frame_item(session, session_id, frame_path)
 
         except Exception as e:
             logging.exception("Per-frame pipeline failed")
@@ -385,12 +514,12 @@ def vision_diagnose():
     try:
         import cv2 as _cv2
         backend = _cv2.CAP_DSHOW if os.name == "nt" else 0
-        cap = _cv2.VideoCapture(1, backend)
+        cap = _cv2.VideoCapture(0, backend)
         camera_ok = cap.isOpened()
         cap.release()
     except Exception as _exc:
         results["camera_error"] = str(_exc)
-    results["camera_index_1_available"] = camera_ok
+    results["camera_index_0_available"] = camera_ok
 
     # --- VLM provider availability ---
     providers: Dict[str, Any] = {}
@@ -451,10 +580,10 @@ def vision_diagnose():
 
     results["recommended_provider"] = recommended_provider
     results["recommended_start_params"] = (
-        "POST /vision/start?camera_index=1&save_interval=1"
+        "POST /vision/start?camera_index=0&save_interval=1"
         "&provider=ollama&no_vlm=false"
         if providers.get("ollama", {}).get("available")
-        else "POST /vision/start?camera_index=1&save_interval=1&no_vlm=true"
+        else "POST /vision/start?camera_index=0&save_interval=1&no_vlm=true"
     )
 
     return results
@@ -462,12 +591,15 @@ def vision_diagnose():
 
 @app.post("/vision/start")
 def start_vision(
-    camera_index: int = 1,
+    camera_index: int = 0,
     save_interval: float = 1.0,
     provider: str = "ollama",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
     ollama_timeout_seconds: float = 45.0,
+    coarse_max_boxes: int = 180,
+    refined_max_elements: int = 120,
+    vlm_batch_max_elements: int = 90,
     no_vlm: bool = False,
 ):
     """Start continuous capture + processing session.
@@ -504,6 +636,9 @@ def start_vision(
             "local_model": local_model,
             "ollama_base_url": ollama_base_url,
             "ollama_timeout_seconds": ollama_timeout_seconds,
+            "coarse_max_boxes": coarse_max_boxes,
+            "refined_max_elements": refined_max_elements,
+            "vlm_batch_max_elements": vlm_batch_max_elements,
             "no_vlm": no_vlm,
             "vlm_client": vlm_client,
         }
@@ -512,6 +647,7 @@ def start_vision(
     with session_lock:
         current_session = session
         capture_running = True
+        sessions_by_id[session["id"]] = session
 
     capture_thread = threading.Thread(
         target=webcam_capture_loop,
@@ -533,6 +669,9 @@ def start_vision(
         "local_model": local_model,
         "ollama_base_url": ollama_base_url,
         "ollama_timeout_seconds": ollama_timeout_seconds,
+        "coarse_max_boxes": coarse_max_boxes,
+        "refined_max_elements": refined_max_elements,
+        "vlm_batch_max_elements": vlm_batch_max_elements,
         "no_vlm": no_vlm,
         "session_root": session["root"],
     }
@@ -578,6 +717,27 @@ def stop_vision(
                 break
             time.sleep(0.1)
 
+        # If background worker could not clear the queue within timeout,
+        # process remaining frames synchronously so summary is complete.
+        while True:
+            with session_lock:
+                inflight = processing_inflight.get(session["id"], 0)
+            item = _pull_next_queued_item_for_session(session["id"])
+
+            if item is None:
+                if inflight == 0:
+                    break
+                time.sleep(0.1)
+                continue
+
+            frame_path = item.get("frame_path")
+            if not frame_path:
+                continue
+            try:
+                _process_single_frame_item(session, session["id"], frame_path)
+            except Exception as exc:
+                logging.exception("Synchronous drain processing failed: %s", exc)
+
     # Finalise SessionAggregator → writes session_summary.json
     session_summary_path: Optional[str] = None
     session_doc: Optional[Dict[str, Any]] = None
@@ -609,17 +769,21 @@ def stop_vision(
 
     with session_lock:
         current_session = None
+        sessions_by_id.pop(session["id"], None)
 
     return summary
 
 
 @app.post("/vision/capture")
 def capture_once(
-    camera_index: int = 1,
+    camera_index: int = 0,
     provider: str = "ollama",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
     ollama_timeout_seconds: float = 60.0,
+    coarse_max_boxes: int = 180,
+    refined_max_elements: int = 120,
+    vlm_batch_max_elements: int = 90,
     no_vlm: bool = False,
 ):
     """Single-shot capture and pipeline execution. Returns final JSON.
@@ -641,6 +805,15 @@ def capture_once(
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
     session = _new_session(prefix="shot")
+    session.update(
+        {
+            "coarse_max_boxes": coarse_max_boxes,
+            "refined_max_elements": refined_max_elements,
+            "vlm_batch_max_elements": vlm_batch_max_elements,
+        }
+    )
+    with session_lock:
+        sessions_by_id[session["id"]] = session
     frame_name = f"frame_{int(time.time())}_{uuid.uuid4().hex[:6]}.jpg"
     frame_path = os.path.join(session["raw_dir"], frame_name)
     cv2.imwrite(frame_path, frame)
@@ -651,6 +824,9 @@ def capture_once(
             session=session,
             vlm_client=vlm_client,
             ollama_timeout_seconds=ollama_timeout_seconds,
+            coarse_max_boxes=coarse_max_boxes,
+            refined_max_elements=refined_max_elements,
+            vlm_batch_max_elements=vlm_batch_max_elements,
         )
         return result
     except Exception as e:
@@ -660,6 +836,9 @@ def capture_once(
             "session_id": session["id"],
             "detail": str(e),
         }
+    finally:
+        with session_lock:
+            sessions_by_id.pop(session["id"], None)
 
 
 @app.get("/vision/stream")
