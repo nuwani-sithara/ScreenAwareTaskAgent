@@ -255,7 +255,7 @@ def generate_hid_commands(request: VisualHIDRequest):
                 "message": result.get("message"),
                 "validation": validation,
                 "suggested_actions": result.get("suggested_actions", []),
-                "steps_description": [],
+                "rewritten_steps": [],
                 "action_steps": [],
                 "hid_commands": [],
                 "total_commands": 0,
@@ -270,15 +270,15 @@ def generate_hid_commands(request: VisualHIDRequest):
         
         action_steps = result.get("action_steps", [])
         hid_commands = result.get("hid_commands", [])
-        steps_description = result.get("steps_description", [])
+        rewritten_steps = result.get("rewritten_steps", [])
         
         logger.info(f"✅ Generated {len(action_steps)} actions → {len(hid_commands)} HID commands in {execution_time:.2f}s")
         
-        # Log human-readable steps for debugging
-        if steps_description:
-            logger.info("📋 Execution Steps:")
-            for step in steps_description[:10]:  # Log first 10
-                logger.info(f"  {step}")
+        # Log rewritten steps for debugging
+        if rewritten_steps:
+            logger.info("📋 Rewritten Steps:")
+            for step in rewritten_steps[:10]:  # Log first 10
+                logger.info(f"  {step.get('step')}. {step.get('action')}: {step.get('description')}")
         
         # Log action steps for debugging
         if action_steps:
@@ -296,7 +296,7 @@ def generate_hid_commands(request: VisualHIDRequest):
             "status": "success",
             "instruction": result.get("instruction"),
             "validation": result.get("validation"),  # Validation result
-            "steps_description": steps_description,  # Human-readable steps
+            "rewritten_steps": rewritten_steps,  # Human-readable structured steps
             "action_steps": action_steps,  # Stage 1 output
             "hid_commands": hid_commands,   # Stage 2 output
             "total_commands": result.get("total_commands"),
