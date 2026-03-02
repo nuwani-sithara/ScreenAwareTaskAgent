@@ -160,6 +160,15 @@ def _norm_bbox(
     )
 
 
+def _bbox_area_px(
+    bbox: Tuple[float, float, float, float],
+    image_w: int,
+    image_h: int,
+) -> float:
+    x1, y1, x2, y2 = bbox
+    return max(0.0, (x2 - x1) * image_w) * max(0.0, (y2 - y1) * image_h)
+
+
 def _bbox_center_xy(
     bbox: Tuple[float, float, float, float],
     image_w: int,
@@ -169,6 +178,147 @@ def _bbox_center_xy(
     cx = int(round(((x1 + x2) * 0.5) * image_w))
     cy = int(round(((y1 + y2) * 0.5) * image_h))
     return max(0, min(image_w - 1, cx)), max(0, min(image_h - 1, cy))
+
+
+def is_inside(
+    inner_bbox: Tuple[float, float, float, float],
+    outer_bbox: Tuple[float, float, float, float],
+    min_ratio: float = 0.97,
+) -> bool:
+    return _bbox_contained_ratio_norm(inner_bbox, outer_bbox) >= min_ratio
+
+
+def apply_nms(
+    detections: List[Dict[str, Any]],
+    iou_threshold: float = 0.4,
+) -> List[Dict[str, Any]]:
+    """
+    Remove overlapping boxes by IoU, keeping highest confidence per region.
+    """
+    if not detections:
+        return []
+    ranked = sorted(
+        detections,
+        key=lambda d: float(d.get("confidence", 0.0)),
+        reverse=True,
+    )
+    kept: List[Dict[str, Any]] = []
+    for cand in ranked:
+        cb = _item_to_bbox_norm(cand)
+        suppress = False
+        for ex in kept:
+            eb = _item_to_bbox_norm(ex)
+            if _bbox_iou_norm(cb, eb) > iou_threshold:
+                suppress = True
+                break
+        if not suppress:
+            kept.append(cand)
+    return kept
+
+
+def merge_nearby_elements(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+    distance_threshold: float = 15.0,
+) -> List[Dict[str, Any]]:
+    """
+    Merge same-type detections when centers are very close and sizes are similar.
+    """
+    if not detections:
+        return []
+    used = [False] * len(detections)
+    merged: List[Dict[str, Any]] = []
+
+    def _size_similar(a: Tuple[float, float, float, float], b: Tuple[float, float, float, float]) -> bool:
+        aw = max(1e-6, a[2] - a[0])
+        ah = max(1e-6, a[3] - a[1])
+        bw = max(1e-6, b[2] - b[0])
+        bh = max(1e-6, b[3] - b[1])
+        rw = max(aw, bw) / max(1e-6, min(aw, bw))
+        rh = max(ah, bh) / max(1e-6, min(ah, bh))
+        return rw <= 1.8 and rh <= 1.8
+
+    for i, base in enumerate(detections):
+        if used[i]:
+            continue
+        used[i] = True
+        bb = _item_to_bbox_norm(base)
+        bcx, bcy = _bbox_center_xy(bb, image_w, image_h)
+        btype = str(base.get("type", "unknown")).strip().lower()
+        group = [base]
+
+        for j in range(i + 1, len(detections)):
+            if used[j]:
+                continue
+            cur = detections[j]
+            ctype = str(cur.get("type", "unknown")).strip().lower()
+            if ctype != btype:
+                continue
+            cb = _item_to_bbox_norm(cur)
+            if not _size_similar(bb, cb):
+                continue
+            ccx, ccy = _bbox_center_xy(cb, image_w, image_h)
+            dist = ((bcx - ccx) ** 2 + (bcy - ccy) ** 2) ** 0.5
+            if dist <= distance_threshold:
+                used[j] = True
+                group.append(cur)
+
+        if len(group) == 1:
+            merged.append(base)
+            continue
+
+        boxes = [_item_to_bbox_norm(g) for g in group]
+        x1 = min(b[0] for b in boxes)
+        y1 = min(b[1] for b in boxes)
+        x2 = max(b[2] for b in boxes)
+        y2 = max(b[3] for b in boxes)
+        best = max(group, key=lambda g: float(g.get("confidence", 0.0)))
+        out = dict(best)
+        out["bbox"] = [x1, y1, x2, y2]
+        out["dxdy"] = [x1, y1, x2, max(0.0, min(1.0, 1.0 - y2))]
+        cx, cy = _bbox_center_xy((x1, y1, x2, y2), image_w, image_h)
+        out["dx"] = cx
+        out["dy"] = cy
+        out["confidence"] = max(float(g.get("confidence", 0.0)) for g in group)
+        merged.append(out)
+
+    return merged
+
+
+def _prune_icon_inside_image(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+) -> List[Dict[str, Any]]:
+    if not detections:
+        return []
+    keep = [True] * len(detections)
+    for i, a in enumerate(detections):
+        if not keep[i]:
+            continue
+        ta = str(a.get("type", "unknown")).strip().lower()
+        ba = _item_to_bbox_norm(a)
+        area_a = _bbox_area_px(ba, image_w, image_h)
+        for j, b in enumerate(detections):
+            if i == j or not keep[j]:
+                continue
+            tb = str(b.get("type", "unknown")).strip().lower()
+            bb = _item_to_bbox_norm(b)
+            area_b = _bbox_area_px(bb, image_w, image_h)
+            # icon inside image -> drop icon
+            if ta == "icon" and tb == "image" and is_inside(ba, bb):
+                keep[i] = False
+                break
+            # image inside icon and image tiny -> drop image
+            if ta == "image" and tb == "icon" and is_inside(ba, bb) and area_a < 1400:
+                keep[i] = False
+                break
+            # generic image/icon containment with tiny image
+            if ta == "image" and tb == "image" and is_inside(ba, bb) and area_a < (0.55 * area_b):
+                keep[i] = False
+                break
+    return [d for idx, d in enumerate(detections) if keep[idx]]
 
 
 def _merge_vlm_discovery_into_refined(
@@ -244,6 +394,8 @@ def _merge_vlm_discovery_into_refined(
 def _dedupe_and_rank_refined_bboxes(
     boxes: List[Dict[str, Any]],
     max_elements: int,
+    image_w: Optional[int] = None,
+    image_h: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
     if not boxes:
         return []
@@ -277,6 +429,10 @@ def _dedupe_and_rank_refined_bboxes(
     for candidate in ranked:
         cb = _item_to_bbox_norm(candidate)
         c_source = str(candidate.get("source", "layout"))
+        if image_w and image_h:
+            # Minimum size filter to drop tiny noisy fragments.
+            if _bbox_area_px(cb, image_w, image_h) < 400.0:
+                continue
         skip = False
         for existing in kept:
             eb = _item_to_bbox_norm(existing)
@@ -334,7 +490,15 @@ def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
 
 def _functional_label(etype: str, dx: int, dy: int, elem_id: str) -> str:
     human = (etype or "element").replace("_", " ").strip()
-    return f"{human} @{dx},{dy}" if human else f"element @{dx},{dy}"
+    if human:
+        if human == "input field":
+            return "Input field"
+        if human == "button":
+            return "Button"
+        if human == "link":
+            return "Link"
+        return human.capitalize()
+    return "Element"
 
 
 def _specific_description(etype: str, label: str, dx: int, dy: int) -> str:
@@ -617,9 +781,37 @@ def _run_pipeline_for_frame(
         except Exception as exc:
             logging.warning("VLM discovery merge failed: %s", exc)
 
+    # 1) Remove icon/image containment duplicates.
+    refined_bboxes = _prune_icon_inside_image(refined_bboxes, img_w, img_h)
+    # 2) NMS to suppress heavy overlap duplicates.
+    refined_bboxes = apply_nms(refined_bboxes, iou_threshold=0.4)
+    # 3) Merge near-duplicate small detections.
+    refined_bboxes = merge_nearby_elements(
+        refined_bboxes,
+        image_w=img_w,
+        image_h=img_h,
+        distance_threshold=15.0,
+    )
+
+    # Dynamic cap per resolution (target ~30 elems for 640x480).
+    area_scale = (img_w * img_h) / float(640 * 480)
+    dynamic_cap = int(round(30.0 * max(0.75, min(2.5, area_scale))))
+    dynamic_cap = max(20, min(80, dynamic_cap))
+    if len(refined_bboxes) > 40:
+        # if noisy frame, tighten by confidence before ranking
+        thr = 0.50
+        if len(refined_bboxes) > 70:
+            thr = 0.58
+        refined_bboxes = [
+            b for b in refined_bboxes
+            if float(b.get("confidence", 0.0)) >= thr
+        ]
+
     refined_bboxes = _dedupe_and_rank_refined_bboxes(
         refined_bboxes,
-        max_elements=max(20, int(refined_max_elements)),
+        max_elements=min(max(20, int(refined_max_elements)), dynamic_cap),
+        image_w=img_w,
+        image_h=img_h,
     )
 
     refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")

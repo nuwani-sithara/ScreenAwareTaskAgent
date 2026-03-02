@@ -36,7 +36,7 @@ BATCH_RESPONSE_SCHEMA = {
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "type", "label", "state", "confidence"],
+                "required": ["id", "type", "label", "description", "state", "confidence"],
                 "properties": {
                     "id":         {"type": "string"},
                     "type":       {"type": "string"},
@@ -227,12 +227,14 @@ def _fallback_classification(elements: List[UIElement]) -> List[Dict[str, Any]]:
         ocr = _clean_label(str(raw.get("ocr_text", "")))
         if ocr:
             return ocr
-        dx = raw.get("dx")
-        dy = raw.get("dy")
-        try:
-            return f"{_human_type(elem_type)} @({int(float(dx))},{int(float(dy))})"
-        except Exception:
-            return _human_type(elem_type)
+        human = _human_type(elem_type)
+        if human == "input field":
+            return "Input field"
+        if human == "button":
+            return "Button"
+        if human == "link":
+            return "Link"
+        return human.capitalize()
 
     def _infer_description(elem: UIElement, elem_type: str, label: str) -> str:
         desc = str(elem.description or "").strip()
@@ -481,13 +483,14 @@ class VLMClient(ABC):
             elem.label = " ".join(str(elem.label or "").split()).strip()
             if not elem.label:
                 human = elem.type.replace("_", " ").strip()
-                raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
-                dx = raw.get("dx")
-                dy = raw.get("dy")
-                try:
-                    elem.label = f"{human} @({int(float(dx))},{int(float(dy))})"
-                except Exception:
-                    elem.label = human
+                if human == "input field":
+                    elem.label = "Input field"
+                elif human == "button":
+                    elem.label = "Button"
+                elif human == "link":
+                    elem.label = "Link"
+                else:
+                    elem.label = human.capitalize()
             if not str(elem.description).strip() or elem.description in stale:
                 if elem.label:
                     elem.description = (

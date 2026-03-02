@@ -119,6 +119,91 @@ def _prepare_crop_for_vlm(crop: np.ndarray, min_side: int = 224) -> np.ndarray:
     return cv2.resize(crop, (new_w, new_h), interpolation=cv2.INTER_CUBIC)
 
 
+def _is_interactive_type(elem_type: str) -> bool:
+    t = str(elem_type or "").strip().lower()
+    return t in {"button", "link", "input_field", "dropdown"}
+
+
+def _infer_label_from_context(
+    idx: int,
+    entries: List[Dict[str, Any]],
+) -> str:
+    """
+    Infer missing labels from nearby text context.
+    - Prefer nearest text above/left of target.
+    - Input field heuristics for email/password.
+    - Button/link icon fallback semantics.
+    """
+    if idx < 0 or idx >= len(entries):
+        return ""
+
+    cur = entries[idx]
+    cur_type = str(cur.get("type", "unknown")).strip().lower()
+    cur_bbox = tuple(cur.get("bbox", (0.0, 0.0, 1.0, 1.0)))
+    cx = float(cur.get("dx", 0))
+    cy = float(cur.get("dy", 0))
+
+    # Detect obvious password hints from OCR if present.
+    ocr_cur = " ".join(str(cur.get("ocr_text", "")).split()).strip()
+    if cur_type == "input_field":
+        low = ocr_cur.lower()
+        if "*" in ocr_cur or "•" in ocr_cur or "password" in low:
+            return "Password"
+        if "@" in ocr_cur or "email" in low or "username" in low:
+            return "Email"
+
+    candidates: List[Tuple[float, str]] = []
+    for j, e in enumerate(entries):
+        if j == idx:
+            continue
+        et = str(e.get("type", "unknown")).strip().lower()
+        txt = " ".join(str(e.get("label", "")).split()).strip()
+        if not txt:
+            txt = " ".join(str(e.get("ocr_text", "")).split()).strip()
+        if not txt:
+            continue
+        if et not in {"text", "label", "link", "button", "input_field"}:
+            continue
+        ex = float(e.get("dx", 0))
+        ey = float(e.get("dy", 0))
+        # Bias toward labels above or slightly left of current element.
+        spatial_penalty = 0.0
+        if ey <= cy:
+            spatial_penalty -= 18.0
+        if ex <= cx:
+            spatial_penalty -= 8.0
+        dist = ((cx - ex) ** 2 + (cy - ey) ** 2) ** 0.5 + spatial_penalty
+        candidates.append((dist, txt))
+
+    if candidates:
+        candidates.sort(key=lambda x: x[0])
+        best = candidates[0][1]
+        # Normalize common field labels.
+        low = best.lower()
+        if cur_type == "input_field":
+            if "pass" in low:
+                return "Password"
+            if "user" in low or "mail" in low or "email" in low:
+                return "Email"
+        if cur_type in {"button", "link"}:
+            if "login" in low or "sign in" in low:
+                return "Login"
+            if "forgot" in low and "password" in low:
+                return "Forgot password?"
+        return best[:80]
+
+    # Last semantic fallback (not coordinate based).
+    if cur_type == "input_field":
+        return "Input field"
+    if cur_type == "button":
+        return "Icon button"
+    if cur_type == "link":
+        return "Link"
+    if cur_type == "dropdown":
+        return "Dropdown"
+    return ""
+
+
 def _heuristic_meta(crop: np.ndarray, source: str = "") -> Dict[str, Any]:
     if crop.size == 0:
         return {
@@ -274,7 +359,7 @@ def enrich_frame(
         max_vlm_calls = len(boxes)
     vlm_calls_used = 0
 
-    elements: List[Dict[str, Any]] = []
+    staged: List[Dict[str, Any]] = []
     try:
         for idx, item in enumerate(boxes):
             bbox = _item_to_bbox(item)
@@ -336,19 +421,20 @@ def enrich_frame(
                     type_hint=_safe_str(meta.get("type", heuristic["type"])),
                 )
 
-            elements.append(
+            staged.append(
                 {
                     "id": f"elem_{idx}",
-                    "type": meta["type"],
-                    "label": meta["label"],
-                    "description": meta["description"],
-                    "state": meta["state"],
+                    "type": str(meta.get("type", "unknown")).strip().lower() or "unknown",
+                    "label": " ".join(str(meta.get("label", "")).split()).strip(),
+                    "description": str(meta.get("description", "")).strip(),
+                    "state": str(meta.get("state", "normal")).strip().lower() or "normal",
                     "dx": int(item.get("dx", dx)),
                     "dy": int(item.get("dy", dy)),
+                    "bbox": list(bbox),
                     "dxdy": item.get("dxdy", []),
                     "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
                     "ocr_text": ocr_text,
-                    "confidence": meta["confidence"],
+                    "confidence": float(meta.get("confidence", 0.5)),
                     "source": (
                         item.get("source", "ui_detector")
                         if str(item.get("source", "")).strip() == "vlm_discovery"
@@ -362,6 +448,50 @@ def enrich_frame(
                 vlm_client.timeout_seconds = original_timeout
             except Exception:
                 pass
+
+    # Strict OCR/context label enforcement for interactive elements.
+    elements: List[Dict[str, Any]] = []
+    for i, e in enumerate(staged):
+        et = str(e.get("type", "unknown")).strip().lower()
+        lbl = " ".join(str(e.get("label", "")).split()).strip()
+        ocr = " ".join(str(e.get("ocr_text", "")).split()).strip()
+        if _is_interactive_type(et):
+            if ocr:
+                lbl = ocr
+            elif not lbl:
+                lbl = _infer_label_from_context(i, staged)
+        else:
+            if not lbl and ocr:
+                lbl = ocr
+
+        if not lbl and et in {"button", "link", "dropdown", "input_field"}:
+            # Never use coordinate fallback names.
+            lbl = "Button" if et == "button" else (
+                "Link" if et == "link" else (
+                    "Dropdown" if et == "dropdown" else "Input field"
+                )
+            )
+
+        desc = str(e.get("description", "")).strip()
+        if not desc:
+            # semantic fallback only, without coordinate-style labels
+            desc = describe_ui_element(
+                vlm_client=None,
+                crop=image[
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[1]:
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[3],
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[0]:
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[2],
+                ],
+                label=lbl,
+                type_hint=et,
+            )
+
+        out = dict(e)
+        out["label"] = lbl
+        out["description"] = desc
+        out.pop("bbox", None)
+        elements.append(out)
 
     payload = {
         "image": str(image_path),
