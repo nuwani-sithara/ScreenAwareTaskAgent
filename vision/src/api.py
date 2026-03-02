@@ -119,6 +119,32 @@ def _bbox_contained_ratio_norm(inner: Tuple[float, float, float, float], outer: 
     return inter / inner_area
 
 
+def _item_to_bbox_norm(item: Dict[str, Any]) -> Tuple[float, float, float, float]:
+    bbox = item.get("bbox")
+    if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        return tuple(float(v) for v in bbox)
+
+    dxdy = item.get("dxdy")
+    screen_bbox = item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0])
+    if (
+        isinstance(dxdy, (list, tuple))
+        and len(dxdy) == 4
+        and isinstance(screen_bbox, (list, tuple))
+        and len(screen_bbox) == 4
+    ):
+        dx1, dy_top, dx2, dy_bottom = (float(v) for v in dxdy)
+        sx1, sy1, sx2, sy2 = (float(v) for v in screen_bbox)
+        sw = max(1e-9, sx2 - sx1)
+        sh = max(1e-9, sy2 - sy1)
+        return (
+            max(0.0, min(1.0, sx1 + dx1 * sw)),
+            max(0.0, min(1.0, sy1 + dy_top * sh)),
+            max(0.0, min(1.0, sx1 + dx2 * sw)),
+            max(0.0, min(1.0, sy2 - dy_bottom * sh)),
+        )
+    return (0.0, 0.0, 1.0, 1.0)
+
+
 def _dedupe_and_rank_refined_bboxes(
     boxes: List[Dict[str, Any]],
     max_elements: int,
@@ -135,7 +161,7 @@ def _dedupe_and_rank_refined_bboxes(
     }
 
     def _score(item: Dict[str, Any]) -> float:
-        bbox = item.get("bbox", [0, 0, 1, 1])
+        bbox = _item_to_bbox_norm(item)
         x1, y1, x2, y2 = bbox
         area = max(1e-9, (x2 - x1) * (y2 - y1))
         conf = float(item.get("confidence", 0.5))
@@ -146,11 +172,11 @@ def _dedupe_and_rank_refined_bboxes(
     kept: List[Dict[str, Any]] = []
 
     for candidate in ranked:
-        cb = tuple(candidate.get("bbox", [0, 0, 1, 1]))
+        cb = _item_to_bbox_norm(candidate)
         c_source = str(candidate.get("source", "layout"))
         skip = False
         for existing in kept:
-            eb = tuple(existing.get("bbox", [0, 0, 1, 1]))
+            eb = _item_to_bbox_norm(existing)
             iou = _bbox_iou_norm(cb, eb)
             contained = _bbox_contained_ratio_norm(cb, eb)
             if iou >= 0.82:
@@ -171,7 +197,7 @@ def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
     vis = image.copy()
     h, w = vis.shape[:2]
     for item in refined_bboxes:
-        x1, y1, x2, y2 = item["bbox"]
+        x1, y1, x2, y2 = _item_to_bbox_norm(item)
         cv2.rectangle(
             vis,
             (int(x1 * w), int(y1 * h)),
@@ -180,6 +206,43 @@ def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
             2,
         )
     cv2.imwrite(out_path, vis)
+
+
+def _finalize_elements_with_dxdy(
+    payload: Dict[str, Any],
+    image_width: int,
+    image_height: int,
+) -> Dict[str, Any]:
+    elements = payload.get("elements", [])
+    if not isinstance(elements, list):
+        return payload
+
+    for elem in elements:
+        if not isinstance(elem, dict):
+            continue
+        bbox = elem.get("bbox")
+        if ("dx" not in elem or "dy" not in elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+            try:
+                x1 = float(bbox[0])
+                y1 = float(bbox[1])
+                elem.setdefault("dx", int(round(max(0.0, x1 * image_width))))
+                elem.setdefault("dy", int(round(max(0.0, y1 * image_height))))
+            except Exception:
+                pass
+        if "dx" in elem:
+            try:
+                elem["dx"] = int(round(float(elem["dx"])))
+            except Exception:
+                pass
+        if "dy" in elem:
+            try:
+                elem["dy"] = int(round(float(elem["dy"])))
+            except Exception:
+                pass
+        elem.pop("bbox", None)
+        elem.pop("dxdy", None)
+        elem.pop("screen_bbox", None)
+    return payload
 
 
 def _capture_single_frame(camera_index: int = 0):
@@ -296,16 +359,21 @@ def _run_pipeline_for_frame(
     refiner = BBoxRefiner()
     refined_bboxes = []
     for item in coarse_bboxes:
+        screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
         refined = refiner.refine_bbox(
             image=image,
-            bbox_normalized=tuple(item["bbox"]),
+            bbox_normalized=refiner.item_to_bbox(item),
             use_edge_detection=True,
             use_grid_snap=False,
         )
         if refiner.validate_bbox(refined):
+            dx, dy = refiner.bbox_to_dxdy_pixels(refined, screen_bbox, image.shape[1], image.shape[0])
             refined_bboxes.append(
                 {
-                    "bbox": list(refined),
+                    "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
+                    "dx": dx,
+                    "dy": dy,
+                    "screen_bbox": list(screen_bbox),
                     "source": item.get("source", "layout"),
                     "confidence": item.get("confidence", 0.5),
                 }
@@ -373,6 +441,10 @@ def _run_pipeline_for_frame(
     else:
         with open(final_json_path, "r", encoding="utf-8") as f:
             payload = json.load(f)
+
+    payload = _finalize_elements_with_dxdy(payload, image.shape[1], image.shape[0])
+    with open(final_json_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
 
     return {
         "status": "completed",

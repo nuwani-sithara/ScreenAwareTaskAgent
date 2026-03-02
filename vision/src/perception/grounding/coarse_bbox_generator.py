@@ -15,6 +15,116 @@ import cv2
 import numpy as np
 
 
+def detect_screen_bbox(image: np.ndarray) -> Tuple[int, int, int, int]:
+    h, w = image.shape[:2]
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+    edges = cv2.Canny(gray, 45, 140)
+    edges = cv2.dilate(edges, cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)), iterations=1)
+
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return (0, 0, w, h)
+
+    image_area = float(w * h)
+    best = None
+    best_score = -1.0
+
+    for cnt in contours:
+        area = float(cv2.contourArea(cnt))
+        if area < 0.08 * image_area:
+            continue
+
+        x, y, bw, bh = cv2.boundingRect(cnt)
+        if bw < 0.25 * w or bh < 0.25 * h:
+            continue
+
+        rect_area = float(bw * bh)
+        fill_ratio = area / max(1.0, rect_area)
+        center_x = x + bw / 2.0
+        center_y = y + bh / 2.0
+        center_bias = 1.0 - (
+            (abs(center_x - (w / 2.0)) / max(1.0, w / 2.0)) * 0.5
+            + (abs(center_y - (h / 2.0)) / max(1.0, h / 2.0)) * 0.5
+        )
+        score = (rect_area / image_area) * 0.7 + fill_ratio * 0.2 + center_bias * 0.1
+
+        if score > best_score:
+            best_score = score
+            best = (x, y, x + bw, y + bh)
+
+    if best is None:
+        return (0, 0, w, h)
+
+    x1, y1, x2, y2 = best
+    pad_x = int((x2 - x1) * 0.01)
+    pad_y = int((y2 - y1) * 0.01)
+    return (
+        max(0, x1 - pad_x),
+        max(0, y1 - pad_y),
+        min(w, x2 + pad_x),
+        min(h, y2 + pad_y),
+    )
+
+
+def bbox_to_dxdy(
+    bbox: Tuple[float, float, float, float],
+    screen_bbox: Tuple[float, float, float, float],
+) -> Tuple[float, float, float, float]:
+    x1, y1, x2, y2 = bbox
+    sx1, sy1, sx2, sy2 = screen_bbox
+    sw = max(1e-9, sx2 - sx1)
+    sh = max(1e-9, sy2 - sy1)
+    # x from left edge of screen; y from top (for y1) and bottom (for y2).
+    dx1 = (x1 - sx1) / sw
+    dy_top = (y1 - sy1) / sh
+    dx2 = (x2 - sx1) / sw
+    dy_bottom = (sy2 - y2) / sh
+    return (
+        max(0.0, min(1.0, dx1)),
+        max(0.0, min(1.0, dy_top)),
+        max(0.0, min(1.0, dx2)),
+        max(0.0, min(1.0, dy_bottom)),
+    )
+
+
+def dxdy_to_bbox(
+    dxdy: Tuple[float, float, float, float],
+    screen_bbox: Tuple[float, float, float, float],
+) -> Tuple[float, float, float, float]:
+    dx1, dy_top, dx2, dy_bottom = dxdy
+    sx1, sy1, sx2, sy2 = screen_bbox
+    sw = max(1e-9, sx2 - sx1)
+    sh = max(1e-9, sy2 - sy1)
+    x1 = sx1 + dx1 * sw
+    y1 = sy1 + dy_top * sh
+    x2 = sx1 + dx2 * sw
+    y2 = sy2 - dy_bottom * sh
+    return (
+        max(0.0, min(1.0, x1)),
+        max(0.0, min(1.0, y1)),
+        max(0.0, min(1.0, x2)),
+        max(0.0, min(1.0, y2)),
+    )
+
+
+def bbox_to_dxdy_pixels(
+    bbox: Tuple[float, float, float, float],
+    screen_bbox: Tuple[float, float, float, float],
+    image_width: int,
+    image_height: int,
+) -> Tuple[int, int]:
+    x1, y1, _, _ = bbox
+    sx1, sy1, sx2, sy2 = screen_bbox
+    screen_x1 = sx1 * image_width
+    screen_y1 = sy1 * image_height
+    elem_x1 = x1 * image_width
+    elem_y1 = y1 * image_height
+    dx = int(round(max(0.0, elem_x1 - screen_x1)))
+    dy = int(round(max(0.0, elem_y1 - screen_y1)))
+    return dx, dy
+
+
 def _bbox_iou(a: Tuple[int, int, int, int], b: Tuple[int, int, int, int]) -> float:
     ax1, ay1, ax2, ay2 = a
     bx1, by1, bx2, by2 = b
@@ -140,7 +250,19 @@ def _collect_mser_text_candidates(gray: np.ndarray) -> List[Tuple[int, int, int,
 
 def generate_coarse_bboxes(image, max_boxes: int = 160):
     h, w = image.shape[:2]
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    sx1, sy1, sx2, sy2 = detect_screen_bbox(image)
+    sw = max(1, sx2 - sx1)
+    sh = max(1, sy2 - sy1)
+    screen_bbox_norm = (sx1 / w, sy1 / h, sx2 / w, sy2 / h)
+
+    roi = image[sy1:sy2, sx1:sx2]
+    if roi.size == 0:
+        roi = image
+        sx1, sy1, sx2, sy2 = 0, 0, w, h
+        sw, sh = w, h
+        screen_bbox_norm = (0.0, 0.0, 1.0, 1.0)
+
+    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (3, 3), 0)
     gray = cv2.equalizeHist(gray)
 
@@ -157,8 +279,8 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     candidates.extend(
         _collect_contour_candidates(
             edges,
-            image_w=w,
-            image_h=h,
+            image_w=sw,
+            image_h=sh,
             source="layout_edge",
             confidence=0.58,
             min_area_frac=0.00022,
@@ -184,8 +306,8 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     candidates.extend(
         _collect_contour_candidates(
             adaptive,
-            image_w=w,
-            image_h=h,
+            image_w=sw,
+            image_h=sh,
             source="layout_adaptive",
             confidence=0.54,
             min_area_frac=0.00007,
@@ -197,12 +319,12 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     horizontal = cv2.morphologyEx(
         adaptive,
         cv2.MORPH_OPEN,
-        cv2.getStructuringElement(cv2.MORPH_RECT, (max(15, w // 45), 1)),
+        cv2.getStructuringElement(cv2.MORPH_RECT, (max(15, sw // 45), 1)),
     )
     vertical = cv2.morphologyEx(
         adaptive,
         cv2.MORPH_OPEN,
-        cv2.getStructuringElement(cv2.MORPH_RECT, (1, max(12, h // 45))),
+        cv2.getStructuringElement(cv2.MORPH_RECT, (1, max(12, sh // 45))),
     )
     form_lines = cv2.bitwise_or(horizontal, vertical)
     form_lines = cv2.dilate(
@@ -213,8 +335,8 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     candidates.extend(
         _collect_contour_candidates(
             form_lines,
-            image_w=w,
-            image_h=h,
+            image_w=sw,
+            image_h=sh,
             source="layout_form",
             confidence=0.62,
             min_area_frac=0.00012,
@@ -235,7 +357,7 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     filtered: List[Dict[str, Any]] = []
     for c in candidates:
         x1, y1, x2, y2 = c["bbox"]
-        area_frac = ((x2 - x1) * (y2 - y1)) / float(w * h)
+        area_frac = ((x2 - x1) * (y2 - y1)) / float(sw * sh)
         if area_frac > 0.82 and len(candidates) > 20:
             continue
         filtered.append(c)
@@ -253,9 +375,20 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     bboxes = []
     for item in deduped:
         x1, y1, x2, y2 = item["bbox"]
+        gx1 = (sx1 + x1) / w
+        gy1 = (sy1 + y1) / h
+        gx2 = (sx1 + x2) / w
+        gy2 = (sy1 + y2) / h
+        bbox_norm = (gx1, gy1, gx2, gy2)
+        dxdy = bbox_to_dxdy(bbox_norm, screen_bbox_norm)
+        bbox_norm = dxdy_to_bbox(dxdy, screen_bbox_norm)
+        dx, dy = bbox_to_dxdy_pixels(bbox_norm, screen_bbox_norm, w, h)
         bboxes.append(
             {
-                "bbox": [x1 / w, y1 / h, x2 / w, y2 / h],
+                "dxdy": list(dxdy),
+                "dx": dx,
+                "dy": dy,
+                "screen_bbox": list(screen_bbox_norm),
                 "source": item["source"],
                 "confidence": float(item["confidence"]),
             }

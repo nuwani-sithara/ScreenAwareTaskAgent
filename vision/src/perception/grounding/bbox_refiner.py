@@ -81,6 +81,79 @@ class BBoxRefiner:
             max(0.0, min(1.0, y_max / height)),
         )
 
+    def dxdy_to_bbox(
+        self,
+        dxdy: Tuple[float, float, float, float],
+        screen_bbox: Tuple[float, float, float, float],
+    ) -> Tuple[float, float, float, float]:
+        dx1, dy_top, dx2, dy_bottom = dxdy
+        sx1, sy1, sx2, sy2 = screen_bbox
+        sw = max(1e-9, sx2 - sx1)
+        sh = max(1e-9, sy2 - sy1)
+        x1 = sx1 + dx1 * sw
+        y1 = sy1 + dy_top * sh
+        x2 = sx1 + dx2 * sw
+        y2 = sy2 - dy_bottom * sh
+        return (
+            max(0.0, min(1.0, x1)),
+            max(0.0, min(1.0, y1)),
+            max(0.0, min(1.0, x2)),
+            max(0.0, min(1.0, y2)),
+        )
+
+    def bbox_to_dxdy(
+        self,
+        bbox: Tuple[float, float, float, float],
+        screen_bbox: Tuple[float, float, float, float],
+    ) -> Tuple[float, float, float, float]:
+        x1, y1, x2, y2 = bbox
+        sx1, sy1, sx2, sy2 = screen_bbox
+        sw = max(1e-9, sx2 - sx1)
+        sh = max(1e-9, sy2 - sy1)
+        dx1 = (x1 - sx1) / sw
+        dy_top = (y1 - sy1) / sh
+        dx2 = (x2 - sx1) / sw
+        dy_bottom = (sy2 - y2) / sh
+        return (
+            max(0.0, min(1.0, dx1)),
+            max(0.0, min(1.0, dy_top)),
+            max(0.0, min(1.0, dx2)),
+            max(0.0, min(1.0, dy_bottom)),
+        )
+
+    def item_to_bbox(
+        self,
+        item: dict,
+    ) -> Tuple[float, float, float, float]:
+        bbox = item.get("bbox")
+        if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+            return tuple(float(v) for v in bbox)
+        dxdy = item.get("dxdy")
+        screen_bbox = item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0])
+        if isinstance(dxdy, (list, tuple)) and len(dxdy) == 4:
+            return self.dxdy_to_bbox(
+                tuple(float(v) for v in dxdy),
+                tuple(float(v) for v in screen_bbox),
+            )
+        return (0.0, 0.0, 1.0, 1.0)
+
+    def bbox_to_dxdy_pixels(
+        self,
+        bbox: Tuple[float, float, float, float],
+        screen_bbox: Tuple[float, float, float, float],
+        image_width: int,
+        image_height: int,
+    ) -> Tuple[int, int]:
+        x1, y1, _, _ = bbox
+        sx1, sy1, _, _ = screen_bbox
+        screen_x1 = sx1 * image_width
+        screen_y1 = sy1 * image_height
+        elem_x1 = x1 * image_width
+        elem_y1 = y1 * image_height
+        dx = int(round(max(0.0, elem_x1 - screen_x1)))
+        dy = int(round(max(0.0, elem_y1 - screen_y1)))
+        return dx, dy
+
     # ---------- Edge detection ----------
 
     def detect_edges_in_region(
@@ -280,6 +353,7 @@ def run_bbox_refinement(
         image = cv2.imread(str(image_path))
         if image is None:
             continue
+        h, w = image.shape[:2]
 
         with open(bbox_file, "r") as f:
             data = json.load(f)
@@ -289,12 +363,17 @@ def run_bbox_refinement(
         for item in data.get("bboxes", []):
             refined = refiner.refine_bbox(
                 image=image,
-                bbox_normalized=tuple(item["bbox"]),
+                bbox_normalized=refiner.item_to_bbox(item),
             )
 
             if refiner.validate_bbox(refined):
+                screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
+                dx, dy = refiner.bbox_to_dxdy_pixels(refined, screen_bbox, w, h)
                 refined_boxes.append({
-                    "bbox": refined,
+                    "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
+                    "dx": dx,
+                    "dy": dy,
+                    "screen_bbox": list(screen_bbox),
                     "source": item.get("source", "unknown"),
                     "confidence": item.get("confidence", 0.5),
                 })
@@ -305,9 +384,8 @@ def run_bbox_refinement(
 
         if debug_visuals:
             vis = image.copy()
-            h, w = image.shape[:2]
             for r in refined_boxes:
-                x1, y1, x2, y2 = r["bbox"]
+                x1, y1, x2, y2 = refiner.item_to_bbox(r)
                 cv2.rectangle(
                     vis,
                     (int(x1 * w), int(y1 * h)),

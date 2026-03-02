@@ -40,6 +40,58 @@ def _safe_str(v: Any) -> str:
     return "" if v is None else str(v)
 
 
+def _dxdy_to_bbox(
+    dxdy: Tuple[float, float, float, float],
+    screen_bbox: Tuple[float, float, float, float],
+) -> Tuple[float, float, float, float]:
+    dx1, dy_top, dx2, dy_bottom = dxdy
+    sx1, sy1, sx2, sy2 = screen_bbox
+    sw = max(1e-9, sx2 - sx1)
+    sh = max(1e-9, sy2 - sy1)
+    x1 = sx1 + dx1 * sw
+    y1 = sy1 + dy_top * sh
+    x2 = sx1 + dx2 * sw
+    y2 = sy2 - dy_bottom * sh
+    return (
+        max(0.0, min(1.0, x1)),
+        max(0.0, min(1.0, y1)),
+        max(0.0, min(1.0, x2)),
+        max(0.0, min(1.0, y2)),
+    )
+
+
+def _item_to_bbox(item: Dict[str, Any]) -> Tuple[float, float, float, float]:
+    bbox = item.get("bbox")
+    if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        return tuple(float(v) for v in bbox)
+
+    dxdy = item.get("dxdy")
+    screen_bbox = item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0])
+    if isinstance(dxdy, (list, tuple)) and len(dxdy) == 4:
+        return _dxdy_to_bbox(
+            tuple(float(v) for v in dxdy),
+            tuple(float(v) for v in screen_bbox),
+        )
+    return (0.0, 0.0, 1.0, 1.0)
+
+
+def _bbox_to_dxdy_pixels(
+    bbox: Tuple[float, float, float, float],
+    screen_bbox: Tuple[float, float, float, float],
+    image_width: int,
+    image_height: int,
+) -> Tuple[int, int]:
+    x1, y1, _, _ = bbox
+    sx1, sy1, _, _ = screen_bbox
+    screen_x1 = sx1 * image_width
+    screen_y1 = sy1 * image_height
+    elem_x1 = x1 * image_width
+    elem_y1 = y1 * image_height
+    dx = int(round(max(0.0, elem_x1 - screen_x1)))
+    dy = int(round(max(0.0, elem_y1 - screen_y1)))
+    return dx, dy
+
+
 def _expand_bbox_norm(
     bbox_norm: Tuple[float, float, float, float],
     pad_ratio: float = 0.08,
@@ -227,12 +279,14 @@ def enrich_frame(
     elements: List[Dict[str, Any]] = []
     try:
         for idx, item in enumerate(boxes):
-            bbox = tuple(item.get("bbox", [0, 0, 1, 1]))
+            bbox = _item_to_bbox(item)
+            screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
             expanded_bbox = _expand_bbox_norm(bbox, pad_ratio=0.10)
             x1, y1, x2, y2 = _to_pixel_bbox(expanded_bbox, w, h)
             crop = image[y1:y2, x1:x2]
             crop = _prepare_crop_for_vlm(crop, min_side=224)
             heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
+            dx, dy = _bbox_to_dxdy_pixels(bbox, screen_bbox, w, h)
 
             meta = {
                 "type": heuristic["type"],
@@ -277,7 +331,10 @@ def enrich_frame(
                     "label": meta["label"],
                     "description": meta["description"],
                     "state": meta["state"],
-                    "bbox": list(bbox),
+                    "dx": int(item.get("dx", dx)),
+                    "dy": int(item.get("dy", dy)),
+                    "dxdy": item.get("dxdy", []),
+                    "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
                     "confidence": meta["confidence"],
                     "source": item.get("source", "refined_bbox"),
                 }
