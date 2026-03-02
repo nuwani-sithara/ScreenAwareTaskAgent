@@ -123,11 +123,16 @@ class HIDStepGenerator:
             confidence = elem.get("confidence", 0)
             elem_id = elem.get("id") or f"elem_{idx}"  # Generate ID if missing
             
-            # Handle both coordinate formats:
-            # 1. Direct x, y pixel coordinates (new format)
-            # 2. Normalized bbox [x1, y1, x2, y2] (old format)
-            if "x" in elem and "y" in elem:
-                # Direct pixel coordinates
+            # Handle multiple coordinate formats:
+            # 1. New pixel coordinates: dx, dy
+            # 2. Legacy pixel coordinates: x, y  
+            # 3. Normalized bbox: [x1, y1, x2, y2]
+            if "dx" in elem and "dy" in elem:
+                # New format: pixel coordinates
+                center_x = elem.get("dx", 0)
+                center_y = elem.get("dy", 0)
+            elif "x" in elem and "y" in elem:
+                # Legacy format: pixel coordinates
                 center_x = elem.get("x", 0)
                 center_y = elem.get("y", 0)
             else:
@@ -322,12 +327,24 @@ JSON Response:"""
                     
                     if elem_id and elem_id in element_map:
                         elem = element_map[elem_id]
-                        bbox = elem.get("bbox", [])
-                        if bbox:
-                            # Calculate center point
-                            center_x = int((bbox[0] + bbox[2]) / 2 * 1920)
-                            center_y = int((bbox[1] + bbox[3]) / 2 * 1080)
-                            
+                        
+                        # Handle multiple coordinate formats
+                        if "dx" in elem and "dy" in elem:
+                            center_x = elem.get("dx", 0)
+                            center_y = elem.get("dy", 0)
+                        elif "x" in elem and "y" in elem:
+                            center_x = elem.get("x", 0)
+                            center_y = elem.get("y", 0)
+                        else:
+                            bbox = elem.get("bbox", [])
+                            if bbox and len(bbox) >= 4:
+                                # Calculate center point
+                                center_x = int((bbox[0] + bbox[2]) / 2 * 1920)
+                                center_y = int((bbox[1] + bbox[3]) / 2 * 1080)
+                            else:
+                                center_x, center_y = 0, 0
+                        
+                        if center_x > 0 or center_y > 0:
                             # Add move command first
                             hid_commands.append(self._create_hid_command(
                                 "mouse_move",
