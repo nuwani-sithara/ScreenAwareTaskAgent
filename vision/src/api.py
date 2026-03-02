@@ -9,16 +9,17 @@ import uuid
 import queue
 import shutil
 import json
+import hashlib
 from pathlib import Path
 from typing import Optional, Dict, Any, List, Tuple
 
 from src.capture.webcam_capture import start_webcam_stream
 from src.preprocessing.preprocess import preprocess_all
-from src.perception.grounding.coarse_bbox_generator import generate_coarse_bboxes
 from src.perception.grounding.bbox_refiner import BBoxRefiner
 from src.perception.grounding.bbox_element_enricher import enrich_frame
-from src.perception.vlm import get_vlm_client, UIElement
+from src.perception.vlm import get_vlm_client, UIElement, get_ui_discovery_prompt
 from src.session_aggregator import SessionAggregator
+from src.vision.detector import detect_ui_elements
 
 logging.basicConfig(
     level=logging.INFO,
@@ -145,6 +146,101 @@ def _item_to_bbox_norm(item: Dict[str, Any]) -> Tuple[float, float, float, float
     return (0.0, 0.0, 1.0, 1.0)
 
 
+def _norm_bbox(
+    bbox: Tuple[float, float, float, float],
+) -> Tuple[float, float, float, float]:
+    x1, y1, x2, y2 = (float(v) for v in bbox)
+    x1, x2 = sorted((x1, x2))
+    y1, y2 = sorted((y1, y2))
+    return (
+        max(0.0, min(1.0, x1)),
+        max(0.0, min(1.0, y1)),
+        max(0.0, min(1.0, x2)),
+        max(0.0, min(1.0, y2)),
+    )
+
+
+def _bbox_center_xy(
+    bbox: Tuple[float, float, float, float],
+    image_w: int,
+    image_h: int,
+) -> Tuple[int, int]:
+    x1, y1, x2, y2 = bbox
+    cx = int(round(((x1 + x2) * 0.5) * image_w))
+    cy = int(round(((y1 + y2) * 0.5) * image_h))
+    return max(0, min(image_w - 1, cx)), max(0, min(image_h - 1, cy))
+
+
+def _merge_vlm_discovery_into_refined(
+    refined_bboxes: List[Dict[str, Any]],
+    vlm_elements: List[UIElement],
+    image_w: int,
+    image_h: int,
+) -> List[Dict[str, Any]]:
+    """
+    Merge full-image VLM discovery with layout-based refined boxes.
+    - If IoU with an existing box is high, enrich that box metadata.
+    - Otherwise, append a new VLM-discovered box.
+    """
+    merged = list(refined_bboxes)
+    by_idx_bbox = [_item_to_bbox_norm(item) for item in merged]
+
+    for elem in vlm_elements:
+        eb = _norm_bbox(elem.bbox)
+        ex1, ey1, ex2, ey2 = eb
+        if (ex2 - ex1) <= 1e-6 or (ey2 - ey1) <= 1e-6:
+            continue
+
+        best_iou = 0.0
+        best_idx = -1
+        for i, rb in enumerate(by_idx_bbox):
+            iou = _bbox_iou_norm(eb, rb)
+            if iou > best_iou:
+                best_iou = iou
+                best_idx = i
+
+        if best_idx >= 0 and best_iou >= 0.62:
+            target = merged[best_idx]
+            target["type"] = str(elem.type or target.get("type", "unknown")).strip().lower() or target.get("type", "unknown")
+            lbl = " ".join(str(elem.label or "").split()).strip()
+            if lbl:
+                target["label"] = lbl[:160]
+            desc = str(elem.description or "").strip()
+            if desc:
+                target["description"] = desc
+            st = str(elem.state or "").strip().lower()
+            if st and st != "unknown":
+                target["state"] = st
+            target["confidence"] = max(float(target.get("confidence", 0.5)), float(elem.confidence or 0.5))
+            target["source"] = "vlm_discovery"
+            continue
+
+        dx, dy = _bbox_center_xy(eb, image_w, image_h)
+        merged.append(
+            {
+                "bbox": [float(v) for v in eb],
+                "dxdy": [
+                    float(ex1),
+                    float(ey1),
+                    float(ex2),
+                    float(max(0.0, min(1.0, 1.0 - ey2))),
+                ],
+                "dx": dx,
+                "dy": dy,
+                "screen_bbox": [0.0, 0.0, 1.0, 1.0],
+                "source": "vlm_discovery",
+                "type": str(elem.type or "unknown").strip().lower() or "unknown",
+                "label": " ".join(str(elem.label or "").split()).strip()[:160],
+                "description": str(elem.description or "").strip(),
+                "state": str(elem.state or "normal").strip().lower() or "normal",
+                "confidence": max(0.0, min(1.0, float(elem.confidence or 0.5))),
+            }
+        )
+        by_idx_bbox.append(eb)
+
+    return merged
+
+
 def _dedupe_and_rank_refined_bboxes(
     boxes: List[Dict[str, Any]],
     max_elements: int,
@@ -153,6 +249,10 @@ def _dedupe_and_rank_refined_bboxes(
         return []
 
     source_weight = {
+        "ui_detector": 1.00,
+        "ocr_enriched": 0.98,
+        "vlm_enriched": 0.99,
+        "vlm_discovery": 1.02,
         "layout_form": 1.00,
         "layout_text": 0.95,
         "layout_adaptive": 0.85,
@@ -166,7 +266,10 @@ def _dedupe_and_rank_refined_bboxes(
         area = max(1e-9, (x2 - x1) * (y2 - y1))
         conf = float(item.get("confidence", 0.5))
         sw = source_weight.get(str(item.get("source", "layout")), 0.65)
-        return (0.65 * conf) + (0.35 * sw) - (0.05 * area)
+        edge_penalty = 0.0
+        if area < 0.0012 and (y1 < 0.02 or y2 > 0.98):
+            edge_penalty = 0.12
+        return (0.65 * conf) + (0.35 * sw) - (0.05 * area) - edge_penalty
 
     ranked = sorted(boxes, key=_score, reverse=True)
     kept: List[Dict[str, Any]] = []
@@ -196,16 +299,54 @@ def _dedupe_and_rank_refined_bboxes(
 def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
     vis = image.copy()
     h, w = vis.shape[:2]
-    for item in refined_bboxes:
+    for idx, item in enumerate(refined_bboxes):
         x1, y1, x2, y2 = _item_to_bbox_norm(item)
+        src = str(item.get("source", "layout"))
+        etype = str(item.get("type", "unknown"))
+        conf = float(item.get("confidence", 0.0))
+        color = (0, 255, 0)
+        if src == "vlm_discovery":
+            color = (255, 170, 0)
+        elif src == "layout_text":
+            color = (0, 200, 255)
         cv2.rectangle(
             vis,
             (int(x1 * w), int(y1 * h)),
             (int(x2 * w), int(y2 * h)),
-            (0, 255, 0),
+            color,
             2,
         )
+        text = f"{idx}:{etype} {conf:.2f}"
+        tx = int(x1 * w)
+        ty = max(10, int(y1 * h) - 4)
+        cv2.putText(
+            vis,
+            text,
+            (tx, ty),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.35,
+            color,
+            1,
+            cv2.LINE_AA,
+        )
     cv2.imwrite(out_path, vis)
+
+
+def _functional_label(etype: str, dx: int, dy: int, elem_id: str) -> str:
+    human = (etype or "element").replace("_", " ").strip()
+    return f"{human} @{dx},{dy}" if human else f"element @{dx},{dy}"
+
+
+def _specific_description(etype: str, label: str, dx: int, dy: int) -> str:
+    human = (etype or "element").replace("_", " ").strip()
+    if label:
+        return (
+            f"{human.capitalize()} identified near ({dx},{dy}) with label '{label}', "
+            "used in the current visible screen."
+        )
+    return (
+        f"{human.capitalize()} identified near ({dx},{dy}) in the current visible screen."
+    )
 
 
 def _finalize_elements_with_dxdy(
@@ -217,6 +358,7 @@ def _finalize_elements_with_dxdy(
     if not isinstance(elements, list):
         return payload
 
+    finalized: List[Dict[str, Any]] = []
     for elem in elements:
         if not isinstance(elem, dict):
             continue
@@ -236,12 +378,10 @@ def _finalize_elements_with_dxdy(
 
         state = str(elem.get("state", "")).strip().lower()
         if not state or state == "unknown":
-            elem["state"] = "normal"
+            state = "normal"
 
         label = " ".join(str(elem.get("label", "")).split()).strip()
-        if not label:
-            label = f"{etype.replace('_', ' ')} {str(elem.get('id', 'elem')).split('_')[-1]}"
-        elem["label"] = label
+        label = label[:160]
 
         desc = str(elem.get("description", "")).strip()
         if not desc or desc in {
@@ -249,32 +389,57 @@ def _finalize_elements_with_dxdy(
             "VLM classification failed",
             "Skipped VLM classification (Ollama call budget)",
         }:
-            elem["description"] = f"Detected {etype.replace('_', ' ')} '{label}'."
+            desc = ""
 
         bbox = elem.get("bbox")
         if ("dx" not in elem or "dy" not in elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
             try:
                 x1 = float(bbox[0])
                 y1 = float(bbox[1])
-                elem.setdefault("dx", int(round(max(0.0, x1 * image_width))))
-                elem.setdefault("dy", int(round(max(0.0, y1 * image_height))))
+                x2 = float(bbox[2])
+                y2 = float(bbox[3])
+                cx = ((x1 + x2) * 0.5) * image_width
+                cy = ((y1 + y2) * 0.5) * image_height
+                elem.setdefault("dx", int(round(max(0.0, cx))))
+                elem.setdefault("dy", int(round(max(0.0, cy))))
             except Exception:
                 pass
-        if "dx" in elem:
-            try:
-                elem["dx"] = int(round(float(elem["dx"])))
-                elem["dx"] = max(0, min(image_width - 1, elem["dx"]))
-            except Exception:
-                pass
-        if "dy" in elem:
-            try:
-                elem["dy"] = int(round(float(elem["dy"])))
-                elem["dy"] = max(0, min(image_height - 1, elem["dy"]))
-            except Exception:
-                pass
-        elem.pop("bbox", None)
-        elem.pop("dxdy", None)
-        elem.pop("screen_bbox", None)
+        try:
+            dx = int(round(float(elem.get("dx", 0)))) if str(elem.get("dx", "")).strip() else 0
+        except Exception:
+            dx = 0
+        try:
+            dy = int(round(float(elem.get("dy", 0)))) if str(elem.get("dy", "")).strip() else 0
+        except Exception:
+            dy = 0
+        dx = max(0, min(image_width - 1, dx))
+        dy = max(0, min(image_height - 1, dy))
+
+        if not label:
+            label = _functional_label(etype, dx, dy, str(elem.get("id", "elem")))
+
+        confidence = elem.get("confidence", 0.5)
+        try:
+            confidence = float(confidence)
+        except Exception:
+            confidence = 0.5
+        confidence = max(0.0, min(1.0, confidence))
+
+        final_source = str(elem.get("source", "")).strip() or "ui_detector"
+        finalized.append(
+            {
+                "id": str(elem.get("id", "elem_0")),
+                "type": etype,
+                "label": label,
+                "description": desc if desc else _specific_description(etype, label, dx, dy),
+                "state": state,
+                "dx": dx,
+                "dy": dy,
+                "confidence": confidence,
+                "source": final_source,
+            }
+        )
+    payload["elements"] = finalized
     return payload
 
 
@@ -293,6 +458,14 @@ def _capture_single_frame(camera_index: int = 0):
     finally:
         cap.release()
     return frame
+
+
+def _file_sha256(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def _process_single_frame_item(
@@ -382,8 +555,11 @@ def _run_pipeline_for_frame(
     if image is None:
         raise RuntimeError(f"Failed to read preprocessed frame: {preprocessed_image}")
 
-    # Coarse bboxes
-    coarse_bboxes = generate_coarse_bboxes(image, max_boxes=max(20, int(coarse_max_boxes)))
+    # Detect UI elements + screen margins.
+    coarse_bboxes, _, _ = detect_ui_elements(
+        image,
+        max_boxes=max(20, int(coarse_max_boxes)),
+    )
     coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
     with open(coarse_json_path, "w", encoding="utf-8") as f:
         json.dump({"bboxes": coarse_bboxes}, f, indent=2)
@@ -391,8 +567,9 @@ def _run_pipeline_for_frame(
     # Refine bboxes
     refiner = BBoxRefiner()
     refined_bboxes = []
+    img_h, img_w = image.shape[:2]
     for item in coarse_bboxes:
-        screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
+        screen_bbox = (0.0, 0.0, 1.0, 1.0)
         refined = refiner.refine_bbox(
             image=image,
             bbox_normalized=refiner.item_to_bbox(item),
@@ -400,17 +577,45 @@ def _run_pipeline_for_frame(
             use_grid_snap=False,
         )
         if refiner.validate_bbox(refined):
-            dx, dy = refiner.bbox_to_dxdy_pixels(refined, screen_bbox, image.shape[1], image.shape[0])
+            x1, y1, x2, y2 = refined
+            center_x = int(round(((x1 + x2) * 0.5) * img_w))
+            center_y = int(round(((y1 + y2) * 0.5) * img_h))
             refined_bboxes.append(
                 {
+                    "bbox": list(refined),
                     "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
-                    "dx": dx,
-                    "dy": dy,
-                    "screen_bbox": list(screen_bbox),
-                    "source": item.get("source", "layout"),
+                    "dx": max(0, min(img_w - 1, center_x)),
+                    "dy": max(0, min(img_h - 1, center_y)),
+                    "screen_bbox": [0.0, 0.0, 1.0, 1.0],
+                    "source": item.get("source", "ui_detector"),
+                    "type": item.get("type", "unknown"),
                     "confidence": item.get("confidence", 0.5),
                 }
             )
+
+    # Optional full-image VLM discovery pass:
+    # supplements missed boxes and enriches type/label/description before final ranking.
+    if vlm_client is not None:
+        try:
+            discovery_prompt = get_ui_discovery_prompt(
+                image_context=(
+                    "Desktop/web app screenshot. Detect every visible interactive and textual UI element. "
+                    "Use specific labels and non-generic descriptions."
+                )
+            )
+            discovery_result = vlm_client.analyze_ui(
+                session_preprocessed,
+                prompt=discovery_prompt,
+            )
+            if discovery_result and discovery_result.parse_successful and discovery_result.elements:
+                refined_bboxes = _merge_vlm_discovery_into_refined(
+                    refined_bboxes=refined_bboxes,
+                    vlm_elements=discovery_result.elements,
+                    image_w=img_w,
+                    image_h=img_h,
+                )
+        except Exception as exc:
+            logging.warning("VLM discovery merge failed: %s", exc)
 
     refined_bboxes = _dedupe_and_rank_refined_bboxes(
         refined_bboxes,
@@ -584,6 +789,23 @@ def processing_worker():
             if not session:
                 logging.warning("Dropping frame for unknown session_id=%s", session_id)
                 continue
+
+            try:
+                frame_hash = _file_sha256(frame_path)
+                last_hash = session.get("_last_frame_hash")
+                if last_hash == frame_hash:
+                    processed_queue.put(
+                        {
+                            "status": "skipped_unchanged",
+                            "session_id": session_id,
+                            "source_frame": frame_path,
+                            "processed_at": time.time(),
+                        }
+                    )
+                    continue
+                session["_last_frame_hash"] = frame_hash
+            except Exception:
+                pass
 
             _process_single_frame_item(session, session_id, frame_path)
 

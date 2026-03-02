@@ -19,6 +19,8 @@ from typing import Dict, Any, List, Tuple, Optional
 
 import cv2
 import numpy as np
+from src.vision.ocr import extract_text_from_region
+from src.vision.semantic_vlm import describe_ui_element
 
 
 def _to_pixel_bbox(
@@ -75,20 +77,16 @@ def _item_to_bbox(item: Dict[str, Any]) -> Tuple[float, float, float, float]:
     return (0.0, 0.0, 1.0, 1.0)
 
 
-def _bbox_to_dxdy_pixels(
+def _bbox_center_pixels(
     bbox: Tuple[float, float, float, float],
-    screen_bbox: Tuple[float, float, float, float],
     image_width: int,
     image_height: int,
 ) -> Tuple[int, int]:
-    x1, y1, _, _ = bbox
-    sx1, sy1, _, _ = screen_bbox
-    screen_x1 = sx1 * image_width
-    screen_y1 = sy1 * image_height
-    elem_x1 = x1 * image_width
-    elem_y1 = y1 * image_height
-    dx = int(round(max(0.0, elem_x1 - screen_x1)))
-    dy = int(round(max(0.0, elem_y1 - screen_y1)))
+    x1, y1, x2, y2 = bbox
+    cx = int(round(((x1 + x2) * 0.5) * image_width))
+    cy = int(round(((y1 + y2) * 0.5) * image_height))
+    dx = max(0, min(image_width - 1, cx))
+    dy = max(0, min(image_height - 1, cy))
     return dx, dy
 
 
@@ -280,19 +278,23 @@ def enrich_frame(
     try:
         for idx, item in enumerate(boxes):
             bbox = _item_to_bbox(item)
-            screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
             expanded_bbox = _expand_bbox_norm(bbox, pad_ratio=0.10)
             x1, y1, x2, y2 = _to_pixel_bbox(expanded_bbox, w, h)
             crop = image[y1:y2, x1:x2]
             crop = _prepare_crop_for_vlm(crop, min_side=224)
             heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
-            dx, dy = _bbox_to_dxdy_pixels(bbox, screen_bbox, w, h)
+            dx, dy = _bbox_center_pixels(bbox, w, h)
+            ocr_text = extract_text_from_region(image, bbox)
+            detected_type = _safe_str(item.get("type", "")).strip().lower()
+            seed_label = " ".join(_safe_str(item.get("label", "")).split()).strip()
+            seed_description = _safe_str(item.get("description", "")).strip()
+            seed_state = _safe_str(item.get("state", "")).strip().lower() or "normal"
 
             meta = {
-                "type": heuristic["type"],
-                "label": heuristic["label"],
-                "description": "No VLM available",
-                "state": heuristic["state"],
+                "type": detected_type if detected_type else heuristic["type"],
+                "label": seed_label if seed_label else (ocr_text if ocr_text else heuristic["label"]),
+                "description": seed_description,
+                "state": seed_state if seed_state != "unknown" else heuristic["state"],
                 "confidence": max(float(item.get("confidence", 0.5)), float(heuristic["confidence"])),
             }
 
@@ -307,7 +309,7 @@ def enrich_frame(
                     meta = _classify_crop_with_vlm(
                         vlm_client,
                         crop_path,
-                        type_hint=heuristic["type"],
+                        type_hint=meta["type"],
                     )
                 except Exception:
                     meta = {
@@ -322,7 +324,17 @@ def enrich_frame(
                         os.remove(crop_path)
                 vlm_calls_used += 1
             elif is_ollama_client:
-                meta["description"] = "Skipped VLM classification (Ollama call budget)"
+                meta["description"] = ""
+
+            if not _safe_str(meta.get("label")).strip() and ocr_text:
+                meta["label"] = ocr_text
+            if not _safe_str(meta.get("description")).strip():
+                meta["description"] = describe_ui_element(
+                    vlm_client=None,
+                    crop=crop,
+                    label=_safe_str(meta.get("label")),
+                    type_hint=_safe_str(meta.get("type", heuristic["type"])),
+                )
 
             elements.append(
                 {
@@ -335,8 +347,13 @@ def enrich_frame(
                     "dy": int(item.get("dy", dy)),
                     "dxdy": item.get("dxdy", []),
                     "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
+                    "ocr_text": ocr_text,
                     "confidence": meta["confidence"],
-                    "source": item.get("source", "refined_bbox"),
+                    "source": (
+                        item.get("source", "ui_detector")
+                        if str(item.get("source", "")).strip() == "vlm_discovery"
+                        else ("ocr_enriched" if ocr_text else item.get("source", "ui_detector"))
+                    ),
                 }
             )
     finally:
