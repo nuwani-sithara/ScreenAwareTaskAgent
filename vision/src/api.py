@@ -220,7 +220,7 @@ def merge_nearby_elements(
     detections: List[Dict[str, Any]],
     image_w: int,
     image_h: int,
-    distance_threshold: float = 15.0,
+    distance_threshold: Optional[float] = None,
 ) -> List[Dict[str, Any]]:
     """
     Merge same-type detections when centers are very close and sizes are similar.
@@ -230,14 +230,19 @@ def merge_nearby_elements(
     used = [False] * len(detections)
     merged: List[Dict[str, Any]] = []
 
+    if distance_threshold is None:
+        # 2% of image diagonal (screen independent)
+        distance_threshold = 0.02 * ((image_w ** 2 + image_h ** 2) ** 0.5)
+
     def _size_similar(a: Tuple[float, float, float, float], b: Tuple[float, float, float, float]) -> bool:
         aw = max(1e-6, a[2] - a[0])
         ah = max(1e-6, a[3] - a[1])
         bw = max(1e-6, b[2] - b[0])
         bh = max(1e-6, b[3] - b[1])
-        rw = max(aw, bw) / max(1e-6, min(aw, bw))
-        rh = max(ah, bh) / max(1e-6, min(ah, bh))
-        return rw <= 1.8 and rh <= 1.8
+        # Similar size within +/-25%
+        rw = abs(aw - bw) / max(aw, bw)
+        rh = abs(ah - bh) / max(ah, bh)
+        return rw <= 0.25 and rh <= 0.25
 
     for i, base in enumerate(detections):
         if used[i]:
@@ -286,6 +291,72 @@ def merge_nearby_elements(
     return merged
 
 
+def _remove_contained_elements_generic(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+) -> List[Dict[str, Any]]:
+    """
+    Generic hierarchy cleanup:
+    if A is contained in B, keep the one with larger area AND higher confidence.
+    """
+    if not detections:
+        return []
+    container_types = {"card", "container", "form", "panel"}
+    keep = [True] * len(detections)
+    areas = [_bbox_area_px(_item_to_bbox_norm(d), image_w, image_h) for d in detections]
+    confs = [float(d.get("confidence", 0.0)) for d in detections]
+
+    for i in range(len(detections)):
+        if not keep[i]:
+            continue
+        bi = _item_to_bbox_norm(detections[i])
+        for j in range(i + 1, len(detections)):
+            if not keep[j]:
+                continue
+            bj = _item_to_bbox_norm(detections[j])
+            i_in_j = is_inside(bi, bj, min_ratio=0.97)
+            j_in_i = is_inside(bj, bi, min_ratio=0.97)
+            if not i_in_j and not j_in_i:
+                continue
+
+            if i_in_j:
+                ti = str(detections[i].get("type", "unknown")).strip().lower()
+                tj = str(detections[j].get("type", "unknown")).strip().lower()
+                # Keep hierarchy under containers/forms/panels/cards.
+                if tj in container_types:
+                    continue
+                # Type-aware removals for nested non-container controls.
+                if ti == "text" and tj == "button":
+                    keep[i] = False
+                    continue
+                if ti == "icon" and tj in {"button", "image"}:
+                    keep[i] = False
+                    continue
+                # default: remove smaller/lower-confidence
+                if areas[j] >= areas[i] and confs[j] >= confs[i]:
+                    keep[i] = False
+                else:
+                    keep[j] = False
+            elif j_in_i:
+                ti = str(detections[i].get("type", "unknown")).strip().lower()
+                tj = str(detections[j].get("type", "unknown")).strip().lower()
+                if ti in container_types:
+                    continue
+                if tj == "text" and ti == "button":
+                    keep[j] = False
+                    continue
+                if tj == "icon" and ti in {"button", "image"}:
+                    keep[j] = False
+                    continue
+                if areas[i] >= areas[j] and confs[i] >= confs[j]:
+                    keep[j] = False
+                else:
+                    keep[i] = False
+
+    return [d for idx, d in enumerate(detections) if keep[idx]]
+
+
 def _prune_icon_inside_image(
     detections: List[Dict[str, Any]],
     image_w: int,
@@ -310,15 +381,30 @@ def _prune_icon_inside_image(
             if ta == "icon" and tb == "image" and is_inside(ba, bb):
                 keep[i] = False
                 break
-            # image inside icon and image tiny -> drop image
-            if ta == "image" and tb == "icon" and is_inside(ba, bb) and area_a < 1400:
-                keep[i] = False
-                break
-            # generic image/icon containment with tiny image
-            if ta == "image" and tb == "image" and is_inside(ba, bb) and area_a < (0.55 * area_b):
-                keep[i] = False
-                break
     return [d for idx, d in enumerate(detections) if keep[idx]]
+
+
+def _filter_by_confidence(
+    detections: List[Dict[str, Any]],
+    threshold: float,
+) -> List[Dict[str, Any]]:
+    return [d for d in detections if float(d.get("confidence", 0.0)) >= threshold]
+
+
+def _filter_by_min_area_ratio(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+    min_area_ratio: float = 0.001,
+) -> List[Dict[str, Any]]:
+    min_area = float(image_w * image_h) * float(min_area_ratio)
+    out: List[Dict[str, Any]] = []
+    for d in detections:
+        b = _item_to_bbox_norm(d)
+        area = _bbox_area_px(b, image_w, image_h)
+        if area >= min_area:
+            out.append(d)
+    return out
 
 
 def _merge_vlm_discovery_into_refined(
@@ -426,9 +512,11 @@ def _dedupe_and_rank_refined_bboxes(
     ranked = sorted(boxes, key=_score, reverse=True)
     kept: List[Dict[str, Any]] = []
 
+    container_types = {"card", "container", "form", "panel"}
     for candidate in ranked:
         cb = _item_to_bbox_norm(candidate)
         c_source = str(candidate.get("source", "layout"))
+        c_type = str(candidate.get("type", "unknown")).strip().lower()
         if image_w and image_h:
             # Minimum size filter to drop tiny noisy fragments.
             if _bbox_area_px(cb, image_w, image_h) < 400.0:
@@ -436,14 +524,24 @@ def _dedupe_and_rank_refined_bboxes(
         skip = False
         for existing in kept:
             eb = _item_to_bbox_norm(existing)
+            e_type = str(existing.get("type", "unknown")).strip().lower()
             iou = _bbox_iou_norm(cb, eb)
             contained = _bbox_contained_ratio_norm(cb, eb)
             if iou >= 0.82:
                 skip = True
                 break
-            if contained >= 0.97 and c_source not in {"layout_text", "layout_form"}:
+            # Do not collapse children of container-like layout elements.
+            if contained >= 0.97 and c_source not in {"layout_text", "layout_form"} and e_type not in container_types:
                 skip = True
                 break
+            # explicit nested cleanup
+            if contained >= 0.97:
+                if c_type == "text" and e_type == "button":
+                    skip = True
+                    break
+                if c_type == "icon" and e_type in {"button", "image"}:
+                    skip = True
+                    break
         if not skip:
             kept.append(candidate)
         if len(kept) >= max_elements:
@@ -579,8 +677,7 @@ def _finalize_elements_with_dxdy(
         dx = max(0, min(image_width - 1, dx))
         dy = max(0, min(image_height - 1, dy))
 
-        if not label:
-            label = _functional_label(etype, dx, dy, str(elem.get("id", "elem")))
+        # no coordinate-based label fallback
 
         confidence = elem.get("confidence", 0.5)
         try:
@@ -781,31 +878,45 @@ def _run_pipeline_for_frame(
         except Exception as exc:
             logging.warning("VLM discovery merge failed: %s", exc)
 
-    # 1) Remove icon/image containment duplicates.
-    refined_bboxes = _prune_icon_inside_image(refined_bboxes, img_w, img_h)
-    # 2) NMS to suppress heavy overlap duplicates.
+    # Generic cleanup pipeline:
+    # raw detections -> confidence -> min area -> nms -> merge neighbors -> contained cleanup
+    conf_thr = 0.55
+    refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
+    print("After confidence:", len(refined_bboxes))
+    refined_bboxes = _filter_by_min_area_ratio(
+        refined_bboxes,
+        image_w=img_w,
+        image_h=img_h,
+        min_area_ratio=0.0008,
+    )
+    print("After area filter:", len(refined_bboxes))
+    if len(refined_bboxes) > 50:
+        # adaptive noise control: tighten confidence threshold and rerun filtering
+        conf_thr = min(0.65, conf_thr + 0.05)
+        refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
+        refined_bboxes = _filter_by_min_area_ratio(
+            refined_bboxes,
+            image_w=img_w,
+            image_h=img_h,
+            min_area_ratio=0.0008,
+        )
+        print("After adaptive confidence:", len(refined_bboxes))
     refined_bboxes = apply_nms(refined_bboxes, iou_threshold=0.4)
-    # 3) Merge near-duplicate small detections.
+    print("After NMS:", len(refined_bboxes))
     refined_bboxes = merge_nearby_elements(
         refined_bboxes,
         image_w=img_w,
         image_h=img_h,
-        distance_threshold=15.0,
+        distance_threshold=None,  # 2% diagonal default
     )
+    print("After merge:", len(refined_bboxes))
+    refined_bboxes = _remove_contained_elements_generic(refined_bboxes, img_w, img_h)
+    print("After containment:", len(refined_bboxes))
 
-    # Dynamic cap per resolution (target ~30 elems for 640x480).
+    # Dynamic cap per resolution (typical 10-40, ~30 for 640x480).
     area_scale = (img_w * img_h) / float(640 * 480)
-    dynamic_cap = int(round(30.0 * max(0.75, min(2.5, area_scale))))
-    dynamic_cap = max(20, min(80, dynamic_cap))
-    if len(refined_bboxes) > 40:
-        # if noisy frame, tighten by confidence before ranking
-        thr = 0.50
-        if len(refined_bboxes) > 70:
-            thr = 0.58
-        refined_bboxes = [
-            b for b in refined_bboxes
-            if float(b.get("confidence", 0.0)) >= thr
-        ]
+    dynamic_cap = int(round(30.0 * max(0.75, min(2.0, area_scale))))
+    dynamic_cap = max(20, min(60, dynamic_cap))
 
     refined_bboxes = _dedupe_and_rank_refined_bboxes(
         refined_bboxes,

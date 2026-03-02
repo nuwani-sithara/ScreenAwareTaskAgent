@@ -127,30 +127,20 @@ def _is_interactive_type(elem_type: str) -> bool:
 def _infer_label_from_context(
     idx: int,
     entries: List[Dict[str, Any]],
+    image_h: int,
 ) -> str:
     """
     Infer missing labels from nearby text context.
     - Prefer nearest text above/left of target.
-    - Input field heuristics for email/password.
-    - Button/link icon fallback semantics.
+    - Generic nearest-neighbor text association only.
     """
     if idx < 0 or idx >= len(entries):
         return ""
 
     cur = entries[idx]
-    cur_type = str(cur.get("type", "unknown")).strip().lower()
-    cur_bbox = tuple(cur.get("bbox", (0.0, 0.0, 1.0, 1.0)))
     cx = float(cur.get("dx", 0))
     cy = float(cur.get("dy", 0))
-
-    # Detect obvious password hints from OCR if present.
-    ocr_cur = " ".join(str(cur.get("ocr_text", "")).split()).strip()
-    if cur_type == "input_field":
-        low = ocr_cur.lower()
-        if "*" in ocr_cur or "•" in ocr_cur or "password" in low:
-            return "Password"
-        if "@" in ocr_cur or "email" in low or "username" in low:
-            return "Email"
+    radius = max(8.0, 0.05 * float(image_h))
 
     candidates: List[Tuple[float, str]] = []
     for j, e in enumerate(entries):
@@ -162,45 +152,19 @@ def _infer_label_from_context(
             txt = " ".join(str(e.get("ocr_text", "")).split()).strip()
         if not txt:
             continue
-        if et not in {"text", "label", "link", "button", "input_field"}:
+        # standalone text-like elements only
+        if et not in {"text", "label"}:
             continue
         ex = float(e.get("dx", 0))
         ey = float(e.get("dy", 0))
-        # Bias toward labels above or slightly left of current element.
-        spatial_penalty = 0.0
-        if ey <= cy:
-            spatial_penalty -= 18.0
-        if ex <= cx:
-            spatial_penalty -= 8.0
-        dist = ((cx - ex) ** 2 + (cy - ey) ** 2) ** 0.5 + spatial_penalty
-        candidates.append((dist, txt))
+        dist = ((cx - ex) ** 2 + (cy - ey) ** 2) ** 0.5
+        if dist <= radius:
+            candidates.append((dist, txt))
 
     if candidates:
         candidates.sort(key=lambda x: x[0])
-        best = candidates[0][1]
-        # Normalize common field labels.
-        low = best.lower()
-        if cur_type == "input_field":
-            if "pass" in low:
-                return "Password"
-            if "user" in low or "mail" in low or "email" in low:
-                return "Email"
-        if cur_type in {"button", "link"}:
-            if "login" in low or "sign in" in low:
-                return "Login"
-            if "forgot" in low and "password" in low:
-                return "Forgot password?"
-        return best[:80]
+        return candidates[0][1][:80]
 
-    # Last semantic fallback (not coordinate based).
-    if cur_type == "input_field":
-        return "Input field"
-    if cur_type == "button":
-        return "Icon button"
-    if cur_type == "link":
-        return "Link"
-    if cur_type == "dropdown":
-        return "Dropdown"
     return ""
 
 
@@ -230,17 +194,16 @@ def _heuristic_meta(crop: np.ndarray, source: str = "") -> Dict[str, Any]:
     )
     text_density = float(np.sum(text_mask > 0)) / float(max(1, area))
 
-    if source == "layout_text":
+    # Generic role inference (geometry + visual texture only).
+    if text_density > 0.24 and edge_density < 0.20:
         element_type = "text"
-    elif source == "layout_form":
-        element_type = "input_field" if ar >= 2.0 else "button"
-    elif ar >= 2.2 and h <= 120:
-        element_type = "input_field" if edge_density < 0.14 else "button"
-    elif 1.5 <= ar < 2.2 and h <= 90 and edge_density >= 0.08:
+    elif area <= 2300 and 0.75 <= ar <= 1.35:
+        element_type = "icon"
+    elif ar >= 2.8 and h <= 130:
+        element_type = "input_field" if edge_density < 0.15 else "button"
+    elif 1.35 <= ar < 2.8 and h <= 120:
         element_type = "button"
-    elif text_density > 0.20 and edge_density < 0.22:
-        element_type = "text"
-    elif source == "layout_edge" and area > 120000 and edge_density < 0.10:
+    elif edge_density < 0.08 and area > 18000:
         element_type = "image"
     else:
         element_type = "unknown"
@@ -459,18 +422,13 @@ def enrich_frame(
             if ocr:
                 lbl = ocr
             elif not lbl:
-                lbl = _infer_label_from_context(i, staged)
+                lbl = _infer_label_from_context(i, staged, image_h=h)
         else:
             if not lbl and ocr:
                 lbl = ocr
 
-        if not lbl and et in {"button", "link", "dropdown", "input_field"}:
-            # Never use coordinate fallback names.
-            lbl = "Button" if et == "button" else (
-                "Link" if et == "link" else (
-                    "Dropdown" if et == "dropdown" else "Input field"
-                )
-            )
+        # No coordinate-based fallback labels.
+        # Leave label empty when OCR/context cannot infer.
 
         desc = str(e.get("description", "")).strip()
         if not desc:
