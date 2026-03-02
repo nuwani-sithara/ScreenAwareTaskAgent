@@ -220,6 +220,37 @@ def _finalize_elements_with_dxdy(
     for elem in elements:
         if not isinstance(elem, dict):
             continue
+
+        source = str(elem.get("source", "")).lower()
+        etype = str(elem.get("type", "")).strip().lower()
+        if not etype or etype == "unknown":
+            if source == "layout_text":
+                etype = "text"
+            elif source == "layout_form":
+                etype = "input_field"
+            elif source == "layout_edge":
+                etype = "image"
+            else:
+                etype = "text"
+            elem["type"] = etype
+
+        state = str(elem.get("state", "")).strip().lower()
+        if not state or state == "unknown":
+            elem["state"] = "normal"
+
+        label = " ".join(str(elem.get("label", "")).split()).strip()
+        if not label:
+            label = f"{etype.replace('_', ' ')} {str(elem.get('id', 'elem')).split('_')[-1]}"
+        elem["label"] = label
+
+        desc = str(elem.get("description", "")).strip()
+        if not desc or desc in {
+            "No VLM available",
+            "VLM classification failed",
+            "Skipped VLM classification (Ollama call budget)",
+        }:
+            elem["description"] = f"Detected {etype.replace('_', ' ')} '{label}'."
+
         bbox = elem.get("bbox")
         if ("dx" not in elem or "dy" not in elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
             try:
@@ -232,11 +263,13 @@ def _finalize_elements_with_dxdy(
         if "dx" in elem:
             try:
                 elem["dx"] = int(round(float(elem["dx"])))
+                elem["dx"] = max(0, min(image_width - 1, elem["dx"]))
             except Exception:
                 pass
         if "dy" in elem:
             try:
                 elem["dy"] = int(round(float(elem["dy"])))
+                elem["dy"] = max(0, min(image_height - 1, elem["dy"]))
             except Exception:
                 pass
         elem.pop("bbox", None)
@@ -663,7 +696,7 @@ def vision_diagnose():
 
 @app.post("/vision/start")
 def start_vision(
-    camera_index: int = 1,
+    camera_index: int = 0,
     save_interval: float = 1.0,
     provider: str = "ollama",
     local_model: str = "llava:7b",
@@ -848,7 +881,7 @@ def stop_vision(
 
 @app.post("/vision/capture")
 def capture_once(
-    camera_index: int = 1,
+    camera_index: int = 0,
     provider: str = "ollama",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
