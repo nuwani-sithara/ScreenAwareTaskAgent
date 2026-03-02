@@ -663,7 +663,7 @@ def vision_diagnose():
 
 @app.post("/vision/start")
 def start_vision(
-    camera_index: int = 0,
+    camera_index: int = 1,
     save_interval: float = 1.0,
     provider: str = "ollama",
     local_model: str = "llava:7b",
@@ -848,7 +848,7 @@ def stop_vision(
 
 @app.post("/vision/capture")
 def capture_once(
-    camera_index: int = 0,
+    camera_index: int = 1,
     provider: str = "ollama",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,

@@ -1,6 +1,11 @@
 {
-  "total": 185,
-  "rewritten_selected": 141,
+<<<<<<< Updated upstream
+  "total": 186,
+  "rewritten_selected": 142,
+=======
+  "total": 187,
+  "rewritten_selected": 143,
+>>>>>>> Stashed changes
   "original_selected": 44,
   "forced_rewritten": 0
 }

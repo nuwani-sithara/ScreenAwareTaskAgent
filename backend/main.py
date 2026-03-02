@@ -117,7 +117,7 @@ async def receive_llm_steps(request: Request):
             return {"error": "No instruction provided"}
 
         result = run_interactive(instruction=instruction)
-
+        logging.info("📤 Filtered response: %s", result)
         generated = result.get("generated", {})
         filtered = {
             "instruction": generated.get("instruction"),

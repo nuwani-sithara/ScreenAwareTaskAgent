@@ -249,14 +249,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
  * Start server
  */
 async function start() {
-  // Initialize device connection on startup
-  await initializeDevice();
-  
+  // Start HTTP server immediately
   app.listen(PORT, () => {
     console.log(`[API] HID API Server running on port ${PORT}`);
     console.log(`[API] Health check: http://localhost:${PORT}/health`);
     console.log(`[API] Device status: http://localhost:${PORT}/hid/status`);
-    console.log(`[API] Execute command: POST http://localhost:${PORT}/hid/command`);
+  });
+
+  // Connect device in background
+  initializeDevice().catch((error) => {
+    console.error('[API] Initial device connection failed:', error.message);
   });
 }
 

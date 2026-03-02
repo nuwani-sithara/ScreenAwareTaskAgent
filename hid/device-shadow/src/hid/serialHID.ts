@@ -98,7 +98,7 @@ export class SerialHID {
     
     const ports = await SerialPort.list();
     console.log('[SerialHID] Available serial ports:');
-    ports.forEach(p => console.log(`  - ${p.path} | vid=${p.vendorId || 'n/a'} pid=${p.productId || 'n/a'} manufacturer=${p.manufacturer || 'n/a'}`));
+    ports.forEach((p: any) => console.log(`  - ${p.path} | vid=${p.vendorId || 'n/a'} pid=${p.productId || 'n/a'} manufacturer=${p.manufacturer || 'n/a'}`));
     // Build prioritized candidate list: saved port -> VID/PID match -> ports with product/manufacturer -> all ports
     const candidates: string[] = [];
 
@@ -260,7 +260,7 @@ export class SerialHID {
             this.handleResponse(line);
           });
 
-          this.port.on('error', (err) => {
+          this.port.on('error', (err: any) => {
             console.error('[SerialHID] Port error:', err && err.message ? err.message : err);
             this.isReady = false;
             this.scheduleReconnect();
@@ -278,7 +278,7 @@ export class SerialHID {
         // Attempt to open
         const openResult = await new Promise<{ ok?: boolean; err?: any }>(res => {
           try {
-            this.port!.open((err) => {
+            this.port!.open((err: any) => {
               if (err) return res({ err });
               return res({ ok: true });
             });
@@ -441,7 +441,7 @@ export class SerialHID {
     
     const pingMsg = JSON.stringify({ type: 'ping' }) + '\n';
     return new Promise((resolve, reject) => {
-      this.port!.write(pingMsg, (err) => {
+      this.port!.write(pingMsg, (err: any) => {
         if (err) reject(err);
         else resolve();
       });
@@ -597,7 +597,7 @@ export class SerialHID {
         
         // Send command - handle write errors immediately
         try {
-          this.port!.write(cmdJson, (err) => {
+          this.port!.write(cmdJson, (err: any) => {
             if (err) {
               cleanup();
               reject(new Error(`Failed to send command: ${err.message}`));
@@ -632,7 +632,7 @@ export class SerialHID {
       });
       
       // Send command
-      this.port!.write(cmdJson, (err) => {
+      this.port!.write(cmdJson, (err: any) => {
         if (err) {
           clearTimeout(timeout);
           this.responseCallbacks.delete(command.cmd);

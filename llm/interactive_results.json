@@ -1094,5 +1094,87 @@
       }
     },
     "timestamp": 1771398830.350125
+  },
+  {
+    "instruction": "Log in to Facebook",
+    "generated": {
+      "instruction": "Task: \"Log in to Facebook\"\n\nWrite SHORT steps (one line each, no sub-points):\n1. Open page\n2. Enter username\n3. Enter password\n4. Click login\n5. Verify success\n\nYour steps:",
+      "category": "general_software",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login.",
+          "description": "Step 1: Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login."
+        }
+      ],
+      "total_steps": 1,
+      "status": "ready_for_execution",
+      "raw_output": "1. Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login.",
+      "timestamp": "2026-02-25T16:26:40.961432"
+    },
+    "rewritten_text": "1. Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login.",
+    "rewritten_steps": [
+      {
+        "step": 1,
+        "action": "Open Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login.",
+        "description": "Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login."
+      }
+    ],
+    "abstract_steps": [
+      {
+        "step": 1,
+        "action": "Open Navigate to facebook",
+        "description": "Open Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login."
+      }
+    ],
+    "chosen_steps": [
+      {
+        "step": 1,
+        "action": "Open Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login.",
+        "description": "Navigate to facebook.com in a web browser. 2. Input your Facebook username or email address in the designated field. 3. Type your Facebook password in the corresponding field. 4. Click on the 'Log In' button or press Enter. 5. Check for the appearance of your profile or news feed to confirm successful login."
+      }
+    ],
+    "chosen_source": "rewritten",
+    "validation": {
+      "original_quality": {
+        "quality_score": 0.6,
+        "issues": [],
+        "warnings": [
+          "Many steps do not begin with an action verb",
+          "1 steps are very long"
+        ],
+        "suggestions": [
+          "Start steps with an action verb (e.g., \"click\", \"open\", \"select\")"
+        ]
+      },
+      "rewritten_quality": {
+        "quality_score": 0.9,
+        "issues": [],
+        "warnings": [
+          "1 steps are very long"
+        ],
+        "suggestions": []
+      },
+      "original_algorithmic": {
+        "is_valid": false,
+        "confidence": 0.45,
+        "action_score": 0.0,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": [
+          "Step 1 basic checks: hasVerb=False, length=53",
+          "Confidence below threshold 0.55: 0.450"
+        ]
+      },
+      "rewritten_algorithmic": {
+        "is_valid": true,
+        "confidence": 0.8,
+        "action_score": 1.0,
+        "dataset_score": 0.5,
+        "alignment_score": 1.0,
+        "details": []
+      }
+    },
+    "timestamp": 1772036803.5958028
   }
 ]

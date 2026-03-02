@@ -1,88 +1,95 @@
-# import logging
-# from .llm_agent import generate_plan
-
-
-# def plan(perception):
-#     print("🧩 Planning next action (LangChain LLM)...")
-#     logging.info(f"Planning next action based on perception: {perception}")
-#     screen_text = perception.get("screen_text", "")
-
-#     # generate_plan now returns a JSON-serializable dict (or a dict-like object)
-#     action_json = generate_plan(screen_text)
-
-#     # Ensure we return a dict
-#     if not isinstance(action_json, dict):
-#         logging.warning("LLM returned non-dict plan; wrapping into dict")
-#         action_json = {"raw_plan": str(action_json)}
-
-#     logging.info(f"Plan result (JSON): {action_json}")
-#     print(f"🤖 LLM Plan (JSON): {action_json}")
-#     return action_json
-
-
+import requests
 import logging
-from .llm_agent import generate_plan
+import json
+import time
 
+LLM_BASE_URL = "http://localhost:8002"
 
-def plan(perception, user_task: str):
+def plan(user_task: str, perception=None, model: str = "mistral"):
     """
-    Generate an action plan using:
-    - User task (mandatory)
-    - Perception data (optional, may be None)
+    Generate HID action plan using LLM visual reasoning.
+
+    Args:
+        user_task (str): Natural language instruction
+        perception (dict): Full perception JSON from vision stop()
+        model (str): LLM model name
+
+    Returns:
+        dict: Action plan containing HID commands
     """
 
-    print("🧩 Planning next action (LangChain LLM)...")
-    logging.info("🧠 Planning phase started")
+    logging.info("🧠 Planner started...")
 
-    # --------------------------------------
-    # Extract screen text safely
-    # --------------------------------------
-    screen_text = ""
+    # 🔹 If task does NOT require vision
+    if perception is None:
+        logging.info("📭 No perception provided. Using text-only planning.")
 
-    if perception and isinstance(perception, dict):
-        screen_text = perception.get("screen_text", "")
-        logging.info("👁️ Using perception data for planning")
-    else:
-        logging.info("🚫 No perception data provided (vision skipped)")
+        return {
+            "status": "no_vision",
+            "instruction": user_task,
+            "hid_commands": [],
+            "message": "Vision not used for this task"
+        }
 
-    # --------------------------------------
-    # Construct structured LLM input
-    # --------------------------------------
-    structured_prompt = f"""
-You are an AI automation agent.
+    try:
+        visual_data = perception.get("session_data", {})
 
-User Task:
-{user_task}
+        payload = {
+            "instruction": user_task,
+            "visual_data": {"session_data": visual_data},
+            "model": model,
+            "max_tokens": 300
+        }
 
-Screen Text (OCR Output):
-{screen_text if screen_text else "No screen data available"}
+        logging.info("📡 Sending request to LLM /generate_hid...")
+        logging.debug("LLM Payload:\n%s", json.dumps(payload, indent=2))
 
-Instructions:
-- Decide the next best action.
-- Return ONLY valid JSON.
-- Format:
-{{
-    "action": "<click/type/scroll/wait/etc>",
-    "target": "<UI element or description>",
-    "stop_vision": false
-}}
-"""
+    # ⏱ Measure request time
+        start_time = time.time()
+        response = requests.post(
+            f"{LLM_BASE_URL}/llm/generate_hid",
+            json=payload,
+            timeout=360  # increased timeout
+        )
+        end_time = time.time()
+        logging.info(f"⏱️ LLM Response Time: {end_time - start_time:.2f}s")
+        
 
-    logging.info(f"📨 LLM Prompt:\n{structured_prompt}")
+        response.raise_for_status()
+        data = response.json()
 
-    # --------------------------------------
-    # Call LLM
-    # --------------------------------------
-    action_json = generate_plan(user_task)
+        if data.get("status") != "success":
+            logging.error("❌ LLM returned error response: %s", data)
+            return {
+                "status": "error",
+                "error": data
+            }
 
-    # --------------------------------------
-    # Safety: Ensure dict output
-    # --------------------------------------
-    if not isinstance(action_json, dict):
-        logging.warning("⚠️ LLM returned non-dict plan; wrapping into dict")
-        action_json = {"raw_plan": str(action_json)}
+        logging.info("✅ HID plan generated successfully")
+        logging.info(f"🎯 Total Commands: {data.get('total_commands')}")
 
-    logging.info(f"✅ Plan result (JSON): {action_json}")
-    print(f"🤖 LLM Plan (JSON): {action_json}")
+        return {
+            "status": data.get("status"),
+            "instruction": data.get("instruction"),
+            "validation": data.get("validation"),
+            "rewritten_steps": data.get("rewritten_steps", []),
+            "action_steps": data.get("action_steps", []),
+            "hid_commands": data.get("hid_commands", []),
+            "total_commands": data.get("total_commands", 0),
+            "timestamp": data.get("timestamp"),
+            "execution_time": data.get("execution_time"),
+        }
 
-    return action_json
+    except requests.RequestException as e:
+        logging.error(f"❌ Failed to contact LLM service: {e}")
+        return {
+            "status": "llm_unreachable",
+            "error": str(e)
+        }
+
+    except Exception as e:
+        logging.exception("❌ Planner crashed")
+        return {
+            "status": "planner_error",
+            "error": str(e)
+        }
