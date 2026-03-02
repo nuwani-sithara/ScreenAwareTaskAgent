@@ -50,9 +50,9 @@ BATCH_RESPONSE_SCHEMA = {
 }
 
 # Minimum fraction of total image area for an element to be sent to the VLM.
-MIN_AREA_FRACTION = 0.01          # 1 %
+MIN_AREA_FRACTION = 0.00035       # 0.035 %
 # Maximum allowed aspect ratio (width/height or height/width).
-MAX_ASPECT_RATIO  = 20.0
+MAX_ASPECT_RATIO  = 28.0
 
 
 def _compute_frame_hash(image_path: str) -> str:
@@ -133,7 +133,21 @@ def _filter_elements_for_vlm(
     for elem in elements:
         area = _bbox_area(elem.bbox)
         ar   = _bbox_aspect_ratio(elem.bbox)
-        if area < MIN_AREA_FRACTION or ar > MAX_ASPECT_RATIO:
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        source = str(raw.get("source", "")).lower()
+        if source == "layout_text":
+            min_area = MIN_AREA_FRACTION * 0.25
+            max_ar = MAX_ASPECT_RATIO * 1.6
+        elif source == "layout_form":
+            min_area = MIN_AREA_FRACTION * 0.6
+            max_ar = MAX_ASPECT_RATIO * 1.35
+        elif source == "layout_adaptive":
+            min_area = MIN_AREA_FRACTION * 1.25
+            max_ar = MAX_ASPECT_RATIO
+        else:
+            min_area = MIN_AREA_FRACTION
+            max_ar = MAX_ASPECT_RATIO
+        if area < min_area or ar > max_ar:
             skipped.append(elem)
         else:
             to_classify.append(elem)
@@ -163,14 +177,80 @@ def _fallback_classification(elements: List[UIElement]) -> List[Dict[str, Any]]:
     Return stub classifications when the VLM is unavailable.
     Preserves original type when already set; otherwise uses 'unknown'.
     """
+    def _clean_label(label: str) -> str:
+        return " ".join(str(label).strip().split())
+
+    def _human_type(elem_type: str) -> str:
+        return str(elem_type).replace("_", " ").strip()
+
+    def _infer_type(elem: UIElement) -> str:
+        existing = (elem.type or "").strip().lower()
+        if existing and existing != "unknown":
+            return existing
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        source = str(raw.get("source", "")).lower()
+        x1, y1, x2, y2 = elem.bbox
+        bw = max(1e-9, x2 - x1)
+        bh = max(1e-9, y2 - y1)
+        ar = bw / bh
+        area = bw * bh
+        if source == "layout_text":
+            return "text"
+        if source == "layout_form":
+            return "input_field" if ar >= 2.0 else "button"
+        if source == "layout_edge" and area >= 0.12:
+            return "image"
+        if ar >= 3.0 and bh <= 0.16:
+            return "input_field"
+        if ar >= 1.4 and bh <= 0.20:
+            return "button"
+        if area <= 0.0025:
+            return "icon"
+        return "text"
+
+    def _infer_state(elem_type: str, current: str) -> str:
+        state = (current or "").strip().lower()
+        if state and state != "unknown":
+            return state
+        if elem_type == "checkbox":
+            return "unchecked"
+        return "normal"
+
+    def _infer_label(elem: UIElement, elem_type: str) -> str:
+        label = _clean_label(elem.label)
+        if label:
+            return label
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        rid = str(raw.get("id", elem.id)).split("_")[-1]
+        return f"{_human_type(elem_type)} {rid}"
+
+    def _infer_description(elem: UIElement, elem_type: str, label: str) -> str:
+        desc = str(elem.description or "").strip()
+        if desc and desc not in VLMClient._STALE_DESCRIPTIONS:
+            return desc
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        dx = raw.get("dx", "")
+        dy = raw.get("dy", "")
+        pos = ""
+        try:
+            pos = f" at ({int(round(float(dx)))},{int(round(float(dy)))})"
+        except Exception:
+            pos = ""
+        return f"Detected {_human_type(elem_type)} '{label}'{pos}."
+
     result = []
     for elem in elements:
+        inferred_type = _infer_type(elem)
+        inferred_label = _infer_label(elem, inferred_type)
+        inferred_desc = _infer_description(elem, inferred_type, inferred_label)
+        inferred_state = _infer_state(inferred_type, elem.state)
         result.append({
             "id":         elem.id,
-            "type":       elem.type if elem.type not in ("", "unknown") else "unknown",
-            "label":      elem.label or "",
-            "state":      elem.state or "normal",
-            "confidence": elem.confidence if elem.type != "unknown" else 0.1,
+            "type":       inferred_type,
+            "label":      inferred_label,
+            "description": inferred_desc,
+            "state":      inferred_state,
+            "confidence": max(0.2, float(elem.confidence or 0.0)),
         })
     return result
 
@@ -271,8 +351,11 @@ class VLMClient(ABC):
             "Rules:\n"
             "1. Return ONLY the JSON object - no prose, no markdown fences.\n"
             "2. Include every element id from the input list.\n"
-            "3. confidence reflects how certain you are about the type.\n"
-            "4. description should be a concise, meaningful sentence; never leave it as 'No VLM available'.\n"
+            "3. Never leave label or description empty; if no visible text, create a short functional label.\n"
+            "4. Avoid type='unknown' unless the crop has no discernible UI role.\n"
+            "5. state must never be unknown; use normal when uncertain.\n"
+            "6. confidence reflects how certain you are about the type.\n"
+            "7. description should be a concise, meaningful sentence; never leave it as 'No VLM available'.\n"
         )
 
         # --- retry loop ---
@@ -337,21 +420,40 @@ class VLMClient(ABC):
         classifications: List[Dict[str, Any]],
     ) -> List[UIElement]:
         """Merge classification results back onto the UIElement list."""
+        valid_types = {
+            "button", "input_field", "text", "label", "icon", "dropdown",
+            "checkbox", "radio", "menu", "tab", "link", "card", "list_item",
+            "image",
+        }
         id_map: Dict[str, Dict[str, Any]] = {c["id"]: c for c in classifications}
         stale = VLMClient._STALE_DESCRIPTIONS
         for elem in elements:
             cls = id_map.get(elem.id)
             if cls:
-                elem.type        = cls.get("type",       elem.type)
-                elem.label       = cls.get("label",      elem.label)
-                elem.state       = cls.get("state",      elem.state)
+                cls_type = str(cls.get("type", elem.type or "")).strip().lower()
+                if cls_type and cls_type in valid_types:
+                    elem.type = cls_type
+                cls_label = " ".join(str(cls.get("label", elem.label or "")).split()).strip()
+                if cls_label:
+                    elem.label = cls_label
+                cls_state = str(cls.get("state", elem.state or "")).strip().lower()
+                elem.state = cls_state if cls_state and cls_state != "unknown" else "normal"
                 elem.confidence  = float(cls.get("confidence", elem.confidence))
                 # Apply description from VLM; clear stale placeholders set by enrich_frame
-                vlm_desc = cls.get("description", "")
+                vlm_desc = str(cls.get("description", "")).strip()
                 if vlm_desc:
                     elem.description = vlm_desc
                 elif elem.description in stale:
                     elem.description = ""
+            if not elem.type or elem.type == "unknown":
+                elem.type = "text"
+            if not str(elem.label).strip():
+                elem.label = f"{elem.type.replace('_', ' ')} {elem.id.split('_')[-1]}"
+            if not str(elem.description).strip() or elem.description in stale:
+                elem.description = f"Detected {elem.type.replace('_', ' ')} '{elem.label}'."
+            if not str(elem.state).strip() or elem.state == "unknown":
+                elem.state = "normal"
+            elem.confidence = max(0.1, min(1.0, float(elem.confidence)))
         return elements
 
     # ------------------------------------------------------------------

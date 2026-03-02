@@ -310,8 +310,8 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
             image_h=sh,
             source="layout_adaptive",
             confidence=0.54,
-            min_area_frac=0.00007,
-            max_ar=40.0,
+            min_area_frac=0.00016,
+            max_ar=26.0,
         )
     )
 
@@ -358,6 +358,13 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
     for c in candidates:
         x1, y1, x2, y2 = c["bbox"]
         area_frac = ((x2 - x1) * (y2 - y1)) / float(sw * sh)
+        src = str(c.get("source", ""))
+        if src == "layout_adaptive":
+            # Suppress border artifacts and tiny blobs that produce unstable dx/dy.
+            if x1 <= 2 or y1 <= 2 or x2 >= (sw - 2) or y2 >= (sh - 2):
+                continue
+            if area_frac < 0.00020:
+                continue
         if area_frac > 0.82 and len(candidates) > 20:
             continue
         filtered.append(c)
