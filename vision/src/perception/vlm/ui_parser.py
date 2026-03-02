@@ -6,7 +6,7 @@ Parse and validate VLM output (JSON) into structured UI element representations.
 import json
 import re
 from typing import List, Dict, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 
 
 @dataclass
@@ -21,25 +21,74 @@ class UIElement:
     confidence: float
     raw_data: Optional[Dict] = None
 
+    @staticmethod
+    def _dxdy_to_bbox(
+        dxdy: Tuple[float, float, float, float],
+        screen_bbox: Tuple[float, float, float, float],
+    ) -> Tuple[float, float, float, float]:
+        dx1, dy_top, dx2, dy_bottom = dxdy
+        sx1, sy1, sx2, sy2 = screen_bbox
+        sw = max(1e-9, sx2 - sx1)
+        sh = max(1e-9, sy2 - sy1)
+        x1 = sx1 + dx1 * sw
+        y1 = sy1 + dy_top * sh
+        x2 = sx1 + dx2 * sw
+        y2 = sy2 - dy_bottom * sh
+        return (
+            max(0.0, min(1.0, x1)),
+            max(0.0, min(1.0, y1)),
+            max(0.0, min(1.0, x2)),
+            max(0.0, min(1.0, y2)),
+        )
+
     def to_dict(self) -> Dict:
         """Convert to dictionary."""
-        return {
+        out: Dict[str, Any] = dict(self.raw_data) if isinstance(self.raw_data, dict) else {}
+        out.update({
             "id": self.id,
             "type": self.type,
             "label": self.label,
             "description": self.description,
             "state": self.state,
-            "bbox": list(self.bbox),
             "confidence": self.confidence
-        }
+        })
+        if "dx" in out:
+            try:
+                out["dx"] = int(round(float(out["dx"])))
+            except Exception:
+                pass
+        if "dy" in out:
+            try:
+                out["dy"] = int(round(float(out["dy"])))
+            except Exception:
+                pass
+        out.pop("bbox", None)
+        out.pop("dxdy", None)
+        out.pop("screen_bbox", None)
+        return out
 
     @classmethod
     def from_dict(cls, data: Dict) -> "UIElement":
         """Create from dictionary."""
-        bbox = data.get("bbox", [0, 0, 1, 1])
-        if isinstance(bbox, list):
-            bbox = tuple(bbox)
-        
+        bbox_raw = data.get("bbox")
+        if isinstance(bbox_raw, (list, tuple)) and len(bbox_raw) == 4:
+            bbox = tuple(float(v) for v in bbox_raw)
+        else:
+            dxdy = data.get("dxdy")
+            screen_bbox = data.get("screen_bbox", [0, 0, 1, 1])
+            if (
+                isinstance(dxdy, (list, tuple))
+                and len(dxdy) == 4
+                and isinstance(screen_bbox, (list, tuple))
+                and len(screen_bbox) == 4
+            ):
+                bbox = cls._dxdy_to_bbox(
+                    tuple(float(v) for v in dxdy),
+                    tuple(float(v) for v in screen_bbox),
+                )
+            else:
+                bbox = (0.0, 0.0, 1.0, 1.0)
+
         return cls(
             id=data.get("id", f"elem_{hash(str(data))}"),
             type=data.get("type", "unknown"),
@@ -48,7 +97,7 @@ class UIElement:
             state=data.get("state", "normal"),
             bbox=bbox,
             confidence=float(data.get("confidence", 0.5)),
-            raw_data=data
+            raw_data=dict(data)
         )
 
 
