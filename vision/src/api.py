@@ -153,11 +153,12 @@ def _dedupe_and_rank_refined_bboxes(
         return []
 
     source_weight = {
-        "layout_form": 1.00,
-        "layout_text": 0.95,
+        "ui_detector":    1.05,
+        "layout_form":    1.00,
+        "layout_text":    0.95,
         "layout_adaptive": 0.85,
-        "layout_edge": 0.75,
-        "layout": 0.70,
+        "layout_edge":    0.75,
+        "layout":         0.70,
     }
 
     def _score(item: Dict[str, Any]) -> float:
@@ -182,7 +183,7 @@ def _dedupe_and_rank_refined_bboxes(
             if iou >= 0.82:
                 skip = True
                 break
-            if contained >= 0.97 and c_source not in {"layout_text", "layout_form"}:
+            if contained >= 0.97 and c_source not in {"layout_text", "layout_form", "ui_detector"}:
                 skip = True
                 break
         if not skip:
@@ -224,11 +225,11 @@ def _finalize_elements_with_dxdy(
         source = str(elem.get("source", "")).lower()
         etype = str(elem.get("type", "")).strip().lower()
         if not etype or etype == "unknown":
-            if source == "layout_text":
+            if source in {"layout_text"}:
                 etype = "text"
-            elif source == "layout_form":
+            elif source in {"layout_form"}:
                 etype = "input_field"
-            elif source == "layout_edge":
+            elif source in {"layout_edge"}:
                 etype = "image"
             else:
                 etype = "text"
@@ -240,7 +241,9 @@ def _finalize_elements_with_dxdy(
 
         label = " ".join(str(elem.get("label", "")).split()).strip()
         if not label:
-            label = f"{etype.replace('_', ' ')} {str(elem.get('id', 'elem')).split('_')[-1]}"
+            # Use OCR from raw_data if available; otherwise type name (never indexed)
+            raw_ocr = str(elem.get("ocr_label", "")).strip()
+            label = raw_ocr if raw_ocr else etype.replace("_", " ")
         elem["label"] = label
 
         desc = str(elem.get("description", "")).strip()
@@ -249,15 +252,15 @@ def _finalize_elements_with_dxdy(
             "VLM classification failed",
             "Skipped VLM classification (Ollama call budget)",
         }:
-            elem["description"] = f"Detected {etype.replace('_', ' ')} '{label}'."
+            elem["description"] = f"{etype.replace('_', ' ').capitalize()} element."
 
         bbox = elem.get("bbox")
         if ("dx" not in elem or "dy" not in elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
             try:
-                x1 = float(bbox[0])
-                y1 = float(bbox[1])
-                elem.setdefault("dx", int(round(max(0.0, x1 * image_width))))
-                elem.setdefault("dy", int(round(max(0.0, y1 * image_height))))
+                # Use CENTER of bbox, not top-left, for accurate agent click targets
+                x1, y1, x2, y2 = float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])
+                elem.setdefault("dx", int(round((x1 + x2) / 2.0 * image_width)))
+                elem.setdefault("dy", int(round((y1 + y2) / 2.0 * image_height)))
             except Exception:
                 pass
         if "dx" in elem:
@@ -400,14 +403,14 @@ def _run_pipeline_for_frame(
             use_grid_snap=False,
         )
         if refiner.validate_bbox(refined):
-            dx, dy = refiner.bbox_to_dxdy_pixels(refined, screen_bbox, image.shape[1], image.shape[0])
+            dx, dy = refiner.bbox_to_center_pixels(refined, image.shape[1], image.shape[0])
             refined_bboxes.append(
                 {
                     "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
                     "dx": dx,
                     "dy": dy,
                     "screen_bbox": list(screen_bbox),
-                    "source": item.get("source", "layout"),
+                    "source": "ui_detector",
                     "confidence": item.get("confidence", 0.5),
                 }
             )

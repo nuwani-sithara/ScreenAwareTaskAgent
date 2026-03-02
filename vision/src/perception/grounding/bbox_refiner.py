@@ -144,6 +144,10 @@ class BBoxRefiner:
         image_width: int,
         image_height: int,
     ) -> Tuple[int, int]:
+        """
+        DEPRECATED: returns top-left offset from screen edge.
+        Use bbox_to_center_pixels() for accurate click coordinates.
+        """
         x1, y1, _, _ = bbox
         sx1, sy1, _, _ = screen_bbox
         screen_x1 = sx1 * image_width
@@ -153,6 +157,29 @@ class BBoxRefiner:
         dx = int(round(max(0.0, elem_x1 - screen_x1)))
         dy = int(round(max(0.0, elem_y1 - screen_y1)))
         return dx, dy
+
+    def bbox_to_center_pixels(
+        self,
+        bbox: Tuple[float, float, float, float],
+        image_width: int,
+        image_height: int,
+    ) -> Tuple[int, int]:
+        """
+        Return the CENTER (cx, cy) of the bounding box in full-image pixel
+        coordinates.  These are the correct agent click targets (dx, dy).
+
+        Args:
+            bbox: Normalised bounding box (x1, y1, x2, y2) in [0, 1].
+            image_width:  Full image width in pixels.
+            image_height: Full image height in pixels.
+
+        Returns:
+            (cx, cy) integer pixel coordinates relative to top-left of full image.
+        """
+        x1, y1, x2, y2 = bbox
+        cx = int(round((x1 + x2) / 2.0 * image_width))
+        cy = int(round((y1 + y2) / 2.0 * image_height))
+        return cx, cy
 
     # ---------- Edge detection ----------
 
@@ -368,13 +395,13 @@ def run_bbox_refinement(
 
             if refiner.validate_bbox(refined):
                 screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
-                dx, dy = refiner.bbox_to_dxdy_pixels(refined, screen_bbox, w, h)
+                dx, dy = refiner.bbox_to_center_pixels(refined, w, h)
                 refined_boxes.append({
                     "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
                     "dx": dx,
                     "dy": dy,
                     "screen_bbox": list(screen_bbox),
-                    "source": item.get("source", "unknown"),
+                    "source": "ui_detector",
                     "confidence": item.get("confidence", 0.5),
                 })
 

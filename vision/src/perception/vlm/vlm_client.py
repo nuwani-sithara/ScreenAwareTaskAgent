@@ -220,23 +220,29 @@ def _fallback_classification(elements: List[UIElement]) -> List[Dict[str, Any]]:
         label = _clean_label(elem.label)
         if label:
             return label
+        # Use OCR text stored in raw_data when available
         raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
-        rid = str(raw.get("id", elem.id)).split("_")[-1]
-        return f"{_human_type(elem_type)} {rid}"
+        ocr = _clean_label(str(raw.get("ocr_label", "")))
+        if ocr:
+            return ocr
+        # Fallback: use type name (e.g. "button") — never use fake indexed names
+        return _human_type(elem_type)
 
     def _infer_description(elem: UIElement, elem_type: str, label: str) -> str:
         desc = str(elem.description or "").strip()
         if desc and desc not in VLMClient._STALE_DESCRIPTIONS:
             return desc
+        # Build a more informative fallback description
         raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
         dx = raw.get("dx", "")
         dy = raw.get("dy", "")
-        pos = ""
+        pos_hint = ""
         try:
-            pos = f" at ({int(round(float(dx)))},{int(round(float(dy)))})"
+            pos_hint = f" centered at ({int(round(float(dx)))}, {int(round(float(dy)))})"
         except Exception:
-            pos = ""
-        return f"Detected {_human_type(elem_type)} '{label}'{pos}."
+            pass
+        label_part = f" labelled '{label}'" if label and label != _human_type(elem_type) else ""
+        return f"{_human_type(elem_type).capitalize()}{label_part}{pos_hint}."
 
     result = []
     for elem in elements:
@@ -338,9 +344,10 @@ class VLMClient(ABC):
             '  "elements": [\n'
             "    {\n"
             '      "id": "<same id as input>",\n'
-            '      "type": "<button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|link|card|list_item|image|unknown>",\n'
-            '      "label": "<short visible text or purpose, empty string if none>",\n'
-            '      "description": "<one sentence describing what this element does or shows>",\n'
+            '      "type": "<button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|link|card|list_item|image|navbar|sidebar|modal|table|unknown>",\n'
+            '      "label": "<exact visible text; if none, a short functional name — NEVER use \\"button 3\\" style names>",\n'
+            '      "description": "<sentence that mentions: (1) visible text, (2) distinctive color, '
+            '(3) position on screen, (4) likely function — e.g. \\"Blue Submit button at the bottom of the form\\">",\n'
             '      "state": "<enabled|disabled|focused|checked|unchecked|normal>",\n'
             '      "confidence": <0.0-1.0>\n'
             "    }\n"
@@ -351,11 +358,12 @@ class VLMClient(ABC):
             "Rules:\n"
             "1. Return ONLY the JSON object - no prose, no markdown fences.\n"
             "2. Include every element id from the input list.\n"
-            "3. Never leave label or description empty; if no visible text, create a short functional label.\n"
-            "4. Avoid type='unknown' unless the crop has no discernible UI role.\n"
-            "5. state must never be unknown; use normal when uncertain.\n"
-            "6. confidence reflects how certain you are about the type.\n"
-            "7. description should be a concise, meaningful sentence; never leave it as 'No VLM available'.\n"
+            "3. label must be the exact visible text when present; otherwise a concise functional name (NOT an indexed name like 'button 3').\n"
+            "4. description must be informative: color, position (top/bottom/left/right/center), and likely function.\n"
+            "5. Avoid type='unknown' unless no discernible UI role exists.\n"
+            "6. state must never be unknown; use normal when uncertain.\n"
+            "7. confidence reflects how certain you are about the type.\n"
+            "8. This app can be any UI: browser, IDE, terminal, dashboard — do not assume form-only.\n"
         )
 
         # --- retry loop ---
@@ -448,9 +456,13 @@ class VLMClient(ABC):
             if not elem.type or elem.type == "unknown":
                 elem.type = "text"
             if not str(elem.label).strip():
-                elem.label = f"{elem.type.replace('_', ' ')} {elem.id.split('_')[-1]}"
+                # Never generate indexed fake labels; use type name as minimal fallback
+                raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+                ocr = str(raw.get("ocr_label", "")).strip()
+                elem.label = ocr if ocr else elem.type.replace("_", " ")
             if not str(elem.description).strip() or elem.description in stale:
-                elem.description = f"Detected {elem.type.replace('_', ' ')} '{elem.label}'."
+                label_part = f" labelled '{elem.label}'" if elem.label and elem.label != elem.type.replace("_", " ") else ""
+                elem.description = f"{elem.type.replace('_', ' ').capitalize()}{label_part}."
             if not str(elem.state).strip() or elem.state == "unknown":
                 elem.state = "normal"
             elem.confidence = max(0.1, min(1.0, float(elem.confidence)))

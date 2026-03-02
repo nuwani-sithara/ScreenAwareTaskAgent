@@ -114,6 +114,10 @@ def bbox_to_dxdy_pixels(
     image_width: int,
     image_height: int,
 ) -> Tuple[int, int]:
+    """
+    DEPRECATED: returns top-left offset from screen edge.
+    Use bbox_to_center_pixels() for accurate click coordinates.
+    """
     x1, y1, _, _ = bbox
     sx1, sy1, sx2, sy2 = screen_bbox
     screen_x1 = sx1 * image_width
@@ -123,6 +127,45 @@ def bbox_to_dxdy_pixels(
     dx = int(round(max(0.0, elem_x1 - screen_x1)))
     dy = int(round(max(0.0, elem_y1 - screen_y1)))
     return dx, dy
+
+
+def bbox_to_center_pixels(
+    bbox: Tuple[float, float, float, float],
+    image_width: int,
+    image_height: int,
+) -> Tuple[int, int]:
+    """
+    Return the CENTER (cx, cy) of the bounding box in full-image pixel
+    coordinates.  These are suitable for use as agent click targets (dx, dy).
+
+    Args:
+        bbox: Normalised bounding box (x1, y1, x2, y2) in [0, 1].
+        image_width:  Full image width in pixels.
+        image_height: Full image height in pixels.
+
+    Returns:
+        (cx, cy) integer pixel coordinates relative to top-left of full image.
+    """
+    x1, y1, x2, y2 = bbox
+    cx = int(round((x1 + x2) / 2.0 * image_width))
+    cy = int(round((y1 + y2) / 2.0 * image_height))
+    return cx, cy
+
+
+def detect_screen_boundaries(image: np.ndarray):
+    """
+    Detect the actual visible screen area, removing black borders or padding.
+
+    Returns:
+        cropped_image (np.ndarray): Cropped to the detected screen area.
+        margin_left   (int):        Left pixel offset of the screen in the original image.
+        margin_top    (int):        Top  pixel offset of the screen in the original image.
+    """
+    x1, y1, x2, y2 = detect_screen_bbox(image)
+    cropped = image[y1:y2, x1:x2]
+    if cropped.size == 0:
+        return image, 0, 0
+    return cropped, x1, y1
 
 
 def _bbox_iou(a: Tuple[int, int, int, int], b: Tuple[int, int, int, int]) -> float:
@@ -389,14 +432,14 @@ def generate_coarse_bboxes(image, max_boxes: int = 160):
         bbox_norm = (gx1, gy1, gx2, gy2)
         dxdy = bbox_to_dxdy(bbox_norm, screen_bbox_norm)
         bbox_norm = dxdy_to_bbox(dxdy, screen_bbox_norm)
-        dx, dy = bbox_to_dxdy_pixels(bbox_norm, screen_bbox_norm, w, h)
+        dx, dy = bbox_to_center_pixels(bbox_norm, w, h)
         bboxes.append(
             {
                 "dxdy": list(dxdy),
                 "dx": dx,
                 "dy": dy,
                 "screen_bbox": list(screen_bbox_norm),
-                "source": item["source"],
+                "source": "ui_detector",
                 "confidence": float(item["confidence"]),
             }
         )

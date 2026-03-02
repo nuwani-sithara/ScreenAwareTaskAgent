@@ -10,15 +10,50 @@ Output:
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
+import sys
 import tempfile
 from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 
 import cv2
 import numpy as np
+
+# ---------------------------------------------------------------------------
+# OCR import (graceful degradation when Tesseract/Paddle not installed)
+# ---------------------------------------------------------------------------
+try:
+    _src_dir = str(Path(__file__).resolve().parents[2])
+    if _src_dir not in sys.path:
+        sys.path.insert(0, _src_dir)
+    from ocr import extract_text_from_region as _ocr_extract
+    _OCR_AVAILABLE = True
+except Exception:
+    _OCR_AVAILABLE = False
+    def _ocr_extract(image, bbox, w=None, h=None):  # type: ignore
+        return ""
+
+# ---------------------------------------------------------------------------
+# Per-call frame-hash cache: skip re-enriching identical frames
+# ---------------------------------------------------------------------------
+_frame_hash_cache: Dict[str, List[Dict[str, Any]]] = {}
+
+
+def _compute_frame_hash(image_path: str) -> str:
+    """Return a SHA-256 hex digest of the raw image file bytes."""
+    h = hashlib.sha256()
+    with open(image_path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+# Per-session crop-level VLM cache: crop_hash -> meta dict
+# Prevents duplicate VLM calls for visually identical element crops.
+_crop_vlm_cache: Dict[str, Dict[str, Any]] = {}
 
 
 def _to_pixel_bbox(
@@ -81,6 +116,7 @@ def _bbox_to_dxdy_pixels(
     image_width: int,
     image_height: int,
 ) -> Tuple[int, int]:
+    """DEPRECATED: top-left offset from screen edge.  Use _bbox_center_pixels."""
     x1, y1, _, _ = bbox
     sx1, sy1, _, _ = screen_bbox
     screen_x1 = sx1 * image_width
@@ -90,6 +126,24 @@ def _bbox_to_dxdy_pixels(
     dx = int(round(max(0.0, elem_x1 - screen_x1)))
     dy = int(round(max(0.0, elem_y1 - screen_y1)))
     return dx, dy
+
+
+def _bbox_center_pixels(
+    bbox: Tuple[float, float, float, float],
+    image_width: int,
+    image_height: int,
+) -> Tuple[int, int]:
+    """
+    Return the CENTER of the bounding box as full-image pixel coordinates.
+    These are the accurate click coordinates (dx, dy) that the agent needs.
+
+    dx = center-x relative to full original screen image
+    dy = center-y relative to full original screen image
+    """
+    x1, y1, x2, y2 = bbox
+    cx = int(round((x1 + x2) / 2.0 * image_width))
+    cy = int(round((y1 + y2) / 2.0 * image_height))
+    return cx, cy
 
 
 def _expand_bbox_norm(
@@ -147,25 +201,39 @@ def _heuristic_meta(crop: np.ndarray, source: str = "") -> Dict[str, Any]:
     )
     text_density = float(np.sum(text_mask > 0)) / float(max(1, area))
 
-    if source == "layout_text":
+    # ------------------------------------------------------------------
+    # Generalised multi-class heuristic (not form-only)
+    # ------------------------------------------------------------------
+    # Determine element type from visual cues; supports browser, IDE,
+    # dashboard, terminal and arbitrary screen content.
+    if text_density > 0.35 and area < 8000:
+        element_type = "icon"
+    elif source == "layout_text" or (text_density > 0.18 and edge_density < 0.18):
         element_type = "text"
-    elif source == "layout_form":
-        element_type = "input_field" if ar >= 2.0 else "button"
-    elif ar >= 2.2 and h <= 120:
+    elif ar >= 5.0 and h <= 60:
+        # Very wide, short strip → likely a navbar or toolbar
+        element_type = "navbar"
+    elif ar >= 2.5 and h <= 80:
+        # Wide, short → input field or button depending on edge activity
         element_type = "input_field" if edge_density < 0.14 else "button"
-    elif 1.5 <= ar < 2.2 and h <= 90 and edge_density >= 0.08:
+    elif 1.5 <= ar < 2.5 and h <= 80 and edge_density >= 0.08:
         element_type = "button"
-    elif text_density > 0.20 and edge_density < 0.22:
-        element_type = "text"
-    elif source == "layout_edge" and area > 120000 and edge_density < 0.10:
+    elif ar < 1.2 and h <= 28 and w <= 28:
+        element_type = "checkbox"
+    elif source == "layout_edge" and area > 80000 and edge_density < 0.10:
         element_type = "image"
+    elif source == "layout_edge" and area > 200000:
+        # Large bordered region → card or modal
+        element_type = "card"
+    elif text_density > 0.10 and ar >= 1.3:
+        element_type = "text"
     else:
         element_type = "unknown"
 
     return {
         "type": element_type,
         "label": "",
-        "description": "Heuristic classification",
+        "description": "Heuristic pre-classification",
         "state": "normal" if element_type != "unknown" else "unknown",
         "confidence": 0.35 if element_type != "unknown" else 0.15,
     }
@@ -175,17 +243,30 @@ def _classify_crop_with_vlm(
     vlm_client,
     crop_path: str,
     type_hint: str = "unknown",
+    ocr_label: str = "",
 ) -> Dict[str, Any]:
     """
-    Ask VLM to classify one cropped UI region.
+    Ask VLM to classify one cropped UI region and generate a rich description.
     Returns fallback values on parse/model failure.
     """
+    ocr_hint = f'OCR text already extracted from this region: "{ocr_label}".  ' if ocr_label else ""
     prompt = (
-        "You are classifying a single cropped UI element from a screenshot.\n"
+        "You are classifying a single cropped UI element from a screenshot of any application "
+        "(browser, IDE, dashboard, terminal, etc.).\n"
         "Return ONLY valid JSON in this exact schema:\n"
-        "{\"elements\":[{\"id\":\"elem_0\",\"type\":\"button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|modal|dialog|link|card|list_item|image|unknown\",\"label\":\"...\",\"description\":\"...\",\"state\":\"normal|active|disabled|focused|selected|unknown\",\"bbox\":[0,0,1,1],\"confidence\":0.0}]}\n"
-        f"Hint from detector: likely {type_hint}.\n"
-        "Rules: return exactly one element, prioritize visible text as label, and choose input_field/button/text when applicable."
+        '{"elements":[{"id":"elem_0",'
+        '"type":"button|input_field|dropdown|checkbox|icon|image|card|text|navbar|sidebar|modal|table|unknown",'
+        '"label":"<exact visible text or short functional name>",'
+        '"description":"<one sentence: mention visible text, color if notable, screen location, likely function>",'
+        '"state":"normal|active|disabled|focused|selected|unknown",'
+        '"bbox":[0,0,1,1],"confidence":0.0}]}\n'
+        f"Detector hint: likely {type_hint}.  {ocr_hint}\n"
+        "Rules:\n"
+        "1. label must be the exact visible text if present; otherwise a concise functional name.\n"
+        "2. description must mention: (a) visible text, (b) color if distinctive, "
+        "(c) position on screen (top/bottom/left/right/center), (d) likely function.\n"
+        "3. Never output generic descriptions like 'Detected button at (x,y)'.\n"
+        "4. Return exactly one element object."
     )
     result = vlm_client.analyze_ui(crop_path, prompt=prompt)
     if not result.parse_successful or not result.elements:
@@ -250,6 +331,25 @@ def enrich_frame(
         raise RuntimeError(f"Failed to read image: {image_path}")
     h, w = image.shape[:2]
 
+    # ------------------------------------------------------------------
+    # Frame-hash deduplication: skip enrichment when frame is unchanged
+    # ------------------------------------------------------------------
+    frame_hash = _compute_frame_hash(str(image_path))
+    global _frame_hash_cache
+    if frame_hash in _frame_hash_cache:
+        cached_elements = _frame_hash_cache[frame_hash]
+        payload = {
+            "image": str(image_path),
+            "image_size": {"width": w, "height": h},
+            "element_count": len(cached_elements),
+            "elements": cached_elements,
+            "from_cache": True,
+        }
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2)
+        return
+
     with open(refined_bbox_path, "r", encoding="utf-8") as f:
         refined = json.load(f)
     boxes = refined.get("bboxes", [])
@@ -286,11 +386,25 @@ def enrich_frame(
             crop = image[y1:y2, x1:x2]
             crop = _prepare_crop_for_vlm(crop, min_side=224)
             heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
-            dx, dy = _bbox_to_dxdy_pixels(bbox, screen_bbox, w, h)
+
+            # ----------------------------------------------------------
+            # Accurate click coordinates: CENTER of bbox in full image
+            # ----------------------------------------------------------
+            cx, cy = _bbox_center_pixels(bbox, w, h)
+
+            # ----------------------------------------------------------
+            # OCR: extract real visible text for the label
+            # ----------------------------------------------------------
+            ocr_label = ""
+            if _OCR_AVAILABLE:
+                try:
+                    ocr_label = _ocr_extract(image, bbox, w, h)
+                except Exception:
+                    ocr_label = ""
 
             meta = {
                 "type": heuristic["type"],
-                "label": heuristic["label"],
+                "label": ocr_label or heuristic["label"],
                 "description": "No VLM available",
                 "state": heuristic["state"],
                 "confidence": max(float(item.get("confidence", 0.5)), float(heuristic["confidence"])),
@@ -300,27 +414,40 @@ def enrich_frame(
                 vlm_client is not None and crop.size > 0 and vlm_calls_used < max_vlm_calls
             )
             if should_call_vlm:
-                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-                    crop_path = tmp.name
-                try:
-                    cv2.imwrite(crop_path, crop)
-                    meta = _classify_crop_with_vlm(
-                        vlm_client,
-                        crop_path,
-                        type_hint=heuristic["type"],
-                    )
-                except Exception:
-                    meta = {
-                        "type": heuristic["type"],
-                        "label": heuristic["label"],
-                        "description": "VLM classification failed",
-                        "state": heuristic["state"],
-                        "confidence": max(0.1, float(heuristic["confidence"])),
-                    }
-                finally:
-                    if os.path.exists(crop_path):
-                        os.remove(crop_path)
-                vlm_calls_used += 1
+                # Crop-level VLM cache: avoid re-classifying identical element crops
+                crop_hash = hashlib.sha256(crop.tobytes()).hexdigest()[:32]
+                if crop_hash in _crop_vlm_cache:
+                    meta = dict(_crop_vlm_cache[crop_hash])
+                    # Prefer fresher OCR text over cached label when available
+                    if ocr_label and not meta.get("label"):
+                        meta["label"] = ocr_label
+                else:
+                    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                        crop_path = tmp.name
+                    try:
+                        cv2.imwrite(crop_path, crop)
+                        meta = _classify_crop_with_vlm(
+                            vlm_client,
+                            crop_path,
+                            type_hint=heuristic["type"],
+                            ocr_label=ocr_label,
+                        )
+                        # Prefer OCR text when VLM returned an empty or generic label
+                        if ocr_label and not meta.get("label"):
+                            meta["label"] = ocr_label
+                        _crop_vlm_cache[crop_hash] = dict(meta)
+                    except Exception:
+                        meta = {
+                            "type": heuristic["type"],
+                            "label": ocr_label or heuristic["label"],
+                            "description": "VLM classification failed",
+                            "state": heuristic["state"],
+                            "confidence": max(0.1, float(heuristic["confidence"])),
+                        }
+                    finally:
+                        if os.path.exists(crop_path):
+                            os.remove(crop_path)
+                    vlm_calls_used += 1
             elif is_ollama_client:
                 meta["description"] = "Skipped VLM classification (Ollama call budget)"
 
@@ -331,12 +458,12 @@ def enrich_frame(
                     "label": meta["label"],
                     "description": meta["description"],
                     "state": meta["state"],
-                    "dx": int(item.get("dx", dx)),
-                    "dy": int(item.get("dy", dy)),
+                    "dx": cx,
+                    "dy": cy,
                     "dxdy": item.get("dxdy", []),
                     "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
                     "confidence": meta["confidence"],
-                    "source": item.get("source", "refined_bbox"),
+                    "source": "ui_detector",
                 }
             )
     finally:
@@ -345,6 +472,9 @@ def enrich_frame(
                 vlm_client.timeout_seconds = original_timeout
             except Exception:
                 pass
+
+    # Cache enriched result for this frame
+    _frame_hash_cache[frame_hash] = elements
 
     payload = {
         "image": str(image_path),
