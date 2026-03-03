@@ -6,31 +6,29 @@ Prompt templates for VLM-based UI detection and analysis.
 from typing import Optional
 
 UI_DISCOVERY_PROMPT = """
-You are an expert visual UI parser for agent automation.
+You are a high-recall, high-precision UI parser for automation.
 
-Task:
-Detect ALL VISIBLE on-screen UI elements in the screenshot. Prioritize recall:
-include small icons, toolbar items, tabs, toggles, chips, links, badges, table rows,
-cards, list items, text labels, and form controls.
+Goal:
+Detect every visible UI element that matters for interaction or understanding:
+buttons, input fields, labels, static text, table cells, tabs, menus, icons,
+cards, list items, chips, links, toggles, checkboxes, radios, dialogs, images.
 
-Rules:
-1. Return ONLY valid JSON (no markdown, no prose).
-2. Detect visible elements only. Do not hallucinate hidden/off-screen elements.
-3. Bounding boxes must be tight and axis-aligned.
-4. Use [x_min, y_min, x_max, y_max] with x_min < x_max and y_min < y_max.
-5. Coordinates may be normalized (0-1) or pixels. Be internally consistent.
-6. Read and include visible text exactly when possible.
-7. Keep confidence realistic (0.0-1.0).
-8. If unsure of class, use type "unknown" but still include the element.
+Hard constraints:
+1. Return ONLY a valid JSON object (no markdown, no commentary).
+2. Detect only what is visible in the screenshot.
+3. Bounding boxes must be tight and axis-aligned around each individual element.
+4. Use bbox = [x_min, y_min, x_max, y_max], with x_min < x_max and y_min < y_max.
+5. Coordinates can be normalized (0-1) or pixels; stay consistent.
+6. Never leave label empty: if no visible text, create a short functional label
+   like "search icon", "profile avatar", "submit button", "data row 3".
+7. Never leave description empty: one concrete sentence about what the element
+   shows or does in context.
+8. Use type "unknown" only as last resort.
+9. Keep confidence realistic (0.0-1.0).
 
-For each element include:
-- id
-- type (button, input_field, text, label, icon, dropdown, checkbox, radio, menu, tab, modal, dialog, link, card, list_item, image, unknown)
-- label
-- description
-- state
-- bbox
-- confidence
+Allowed types:
+button, input_field, text, label, icon, dropdown, checkbox, radio, menu, tab,
+modal, dialog, link, card, list_item, image, unknown
 
 Output schema:
 {
@@ -38,8 +36,8 @@ Output schema:
     {
       "id": "element_1",
       "type": "button",
-      "label": "Login",
-      "description": "Primary authentication action",
+      "label": "Save",
+      "description": "Primary action button to persist the current form values.",
       "state": "enabled",
       "bbox": [0.35, 0.70, 0.65, 0.85],
       "confidence": 0.95

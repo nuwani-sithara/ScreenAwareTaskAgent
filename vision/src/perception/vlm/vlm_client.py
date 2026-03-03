@@ -36,11 +36,12 @@ BATCH_RESPONSE_SCHEMA = {
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "type", "label", "state", "confidence"],
+                "required": ["id", "type", "label", "description", "state", "confidence"],
                 "properties": {
                     "id":         {"type": "string"},
                     "type":       {"type": "string"},
                     "label":      {"type": "string"},
+                    "description": {"type": "string"},
                     "state":      {"type": "string"},
                     "confidence": {"type": "number"},
                 },
@@ -50,9 +51,9 @@ BATCH_RESPONSE_SCHEMA = {
 }
 
 # Minimum fraction of total image area for an element to be sent to the VLM.
-MIN_AREA_FRACTION = 0.01          # 1 %
+MIN_AREA_FRACTION = 0.00035       # 0.035 %
 # Maximum allowed aspect ratio (width/height or height/width).
-MAX_ASPECT_RATIO  = 20.0
+MAX_ASPECT_RATIO  = 28.0
 
 
 def _compute_frame_hash(image_path: str) -> str:
@@ -133,7 +134,21 @@ def _filter_elements_for_vlm(
     for elem in elements:
         area = _bbox_area(elem.bbox)
         ar   = _bbox_aspect_ratio(elem.bbox)
-        if area < MIN_AREA_FRACTION or ar > MAX_ASPECT_RATIO:
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        source = str(raw.get("source", "")).lower()
+        if source == "layout_text":
+            min_area = MIN_AREA_FRACTION * 0.25
+            max_ar = MAX_ASPECT_RATIO * 1.6
+        elif source == "layout_form":
+            min_area = MIN_AREA_FRACTION * 0.6
+            max_ar = MAX_ASPECT_RATIO * 1.35
+        elif source == "layout_adaptive":
+            min_area = MIN_AREA_FRACTION * 1.25
+            max_ar = MAX_ASPECT_RATIO
+        else:
+            min_area = MIN_AREA_FRACTION
+            max_ar = MAX_ASPECT_RATIO
+        if area < min_area or ar > max_ar:
             skipped.append(elem)
         else:
             to_classify.append(elem)
@@ -150,10 +165,12 @@ def _validate_batch_response(data: Any) -> bool:
     for item in elements:
         if not isinstance(item, dict):
             return False
-        for key in ("id", "type", "label", "state", "confidence"):
+        for key in ("id", "type", "label", "description", "state", "confidence"):
             if key not in item:
                 return False
         if not isinstance(item["confidence"], (int, float)):
+            return False
+        if not str(item.get("description", "")).strip():
             return False
     return True
 
@@ -163,14 +180,91 @@ def _fallback_classification(elements: List[UIElement]) -> List[Dict[str, Any]]:
     Return stub classifications when the VLM is unavailable.
     Preserves original type when already set; otherwise uses 'unknown'.
     """
+    def _clean_label(label: str) -> str:
+        return " ".join(str(label).strip().split())
+
+    def _human_type(elem_type: str) -> str:
+        return str(elem_type).replace("_", " ").strip()
+
+    def _infer_type(elem: UIElement) -> str:
+        existing = (elem.type or "").strip().lower()
+        if existing and existing != "unknown":
+            return existing
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        source = str(raw.get("source", "")).lower()
+        x1, y1, x2, y2 = elem.bbox
+        bw = max(1e-9, x2 - x1)
+        bh = max(1e-9, y2 - y1)
+        ar = bw / bh
+        area = bw * bh
+        if source == "layout_text":
+            return "text"
+        if source == "layout_form":
+            return "input_field" if ar >= 2.0 else "button"
+        if source == "layout_edge" and area >= 0.12:
+            return "image"
+        if ar >= 3.0 and bh <= 0.16:
+            return "input_field"
+        if ar >= 1.4 and bh <= 0.20:
+            return "button"
+        if area <= 0.0025:
+            return "icon"
+        return "text"
+
+    def _infer_state(elem_type: str, current: str) -> str:
+        state = (current or "").strip().lower()
+        if state and state != "unknown":
+            return state
+        if elem_type == "checkbox":
+            return "unchecked"
+        return "normal"
+
+    def _infer_label(elem: UIElement, elem_type: str) -> str:
+        label = _clean_label(elem.label)
+        if label:
+            return label
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        ocr = _clean_label(str(raw.get("ocr_text", "")))
+        if ocr:
+            return ocr
+        human = _human_type(elem_type)
+        if human == "input field":
+            return "Input field"
+        if human == "button":
+            return "Button"
+        if human == "link":
+            return "Link"
+        return human.capitalize()
+
+    def _infer_description(elem: UIElement, elem_type: str, label: str) -> str:
+        desc = str(elem.description or "").strip()
+        if desc and desc not in VLMClient._STALE_DESCRIPTIONS:
+            return desc
+        raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
+        dx = raw.get("dx", "")
+        dy = raw.get("dy", "")
+        pos = ""
+        try:
+            pos = f" at ({int(round(float(dx)))},{int(round(float(dy)))})"
+        except Exception:
+            pos = ""
+        if label:
+            return f"{_human_type(elem_type).capitalize()} labeled '{label}'{pos}, likely used for interaction."
+        return f"{_human_type(elem_type).capitalize()} in the interface{pos}, likely part of the workflow."
+
     result = []
     for elem in elements:
+        inferred_type = _infer_type(elem)
+        inferred_label = _infer_label(elem, inferred_type)
+        inferred_desc = _infer_description(elem, inferred_type, inferred_label)
+        inferred_state = _infer_state(inferred_type, elem.state)
         result.append({
             "id":         elem.id,
-            "type":       elem.type if elem.type not in ("", "unknown") else "unknown",
-            "label":      elem.label or "",
-            "state":      elem.state or "normal",
-            "confidence": elem.confidence if elem.type != "unknown" else 0.1,
+            "type":       inferred_type,
+            "label":      inferred_label,
+            "description": inferred_desc,
+            "state":      inferred_state,
+            "confidence": max(0.2, float(elem.confidence or 0.0)),
         })
     return result
 
@@ -245,21 +339,34 @@ class VLMClient(ABC):
             )
 
         # --- build prompt ---
-        element_list_json = json.dumps(
-            [{"id": e.id, "bbox": list(e.bbox)} for e in to_classify],
-            indent=2,
-        )
+        element_payload: List[Dict[str, Any]] = []
+        for e in to_classify:
+            raw = e.raw_data if isinstance(e.raw_data, dict) else {}
+            element_payload.append(
+                {
+                    "id": e.id,
+                    "bbox": [float(v) for v in e.bbox],
+                    "hint_type": str(e.type or "").strip(),
+                    "hint_label": " ".join(str(e.label or "").split()).strip(),
+                    "ocr_text": " ".join(str(raw.get("ocr_text", "")).split()).strip(),
+                    "source": str(raw.get("source", "")),
+                    "dx": raw.get("dx"),
+                    "dy": raw.get("dy"),
+                }
+            )
+        element_list_json = json.dumps(element_payload, indent=2)
         prompt = (
-            "You are a precise UI element classifier.\n\n"
-            "You are given a screenshot and a list of UI elements with their bounding boxes "
-            "(normalised to 0-1 range: [x_min, y_min, x_max, y_max]).\n\n"
+            "You are an expert UI element classifier for automation.\n\n"
+            "You are given ONE screenshot and a list of UI element candidates with bboxes.\n"
+            "Classify every candidate using the screenshot content and each candidate bbox.\n"
+            "Do not skip any element id.\n\n"
             "For EVERY element in the list classify it and return ONLY valid JSON with this exact schema:\n"
             "{\n"
             '  "elements": [\n'
             "    {\n"
             '      "id": "<same id as input>",\n'
             '      "type": "<button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|link|card|list_item|image|unknown>",\n'
-            '      "label": "<short visible text or purpose, empty string if none>",\n'
+            '      "label": "<short visible text or functional name; never empty>",\n'
             '      "description": "<one sentence describing what this element does or shows>",\n'
             '      "state": "<enabled|disabled|focused|checked|unchecked|normal>",\n'
             '      "confidence": <0.0-1.0>\n'
@@ -271,8 +378,14 @@ class VLMClient(ABC):
             "Rules:\n"
             "1. Return ONLY the JSON object - no prose, no markdown fences.\n"
             "2. Include every element id from the input list.\n"
-            "3. confidence reflects how certain you are about the type.\n"
-            "4. description should be a concise, meaningful sentence; never leave it as 'No VLM available'.\n"
+            "3. Never leave label or description empty.\n"
+            "4. If no readable text, create a concise functional label (example: 'menu icon', 'submit button', 'table row').\n"
+            "5. Avoid type='unknown' unless the element has no discernible UI role.\n"
+            "6. Use hint_type/hint_label/ocr_text as soft hints, not strict truth.\n"
+            "7. Keep labels short (2-6 words).\n"
+            "8. state must never be unknown; use normal when uncertain.\n"
+            "9. confidence reflects certainty of type classification.\n"
+            "10. description should be specific and concrete, not generic boilerplate.\n"
         )
 
         # --- retry loop ---
@@ -337,21 +450,60 @@ class VLMClient(ABC):
         classifications: List[Dict[str, Any]],
     ) -> List[UIElement]:
         """Merge classification results back onto the UIElement list."""
+        valid_types = {
+            "button", "input_field", "text", "label", "icon", "dropdown",
+            "checkbox", "radio", "menu", "tab", "link", "card", "list_item",
+            "image",
+        }
         id_map: Dict[str, Dict[str, Any]] = {c["id"]: c for c in classifications}
         stale = VLMClient._STALE_DESCRIPTIONS
         for elem in elements:
             cls = id_map.get(elem.id)
             if cls:
-                elem.type        = cls.get("type",       elem.type)
-                elem.label       = cls.get("label",      elem.label)
-                elem.state       = cls.get("state",      elem.state)
+                if not isinstance(elem.raw_data, dict):
+                    elem.raw_data = {}
+                cls_type = str(cls.get("type", elem.type or "")).strip().lower()
+                if cls_type and cls_type in valid_types:
+                    elem.type = cls_type
+                cls_label = " ".join(str(cls.get("label", elem.label or "")).split()).strip()
+                if cls_label:
+                    elem.label = cls_label
+                cls_state = str(cls.get("state", elem.state or "")).strip().lower()
+                elem.state = cls_state if cls_state and cls_state != "unknown" else "normal"
                 elem.confidence  = float(cls.get("confidence", elem.confidence))
                 # Apply description from VLM; clear stale placeholders set by enrich_frame
-                vlm_desc = cls.get("description", "")
+                vlm_desc = str(cls.get("description", "")).strip()
                 if vlm_desc:
                     elem.description = vlm_desc
                 elif elem.description in stale:
                     elem.description = ""
+                elem.raw_data["source"] = "vlm_enriched"
+            if not elem.type or elem.type == "unknown":
+                elem.type = "text"
+            elem.label = " ".join(str(elem.label or "").split()).strip()
+            if not elem.label:
+                human = elem.type.replace("_", " ").strip()
+                if human == "input field":
+                    elem.label = "Input field"
+                elif human == "button":
+                    elem.label = "Button"
+                elif human == "link":
+                    elem.label = "Link"
+                else:
+                    elem.label = human.capitalize()
+            if not str(elem.description).strip() or elem.description in stale:
+                if elem.label:
+                    elem.description = (
+                        f"{elem.type.replace('_', ' ').capitalize()} labeled '{elem.label}', "
+                        "identified in the current screen context."
+                    )
+                else:
+                    elem.description = (
+                        f"{elem.type.replace('_', ' ').capitalize()} identified in the current screen context."
+                    )
+            if not str(elem.state).strip() or elem.state == "unknown":
+                elem.state = "normal"
+            elem.confidence = max(0.1, min(1.0, float(elem.confidence)))
         return elements
 
     # ------------------------------------------------------------------
