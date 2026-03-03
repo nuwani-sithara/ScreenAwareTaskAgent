@@ -36,11 +36,12 @@ BATCH_RESPONSE_SCHEMA = {
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "type", "label", "state", "confidence"],
+                "required": ["id", "type", "label", "description", "state", "confidence"],
                 "properties": {
                     "id":         {"type": "string"},
                     "type":       {"type": "string"},
                     "label":      {"type": "string"},
+                    "description": {"type": "string"},
                     "state":      {"type": "string"},
                     "confidence": {"type": "number"},
                 },
@@ -164,10 +165,12 @@ def _validate_batch_response(data: Any) -> bool:
     for item in elements:
         if not isinstance(item, dict):
             return False
-        for key in ("id", "type", "label", "state", "confidence"):
+        for key in ("id", "type", "label", "description", "state", "confidence"):
             if key not in item:
                 return False
         if not isinstance(item["confidence"], (int, float)):
+            return False
+        if not str(item.get("description", "")).strip():
             return False
     return True
 
@@ -221,8 +224,17 @@ def _fallback_classification(elements: List[UIElement]) -> List[Dict[str, Any]]:
         if label:
             return label
         raw = elem.raw_data if isinstance(elem.raw_data, dict) else {}
-        rid = str(raw.get("id", elem.id)).split("_")[-1]
-        return f"{_human_type(elem_type)} {rid}"
+        ocr = _clean_label(str(raw.get("ocr_text", "")))
+        if ocr:
+            return ocr
+        human = _human_type(elem_type)
+        if human == "input field":
+            return "Input field"
+        if human == "button":
+            return "Button"
+        if human == "link":
+            return "Link"
+        return human.capitalize()
 
     def _infer_description(elem: UIElement, elem_type: str, label: str) -> str:
         desc = str(elem.description or "").strip()
@@ -236,7 +248,9 @@ def _fallback_classification(elements: List[UIElement]) -> List[Dict[str, Any]]:
             pos = f" at ({int(round(float(dx)))},{int(round(float(dy)))})"
         except Exception:
             pos = ""
-        return f"Detected {_human_type(elem_type)} '{label}'{pos}."
+        if label:
+            return f"{_human_type(elem_type).capitalize()} labeled '{label}'{pos}, likely used for interaction."
+        return f"{_human_type(elem_type).capitalize()} in the interface{pos}, likely part of the workflow."
 
     result = []
     for elem in elements:
@@ -325,21 +339,34 @@ class VLMClient(ABC):
             )
 
         # --- build prompt ---
-        element_list_json = json.dumps(
-            [{"id": e.id, "bbox": list(e.bbox)} for e in to_classify],
-            indent=2,
-        )
+        element_payload: List[Dict[str, Any]] = []
+        for e in to_classify:
+            raw = e.raw_data if isinstance(e.raw_data, dict) else {}
+            element_payload.append(
+                {
+                    "id": e.id,
+                    "bbox": [float(v) for v in e.bbox],
+                    "hint_type": str(e.type or "").strip(),
+                    "hint_label": " ".join(str(e.label or "").split()).strip(),
+                    "ocr_text": " ".join(str(raw.get("ocr_text", "")).split()).strip(),
+                    "source": str(raw.get("source", "")),
+                    "dx": raw.get("dx"),
+                    "dy": raw.get("dy"),
+                }
+            )
+        element_list_json = json.dumps(element_payload, indent=2)
         prompt = (
-            "You are a precise UI element classifier.\n\n"
-            "You are given a screenshot and a list of UI elements with their bounding boxes "
-            "(normalised to 0-1 range: [x_min, y_min, x_max, y_max]).\n\n"
+            "You are an expert UI element classifier for automation.\n\n"
+            "You are given ONE screenshot and a list of UI element candidates with bboxes.\n"
+            "Classify every candidate using the screenshot content and each candidate bbox.\n"
+            "Do not skip any element id.\n\n"
             "For EVERY element in the list classify it and return ONLY valid JSON with this exact schema:\n"
             "{\n"
             '  "elements": [\n'
             "    {\n"
             '      "id": "<same id as input>",\n'
             '      "type": "<button|input_field|text|label|icon|dropdown|checkbox|radio|menu|tab|link|card|list_item|image|unknown>",\n'
-            '      "label": "<short visible text or purpose, empty string if none>",\n'
+            '      "label": "<short visible text or functional name; never empty>",\n'
             '      "description": "<one sentence describing what this element does or shows>",\n'
             '      "state": "<enabled|disabled|focused|checked|unchecked|normal>",\n'
             '      "confidence": <0.0-1.0>\n'
@@ -351,11 +378,14 @@ class VLMClient(ABC):
             "Rules:\n"
             "1. Return ONLY the JSON object - no prose, no markdown fences.\n"
             "2. Include every element id from the input list.\n"
-            "3. Never leave label or description empty; if no visible text, create a short functional label.\n"
-            "4. Avoid type='unknown' unless the crop has no discernible UI role.\n"
-            "5. state must never be unknown; use normal when uncertain.\n"
-            "6. confidence reflects how certain you are about the type.\n"
-            "7. description should be a concise, meaningful sentence; never leave it as 'No VLM available'.\n"
+            "3. Never leave label or description empty.\n"
+            "4. If no readable text, create a concise functional label (example: 'menu icon', 'submit button', 'table row').\n"
+            "5. Avoid type='unknown' unless the element has no discernible UI role.\n"
+            "6. Use hint_type/hint_label/ocr_text as soft hints, not strict truth.\n"
+            "7. Keep labels short (2-6 words).\n"
+            "8. state must never be unknown; use normal when uncertain.\n"
+            "9. confidence reflects certainty of type classification.\n"
+            "10. description should be specific and concrete, not generic boilerplate.\n"
         )
 
         # --- retry loop ---
@@ -430,6 +460,8 @@ class VLMClient(ABC):
         for elem in elements:
             cls = id_map.get(elem.id)
             if cls:
+                if not isinstance(elem.raw_data, dict):
+                    elem.raw_data = {}
                 cls_type = str(cls.get("type", elem.type or "")).strip().lower()
                 if cls_type and cls_type in valid_types:
                     elem.type = cls_type
@@ -445,12 +477,30 @@ class VLMClient(ABC):
                     elem.description = vlm_desc
                 elif elem.description in stale:
                     elem.description = ""
+                elem.raw_data["source"] = "vlm_enriched"
             if not elem.type or elem.type == "unknown":
                 elem.type = "text"
-            if not str(elem.label).strip():
-                elem.label = f"{elem.type.replace('_', ' ')} {elem.id.split('_')[-1]}"
+            elem.label = " ".join(str(elem.label or "").split()).strip()
+            if not elem.label:
+                human = elem.type.replace("_", " ").strip()
+                if human == "input field":
+                    elem.label = "Input field"
+                elif human == "button":
+                    elem.label = "Button"
+                elif human == "link":
+                    elem.label = "Link"
+                else:
+                    elem.label = human.capitalize()
             if not str(elem.description).strip() or elem.description in stale:
-                elem.description = f"Detected {elem.type.replace('_', ' ')} '{elem.label}'."
+                if elem.label:
+                    elem.description = (
+                        f"{elem.type.replace('_', ' ').capitalize()} labeled '{elem.label}', "
+                        "identified in the current screen context."
+                    )
+                else:
+                    elem.description = (
+                        f"{elem.type.replace('_', ' ').capitalize()} identified in the current screen context."
+                    )
             if not str(elem.state).strip() or elem.state == "unknown":
                 elem.state = "normal"
             elem.confidence = max(0.1, min(1.0, float(elem.confidence)))

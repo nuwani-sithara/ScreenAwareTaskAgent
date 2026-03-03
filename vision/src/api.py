@@ -9,16 +9,17 @@ import uuid
 import queue
 import shutil
 import json
+import hashlib
 from pathlib import Path
 from typing import Optional, Dict, Any, List, Tuple
 
 from src.capture.webcam_capture import start_webcam_stream
 from src.preprocessing.preprocess import preprocess_all
-from src.perception.grounding.coarse_bbox_generator import generate_coarse_bboxes
 from src.perception.grounding.bbox_refiner import BBoxRefiner
 from src.perception.grounding.bbox_element_enricher import enrich_frame
-from src.perception.vlm import get_vlm_client, UIElement
+from src.perception.vlm import get_vlm_client, UIElement, get_ui_discovery_prompt
 from src.session_aggregator import SessionAggregator
+from src.vision.detector import detect_ui_elements
 
 logging.basicConfig(
     level=logging.INFO,
@@ -145,14 +146,351 @@ def _item_to_bbox_norm(item: Dict[str, Any]) -> Tuple[float, float, float, float
     return (0.0, 0.0, 1.0, 1.0)
 
 
+def _norm_bbox(
+    bbox: Tuple[float, float, float, float],
+) -> Tuple[float, float, float, float]:
+    x1, y1, x2, y2 = (float(v) for v in bbox)
+    x1, x2 = sorted((x1, x2))
+    y1, y2 = sorted((y1, y2))
+    return (
+        max(0.0, min(1.0, x1)),
+        max(0.0, min(1.0, y1)),
+        max(0.0, min(1.0, x2)),
+        max(0.0, min(1.0, y2)),
+    )
+
+
+def _bbox_area_px(
+    bbox: Tuple[float, float, float, float],
+    image_w: int,
+    image_h: int,
+) -> float:
+    x1, y1, x2, y2 = bbox
+    return max(0.0, (x2 - x1) * image_w) * max(0.0, (y2 - y1) * image_h)
+
+
+def _bbox_center_xy(
+    bbox: Tuple[float, float, float, float],
+    image_w: int,
+    image_h: int,
+) -> Tuple[int, int]:
+    x1, y1, x2, y2 = bbox
+    cx = int(round(((x1 + x2) * 0.5) * image_w))
+    cy = int(round(((y1 + y2) * 0.5) * image_h))
+    return max(0, min(image_w - 1, cx)), max(0, min(image_h - 1, cy))
+
+
+def is_inside(
+    inner_bbox: Tuple[float, float, float, float],
+    outer_bbox: Tuple[float, float, float, float],
+    min_ratio: float = 0.97,
+) -> bool:
+    return _bbox_contained_ratio_norm(inner_bbox, outer_bbox) >= min_ratio
+
+
+def apply_nms(
+    detections: List[Dict[str, Any]],
+    iou_threshold: float = 0.4,
+) -> List[Dict[str, Any]]:
+    """
+    Remove overlapping boxes by IoU, keeping highest confidence per region.
+    """
+    if not detections:
+        return []
+    ranked = sorted(
+        detections,
+        key=lambda d: float(d.get("confidence", 0.0)),
+        reverse=True,
+    )
+    kept: List[Dict[str, Any]] = []
+    for cand in ranked:
+        cb = _item_to_bbox_norm(cand)
+        suppress = False
+        for ex in kept:
+            eb = _item_to_bbox_norm(ex)
+            if _bbox_iou_norm(cb, eb) > iou_threshold:
+                suppress = True
+                break
+        if not suppress:
+            kept.append(cand)
+    return kept
+
+
+def merge_nearby_elements(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+    distance_threshold: Optional[float] = None,
+) -> List[Dict[str, Any]]:
+    """
+    Merge same-type detections when centers are very close and sizes are similar.
+    """
+    if not detections:
+        return []
+    used = [False] * len(detections)
+    merged: List[Dict[str, Any]] = []
+
+    if distance_threshold is None:
+        # 2% of image diagonal (screen independent)
+        distance_threshold = 0.02 * ((image_w ** 2 + image_h ** 2) ** 0.5)
+
+    def _size_similar(a: Tuple[float, float, float, float], b: Tuple[float, float, float, float]) -> bool:
+        aw = max(1e-6, a[2] - a[0])
+        ah = max(1e-6, a[3] - a[1])
+        bw = max(1e-6, b[2] - b[0])
+        bh = max(1e-6, b[3] - b[1])
+        # Similar size within +/-25%
+        rw = abs(aw - bw) / max(aw, bw)
+        rh = abs(ah - bh) / max(ah, bh)
+        return rw <= 0.25 and rh <= 0.25
+
+    for i, base in enumerate(detections):
+        if used[i]:
+            continue
+        used[i] = True
+        bb = _item_to_bbox_norm(base)
+        bcx, bcy = _bbox_center_xy(bb, image_w, image_h)
+        btype = str(base.get("type", "unknown")).strip().lower()
+        group = [base]
+
+        for j in range(i + 1, len(detections)):
+            if used[j]:
+                continue
+            cur = detections[j]
+            ctype = str(cur.get("type", "unknown")).strip().lower()
+            if ctype != btype:
+                continue
+            cb = _item_to_bbox_norm(cur)
+            if not _size_similar(bb, cb):
+                continue
+            ccx, ccy = _bbox_center_xy(cb, image_w, image_h)
+            dist = ((bcx - ccx) ** 2 + (bcy - ccy) ** 2) ** 0.5
+            if dist <= distance_threshold:
+                used[j] = True
+                group.append(cur)
+
+        if len(group) == 1:
+            merged.append(base)
+            continue
+
+        boxes = [_item_to_bbox_norm(g) for g in group]
+        x1 = min(b[0] for b in boxes)
+        y1 = min(b[1] for b in boxes)
+        x2 = max(b[2] for b in boxes)
+        y2 = max(b[3] for b in boxes)
+        best = max(group, key=lambda g: float(g.get("confidence", 0.0)))
+        out = dict(best)
+        out["bbox"] = [x1, y1, x2, y2]
+        out["dxdy"] = [x1, y1, x2, max(0.0, min(1.0, 1.0 - y2))]
+        cx, cy = _bbox_center_xy((x1, y1, x2, y2), image_w, image_h)
+        out["dx"] = cx
+        out["dy"] = cy
+        out["confidence"] = max(float(g.get("confidence", 0.0)) for g in group)
+        merged.append(out)
+
+    return merged
+
+
+def _remove_contained_elements_generic(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+) -> List[Dict[str, Any]]:
+    """
+    Generic hierarchy cleanup:
+    if A is contained in B, keep the one with larger area AND higher confidence.
+    """
+    if not detections:
+        return []
+    container_types = {"card", "container", "form", "panel"}
+    keep = [True] * len(detections)
+    areas = [_bbox_area_px(_item_to_bbox_norm(d), image_w, image_h) for d in detections]
+    confs = [float(d.get("confidence", 0.0)) for d in detections]
+
+    for i in range(len(detections)):
+        if not keep[i]:
+            continue
+        bi = _item_to_bbox_norm(detections[i])
+        for j in range(i + 1, len(detections)):
+            if not keep[j]:
+                continue
+            bj = _item_to_bbox_norm(detections[j])
+            i_in_j = is_inside(bi, bj, min_ratio=0.97)
+            j_in_i = is_inside(bj, bi, min_ratio=0.97)
+            if not i_in_j and not j_in_i:
+                continue
+
+            if i_in_j:
+                ti = str(detections[i].get("type", "unknown")).strip().lower()
+                tj = str(detections[j].get("type", "unknown")).strip().lower()
+                # Keep hierarchy under containers/forms/panels/cards.
+                if tj in container_types:
+                    continue
+                # Type-aware removals for nested non-container controls.
+                if ti == "text" and tj == "button":
+                    keep[i] = False
+                    continue
+                if ti == "icon" and tj in {"button", "image"}:
+                    keep[i] = False
+                    continue
+                # default: remove smaller/lower-confidence
+                if areas[j] >= areas[i] and confs[j] >= confs[i]:
+                    keep[i] = False
+                else:
+                    keep[j] = False
+            elif j_in_i:
+                ti = str(detections[i].get("type", "unknown")).strip().lower()
+                tj = str(detections[j].get("type", "unknown")).strip().lower()
+                if ti in container_types:
+                    continue
+                if tj == "text" and ti == "button":
+                    keep[j] = False
+                    continue
+                if tj == "icon" and ti in {"button", "image"}:
+                    keep[j] = False
+                    continue
+                if areas[i] >= areas[j] and confs[i] >= confs[j]:
+                    keep[j] = False
+                else:
+                    keep[i] = False
+
+    return [d for idx, d in enumerate(detections) if keep[idx]]
+
+
+def _prune_icon_inside_image(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+) -> List[Dict[str, Any]]:
+    if not detections:
+        return []
+    keep = [True] * len(detections)
+    for i, a in enumerate(detections):
+        if not keep[i]:
+            continue
+        ta = str(a.get("type", "unknown")).strip().lower()
+        ba = _item_to_bbox_norm(a)
+        area_a = _bbox_area_px(ba, image_w, image_h)
+        for j, b in enumerate(detections):
+            if i == j or not keep[j]:
+                continue
+            tb = str(b.get("type", "unknown")).strip().lower()
+            bb = _item_to_bbox_norm(b)
+            area_b = _bbox_area_px(bb, image_w, image_h)
+            # icon inside image -> drop icon
+            if ta == "icon" and tb == "image" and is_inside(ba, bb):
+                keep[i] = False
+                break
+    return [d for idx, d in enumerate(detections) if keep[idx]]
+
+
+def _filter_by_confidence(
+    detections: List[Dict[str, Any]],
+    threshold: float,
+) -> List[Dict[str, Any]]:
+    return [d for d in detections if float(d.get("confidence", 0.0)) >= threshold]
+
+
+def _filter_by_min_area_ratio(
+    detections: List[Dict[str, Any]],
+    image_w: int,
+    image_h: int,
+    min_area_ratio: float = 0.001,
+) -> List[Dict[str, Any]]:
+    min_area = float(image_w * image_h) * float(min_area_ratio)
+    out: List[Dict[str, Any]] = []
+    for d in detections:
+        b = _item_to_bbox_norm(d)
+        area = _bbox_area_px(b, image_w, image_h)
+        if area >= min_area:
+            out.append(d)
+    return out
+
+
+def _merge_vlm_discovery_into_refined(
+    refined_bboxes: List[Dict[str, Any]],
+    vlm_elements: List[UIElement],
+    image_w: int,
+    image_h: int,
+) -> List[Dict[str, Any]]:
+    """
+    Merge full-image VLM discovery with layout-based refined boxes.
+    - If IoU with an existing box is high, enrich that box metadata.
+    - Otherwise, append a new VLM-discovered box.
+    """
+    merged = list(refined_bboxes)
+    by_idx_bbox = [_item_to_bbox_norm(item) for item in merged]
+
+    for elem in vlm_elements:
+        eb = _norm_bbox(elem.bbox)
+        ex1, ey1, ex2, ey2 = eb
+        if (ex2 - ex1) <= 1e-6 or (ey2 - ey1) <= 1e-6:
+            continue
+
+        best_iou = 0.0
+        best_idx = -1
+        for i, rb in enumerate(by_idx_bbox):
+            iou = _bbox_iou_norm(eb, rb)
+            if iou > best_iou:
+                best_iou = iou
+                best_idx = i
+
+        if best_idx >= 0 and best_iou >= 0.62:
+            target = merged[best_idx]
+            target["type"] = str(elem.type or target.get("type", "unknown")).strip().lower() or target.get("type", "unknown")
+            lbl = " ".join(str(elem.label or "").split()).strip()
+            if lbl:
+                target["label"] = lbl[:160]
+            desc = str(elem.description or "").strip()
+            if desc:
+                target["description"] = desc
+            st = str(elem.state or "").strip().lower()
+            if st and st != "unknown":
+                target["state"] = st
+            target["confidence"] = max(float(target.get("confidence", 0.5)), float(elem.confidence or 0.5))
+            target["source"] = "vlm_discovery"
+            continue
+
+        dx, dy = _bbox_center_xy(eb, image_w, image_h)
+        merged.append(
+            {
+                "bbox": [float(v) for v in eb],
+                "dxdy": [
+                    float(ex1),
+                    float(ey1),
+                    float(ex2),
+                    float(max(0.0, min(1.0, 1.0 - ey2))),
+                ],
+                "dx": dx,
+                "dy": dy,
+                "screen_bbox": [0.0, 0.0, 1.0, 1.0],
+                "source": "vlm_discovery",
+                "type": str(elem.type or "unknown").strip().lower() or "unknown",
+                "label": " ".join(str(elem.label or "").split()).strip()[:160],
+                "description": str(elem.description or "").strip(),
+                "state": str(elem.state or "normal").strip().lower() or "normal",
+                "confidence": max(0.0, min(1.0, float(elem.confidence or 0.5))),
+            }
+        )
+        by_idx_bbox.append(eb)
+
+    return merged
+
+
 def _dedupe_and_rank_refined_bboxes(
     boxes: List[Dict[str, Any]],
     max_elements: int,
+    image_w: Optional[int] = None,
+    image_h: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
     if not boxes:
         return []
 
     source_weight = {
+        "ui_detector": 1.00,
+        "ocr_enriched": 0.98,
+        "vlm_enriched": 0.99,
+        "vlm_discovery": 1.02,
         "layout_form": 1.00,
         "layout_text": 0.95,
         "layout_adaptive": 0.85,
@@ -166,25 +504,44 @@ def _dedupe_and_rank_refined_bboxes(
         area = max(1e-9, (x2 - x1) * (y2 - y1))
         conf = float(item.get("confidence", 0.5))
         sw = source_weight.get(str(item.get("source", "layout")), 0.65)
-        return (0.65 * conf) + (0.35 * sw) - (0.05 * area)
+        edge_penalty = 0.0
+        if area < 0.0012 and (y1 < 0.02 or y2 > 0.98):
+            edge_penalty = 0.12
+        return (0.65 * conf) + (0.35 * sw) - (0.05 * area) - edge_penalty
 
     ranked = sorted(boxes, key=_score, reverse=True)
     kept: List[Dict[str, Any]] = []
 
+    container_types = {"card", "container", "form", "panel"}
     for candidate in ranked:
         cb = _item_to_bbox_norm(candidate)
         c_source = str(candidate.get("source", "layout"))
+        c_type = str(candidate.get("type", "unknown")).strip().lower()
+        if image_w and image_h:
+            # Minimum size filter to drop tiny noisy fragments.
+            if _bbox_area_px(cb, image_w, image_h) < 400.0:
+                continue
         skip = False
         for existing in kept:
             eb = _item_to_bbox_norm(existing)
+            e_type = str(existing.get("type", "unknown")).strip().lower()
             iou = _bbox_iou_norm(cb, eb)
             contained = _bbox_contained_ratio_norm(cb, eb)
             if iou >= 0.82:
                 skip = True
                 break
-            if contained >= 0.97 and c_source not in {"layout_text", "layout_form"}:
+            # Do not collapse children of container-like layout elements.
+            if contained >= 0.97 and c_source not in {"layout_text", "layout_form"} and e_type not in container_types:
                 skip = True
                 break
+            # explicit nested cleanup
+            if contained >= 0.97:
+                if c_type == "text" and e_type == "button":
+                    skip = True
+                    break
+                if c_type == "icon" and e_type in {"button", "image"}:
+                    skip = True
+                    break
         if not skip:
             kept.append(candidate)
         if len(kept) >= max_elements:
@@ -196,16 +553,62 @@ def _dedupe_and_rank_refined_bboxes(
 def _write_refined_debug_image(image, refined_bboxes, out_path: str) -> None:
     vis = image.copy()
     h, w = vis.shape[:2]
-    for item in refined_bboxes:
+    for idx, item in enumerate(refined_bboxes):
         x1, y1, x2, y2 = _item_to_bbox_norm(item)
+        src = str(item.get("source", "layout"))
+        etype = str(item.get("type", "unknown"))
+        conf = float(item.get("confidence", 0.0))
+        color = (0, 255, 0)
+        if src == "vlm_discovery":
+            color = (255, 170, 0)
+        elif src == "layout_text":
+            color = (0, 200, 255)
         cv2.rectangle(
             vis,
             (int(x1 * w), int(y1 * h)),
             (int(x2 * w), int(y2 * h)),
-            (0, 255, 0),
+            color,
             2,
         )
+        text = f"{idx}:{etype} {conf:.2f}"
+        tx = int(x1 * w)
+        ty = max(10, int(y1 * h) - 4)
+        cv2.putText(
+            vis,
+            text,
+            (tx, ty),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.35,
+            color,
+            1,
+            cv2.LINE_AA,
+        )
     cv2.imwrite(out_path, vis)
+
+
+def _functional_label(etype: str, dx: int, dy: int, elem_id: str) -> str:
+    human = (etype or "element").replace("_", " ").strip()
+    if human:
+        if human == "input field":
+            return "Input field"
+        if human == "button":
+            return "Button"
+        if human == "link":
+            return "Link"
+        return human.capitalize()
+    return "Element"
+
+
+def _specific_description(etype: str, label: str, dx: int, dy: int) -> str:
+    human = (etype or "element").replace("_", " ").strip()
+    if label:
+        return (
+            f"{human.capitalize()} identified near ({dx},{dy}) with label '{label}', "
+            "used in the current visible screen."
+        )
+    return (
+        f"{human.capitalize()} identified near ({dx},{dy}) in the current visible screen."
+    )
 
 
 def _finalize_elements_with_dxdy(
@@ -217,6 +620,7 @@ def _finalize_elements_with_dxdy(
     if not isinstance(elements, list):
         return payload
 
+    finalized: List[Dict[str, Any]] = []
     for elem in elements:
         if not isinstance(elem, dict):
             continue
@@ -236,12 +640,10 @@ def _finalize_elements_with_dxdy(
 
         state = str(elem.get("state", "")).strip().lower()
         if not state or state == "unknown":
-            elem["state"] = "normal"
+            state = "normal"
 
         label = " ".join(str(elem.get("label", "")).split()).strip()
-        if not label:
-            label = f"{etype.replace('_', ' ')} {str(elem.get('id', 'elem')).split('_')[-1]}"
-        elem["label"] = label
+        label = label[:160]
 
         desc = str(elem.get("description", "")).strip()
         if not desc or desc in {
@@ -249,32 +651,56 @@ def _finalize_elements_with_dxdy(
             "VLM classification failed",
             "Skipped VLM classification (Ollama call budget)",
         }:
-            elem["description"] = f"Detected {etype.replace('_', ' ')} '{label}'."
+            desc = ""
 
         bbox = elem.get("bbox")
         if ("dx" not in elem or "dy" not in elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
             try:
                 x1 = float(bbox[0])
                 y1 = float(bbox[1])
-                elem.setdefault("dx", int(round(max(0.0, x1 * image_width))))
-                elem.setdefault("dy", int(round(max(0.0, y1 * image_height))))
+                x2 = float(bbox[2])
+                y2 = float(bbox[3])
+                cx = ((x1 + x2) * 0.5) * image_width
+                cy = ((y1 + y2) * 0.5) * image_height
+                elem.setdefault("dx", int(round(max(0.0, cx))))
+                elem.setdefault("dy", int(round(max(0.0, cy))))
             except Exception:
                 pass
-        if "dx" in elem:
-            try:
-                elem["dx"] = int(round(float(elem["dx"])))
-                elem["dx"] = max(0, min(image_width - 1, elem["dx"]))
-            except Exception:
-                pass
-        if "dy" in elem:
-            try:
-                elem["dy"] = int(round(float(elem["dy"])))
-                elem["dy"] = max(0, min(image_height - 1, elem["dy"]))
-            except Exception:
-                pass
-        elem.pop("bbox", None)
-        elem.pop("dxdy", None)
-        elem.pop("screen_bbox", None)
+        try:
+            dx = int(round(float(elem.get("dx", 0)))) if str(elem.get("dx", "")).strip() else 0
+        except Exception:
+            dx = 0
+        try:
+            dy = int(round(float(elem.get("dy", 0)))) if str(elem.get("dy", "")).strip() else 0
+        except Exception:
+            dy = 0
+        dx = max(0, min(image_width - 1, dx))
+        dy = max(0, min(image_height - 1, dy))
+
+        # no coordinate-based label fallback
+
+        confidence = elem.get("confidence", 0.5)
+        try:
+            confidence = float(confidence)
+        except Exception:
+            confidence = 0.5
+        confidence = max(0.0, min(1.0, confidence))
+
+        final_source = str(elem.get("source", "")).strip() or "ui_detector"
+        finalized.append(
+            {
+                "id": str(elem.get("id", "elem_0")),
+                "type": etype,
+                "label": label,
+                "description": desc if desc else _specific_description(etype, label, dx, dy),
+                "state": state,
+                "dx": dx,
+                "dy": dy,
+                "confidence": confidence,
+                "source": final_source,
+            }
+        )
+    payload["elements"] = finalized
     return payload
 
 
@@ -293,6 +719,14 @@ def _capture_single_frame(camera_index: int = 0):
     finally:
         cap.release()
     return frame
+
+
+def _file_sha256(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def _process_single_frame_item(
@@ -382,8 +816,11 @@ def _run_pipeline_for_frame(
     if image is None:
         raise RuntimeError(f"Failed to read preprocessed frame: {preprocessed_image}")
 
-    # Coarse bboxes
-    coarse_bboxes = generate_coarse_bboxes(image, max_boxes=max(20, int(coarse_max_boxes)))
+    # Detect UI elements + screen margins.
+    coarse_bboxes, _, _ = detect_ui_elements(
+        image,
+        max_boxes=max(20, int(coarse_max_boxes)),
+    )
     coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
     with open(coarse_json_path, "w", encoding="utf-8") as f:
         json.dump({"bboxes": coarse_bboxes}, f, indent=2)
@@ -391,8 +828,9 @@ def _run_pipeline_for_frame(
     # Refine bboxes
     refiner = BBoxRefiner()
     refined_bboxes = []
+    img_h, img_w = image.shape[:2]
     for item in coarse_bboxes:
-        screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
+        screen_bbox = (0.0, 0.0, 1.0, 1.0)
         refined = refiner.refine_bbox(
             image=image,
             bbox_normalized=refiner.item_to_bbox(item),
@@ -400,21 +838,91 @@ def _run_pipeline_for_frame(
             use_grid_snap=False,
         )
         if refiner.validate_bbox(refined):
-            dx, dy = refiner.bbox_to_dxdy_pixels(refined, screen_bbox, image.shape[1], image.shape[0])
+            x1, y1, x2, y2 = refined
+            center_x = int(round(((x1 + x2) * 0.5) * img_w))
+            center_y = int(round(((y1 + y2) * 0.5) * img_h))
             refined_bboxes.append(
                 {
+                    "bbox": list(refined),
                     "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
-                    "dx": dx,
-                    "dy": dy,
-                    "screen_bbox": list(screen_bbox),
-                    "source": item.get("source", "layout"),
+                    "dx": max(0, min(img_w - 1, center_x)),
+                    "dy": max(0, min(img_h - 1, center_y)),
+                    "screen_bbox": [0.0, 0.0, 1.0, 1.0],
+                    "source": item.get("source", "ui_detector"),
+                    "type": item.get("type", "unknown"),
                     "confidence": item.get("confidence", 0.5),
                 }
             )
 
+    # Optional full-image VLM discovery pass:
+    # supplements missed boxes and enriches type/label/description before final ranking.
+    if vlm_client is not None:
+        try:
+            discovery_prompt = get_ui_discovery_prompt(
+                image_context=(
+                    "Desktop/web app screenshot. Detect every visible interactive and textual UI element. "
+                    "Use specific labels and non-generic descriptions."
+                )
+            )
+            discovery_result = vlm_client.analyze_ui(
+                session_preprocessed,
+                prompt=discovery_prompt,
+            )
+            if discovery_result and discovery_result.parse_successful and discovery_result.elements:
+                refined_bboxes = _merge_vlm_discovery_into_refined(
+                    refined_bboxes=refined_bboxes,
+                    vlm_elements=discovery_result.elements,
+                    image_w=img_w,
+                    image_h=img_h,
+                )
+        except Exception as exc:
+            logging.warning("VLM discovery merge failed: %s", exc)
+
+    # Generic cleanup pipeline:
+    # raw detections -> confidence -> min area -> nms -> merge neighbors -> contained cleanup
+    conf_thr = 0.55
+    refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
+    print("After confidence:", len(refined_bboxes))
+    refined_bboxes = _filter_by_min_area_ratio(
+        refined_bboxes,
+        image_w=img_w,
+        image_h=img_h,
+        min_area_ratio=0.0008,
+    )
+    print("After area filter:", len(refined_bboxes))
+    if len(refined_bboxes) > 50:
+        # adaptive noise control: tighten confidence threshold and rerun filtering
+        conf_thr = min(0.65, conf_thr + 0.05)
+        refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
+        refined_bboxes = _filter_by_min_area_ratio(
+            refined_bboxes,
+            image_w=img_w,
+            image_h=img_h,
+            min_area_ratio=0.0008,
+        )
+        print("After adaptive confidence:", len(refined_bboxes))
+    refined_bboxes = apply_nms(refined_bboxes, iou_threshold=0.4)
+    print("After NMS:", len(refined_bboxes))
+    refined_bboxes = merge_nearby_elements(
+        refined_bboxes,
+        image_w=img_w,
+        image_h=img_h,
+        distance_threshold=None,  # 2% diagonal default
+    )
+    print("After merge:", len(refined_bboxes))
+    refined_bboxes = _remove_contained_elements_generic(refined_bboxes, img_w, img_h)
+    print("After containment:", len(refined_bboxes))
+
+    # Dynamic cap per resolution (typical 10-40, ~30 for 640x480).
+    area_scale = (img_w * img_h) / float(640 * 480)
+    dynamic_cap = int(round(30.0 * max(0.75, min(2.0, area_scale))))
+    dynamic_cap = max(20, min(60, dynamic_cap))
+
     refined_bboxes = _dedupe_and_rank_refined_bboxes(
         refined_bboxes,
-        max_elements=max(20, int(refined_max_elements)),
+        max_elements=min(max(20, int(refined_max_elements)), dynamic_cap),
+        image_w=img_w,
+        image_h=img_h,
     )
 
     refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
@@ -584,6 +1092,23 @@ def processing_worker():
             if not session:
                 logging.warning("Dropping frame for unknown session_id=%s", session_id)
                 continue
+
+            try:
+                frame_hash = _file_sha256(frame_path)
+                last_hash = session.get("_last_frame_hash")
+                if last_hash == frame_hash:
+                    processed_queue.put(
+                        {
+                            "status": "skipped_unchanged",
+                            "session_id": session_id,
+                            "source_frame": frame_path,
+                            "processed_at": time.time(),
+                        }
+                    )
+                    continue
+                session["_last_frame_hash"] = frame_hash
+            except Exception:
+                pass
 
             _process_single_frame_item(session, session_id, frame_path)
 

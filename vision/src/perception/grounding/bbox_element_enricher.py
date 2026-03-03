@@ -19,6 +19,8 @@ from typing import Dict, Any, List, Tuple, Optional
 
 import cv2
 import numpy as np
+from src.vision.ocr import extract_text_from_region
+from src.vision.semantic_vlm import describe_ui_element
 
 
 def _to_pixel_bbox(
@@ -75,20 +77,16 @@ def _item_to_bbox(item: Dict[str, Any]) -> Tuple[float, float, float, float]:
     return (0.0, 0.0, 1.0, 1.0)
 
 
-def _bbox_to_dxdy_pixels(
+def _bbox_center_pixels(
     bbox: Tuple[float, float, float, float],
-    screen_bbox: Tuple[float, float, float, float],
     image_width: int,
     image_height: int,
 ) -> Tuple[int, int]:
-    x1, y1, _, _ = bbox
-    sx1, sy1, _, _ = screen_bbox
-    screen_x1 = sx1 * image_width
-    screen_y1 = sy1 * image_height
-    elem_x1 = x1 * image_width
-    elem_y1 = y1 * image_height
-    dx = int(round(max(0.0, elem_x1 - screen_x1)))
-    dy = int(round(max(0.0, elem_y1 - screen_y1)))
+    x1, y1, x2, y2 = bbox
+    cx = int(round(((x1 + x2) * 0.5) * image_width))
+    cy = int(round(((y1 + y2) * 0.5) * image_height))
+    dx = max(0, min(image_width - 1, cx))
+    dy = max(0, min(image_height - 1, cy))
     return dx, dy
 
 
@@ -121,6 +119,55 @@ def _prepare_crop_for_vlm(crop: np.ndarray, min_side: int = 224) -> np.ndarray:
     return cv2.resize(crop, (new_w, new_h), interpolation=cv2.INTER_CUBIC)
 
 
+def _is_interactive_type(elem_type: str) -> bool:
+    t = str(elem_type or "").strip().lower()
+    return t in {"button", "link", "input_field", "dropdown"}
+
+
+def _infer_label_from_context(
+    idx: int,
+    entries: List[Dict[str, Any]],
+    image_h: int,
+) -> str:
+    """
+    Infer missing labels from nearby text context.
+    - Prefer nearest text above/left of target.
+    - Generic nearest-neighbor text association only.
+    """
+    if idx < 0 or idx >= len(entries):
+        return ""
+
+    cur = entries[idx]
+    cx = float(cur.get("dx", 0))
+    cy = float(cur.get("dy", 0))
+    radius = max(8.0, 0.05 * float(image_h))
+
+    candidates: List[Tuple[float, str]] = []
+    for j, e in enumerate(entries):
+        if j == idx:
+            continue
+        et = str(e.get("type", "unknown")).strip().lower()
+        txt = " ".join(str(e.get("label", "")).split()).strip()
+        if not txt:
+            txt = " ".join(str(e.get("ocr_text", "")).split()).strip()
+        if not txt:
+            continue
+        # standalone text-like elements only
+        if et not in {"text", "label"}:
+            continue
+        ex = float(e.get("dx", 0))
+        ey = float(e.get("dy", 0))
+        dist = ((cx - ex) ** 2 + (cy - ey) ** 2) ** 0.5
+        if dist <= radius:
+            candidates.append((dist, txt))
+
+    if candidates:
+        candidates.sort(key=lambda x: x[0])
+        return candidates[0][1][:80]
+
+    return ""
+
+
 def _heuristic_meta(crop: np.ndarray, source: str = "") -> Dict[str, Any]:
     if crop.size == 0:
         return {
@@ -147,17 +194,16 @@ def _heuristic_meta(crop: np.ndarray, source: str = "") -> Dict[str, Any]:
     )
     text_density = float(np.sum(text_mask > 0)) / float(max(1, area))
 
-    if source == "layout_text":
+    # Generic role inference (geometry + visual texture only).
+    if text_density > 0.24 and edge_density < 0.20:
         element_type = "text"
-    elif source == "layout_form":
-        element_type = "input_field" if ar >= 2.0 else "button"
-    elif ar >= 2.2 and h <= 120:
-        element_type = "input_field" if edge_density < 0.14 else "button"
-    elif 1.5 <= ar < 2.2 and h <= 90 and edge_density >= 0.08:
+    elif area <= 2300 and 0.75 <= ar <= 1.35:
+        element_type = "icon"
+    elif ar >= 2.8 and h <= 130:
+        element_type = "input_field" if edge_density < 0.15 else "button"
+    elif 1.35 <= ar < 2.8 and h <= 120:
         element_type = "button"
-    elif text_density > 0.20 and edge_density < 0.22:
-        element_type = "text"
-    elif source == "layout_edge" and area > 120000 and edge_density < 0.10:
+    elif edge_density < 0.08 and area > 18000:
         element_type = "image"
     else:
         element_type = "unknown"
@@ -276,23 +322,27 @@ def enrich_frame(
         max_vlm_calls = len(boxes)
     vlm_calls_used = 0
 
-    elements: List[Dict[str, Any]] = []
+    staged: List[Dict[str, Any]] = []
     try:
         for idx, item in enumerate(boxes):
             bbox = _item_to_bbox(item)
-            screen_bbox = tuple(item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]))
             expanded_bbox = _expand_bbox_norm(bbox, pad_ratio=0.10)
             x1, y1, x2, y2 = _to_pixel_bbox(expanded_bbox, w, h)
             crop = image[y1:y2, x1:x2]
             crop = _prepare_crop_for_vlm(crop, min_side=224)
             heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
-            dx, dy = _bbox_to_dxdy_pixels(bbox, screen_bbox, w, h)
+            dx, dy = _bbox_center_pixels(bbox, w, h)
+            ocr_text = extract_text_from_region(image, bbox)
+            detected_type = _safe_str(item.get("type", "")).strip().lower()
+            seed_label = " ".join(_safe_str(item.get("label", "")).split()).strip()
+            seed_description = _safe_str(item.get("description", "")).strip()
+            seed_state = _safe_str(item.get("state", "")).strip().lower() or "normal"
 
             meta = {
-                "type": heuristic["type"],
-                "label": heuristic["label"],
-                "description": "No VLM available",
-                "state": heuristic["state"],
+                "type": detected_type if detected_type else heuristic["type"],
+                "label": seed_label if seed_label else (ocr_text if ocr_text else heuristic["label"]),
+                "description": seed_description,
+                "state": seed_state if seed_state != "unknown" else heuristic["state"],
                 "confidence": max(float(item.get("confidence", 0.5)), float(heuristic["confidence"])),
             }
 
@@ -307,7 +357,7 @@ def enrich_frame(
                     meta = _classify_crop_with_vlm(
                         vlm_client,
                         crop_path,
-                        type_hint=heuristic["type"],
+                        type_hint=meta["type"],
                     )
                 except Exception:
                     meta = {
@@ -322,21 +372,37 @@ def enrich_frame(
                         os.remove(crop_path)
                 vlm_calls_used += 1
             elif is_ollama_client:
-                meta["description"] = "Skipped VLM classification (Ollama call budget)"
+                meta["description"] = ""
 
-            elements.append(
+            if not _safe_str(meta.get("label")).strip() and ocr_text:
+                meta["label"] = ocr_text
+            if not _safe_str(meta.get("description")).strip():
+                meta["description"] = describe_ui_element(
+                    vlm_client=None,
+                    crop=crop,
+                    label=_safe_str(meta.get("label")),
+                    type_hint=_safe_str(meta.get("type", heuristic["type"])),
+                )
+
+            staged.append(
                 {
                     "id": f"elem_{idx}",
-                    "type": meta["type"],
-                    "label": meta["label"],
-                    "description": meta["description"],
-                    "state": meta["state"],
+                    "type": str(meta.get("type", "unknown")).strip().lower() or "unknown",
+                    "label": " ".join(str(meta.get("label", "")).split()).strip(),
+                    "description": str(meta.get("description", "")).strip(),
+                    "state": str(meta.get("state", "normal")).strip().lower() or "normal",
                     "dx": int(item.get("dx", dx)),
                     "dy": int(item.get("dy", dy)),
+                    "bbox": list(bbox),
                     "dxdy": item.get("dxdy", []),
                     "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
-                    "confidence": meta["confidence"],
-                    "source": item.get("source", "refined_bbox"),
+                    "ocr_text": ocr_text,
+                    "confidence": float(meta.get("confidence", 0.5)),
+                    "source": (
+                        item.get("source", "ui_detector")
+                        if str(item.get("source", "")).strip() == "vlm_discovery"
+                        else ("ocr_enriched" if ocr_text else item.get("source", "ui_detector"))
+                    ),
                 }
             )
     finally:
@@ -345,6 +411,45 @@ def enrich_frame(
                 vlm_client.timeout_seconds = original_timeout
             except Exception:
                 pass
+
+    # Strict OCR/context label enforcement for interactive elements.
+    elements: List[Dict[str, Any]] = []
+    for i, e in enumerate(staged):
+        et = str(e.get("type", "unknown")).strip().lower()
+        lbl = " ".join(str(e.get("label", "")).split()).strip()
+        ocr = " ".join(str(e.get("ocr_text", "")).split()).strip()
+        if _is_interactive_type(et):
+            if ocr:
+                lbl = ocr
+            elif not lbl:
+                lbl = _infer_label_from_context(i, staged, image_h=h)
+        else:
+            if not lbl and ocr:
+                lbl = ocr
+
+        # No coordinate-based fallback labels.
+        # Leave label empty when OCR/context cannot infer.
+
+        desc = str(e.get("description", "")).strip()
+        if not desc:
+            # semantic fallback only, without coordinate-style labels
+            desc = describe_ui_element(
+                vlm_client=None,
+                crop=image[
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[1]:
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[3],
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[0]:
+                    _to_pixel_bbox(tuple(e.get("bbox", [0, 0, 1, 1])), w, h)[2],
+                ],
+                label=lbl,
+                type_hint=et,
+            )
+
+        out = dict(e)
+        out["label"] = lbl
+        out["description"] = desc
+        out.pop("bbox", None)
+        elements.append(out)
 
     payload = {
         "image": str(image_path),
