@@ -27301,3 +27301,3551 @@ Instructions:
 2026-03-01 21:21:22,180 | INFO | \U0001f4ca Evaluation result: {'success': True}
 2026-03-01 21:21:22,180 | INFO | \u2705 Cycle completed.
 2026-03-01 21:21:22,180 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 461.66s
+2026-03-02 15:29:14,296 | INFO | === Agentic AI System Started ===
+2026-03-02 15:35:31,083 | INFO | === Agentic AI System Started ===
+2026-03-02 15:36:30,337 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-02 15:36:30,337 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-02 15:36:30,338 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-02 15:36:30,338 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-02 15:36:30,338 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-02 15:36:32,338 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-02 15:36:32,339 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-02 15:36:34,401 | INFO | \u2705 Vision start response status: 200
+2026-03-02 15:36:34,401 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772445994_73edcd","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772445994_73edcd"}
+2026-03-02 15:36:34,401 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-02 15:36:34,401 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-02 15:36:34,402 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-02 15:40:10,261 | INFO | \u23f1\ufe0f Vision STOP Response Time: 215.86s
+2026-03-02 15:40:10,262 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-02 15:40:10,262 | INFO | \U0001f4e6 Vision stop session_id: session_1772445994_73edcd
+2026-03-02 15:40:10,263 | INFO | \U0001f4e6 Session ID: session_1772445994_73edcd
+2026-03-02 15:40:10,263 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-02T15:39:38.749153",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772445994_73edcd\\preprocessed_frames\\frame_1772445994_206a41.jpg",
+    "frame_hash": "a4920057ec5b90b3cb57c788a457199cb889b11c24da542c341e41682187aecf",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 429,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_1",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 151,
+        "dy": 422,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 20,
+        "dy": 428,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 294,
+        "dy": 468,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 436,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_5",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 130,
+        "dy": 213,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_6",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 480,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_7",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 555,
+        "dy": 428,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_8",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 109,
+        "dy": 161,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_9",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 109,
+        "dy": 205,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_10",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 201,
+        "dy": 425,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_11",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 352,
+        "dy": 425,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_12",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 301,
+        "dy": 428,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_13",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 149,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_14",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 529,
+        "dy": 430,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_15",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 502,
+        "dy": 430,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_16",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 582,
+        "dy": 427,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_17",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 225,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_18",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 274,
+        "dy": 264,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_19",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 174,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_20",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 501,
+        "dy": 427,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_21",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 249,
+        "dy": 263,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_22",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 249,
+        "dy": 191,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_23",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 230,
+        "dy": 158,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_24",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 240,
+        "dy": 189,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_25",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 239,
+        "dy": 260,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_26",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 329,
+        "dy": 314,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_27",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 234,
+        "dy": 230,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_28",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 268,
+        "dy": 192,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_29",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 269,
+        "dy": 264,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_30",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 227,
+        "dy": 228,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_31",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 228,
+        "dy": 157,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_32",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 267,
+        "dy": 262,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_33",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 328,
+        "dy": 113,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_34",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 192,
+        "dy": 338,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_35",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 195,
+        "dy": 293,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_36",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 196,
+        "dy": 170,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_37",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 196,
+        "dy": 240,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_38",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 416,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_39",
+        "type": "text",
+        "label": "",
+        "description": "No VLM available",
+        "state": "normal",
+        "dx": 0,
+        "dy": 411,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_40",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 453,
+        "dy": 266,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_41",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 319,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_42",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 1,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_43",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 293,
+        "dy": 467,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-02T15:40:10.244261",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772445994_73edcd\\preprocessed_frames\\frame_1772445995_c10038.jpg",
+    "frame_hash": "4b412deb9938fabc999b1d3983eaea7b1faf28c2d230553dbc3fe8395921539a",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 429,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 20,
+        "dy": 429,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_2",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 151,
+        "dy": 422,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_3",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 92,
+        "dy": 183,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 392,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_5",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 134,
+        "dy": 52,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_6",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 555,
+        "dy": 428,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_7",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 479,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_8",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 151,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_9",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 308,
+        "dy": 264,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_10",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 530,
+        "dy": 430,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_11",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 583,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_12",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 201,
+        "dy": 425,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_13",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 352,
+        "dy": 425,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_14",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 328,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_15",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 428,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_16",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 301,
+        "dy": 427,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_17",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 276,
+        "dy": 425,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_18",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 149,
+        "dy": 428,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_19",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 528,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_20",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 582,
+        "dy": 427,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_21",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 200,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_22",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 175,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_23",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 225,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_24",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 274,
+        "dy": 264,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_25",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 501,
+        "dy": 429,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_26",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 249,
+        "dy": 191,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_27",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 272,
+        "dy": 264,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_28",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 235,
+        "dy": 231,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_29",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 240,
+        "dy": 189,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_30",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 239,
+        "dy": 260,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_31",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 329,
+        "dy": 314,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_32",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 268,
+        "dy": 192,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_33",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 227,
+        "dy": 228,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_34",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 227,
+        "dy": 157,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_35",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 267,
+        "dy": 262,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_36",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 253,
+        "dy": 246,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_37",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 195,
+        "dy": 293,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_38",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 197,
+        "dy": 170,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_39",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 195,
+        "dy": 240,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_40",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 416,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_41",
+        "type": "text",
+        "label": "",
+        "description": "No VLM available",
+        "state": "normal",
+        "dx": 0,
+        "dy": 413,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_42",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 411,
+        "dy": 251,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_43",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 314,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_44",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 192,
+        "dy": 250,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_45",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 269,
+        "dy": 465,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_46",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 108,
+        "dy": 168,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_47",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 41,
+        "dy": 140,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_48",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 629,
+        "dy": 121,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_49",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 201,
+        "dy": 462,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_50",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 433,
+        "dy": 456,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_51",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 89,
+        "dy": 205,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_52",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 337,
+        "dy": 468,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_53",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 10,
+        "dy": 145,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_54",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 21,
+        "dy": 205,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_55",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 77,
+        "dy": 134,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_56",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 128,
+        "dy": 237,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_57",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 5,
+        "dy": 157,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_58",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 2,
+        "dy": 167,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_59",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 20,
+        "dy": 191,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_60",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 70,
+        "dy": 154,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_61",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 632,
+        "dy": 139,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_62",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 2,
+        "dy": 219,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_63",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 23,
+        "dy": 313,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_64",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 35,
+        "dy": 157,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_65",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 67,
+        "dy": 244,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_66",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 299,
+        "dy": 465,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_67",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 10,
+        "dy": 129,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_68",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 278,
+        "dy": 466,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_69",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 113,
+        "dy": 264,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_70",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 572,
+        "dy": 156,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_71",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 54,
+        "dy": 156,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_72",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 620,
+        "dy": 143,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_73",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 97,
+        "dy": 165,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_74",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 603,
+        "dy": 158,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_75",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 73,
+        "dy": 193,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_76",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 0,
+        "dy": 464,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_77",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 584,
+        "dy": 156,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_78",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 616,
+        "dy": 156,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_79",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 56,
+        "dy": 178,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_80",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 79,
+        "dy": 268,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_81",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 88,
+        "dy": 218,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_82",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 11,
+        "dy": 196,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_83",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 43,
+        "dy": 166,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_84",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 96,
+        "dy": 265,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_85",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 77,
+        "dy": 242,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_86",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 65,
+        "dy": 166,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_87",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 119,
+        "dy": 204,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_88",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 97,
+        "dy": 202,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_89",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 126,
+        "dy": 253,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_90",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 13,
+        "dy": 168,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_91",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 90,
+        "dy": 242,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_92",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 121,
+        "dy": 222,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_93",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 30,
+        "dy": 193,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_94",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 83,
+        "dy": 228,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_95",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 118,
+        "dy": 187,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_96",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 27,
+        "dy": 177,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_97",
+        "type": "unknown",
+        "label": "",
+        "description": "No VLM available",
+        "state": "unknown",
+        "dx": 74,
+        "dy": 179,
+        "confidence": 0.54,
+        "source": "layout_adaptive"
+      }
+    ],
+    "delta": {
+      "added": [
+        {
+          "id": "elem_59",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 20,
+          "dy": 191,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_89",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 126,
+          "dy": 253,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_96",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 27,
+          "dy": 177,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_83",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 43,
+          "dy": 166,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_81",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 88,
+          "dy": 218,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_61",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 632,
+          "dy": 139,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_64",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 35,
+          "dy": 157,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_71",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 54,
+          "dy": 156,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_60",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 70,
+          "dy": 154,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_53",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 10,
+          "dy": 145,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_57",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 5,
+          "dy": 157,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_58",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 2,
+          "dy": 167,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_52",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 337,
+          "dy": 468,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_55",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 77,
+          "dy": 134,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_65",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 67,
+          "dy": 244,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_84",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 96,
+          "dy": 265,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_50",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 433,
+          "dy": 456,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_80",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 79,
+          "dy": 268,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_86",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 65,
+          "dy": 166,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_56",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 128,
+          "dy": 237,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_72",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 620,
+          "dy": 143,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_94",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 83,
+          "dy": 228,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_66",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 299,
+          "dy": 465,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_67",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 10,
+          "dy": 129,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_68",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 278,
+          "dy": 466,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_88",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 97,
+          "dy": 202,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_95",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 118,
+          "dy": 187,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_79",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 56,
+          "dy": 178,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_69",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 113,
+          "dy": 264,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_44",
+          "type": "text",
+          "label": "",
+          "description": "",
+          "state": "normal",
+          "dx": 192,
+          "dy": 250,
+          "confidence": 0.6,
+          "source": "layout_text"
+        },
+        {
+          "id": "elem_45",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 269,
+          "dy": 465,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_93",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 30,
+          "dy": 193,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_62",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 2,
+          "dy": 219,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_48",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 629,
+          "dy": 121,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_82",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 11,
+          "dy": 196,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_54",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 21,
+          "dy": 205,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_46",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 108,
+          "dy": 168,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_91",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 90,
+          "dy": 242,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_87",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 119,
+          "dy": 204,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_76",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 0,
+          "dy": 464,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_70",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 572,
+          "dy": 156,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_63",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 23,
+          "dy": 313,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_85",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 77,
+          "dy": 242,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_49",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 201,
+          "dy": 462,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_75",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 73,
+          "dy": 193,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_97",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 74,
+          "dy": 179,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_47",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 41,
+          "dy": 140,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_77",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 584,
+          "dy": 156,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_90",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 13,
+          "dy": 168,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_74",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 603,
+          "dy": 158,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_73",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 97,
+          "dy": 165,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_92",
+          "type": "unknown",
+          "label": "",
+          "description": "No VLM available",
+          "state": "unknown",
+          "dx": 121,
+          "dy": 222,
+          "confidence": 0.54,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_78",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 616,
+          "dy": 156,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        },
+        {
+          "id": "elem_51",
+          "type": "unknown",
+          "label": "",
+          "description": "",
+          "state": "unknown",
+          "dx": 89,
+          "dy": 205,
+          "confidence": 0.1,
+          "source": "layout_adaptive"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": "elem_3",
+          "before": {
+            "type": "input_field",
+            "label": "",
+            "state": "normal"
+          },
+          "after": {
+            "type": "button",
+            "label": "",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_5",
+          "before": {
+            "type": "text",
+            "label": "",
+            "state": "normal"
+          },
+          "after": {
+            "type": "button",
+            "label": "",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_43",
+          "before": {
+            "type": "unknown",
+            "label": "",
+            "state": "unknown"
+          },
+          "after": {
+            "type": "text",
+            "label": "",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_1",
+          "before": {
+            "type": "button",
+            "label": "",
+            "state": "normal"
+          },
+          "after": {
+            "type": "input_field",
+            "label": "",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_2",
+          "before": {
+            "type": "input_field",
+            "label": "",
+            "state": "normal"
+          },
+          "after": {
+            "type": "button",
+            "label": "",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_42",
+          "before": {
+            "type": "button",
+            "label": "",
+            "state": "normal"
+          },
+          "after": {
+            "type": "text",
+            "label": "",
+            "state": "normal"
+          }
+        }
+      ]
+    }
+  }
+]
+2026-03-02 15:40:10,265 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 219.93s
+2026-03-02 15:40:10,266 | INFO | \U0001f9e0 Planning action...
+2026-03-02 15:40:10,266 | INFO | \U0001f9e0 Planner started...
+2026-03-02 15:40:10,266 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-02 15:44:38,395 | INFO | \u23f1\ufe0f LLM Response Time: 268.13s
+2026-03-02 15:44:38,395 | INFO | \u2705 HID plan generated successfully
+2026-03-02 15:44:38,395 | INFO | \U0001f3af Total Commands: 8
+2026-03-02 15:44:38,395 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.",
+  "validation": {
+    "is_valid": true,
+    "confidence": 1.0,
+    "reason": "Username field and Password field are present, along with a Login button.",
+    "missing_elements": [],
+    "suggested_actions": []
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click username field"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'tharushi' in username field"
+    },
+    {
+      "step": 3,
+      "action": "click",
+      "description": "Click password field"
+    },
+    {
+      "step": 4,
+      "action": "type_text",
+      "description": "Type '123' in password field"
+    },
+    {
+      "step": 5,
+      "action": "click",
+      "description": "Click unlabeled button"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "username field",
+      "x": 0,
+      "y": 429
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "username field",
+      "text": "tharushi"
+    },
+    {
+      "step": 3,
+      "action": "click",
+      "target": "password field",
+      "x": 0,
+      "y": 392
+    },
+    {
+      "step": 4,
+      "action": "type_text",
+      "target": "password field",
+      "text": "123"
+    },
+    {
+      "step": 5,
+      "action": "click",
+      "target": "unlabeled button",
+      "x": 151,
+      "y": 422
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "8ebb96de-7680-43f6-9231-837f816d2ee4"
+      },
+      "dx": 0,
+      "dy": 429
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "771b92d6-e638-48fe-a3dc-da6a73a333bb"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "b6d42b76-5de2-4565-9a25-24ebe8598b45"
+      },
+      "text": "tharushi"
+    },
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "569f9193-41bd-42cb-970b-42c16b6fc4ff"
+      },
+      "dx": 0,
+      "dy": 392
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "b14b57ea-1cf9-4154-a586-653555d1782b"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "2102d02f-2af3-4e3b-89f3-397d0eca046e"
+      },
+      "text": "123"
+    },
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "3da8f017-3c02-468f-a194-be936a5128a3"
+      },
+      "dx": 151,
+      "dy": 422
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "359f169f-8869-41c3-9ee7-ac4f17cba364"
+      },
+      "button": "left"
+    }
+  ],
+  "total_commands": 8,
+  "timestamp": "2026-03-02T10:14:38.388524",
+  "execution_time": "265.72s"
+}
+2026-03-02 15:44:38,395 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-02 15:44:38,395 | INFO | \U0001f680 Starting HID execution process...
+2026-03-02 15:44:38,396 | INFO | \U0001f5b1\ufe0f Executing command 1/8: mouse_move
+2026-03-02 15:44:39,047 | INFO | \u2705 HID response: {'success': True, 'executionTime': '593ms'}
+2026-03-02 15:44:39,248 | INFO | \U0001f5b1\ufe0f Executing command 2/8: mouse_click
+2026-03-02 15:44:39,273 | INFO | \u2705 HID response: {'success': True, 'executionTime': '18ms'}
+2026-03-02 15:44:39,473 | INFO | \U0001f5b1\ufe0f Executing command 3/8: type_text
+2026-03-02 15:44:39,501 | INFO | \u2705 HID response: {'success': True, 'executionTime': '22ms'}
+2026-03-02 15:44:39,702 | INFO | \U0001f5b1\ufe0f Executing command 4/8: mouse_move
+2026-03-02 15:44:40,325 | INFO | \u2705 HID response: {'success': True, 'executionTime': '618ms'}
+2026-03-02 15:44:40,526 | INFO | \U0001f5b1\ufe0f Executing command 5/8: mouse_click
+2026-03-02 15:44:40,550 | INFO | \u2705 HID response: {'success': True, 'executionTime': '18ms'}
+2026-03-02 15:44:40,750 | INFO | \U0001f5b1\ufe0f Executing command 6/8: type_text
+2026-03-02 15:44:40,769 | INFO | \u2705 HID response: {'success': True, 'executionTime': '11ms'}
+2026-03-02 15:44:40,970 | INFO | \U0001f5b1\ufe0f Executing command 7/8: mouse_move
+2026-03-02 15:44:41,559 | INFO | \u2705 HID response: {'success': True, 'executionTime': '583ms'}
+2026-03-02 15:44:41,760 | INFO | \U0001f5b1\ufe0f Executing command 8/8: mouse_click
+2026-03-02 15:44:41,783 | INFO | \u2705 HID response: {'success': True, 'executionTime': '17ms'}
+2026-03-02 15:44:41,983 | INFO | \U0001f389 All HID commands executed successfully.
+2026-03-02 15:44:41,984 | INFO | \U0001f4ca Evaluating result...
+2026-03-02 15:44:41,984 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-03-02 15:44:41,984 | INFO | \u2705 Cycle completed.
+2026-03-02 15:44:41,984 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 491.65s
+2026-03-02 15:53:58,355 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-02 15:53:58,355 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-02 15:53:58,355 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-02 15:53:58,355 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-02 15:53:58,355 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-02 15:54:00,356 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-02 15:54:00,356 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-02 15:54:02,484 | INFO | \u2705 Vision start response status: 200
+2026-03-02 15:54:02,484 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772447042_019cb8","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772447042_019cb8"}
+2026-03-02 15:54:02,484 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-02 15:54:02,484 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-02 15:54:02,484 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-02 15:57:06,339 | INFO | \u23f1\ufe0f Vision STOP Response Time: 183.85s
+2026-03-02 15:57:06,340 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-02 15:57:06,340 | INFO | \U0001f4e6 Vision stop session_id: session_1772447042_019cb8
+2026-03-02 15:57:06,340 | INFO | \U0001f4e6 Session ID: session_1772447042_019cb8
+2026-03-02 15:57:06,341 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-02T15:57:06.298874",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772447042_019cb8\\preprocessed_frames\\frame_1772447042_bfbdc6.jpg",
+    "frame_hash": "85ca2679a97eaeedbacc1491c5097885a590fb0979a6f604a915db8400185de2",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 53,
+        "dy": 155,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 389,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 417,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_3",
+        "type": "button",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 132,
+        "dy": 47,
+        "confidence": 0.62,
+        "source": "layout_form"
+      },
+      {
+        "id": "elem_4",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 482,
+        "dy": 426,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_5",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 202,
+        "dy": 423,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_6",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 557,
+        "dy": 426,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_7",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 338,
+        "dy": 312,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_8",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 277,
+        "dy": 423,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_9",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 246,
+        "dy": 228,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_10",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 301,
+        "dy": 261,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_11",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 150,
+        "dy": 426,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_12",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 583,
+        "dy": 425,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_13",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 503,
+        "dy": 427,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_14",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 258,
+        "dy": 188,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_15",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 275,
+        "dy": 261,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_16",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 200,
+        "dy": 422,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_17",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 149,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_18",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 256,
+        "dy": 228,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_19",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 503,
+        "dy": 424,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_20",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 250,
+        "dy": 259,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_21",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 337,
+        "dy": 311,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_22",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 239,
+        "dy": 257,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_23",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 330,
+        "dy": 311,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_24",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 269,
+        "dy": 260,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_25",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 268,
+        "dy": 188,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_26",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 239,
+        "dy": 183,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_27",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 228,
+        "dy": 153,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_28",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 227,
+        "dy": 224,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_29",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 268,
+        "dy": 258,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_30",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 329,
+        "dy": 109,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_31",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 414,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_32",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 195,
+        "dy": 166,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_33",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 195,
+        "dy": 238,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_34",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 194,
+        "dy": 287,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_35",
+        "type": "text",
+        "label": "",
+        "description": "No VLM available",
+        "state": "normal",
+        "dx": 0,
+        "dy": 411,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_36",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 0,
+        "dy": 299,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_37",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 390,
+        "dy": 283,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_38",
+        "type": "text",
+        "label": "",
+        "description": "",
+        "state": "normal",
+        "dx": 159,
+        "dy": 265,
+        "confidence": 0.6,
+        "source": "layout_text"
+      },
+      {
+        "id": "elem_39",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 32,
+        "dy": 200,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_40",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 619,
+        "dy": 188,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_41",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 18,
+        "dy": 252,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_42",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 23,
+        "dy": 161,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_43",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 610,
+        "dy": 148,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_44",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 404,
+        "dy": 461,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_45",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 32,
+        "dy": 459,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_46",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 78,
+        "dy": 457,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_47",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 130,
+        "dy": 230,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_48",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 68,
+        "dy": 205,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_49",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 624,
+        "dy": 108,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_50",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 573,
+        "dy": 277,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_51",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 54,
+        "dy": 252,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_52",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 73,
+        "dy": 248,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_53",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 79,
+        "dy": 230,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_54",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 610,
+        "dy": 203,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_55",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 108,
+        "dy": 238,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_56",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 591,
+        "dy": 212,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_57",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 415,
+        "dy": 461,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_58",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 130,
+        "dy": 250,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_59",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 619,
+        "dy": 202,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_60",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 8,
+        "dy": 147,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_61",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 254,
+        "dy": 462,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_62",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 213,
+        "dy": 464,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_63",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 37,
+        "dy": 150,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_64",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 586,
+        "dy": 170,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_65",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 61,
+        "dy": 453,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_66",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 603,
+        "dy": 213,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_67",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 124,
+        "dy": 266,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_68",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 382,
+        "dy": 460,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_69",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 0,
+        "dy": 474,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_70",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 285,
+        "dy": 455,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_71",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 46,
+        "dy": 474,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_72",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 268,
+        "dy": 462,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_73",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 83,
+        "dy": 238,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_74",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 332,
+        "dy": 458,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_75",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 0,
+        "dy": 251,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_76",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 3,
+        "dy": 463,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_77",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 293,
+        "dy": 460,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_78",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 67,
+        "dy": 473,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_79",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 159,
+        "dy": 456,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_80",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 217,
+        "dy": 44,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      },
+      {
+        "id": "elem_81",
+        "type": "unknown",
+        "label": "",
+        "description": "",
+        "state": "unknown",
+        "dx": 113,
+        "dy": 468,
+        "confidence": 0.1,
+        "source": "layout_adaptive"
+      }
+    ]
+  }
+]
+2026-03-02 15:57:06,342 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 187.99s
+2026-03-02 15:57:06,342 | INFO | \U0001f9e0 Planning action...
+2026-03-02 15:57:06,342 | INFO | \U0001f9e0 Planner started...
+2026-03-02 15:57:06,342 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-02 16:01:58,423 | INFO | \u23f1\ufe0f LLM Response Time: 292.08s
+2026-03-02 16:01:58,424 | INFO | \u2705 HID plan generated successfully
+2026-03-02 16:01:58,424 | INFO | \U0001f3af Total Commands: 8
+2026-03-02 16:01:58,424 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.",
+  "validation": {
+    "is_valid": true,
+    "confidence": 0.9,
+    "reason": "There are two unlabeled input fields and a 'Login' button, which can be presumed as Username field, Password field, and Login button respectively.",
+    "missing_elements": [],
+    "suggested_actions": []
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click username field"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'tharushi' in username field"
+    },
+    {
+      "step": 3,
+      "action": "click",
+      "description": "Click password field"
+    },
+    {
+      "step": 4,
+      "action": "type_text",
+      "description": "Type '123' in password field"
+    },
+    {
+      "step": 5,
+      "action": "click",
+      "description": "Click unlabeled button"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "username field",
+      "x": 86,
+      "y": 389
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "username field",
+      "text": "tharushi"
+    },
+    {
+      "step": 3,
+      "action": "click",
+      "target": "password field",
+      "x": 86,
+      "y": 417
+    },
+    {
+      "step": 4,
+      "action": "type_text",
+      "target": "password field",
+      "text": "123"
+    },
+    {
+      "step": 5,
+      "action": "click",
+      "target": "unlabeled button",
+      "x": 132,
+      "y": 47
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "35e1572e-e375-4caa-bdde-3f673733f55d"
+      },
+      "dx": 86,
+      "dy": 389
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "7ec633ba-f5c4-4921-b3d6-3a509827d9a3"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "65b91b05-ceee-4919-9730-5c521328afc4"
+      },
+      "text": "tharushi"
+    },
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "af304737-825e-4dae-90a9-b2bfdd7d8296"
+      },
+      "dx": 86,
+      "dy": 417
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "71f7991a-b60a-4781-b98f-ff6e17281427"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "c4a0af98-79b4-4647-bbff-d2d4c3ec1309"
+      },
+      "text": "123"
+    },
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "b0194fd1-6d77-497f-b4cc-436015c78231"
+      },
+      "dx": 132,
+      "dy": 47
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "2dd8278b-0768-4f21-9ebb-9fffd84bd348"
+      },
+      "button": "left"
+    }
+  ],
+  "total_commands": 8,
+  "timestamp": "2026-03-02T10:31:58.418282",
+  "execution_time": "290.04s"
+}
+2026-03-02 16:01:58,425 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-02 16:01:58,425 | INFO | \U0001f680 Starting HID execution process...
+2026-03-02 16:01:58,425 | INFO | \U0001f5b1\ufe0f Executing command 1/8: mouse_move
+2026-03-02 16:01:59,019 | INFO | \u2705 HID response: {'success': True, 'executionTime': '586ms'}
+2026-03-02 16:01:59,220 | INFO | \U0001f5b1\ufe0f Executing command 2/8: mouse_click
+2026-03-02 16:01:59,242 | INFO | \u2705 HID response: {'success': True, 'executionTime': '16ms'}
+2026-03-02 16:01:59,443 | INFO | \U0001f5b1\ufe0f Executing command 3/8: type_text
+2026-03-02 16:01:59,469 | INFO | \u2705 HID response: {'success': True, 'executionTime': '21ms'}
+2026-03-02 16:01:59,669 | INFO | \U0001f5b1\ufe0f Executing command 4/8: mouse_move
+2026-03-02 16:02:00,224 | INFO | \u2705 HID response: {'success': True, 'executionTime': '549ms'}
+2026-03-02 16:02:00,425 | INFO | \U0001f5b1\ufe0f Executing command 5/8: mouse_click
+2026-03-02 16:02:00,445 | INFO | \u2705 HID response: {'success': True, 'executionTime': '15ms'}
+2026-03-02 16:02:00,647 | INFO | \U0001f5b1\ufe0f Executing command 6/8: type_text
+2026-03-02 16:02:00,664 | INFO | \u2705 HID response: {'success': True, 'executionTime': '11ms'}
+2026-03-02 16:02:00,865 | INFO | \U0001f5b1\ufe0f Executing command 7/8: mouse_move
+2026-03-02 16:02:01,476 | INFO | \u2705 HID response: {'success': True, 'executionTime': '605ms'}
+2026-03-02 16:02:01,676 | INFO | \U0001f5b1\ufe0f Executing command 8/8: mouse_click
+2026-03-02 16:02:01,697 | INFO | \u2705 HID response: {'success': True, 'executionTime': '15ms'}
+2026-03-02 16:02:01,898 | INFO | \U0001f389 All HID commands executed successfully.
+2026-03-02 16:02:01,899 | INFO | \U0001f4ca Evaluating result...
+2026-03-02 16:02:01,899 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-03-02 16:02:01,899 | INFO | \u2705 Cycle completed.
+2026-03-02 16:02:01,899 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 483.54s
+2026-03-02 17:47:43,200 | INFO | === Agentic AI System Started ===
+2026-03-02 17:56:47,460 | INFO | === Agentic AI System Started ===
+2026-03-02 17:58:21,032 | INFO | === Agentic AI System Started ===
+2026-03-03 11:25:53,377 | INFO | === Agentic AI System Started ===
+2026-03-03 11:28:10,108 | INFO | === Agentic AI System Started ===
