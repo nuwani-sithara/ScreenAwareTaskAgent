@@ -30849,3 +30849,4140 @@ Instructions:
 2026-03-02 17:58:21,032 | INFO | === Agentic AI System Started ===
 2026-03-03 11:25:53,377 | INFO | === Agentic AI System Started ===
 2026-03-03 11:28:10,108 | INFO | === Agentic AI System Started ===
+2026-03-03 11:32:30,411 | INFO | === Agentic AI System Started ===
+2026-03-03 11:32:58,447 | INFO | === Agentic AI System Started ===
+2026-03-03 11:33:45,717 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-03 11:33:45,717 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-03 11:33:45,717 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 11:33:45,717 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 11:33:45,717 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 11:33:47,718 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 11:33:47,718 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 11:33:49,787 | INFO | \u2705 Vision start response status: 200
+2026-03-03 11:33:49,788 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772517829_fbbd5e","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772517829_fbbd5e"}
+2026-03-03 11:33:49,788 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 11:33:49,788 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 11:33:49,788 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 11:35:01,488 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-03 11:35:01,488 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-03 11:35:01,488 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 11:35:01,488 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 11:35:01,488 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 11:35:03,490 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 11:35:03,490 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 11:35:05,860 | INFO | \u2705 Vision start response status: 200
+2026-03-03 11:35:05,861 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772517905_f38c4c","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772517905_f38c4c"}
+2026-03-03 11:35:05,861 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 11:35:05,861 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 11:35:05,861 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 11:38:51,849 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Read timed out. (read timeout=300)
+2026-03-03 11:38:51,849 | INFO | \U0001f4e6 Session ID: None
+2026-03-03 11:38:51,850 | INFO | \U0001f5bc Screens:
+[]
+2026-03-03 11:38:51,856 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 306.14s
+2026-03-03 11:38:51,856 | INFO | \U0001f9e0 Planning action...
+2026-03-03 11:38:51,856 | INFO | \U0001f9e0 Planner started...
+2026-03-03 11:38:51,856 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 11:40:08,061 | ERROR | \u274c Failed to stop vision service: HTTPConnectionPool(host='localhost', port=8001): Read timed out. (read timeout=300)
+2026-03-03 11:40:08,061 | INFO | \U0001f4e6 Session ID: None
+2026-03-03 11:40:08,062 | INFO | \U0001f5bc Screens:
+[]
+2026-03-03 11:40:08,062 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 306.57s
+2026-03-03 11:40:08,062 | INFO | \U0001f9e0 Planning action...
+2026-03-03 11:40:08,062 | INFO | \U0001f9e0 Planner started...
+2026-03-03 11:40:08,062 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 11:42:25,233 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-03 11:42:25,234 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-03 11:42:25,234 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 11:42:25,234 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 11:42:25,234 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 11:42:27,235 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 11:42:27,235 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 11:42:28,031 | INFO | \u23f1\ufe0f LLM Response Time: 216.18s
+2026-03-03 11:42:28,032 | ERROR | \u274c Failed to contact LLM service: 500 Server Error: Internal Server Error for url: http://localhost:8002/llm/generate_hid
+2026-03-03 11:42:28,032 | INFO | Generated Action Plan:
+{
+  "status": "llm_unreachable",
+  "error": "500 Server Error: Internal Server Error for url: http://localhost:8002/llm/generate_hid"
+}
+2026-03-03 11:42:28,032 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 11:42:28,032 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 11:42:28,033 | WARNING | \u26a0\ufe0f No HID commands found.
+2026-03-03 11:42:28,033 | INFO | \u23f1\ufe0f LLM Response Time: 139.97s
+2026-03-03 11:42:28,033 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 11:42:28,033 | ERROR | \u274c Failed to contact LLM service: 500 Server Error: Internal Server Error for url: http://localhost:8002/llm/generate_hid
+2026-03-03 11:42:28,033 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 11:42:28,034 | INFO | \u2705 Cycle completed.
+2026-03-03 11:42:28,034 | INFO | Generated Action Plan:
+{
+  "status": "llm_unreachable",
+  "error": "500 Server Error: Internal Server Error for url: http://localhost:8002/llm/generate_hid"
+}
+2026-03-03 11:42:28,034 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 522.32s
+2026-03-03 11:42:28,034 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 11:42:28,034 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 11:42:28,034 | WARNING | \u26a0\ufe0f No HID commands found.
+2026-03-03 11:42:28,034 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 11:42:28,034 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 11:42:28,034 | INFO | \u2705 Cycle completed.
+2026-03-03 11:42:28,034 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 446.55s
+2026-03-03 11:42:29,295 | INFO | \u2705 Vision start response status: 200
+2026-03-03 11:42:29,295 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772518349_59aa6f","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772518349_59aa6f"}
+2026-03-03 11:42:29,295 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 11:42:29,295 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 11:42:29,295 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 11:45:15,620 | ERROR | \u274c Failed to stop vision service: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2026-03-03 11:45:15,620 | INFO | \U0001f4e6 Session ID: None
+2026-03-03 11:45:15,620 | INFO | \U0001f5bc Screens:
+[]
+2026-03-03 11:45:15,621 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 170.39s
+2026-03-03 11:45:15,621 | INFO | \U0001f9e0 Planning action...
+2026-03-03 11:45:15,621 | INFO | \U0001f9e0 Planner started...
+2026-03-03 11:45:15,621 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 11:48:28,641 | INFO | === Agentic AI System Started ===
+2026-03-03 11:48:39,117 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-03 11:48:39,117 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-03 11:48:39,118 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 11:48:39,118 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 11:48:39,118 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 11:48:41,119 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 11:48:41,119 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 11:48:43,446 | INFO | \u2705 Vision start response status: 200
+2026-03-03 11:48:43,447 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772518723_063224","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772518723_063224"}
+2026-03-03 11:48:43,447 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 11:48:43,447 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 11:48:43,447 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 11:54:19,680 | INFO | \u23f1\ufe0f Vision STOP Response Time: 336.23s
+2026-03-03 11:54:19,681 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 11:54:19,681 | INFO | \U0001f4e6 Vision stop session_id: session_1772518723_063224
+2026-03-03 11:54:19,681 | INFO | \U0001f4e6 Session ID: session_1772518723_063224
+2026-03-03 11:54:19,681 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T11:53:51.944472",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772518723_063224\\preprocessed_frames\\frame_1772518724_2aeafc.jpg",
+    "frame_hash": "d7d6ef052a6c6dc6e78d9694a7ec2a0a75e7ba0d2aa3c4615c562158961f8ddc",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 292,
+        "dy": 418,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 316,
+        "dy": 253,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 276,
+        "dy": 222,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 274,
+        "dy": 290,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 326,
+        "dy": 271,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 260,
+        "dy": 409,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 292,
+        "dy": 250,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 282,
+        "dy": 170,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 368,
+        "dy": 321,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 368,
+        "dy": 374,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 414,
+        "dy": 202,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 428,
+        "dy": 419,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 502,
+        "dy": 428,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 350,
+        "dy": 286,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-03T11:54:19.668287",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772518723_063224\\preprocessed_frames\\frame_1772518725_055f32.jpg",
+    "frame_hash": "e82f57c55e11554cf5b920096100a4197098600d8f5005e4b2a8c00866482eaf",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 440,
+        "dy": 412,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 274,
+        "dy": 222,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 490,
+        "dy": 414,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 276,
+        "dy": 290,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 256,
+        "dy": 400,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 278,
+        "dy": 169,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 372,
+        "dy": 176,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 368,
+        "dy": 321,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 366,
+        "dy": 252,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 370,
+        "dy": 376,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 459,
+        "dy": 194,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 235,
+        "dy": 118,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      }
+    ],
+    "delta": {
+      "added": [],
+      "removed": [
+        {
+          "id": "elem_12",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 502,
+          "dy": 428,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_13",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 350,
+          "dy": 286,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        }
+      ],
+      "changed": [
+        {
+          "id": "elem_0",
+          "before": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          },
+          "after": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          }
+        }
+      ]
+    }
+  }
+]
+2026-03-03 11:54:19,682 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 340.56s
+2026-03-03 11:54:19,682 | INFO | \U0001f9e0 Planning action...
+2026-03-03 11:54:19,682 | INFO | \U0001f9e0 Planner started...
+2026-03-03 11:54:19,682 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 11:58:47,679 | INFO | \u23f1\ufe0f LLM Response Time: 268.00s
+2026-03-03 11:58:47,679 | ERROR | \u274c Failed to contact LLM service: 500 Server Error: Internal Server Error for url: http://localhost:8002/llm/generate_hid
+2026-03-03 11:58:47,679 | INFO | Generated Action Plan:
+{
+  "status": "llm_unreachable",
+  "error": "500 Server Error: Internal Server Error for url: http://localhost:8002/llm/generate_hid"
+}
+2026-03-03 11:58:47,679 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 11:58:47,679 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 11:58:47,679 | WARNING | \u26a0\ufe0f No HID commands found.
+2026-03-03 11:58:47,679 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 11:58:47,679 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 11:58:47,679 | INFO | \u2705 Cycle completed.
+2026-03-03 11:58:47,680 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 608.56s
+2026-03-03 12:06:24,423 | INFO | \U0001f4dd Received Task From Frontend: please type "hi" in notepad
+2026-03-03 12:06:24,423 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi" in notepad'
+2026-03-03 12:06:24,423 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 12:06:24,423 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 12:06:24,423 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 12:06:26,424 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 12:06:26,424 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 12:06:28,482 | INFO | \u2705 Vision start response status: 200
+2026-03-03 12:06:28,482 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772519788_236e81","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772519788_236e81"}
+2026-03-03 12:06:28,482 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 12:06:28,482 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 12:06:28,482 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 12:12:04,182 | INFO | \u23f1\ufe0f Vision STOP Response Time: 335.70s
+2026-03-03 12:12:04,182 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 12:12:04,182 | INFO | \U0001f4e6 Vision stop session_id: session_1772519788_236e81
+2026-03-03 12:12:04,183 | INFO | \U0001f4e6 Session ID: session_1772519788_236e81
+2026-03-03 12:12:04,183 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T12:11:32.054285",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772519788_236e81\\preprocessed_frames\\frame_1772519788_eba6a6.jpg",
+    "frame_hash": "64d203a163fc31a1486be05cf7b3e5696b93aab02869d96586f2a2090e68b40c",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 18,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 243,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-03T12:12:04.174498",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772519788_236e81\\preprocessed_frames\\frame_1772519789_b70c89.jpg",
+    "frame_hash": "795e2435dadab30dca208f5f424db0798737f30af103f419f655611a67a11880",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 106,
+        "dy": 4,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 22,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 321,
+        "dy": 49,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 33,
+        "dy": 9,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 522,
+        "dy": 8,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 257,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ],
+    "delta": {
+      "added": [
+        {
+          "id": "elem_4",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 522,
+          "dy": 8,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_3",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 33,
+          "dy": 9,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_5",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 320,
+          "dy": 257,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_2",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 321,
+          "dy": 49,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        }
+      ],
+      "removed": [],
+      "changed": []
+    }
+  }
+]
+2026-03-03 12:12:04,183 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 339.76s
+2026-03-03 12:12:04,183 | INFO | \U0001f9e0 Planning action...
+2026-03-03 12:12:04,183 | INFO | \U0001f9e0 Planner started...
+2026-03-03 12:12:04,183 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 12:15:45,858 | INFO | \u23f1\ufe0f LLM Response Time: 221.67s
+2026-03-03 12:15:45,858 | INFO | \u2705 HID plan generated successfully
+2026-03-03 12:15:45,858 | INFO | \U0001f3af Total Commands: 3
+2026-03-03 12:15:45,859 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "please type \"hi\" in notepad",
+  "validation": {
+    "is_valid": false,
+    "confidence": 0.3,
+    "reason": "No text input field for notepad was found.",
+    "missing_elements": [
+      "Input field for Notepad"
+    ],
+    "suggested_actions": [
+      "Check if other screens or windows are open",
+      "Wait for the application to load completely"
+    ]
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click notepad input field"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'hi' in notepad input field"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "notepad input field",
+      "x": 320,
+      "y": 22
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "notepad input field",
+      "text": "hi"
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "b71914e0-6e3e-4421-bd12-93597ad26738"
+      },
+      "dx": 320,
+      "dy": 22
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "45e31c77-097d-4c77-899a-c4210f5e97a8"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "f816c4f3-8ea8-49d8-819d-407725b13c73"
+      },
+      "text": "hi"
+    }
+  ],
+  "total_commands": 3,
+  "timestamp": "2026-03-03T06:45:45.850237",
+  "execution_time": "219.63s"
+}
+2026-03-03 12:15:45,859 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 12:15:45,859 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 12:15:45,859 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 12:15:46,502 | INFO | \u2705 HID response: {'success': True, 'executionTime': '633ms'}
+2026-03-03 12:15:46,703 | INFO | \U0001f5b1\ufe0f Executing command 2/3: mouse_click
+2026-03-03 12:15:46,731 | INFO | \u2705 HID response: {'success': True, 'executionTime': '21ms'}
+2026-03-03 12:15:46,932 | INFO | \U0001f5b1\ufe0f Executing command 3/3: type_text
+2026-03-03 12:15:46,948 | INFO | \u2705 HID response: {'success': True, 'executionTime': '9ms'}
+2026-03-03 12:15:47,149 | INFO | \U0001f389 All HID commands executed successfully.
+2026-03-03 12:15:47,149 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 12:15:47,150 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-03-03 12:15:47,150 | INFO | \u2705 Cycle completed.
+2026-03-03 12:15:47,150 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 562.73s
+2026-03-03 13:03:15,667 | INFO | \U0001f4dd Received Task From Frontend: Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.
+2026-03-03 13:03:15,667 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'Enter username 'tharushi' in the Username field, enter password '123' in the Password field, then click the Login button to verify the login screen.'
+2026-03-03 13:03:15,667 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 13:03:15,667 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 13:03:15,668 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 13:03:17,668 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 13:03:17,668 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 13:03:19,737 | INFO | \u2705 Vision start response status: 200
+2026-03-03 13:03:19,738 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772523199_be872b","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772523199_be872b"}
+2026-03-03 13:03:19,738 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 13:03:19,738 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 13:03:19,738 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 13:08:23,735 | INFO | \u23f1\ufe0f Vision STOP Response Time: 304.00s
+2026-03-03 13:08:23,735 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 13:08:23,735 | INFO | \U0001f4e6 Vision stop session_id: session_1772523199_be872b
+2026-03-03 13:08:23,736 | INFO | \U0001f4e6 Session ID: session_1772523199_be872b
+2026-03-03 13:08:23,736 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T13:08:23.626879",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772523199_be872b\\preprocessed_frames\\frame_1772523200_4027b2.jpg",
+    "frame_hash": "97b58330eeadb154dcd83c209e55f677de00d09a1bb86affa814480e34bc7e69",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 478,
+        "dy": 422,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 263,
+        "dy": 406,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 438,
+        "dy": 421,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 352,
+        "dy": 296,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 327,
+        "dy": 158,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 418,
+        "dy": 296,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 356,
+        "dy": 422,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 450,
+        "dy": 186,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 328,
+        "dy": 332,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 352,
+        "dy": 262,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 352,
+        "dy": 382,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 381,
+        "dy": 188,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 263,
+        "dy": 237,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 440,
+        "dy": 330,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      }
+    ]
+  }
+]
+2026-03-03 13:08:23,736 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 308.07s
+2026-03-03 13:08:23,736 | INFO | \U0001f9e0 Planning action...
+2026-03-03 13:08:23,736 | INFO | \U0001f9e0 Planner started...
+2026-03-03 13:08:23,736 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 13:09:14,635 | INFO | === Agentic AI System Started ===
+2026-03-03 13:09:55,159 | INFO | \U0001f4dd Received Task From Frontend: please type "hi" in the notepad
+2026-03-03 13:09:55,161 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi" in the notepad'
+2026-03-03 13:09:55,161 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 13:09:55,161 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 13:09:55,162 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 13:09:57,163 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 13:09:57,163 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 13:09:59,593 | INFO | \u2705 Vision start response status: 200
+2026-03-03 13:09:59,593 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772523599_bc3018","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772523599_bc3018"}
+2026-03-03 13:09:59,593 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 13:09:59,593 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 13:09:59,593 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 13:15:35,241 | INFO | \u23f1\ufe0f Vision STOP Response Time: 335.65s
+2026-03-03 13:15:35,242 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 13:15:35,242 | INFO | \U0001f4e6 Vision stop session_id: session_1772523599_bc3018
+2026-03-03 13:15:35,242 | INFO | \U0001f4e6 Session ID: session_1772523599_bc3018
+2026-03-03 13:15:35,242 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T13:15:03.707338",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772523599_bc3018\\preprocessed_frames\\frame_1772523600_2ae0ea.jpg",
+    "frame_hash": "b48d8723aae17d3c35d51932a02b4fb24bc48579df906f658d7d958e6782e169",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 236,
+        "dy": 81,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 34,
+        "dy": 228,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 323,
+        "dy": 60,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 126,
+        "dy": 66,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 457,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 245,
+        "dy": 66,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 560,
+        "dy": 119,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 354,
+        "dy": 24,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 516,
+        "dy": 56,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "image",
+        "label": "Image",
+        "description": "Image detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 46,
+        "dy": 120,
+        "confidence": 0.58,
+        "source": "vlm_enriched"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-03T13:15:35.231528",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772523599_bc3018\\preprocessed_frames\\frame_1772523601_14bd46.jpg",
+    "frame_hash": "eaab230e711b524d7250cbee3e4ca9162c5a191193b59fe8ee07baa2d3f1aab8",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 341,
+        "dy": 361,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 134,
+        "dy": 135,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 231,
+        "dy": 366,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 431,
+        "dy": 203,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 228,
+        "dy": 320,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 429,
+        "dy": 348,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 137,
+        "dy": 236,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 181,
+        "dy": 282,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 460,
+        "dy": 271,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 334,
+        "dy": 404,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 371,
+        "dy": 156,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ],
+    "delta": {
+      "added": [
+        {
+          "id": "elem_10",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 371,
+          "dy": 156,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": "elem_5",
+          "before": {
+            "type": "text",
+            "label": "Text",
+            "state": "normal"
+          },
+          "after": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_4",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_0",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_8",
+          "before": {
+            "type": "text",
+            "label": "Text",
+            "state": "normal"
+          },
+          "after": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_7",
+          "before": {
+            "type": "text",
+            "label": "Text",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_6",
+          "before": {
+            "type": "text",
+            "label": "Text",
+            "state": "normal"
+          },
+          "after": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_9",
+          "before": {
+            "type": "image",
+            "label": "Image",
+            "state": "normal"
+          },
+          "after": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_1",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        }
+      ]
+    }
+  }
+]
+2026-03-03 13:15:35,243 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 340.08s
+2026-03-03 13:15:35,243 | INFO | \U0001f9e0 Planning action...
+2026-03-03 13:15:35,243 | INFO | \U0001f9e0 Planner started...
+2026-03-03 13:15:35,244 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 13:17:11,507 | INFO | \u23f1\ufe0f LLM Response Time: 96.26s
+2026-03-03 13:17:11,507 | ERROR | \u274c LLM returned error response: {'status': 'validation_failed', 'instruction': 'please type "hi" in the notepad', 'message': "Required elements not found on screen. No text input field labeled as 'notepad' is found among the current screen elements.", 'validation': {'is_valid': False, 'confidence': 0.7, 'reason': "No text input field labeled as 'notepad' is found among the current screen elements.", 'missing_elements': ['Notepad'], 'suggested_actions': ['wait_for_load', "search for 'Notepad' in the UI structure"]}, 'suggested_actions': ['wait_for_load', "search for 'Notepad' in the UI structure"], 'rewritten_steps': [], 'action_steps': [], 'hid_commands': [], 'total_commands': 0, 'timestamp': '2026-03-03T07:47:11.497228', 'execution_time': '93.98s'}
+2026-03-03 13:17:11,508 | INFO | Generated Action Plan:
+{
+  "status": "error",
+  "error": {
+    "status": "validation_failed",
+    "instruction": "please type \"hi\" in the notepad",
+    "message": "Required elements not found on screen. No text input field labeled as 'notepad' is found among the current screen elements.",
+    "validation": {
+      "is_valid": false,
+      "confidence": 0.7,
+      "reason": "No text input field labeled as 'notepad' is found among the current screen elements.",
+      "missing_elements": [
+        "Notepad"
+      ],
+      "suggested_actions": [
+        "wait_for_load",
+        "search for 'Notepad' in the UI structure"
+      ]
+    },
+    "suggested_actions": [
+      "wait_for_load",
+      "search for 'Notepad' in the UI structure"
+    ],
+    "rewritten_steps": [],
+    "action_steps": [],
+    "hid_commands": [],
+    "total_commands": 0,
+    "timestamp": "2026-03-03T07:47:11.497228",
+    "execution_time": "93.98s"
+  }
+}
+2026-03-03 13:17:11,508 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 13:17:11,508 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 13:17:11,508 | WARNING | \u26a0\ufe0f No HID commands found.
+2026-03-03 13:17:11,508 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 13:17:11,508 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 13:17:11,508 | INFO | \u2705 Cycle completed.
+2026-03-03 13:17:11,508 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 436.35s
+2026-03-03 13:55:29,743 | INFO | === Agentic AI System Started ===
+2026-03-03 13:55:38,955 | INFO | \U0001f4dd Received Task From Frontend: please type "hi" in notepad
+2026-03-03 13:55:38,955 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi" in notepad'
+2026-03-03 13:55:38,955 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 13:55:38,955 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 13:55:38,955 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 13:55:40,956 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 13:55:40,956 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 13:55:43,028 | INFO | \u2705 Vision start response status: 200
+2026-03-03 13:55:43,028 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772526343_fc2e85","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772526343_fc2e85"}
+2026-03-03 13:55:43,028 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 13:55:43,029 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 13:55:43,029 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 14:01:18,622 | INFO | \u23f1\ufe0f Vision STOP Response Time: 335.59s
+2026-03-03 14:01:18,622 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 14:01:18,622 | INFO | \U0001f4e6 Vision stop session_id: session_1772526343_fc2e85
+2026-03-03 14:01:18,622 | INFO | \U0001f4e6 Session ID: session_1772526343_fc2e85
+2026-03-03 14:01:18,622 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T14:00:47.479765",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772526343_fc2e85\\preprocessed_frames\\frame_1772526343_3efaff.jpg",
+    "frame_hash": "0853c441f6e6d382df5f2fa54c62b455c93a00ba330202cc3eeea4d7fb78e8de",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 528,
+        "dy": 9,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 496,
+        "dy": 64,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 399,
+        "dy": 52,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 100,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 126,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 298,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-03T14:01:18.612638",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772526343_fc2e85\\preprocessed_frames\\frame_1772526344_72b98b.jpg",
+    "frame_hash": "1199b898b6b1f055596634af57eac53af2fd6bf618659cdb269de166980ca659",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 554,
+        "dy": 71,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 378,
+        "dy": 30,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 438,
+        "dy": 56,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 344,
+        "dy": 64,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 98,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 324,
+        "dy": 126,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 312,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ],
+    "delta": {
+      "added": [
+        {
+          "id": "elem_6",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 320,
+          "dy": 312,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": "elem_1",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_0",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        }
+      ]
+    }
+  }
+]
+2026-03-03 14:01:18,624 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 339.67s
+2026-03-03 14:01:18,624 | INFO | \U0001f9e0 Planning action...
+2026-03-03 14:01:18,624 | INFO | \U0001f9e0 Planner started...
+2026-03-03 14:01:18,624 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 14:05:21,816 | INFO | \u23f1\ufe0f LLM Response Time: 243.19s
+2026-03-03 14:05:21,816 | INFO | \u2705 HID plan generated successfully
+2026-03-03 14:05:21,817 | INFO | \U0001f3af Total Commands: 3
+2026-03-03 14:05:21,817 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "please type \"hi\" in notepad",
+  "validation": {
+    "is_valid": false,
+    "confidence": 0.2,
+    "reason": "No text input fields found that could be interpreted as a 'Notepad' or 'Text Editor'. No 'hi' typing action is possible.",
+    "missing_elements": [
+      "Notepad",
+      "Text Editor"
+    ],
+    "suggested_actions": [
+      "Check if there are other screens or applications to switch to, such as a File Explorer or Text Editor."
+    ]
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click Input field at position (438, 56)"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'hi' in Input field at position (438, 56)"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "Input field at position (438, 56)"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "Input field at position (438, 56)",
+      "text": "hi"
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "31ed25e9-db6c-4cac-af90-2ca4a8db8eac"
+      },
+      "dx": 0,
+      "dy": 0
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "7f296101-fd65-4da5-a5c0-3d9a589d7ba0"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "a6990450-2b83-4127-82ff-e25e2bb68d9c"
+      },
+      "text": "hi"
+    }
+  ],
+  "total_commands": 3,
+  "timestamp": "2026-03-03T08:35:21.806798",
+  "execution_time": "241.11s"
+}
+2026-03-03 14:05:21,817 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 14:05:21,817 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 14:05:21,817 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 14:05:22,752 | INFO | \u2705 HID response: {'success': True, 'executionTime': '902ms'}
+2026-03-03 14:05:22,952 | INFO | \U0001f5b1\ufe0f Executing command 2/3: mouse_click
+2026-03-03 14:05:22,980 | INFO | \u2705 HID response: {'success': True, 'executionTime': '17ms'}
+2026-03-03 14:05:23,180 | INFO | \U0001f5b1\ufe0f Executing command 3/3: type_text
+2026-03-03 14:05:23,198 | INFO | \u2705 HID response: {'success': True, 'executionTime': '11ms'}
+2026-03-03 14:05:23,398 | INFO | \U0001f389 All HID commands executed successfully.
+2026-03-03 14:05:23,399 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 14:05:23,399 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-03-03 14:05:23,399 | INFO | \u2705 Cycle completed.
+2026-03-03 14:05:23,399 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 584.44s
+2026-03-03 14:06:24,533 | INFO | \U0001f4dd Received Task From Frontend: please type "hi" in notepad
+2026-03-03 14:06:24,533 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi" in notepad'
+2026-03-03 14:06:24,533 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 14:06:24,533 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 14:06:24,533 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 14:06:26,534 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 14:06:26,534 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 14:06:28,573 | INFO | \u2705 Vision start response status: 200
+2026-03-03 14:06:28,573 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772526988_c50a2b","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772526988_c50a2b"}
+2026-03-03 14:06:28,573 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 14:06:28,573 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 14:06:28,573 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 14:12:04,162 | INFO | \u23f1\ufe0f Vision STOP Response Time: 335.59s
+2026-03-03 14:12:04,163 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 14:12:04,163 | INFO | \U0001f4e6 Vision stop session_id: session_1772526988_c50a2b
+2026-03-03 14:12:04,163 | INFO | \U0001f4e6 Session ID: session_1772526988_c50a2b
+2026-03-03 14:12:04,163 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T14:11:32.508265",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772526988_c50a2b\\preprocessed_frames\\frame_1772526989_1a92ca.jpg",
+    "frame_hash": "2582151d30557fb9e01c0426061197c18260f757fb5795a63fc57f11d1d48bc9",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 507,
+        "dy": 68,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 524,
+        "dy": 18,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 598,
+        "dy": 43,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 411,
+        "dy": 56,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 102,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 130,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 502,
+        "dy": 9,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 621,
+        "dy": 50,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "text",
+        "label": "Text",
+        "description": "Text detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 575,
+        "dy": 32,
+        "confidence": 0.6,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 301,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-03T14:12:04.149773",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772526988_c50a2b\\preprocessed_frames\\frame_1772526990_599214.jpg",
+    "frame_hash": "29b7c25c55d94511d2c22e3dfd587e1d7dffbdcdaa90998738de5a2d90340ae0",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 512,
+        "dy": 16,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 100,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 322,
+        "dy": 128,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 320,
+        "dy": 299,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ],
+    "delta": {
+      "added": [],
+      "removed": [
+        {
+          "id": "elem_4",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 320,
+          "dy": 102,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_5",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 320,
+          "dy": 130,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_7",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 621,
+          "dy": 50,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_8",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 575,
+          "dy": 32,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_6",
+          "type": "text",
+          "label": "Text",
+          "description": "Text detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 502,
+          "dy": 9,
+          "confidence": 0.6,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_9",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 320,
+          "dy": 301,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        }
+      ],
+      "changed": []
+    }
+  }
+]
+2026-03-03 14:12:04,163 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 339.63s
+2026-03-03 14:12:04,163 | INFO | \U0001f9e0 Planning action...
+2026-03-03 14:12:04,163 | INFO | \U0001f9e0 Planner started...
+2026-03-03 14:12:04,164 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 14:15:54,387 | INFO | \u23f1\ufe0f LLM Response Time: 230.22s
+2026-03-03 14:15:54,387 | INFO | \u2705 HID plan generated successfully
+2026-03-03 14:15:54,387 | INFO | \U0001f3af Total Commands: 3
+2026-03-03 14:15:54,387 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "please type \"hi\" in notepad",
+  "validation": {
+    "is_valid": false,
+    "confidence": 0.2,
+    "reason": "The current screen does not have a text editor or notepad-like application",
+    "missing_elements": [
+      "text editor"
+    ],
+    "suggested_actions": [
+      "wait_for_load_notepad"
+    ]
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click input field at position (512, 16)"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'hi' in input field at position (512, 16)"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "input field at position (512, 16)"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "input field at position (512, 16)",
+      "text": "hi"
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "cf7f5f57-fb09-449f-9671-797894519cc1"
+      },
+      "dx": 0,
+      "dy": 0
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "96af82c1-ef98-4734-bfb2-40d0e8678f1a"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "9461cdd3-63b8-4ecd-873b-dbbf83c1bf2c"
+      },
+      "text": "hi"
+    }
+  ],
+  "total_commands": 3,
+  "timestamp": "2026-03-03T08:45:54.382381",
+  "execution_time": "228.08s"
+}
+2026-03-03 14:15:54,387 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 14:15:54,388 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 14:15:54,388 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 14:15:55,080 | INFO | \u2705 HID response: {'success': True, 'executionTime': '684ms'}
+2026-03-03 14:15:55,281 | INFO | \U0001f5b1\ufe0f Executing command 2/3: mouse_click
+2026-03-03 14:15:55,303 | INFO | \u2705 HID response: {'success': True, 'executionTime': '15ms'}
+2026-03-03 14:15:55,503 | INFO | \U0001f5b1\ufe0f Executing command 3/3: type_text
+2026-03-03 14:15:55,520 | INFO | \u2705 HID response: {'success': True, 'executionTime': '9ms'}
+2026-03-03 14:15:55,721 | INFO | \U0001f389 All HID commands executed successfully.
+2026-03-03 14:15:55,722 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 14:15:55,722 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-03-03 14:15:55,722 | INFO | \u2705 Cycle completed.
+2026-03-03 14:15:55,722 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 571.19s
+2026-03-03 22:44:57,426 | INFO | === Agentic AI System Started ===
+2026-03-03 22:45:54,494 | INFO | \U0001f4dd Received Task From Frontend: please type "hi everyone" in the notepad
+2026-03-03 22:45:54,494 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi everyone" in the notepad'
+2026-03-03 22:45:54,494 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 22:45:54,494 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 22:45:54,494 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 22:45:56,495 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 22:45:56,495 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 22:45:58,560 | INFO | \u2705 Vision start response status: 200
+2026-03-03 22:45:58,560 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772558158_7c6f48","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772558158_7c6f48"}
+2026-03-03 22:45:58,560 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 22:45:58,560 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 22:45:58,561 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 22:51:03,297 | INFO | \u23f1\ufe0f Vision STOP Response Time: 304.74s
+2026-03-03 22:51:03,297 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 22:51:03,298 | INFO | \U0001f4e6 Vision stop session_id: session_1772558158_7c6f48
+2026-03-03 22:51:03,298 | INFO | \U0001f4e6 Session ID: session_1772558158_7c6f48
+2026-03-03 22:51:03,298 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T22:51:03.185173",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772558158_7c6f48\\preprocessed_frames\\frame_1772558159_10bb1d.jpg",
+    "frame_hash": "a6827d2dfe447ef5471ced99b1e65fdb8470f83f8e69d1c8f268d579c0944080",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 380,
+        "dy": 352,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 481,
+        "dy": 236,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 329,
+        "dy": 370,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 186,
+        "dy": 153,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 139,
+        "dy": 252,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 216,
+        "dy": 306,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 192,
+        "dy": 300,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 393,
+        "dy": 330,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 163,
+        "dy": 222,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 262,
+        "dy": 304,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 433,
+        "dy": 280,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 458,
+        "dy": 338,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 328,
+        "dy": 412,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 220,
+        "dy": 326,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_14",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 331,
+        "dy": 216,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_15",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 225,
+        "dy": 118,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_16",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 387,
+        "dy": 365,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_17",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 353,
+        "dy": 380,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_18",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 425,
+        "dy": 306,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_19",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 226,
+        "dy": 257,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_20",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 228,
+        "dy": 418,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_21",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 310,
+        "dy": 454,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_22",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 202,
+        "dy": 243,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_23",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 512,
+        "dy": 227,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_24",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 256,
+        "dy": 442,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_25",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 184,
+        "dy": 338,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_26",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 388,
+        "dy": 231,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_27",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 145,
+        "dy": 154,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_28",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 574,
+        "dy": 110,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_29",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 477,
+        "dy": 305,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  }
+]
+2026-03-03 22:51:03,299 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 308.80s
+2026-03-03 22:51:03,299 | INFO | \U0001f9e0 Planning action...
+2026-03-03 22:51:03,299 | INFO | \U0001f9e0 Planner started...
+2026-03-03 22:51:03,299 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 22:52:50,697 | INFO | \u23f1\ufe0f LLM Response Time: 107.40s
+2026-03-03 22:52:50,697 | ERROR | \u274c LLM returned error response: {'status': 'validation_failed', 'instruction': 'please type "hi everyone" in the notepad', 'message': "Required elements not found on screen. The 'notepad' or 'text area' for typing 'hi everyone' is not found among the current screen elements.", 'validation': {'is_valid': False, 'confidence': 1.0, 'reason': "The 'notepad' or 'text area' for typing 'hi everyone' is not found among the current screen elements.", 'missing_elements': ["'Notepad' or 'Text Area'"], 'suggested_actions': ['scroll_down', 'check if it appears after a delay']}, 'suggested_actions': ['scroll_down', 'check if it appears after a delay'], 'rewritten_steps': [], 'action_steps': [], 'hid_commands': [], 'total_commands': 0, 'timestamp': '2026-03-03T17:22:50.691017', 'execution_time': '105.15s'}
+2026-03-03 22:52:50,697 | INFO | Generated Action Plan:
+{
+  "status": "error",
+  "error": {
+    "status": "validation_failed",
+    "instruction": "please type \"hi everyone\" in the notepad",
+    "message": "Required elements not found on screen. The 'notepad' or 'text area' for typing 'hi everyone' is not found among the current screen elements.",
+    "validation": {
+      "is_valid": false,
+      "confidence": 1.0,
+      "reason": "The 'notepad' or 'text area' for typing 'hi everyone' is not found among the current screen elements.",
+      "missing_elements": [
+        "'Notepad' or 'Text Area'"
+      ],
+      "suggested_actions": [
+        "scroll_down",
+        "check if it appears after a delay"
+      ]
+    },
+    "suggested_actions": [
+      "scroll_down",
+      "check if it appears after a delay"
+    ],
+    "rewritten_steps": [],
+    "action_steps": [],
+    "hid_commands": [],
+    "total_commands": 0,
+    "timestamp": "2026-03-03T17:22:50.691017",
+    "execution_time": "105.15s"
+  }
+}
+2026-03-03 22:52:50,697 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 22:52:50,697 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 22:52:50,697 | WARNING | \u26a0\ufe0f No HID commands found.
+2026-03-03 22:52:50,697 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 22:52:50,697 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 22:52:50,698 | INFO | \u2705 Cycle completed.
+2026-03-03 22:52:50,698 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 416.20s
+2026-03-03 23:02:08,909 | INFO | \U0001f4dd Received Task From Frontend: please type "hi everyone" in the notepad
+2026-03-03 23:02:08,909 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi everyone" in the notepad'
+2026-03-03 23:02:08,909 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 23:02:08,909 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 23:02:08,909 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 23:02:10,911 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 23:02:10,911 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 23:02:12,959 | INFO | \u2705 Vision start response status: 200
+2026-03-03 23:02:12,960 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772559132_9b54a9","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772559132_9b54a9"}
+2026-03-03 23:02:12,960 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 23:02:12,960 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 23:02:12,960 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 23:07:17,330 | INFO | \u23f1\ufe0f Vision STOP Response Time: 304.37s
+2026-03-03 23:07:17,331 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 23:07:17,331 | INFO | \U0001f4e6 Vision stop session_id: session_1772559132_9b54a9
+2026-03-03 23:07:17,331 | INFO | \U0001f4e6 Session ID: session_1772559132_9b54a9
+2026-03-03 23:07:17,331 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T23:07:17.242286",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772559132_9b54a9\\preprocessed_frames\\frame_1772559133_2779b5.jpg",
+    "frame_hash": "b22044e5ab00a44b6ad824ed2e6c99998b0fd64b71257050eeff20df2bd8f742",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 186,
+        "dy": 150,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 479,
+        "dy": 174,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 304,
+        "dy": 459,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 360,
+        "dy": 397,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 234,
+        "dy": 194,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 414,
+        "dy": 426,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 224,
+        "dy": 262,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 273,
+        "dy": 268,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 500,
+        "dy": 338,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 294,
+        "dy": 348,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 456,
+        "dy": 392,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 422,
+        "dy": 300,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 514,
+        "dy": 301,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 509,
+        "dy": 255,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_14",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 344,
+        "dy": 190,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_15",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 387,
+        "dy": 220,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_16",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 130,
+        "dy": 257,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_17",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 257,
+        "dy": 361,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_18",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 450,
+        "dy": 253,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_19",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 483,
+        "dy": 273,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_20",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 522,
+        "dy": 185,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_21",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 300,
+        "dy": 417,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_22",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 135,
+        "dy": 304,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_23",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 248,
+        "dy": 278,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_24",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 361,
+        "dy": 234,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_25",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 569,
+        "dy": 50,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_26",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 144,
+        "dy": 150,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_27",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 418,
+        "dy": 262,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_28",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 192,
+        "dy": 200,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_29",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 388,
+        "dy": 381,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  }
+]
+2026-03-03 23:07:17,332 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 308.42s
+2026-03-03 23:07:17,332 | INFO | \U0001f9e0 Planning action...
+2026-03-03 23:07:17,332 | INFO | \U0001f9e0 Planner started...
+2026-03-03 23:07:17,332 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 23:08:53,888 | INFO | \u23f1\ufe0f LLM Response Time: 96.56s
+2026-03-03 23:08:53,889 | ERROR | \u274c LLM returned error response: {'status': 'validation_failed', 'instruction': 'please type "hi everyone" in the notepad', 'message': "Required elements not found on screen. No text input field is labeled or purposefully identified as 'notepad' or similar.", 'validation': {'is_valid': False, 'confidence': 0.9, 'reason': "No text input field is labeled or purposefully identified as 'notepad' or similar.", 'missing_elements': ['notepad'], 'suggested_actions': ['wait_for_load', 'check_other_screens']}, 'suggested_actions': ['wait_for_load', 'check_other_screens'], 'rewritten_steps': [], 'action_steps': [], 'hid_commands': [], 'total_commands': 0, 'timestamp': '2026-03-03T17:38:53.886109', 'execution_time': '94.11s'}
+2026-03-03 23:08:53,889 | INFO | Generated Action Plan:
+{
+  "status": "error",
+  "error": {
+    "status": "validation_failed",
+    "instruction": "please type \"hi everyone\" in the notepad",
+    "message": "Required elements not found on screen. No text input field is labeled or purposefully identified as 'notepad' or similar.",
+    "validation": {
+      "is_valid": false,
+      "confidence": 0.9,
+      "reason": "No text input field is labeled or purposefully identified as 'notepad' or similar.",
+      "missing_elements": [
+        "notepad"
+      ],
+      "suggested_actions": [
+        "wait_for_load",
+        "check_other_screens"
+      ]
+    },
+    "suggested_actions": [
+      "wait_for_load",
+      "check_other_screens"
+    ],
+    "rewritten_steps": [],
+    "action_steps": [],
+    "hid_commands": [],
+    "total_commands": 0,
+    "timestamp": "2026-03-03T17:38:53.886109",
+    "execution_time": "94.11s"
+  }
+}
+2026-03-03 23:08:53,889 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 23:08:53,889 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 23:08:53,889 | WARNING | \u26a0\ufe0f No HID commands found.
+2026-03-03 23:08:53,889 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 23:08:53,889 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 23:08:53,890 | INFO | \u2705 Cycle completed.
+2026-03-03 23:08:53,890 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 404.98s
+2026-03-03 23:14:04,609 | INFO | === Agentic AI System Started ===
+2026-03-03 23:14:23,298 | INFO | === Agentic AI System Started ===
+2026-03-03 23:14:47,104 | INFO | \U0001f4dd Received Task From Frontend: please type "hi everyone" in the notepad
+2026-03-03 23:14:47,104 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi everyone" in the notepad'
+2026-03-03 23:14:47,104 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 23:14:47,104 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 23:14:47,104 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 23:14:49,105 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 23:14:49,105 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 23:14:51,162 | INFO | \u2705 Vision start response status: 200
+2026-03-03 23:14:51,163 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772559891_98d537","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772559891_98d537"}
+2026-03-03 23:14:51,163 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 23:14:51,163 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 23:14:51,163 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 23:20:26,846 | INFO | \u23f1\ufe0f Vision STOP Response Time: 335.68s
+2026-03-03 23:20:26,847 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 23:20:26,847 | INFO | \U0001f4e6 Vision stop session_id: session_1772559891_98d537
+2026-03-03 23:20:26,847 | INFO | \U0001f4e6 Session ID: session_1772559891_98d537
+2026-03-03 23:20:26,848 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T23:19:55.776984",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772559891_98d537\\preprocessed_frames\\frame_1772559892_8c83db.jpg",
+    "frame_hash": "f68037d3e0f9d11bf604e34a071151c50cfbb7514d827f7e1f690c86fb27a875",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 430,
+        "dy": 388,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 272,
+        "dy": 304,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 350,
+        "dy": 322,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 178,
+        "dy": 198,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 542,
+        "dy": 221,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 566,
+        "dy": 133,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 398,
+        "dy": 172,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 464,
+        "dy": 370,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 322,
+        "dy": 376,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 166,
+        "dy": 244,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 410,
+        "dy": 298,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 258,
+        "dy": 319,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 212,
+        "dy": 196,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 491,
+        "dy": 230,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_14",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 571,
+        "dy": 48,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_15",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 510,
+        "dy": 288,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_16",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 144,
+        "dy": 48,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_17",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 164,
+        "dy": 148,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_18",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 248,
+        "dy": 412,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_19",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 184,
+        "dy": 318,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_20",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 361,
+        "dy": 48,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_21",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 454,
+        "dy": 306,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_22",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 337,
+        "dy": 96,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_23",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 312,
+        "dy": 203,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  },
+  {
+    "screen_index": 1,
+    "timestamp": "2026-03-03T23:20:26.836062",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772559891_98d537\\preprocessed_frames\\frame_1772559893_def8fb.jpg",
+    "frame_hash": "6f09b3f2906961cf3ef909144a638e8cd2b8aaf4e98abb1e20fa3418aaec48d9",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 349,
+        "dy": 402,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 358,
+        "dy": 352,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 333,
+        "dy": 370,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 182,
+        "dy": 151,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 387,
+        "dy": 228,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 404,
+        "dy": 437,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 324,
+        "dy": 400,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 316,
+        "dy": 234,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 298,
+        "dy": 152,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 277,
+        "dy": 442,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 129,
+        "dy": 253,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 314,
+        "dy": 280,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 292,
+        "dy": 252,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 378,
+        "dy": 432,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_14",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 423,
+        "dy": 406,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_15",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 508,
+        "dy": 210,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_16",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 350,
+        "dy": 423,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_17",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 328,
+        "dy": 426,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_18",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 401,
+        "dy": 314,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_19",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 190,
+        "dy": 276,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_20",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 428,
+        "dy": 276,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_21",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 482,
+        "dy": 167,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_22",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 471,
+        "dy": 345,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_23",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 141,
+        "dy": 152,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_24",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 130,
+        "dy": 304,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_25",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 397,
+        "dy": 382,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_26",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 242,
+        "dy": 162,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_27",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 352,
+        "dy": 460,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_28",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 452,
+        "dy": 322,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_29",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 186,
+        "dy": 230,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ],
+    "delta": {
+      "added": [
+        {
+          "id": "elem_26",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 242,
+          "dy": 162,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_24",
+          "type": "icon",
+          "label": "Icon",
+          "description": "Icon detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 130,
+          "dy": 304,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_27",
+          "type": "icon",
+          "label": "Icon",
+          "description": "Icon detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 352,
+          "dy": 460,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_25",
+          "type": "icon",
+          "label": "Icon",
+          "description": "Icon detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 397,
+          "dy": 382,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_29",
+          "type": "input_field",
+          "label": "Input field",
+          "description": "Input field detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 186,
+          "dy": 230,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        },
+        {
+          "id": "elem_28",
+          "type": "icon",
+          "label": "Icon",
+          "description": "Icon detected in this screen and likely relevant to user interaction.",
+          "state": "normal",
+          "dx": 452,
+          "dy": 322,
+          "confidence": 0.62,
+          "source": "vlm_enriched"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": "elem_20",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_5",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_17",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_19",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_13",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        },
+        {
+          "id": "elem_14",
+          "before": {
+            "type": "input_field",
+            "label": "Input field",
+            "state": "normal"
+          },
+          "after": {
+            "type": "icon",
+            "label": "Icon",
+            "state": "normal"
+          }
+        }
+      ]
+    }
+  }
+]
+2026-03-03 23:20:26,855 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 339.75s
+2026-03-03 23:20:26,855 | INFO | \U0001f9e0 Planning action...
+2026-03-03 23:20:26,855 | INFO | \U0001f9e0 Planner started...
+2026-03-03 23:20:26,855 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 23:24:43,860 | INFO | \u23f1\ufe0f LLM Response Time: 257.00s
+2026-03-03 23:24:43,860 | INFO | \u2705 HID plan generated successfully
+2026-03-03 23:24:43,860 | INFO | \U0001f3af Total Commands: 3
+2026-03-03 23:24:43,861 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "please type \"hi everyone\" in the notepad",
+  "validation": {
+    "is_valid": false,
+    "confidence": 0.5,
+    "reason": "There are no text input fields labeled as 'notepad' or similar that matches the user's instruction.",
+    "missing_elements": [
+      "notepad"
+    ],
+    "suggested_actions": [
+      "wait_for_load",
+      "check_other_screens"
+    ]
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click notepad input field"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'hi everyone' in notepad input field"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "notepad input field",
+      "x": 350,
+      "y": 423
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "notepad input field",
+      "text": "hi everyone"
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "bee3e9aa-cca8-47d8-a5b9-9537421e7e7d"
+      },
+      "dx": 350,
+      "dy": 423
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "1f338f28-0ed1-44df-a23a-aa2d94a81d23"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "8afa9876-c886-4651-a287-521b5c6de083"
+      },
+      "text": "hi everyone"
+    }
+  ],
+  "total_commands": 3,
+  "timestamp": "2026-03-03T17:54:43.852492",
+  "execution_time": "254.70s"
+}
+2026-03-03 23:24:43,861 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 23:24:43,861 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 23:24:43,861 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 23:24:44,060 | WARNING | \u26a0\ufe0f Command failed (Attempt 1/3): 503 Server Error: Service Unavailable for url: http://localhost:3015/hid/command
+2026-03-03 23:24:45,061 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 23:24:45,092 | WARNING | \u26a0\ufe0f Command failed (Attempt 2/3): 503 Server Error: Service Unavailable for url: http://localhost:3015/hid/command
+2026-03-03 23:24:46,093 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 23:24:46,114 | WARNING | \u26a0\ufe0f Command failed (Attempt 3/3): 503 Server Error: Service Unavailable for url: http://localhost:3015/hid/command
+2026-03-03 23:24:47,114 | ERROR | \u274c Failed command after 3 retries.
+2026-03-03 23:24:47,115 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 23:24:47,115 | INFO | \U0001f4ca Evaluation result: {'success': False}
+2026-03-03 23:24:47,115 | INFO | \u2705 Cycle completed.
+2026-03-03 23:24:47,115 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 600.01s
+2026-03-03 23:30:28,186 | INFO | \U0001f4dd Received Task From Frontend: please type "hi everyone" in the notepad
+2026-03-03 23:30:28,186 | INFO | \U0001f504 Starting Agentic AI full cycle for task: 'please type "hi everyone" in the notepad'
+2026-03-03 23:30:28,186 | INFO | \U0001f914 Deciding whether vision is required for this task...
+2026-03-03 23:30:28,186 | INFO | \U0001f441\ufe0f Vision required: True
+2026-03-03 23:30:28,186 | INFO | \u23f3 Waiting 2.0 seconds before starting vision...
+2026-03-03 23:30:30,187 | INFO | \U0001f4e1 Vision required. Starting vision service...
+2026-03-03 23:30:30,187 | INFO | \u27a1\ufe0f Sending request to START vision service with parameters...
+2026-03-03 23:30:32,217 | INFO | \u2705 Vision start response status: 200
+2026-03-03 23:30:32,217 | INFO | \U0001f4e8 Vision start response body: {"status":"started","session_id":"session_1772560832_44b4d9","camera_index":1,"save_interval":1.0,"provider":"ollama","local_model":"llava:7b","ollama_base_url":null,"ollama_timeout_seconds":60.0,"coarse_max_boxes":180,"refined_max_elements":120,"vlm_batch_max_elements":90,"no_vlm":false,"session_root":"C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772560832_44b4d9"}
+2026-03-03 23:30:32,218 | INFO | \u23f3 Vision will auto-stop after 6 minutes (360 seconds).
+2026-03-03 23:30:32,218 | INFO | \u23f9\ufe0f Auto-stopping vision after 6 minutes.
+2026-03-03 23:30:32,218 | INFO | \u27a1\ufe0f Sending request to STOP vision service...
+2026-03-03 23:35:36,466 | INFO | \u23f1\ufe0f Vision STOP Response Time: 304.25s
+2026-03-03 23:35:36,466 | INFO | \U0001f6d1 Vision stop response status: 200
+2026-03-03 23:35:36,466 | INFO | \U0001f4e6 Vision stop session_id: session_1772560832_44b4d9
+2026-03-03 23:35:36,467 | INFO | \U0001f4e6 Session ID: session_1772560832_44b4d9
+2026-03-03 23:35:36,467 | INFO | \U0001f5bc Screens:
+[
+  {
+    "screen_index": 0,
+    "timestamp": "2026-03-03T23:35:36.428596",
+    "image_path": "C:\\ResearchRepo\\ScreenAwareTaskAgent\\ScreenAwareTaskAgent\\vision\\data\\sessions\\session_1772560832_44b4d9\\preprocessed_frames\\frame_1772560833_9a4e82.jpg",
+    "frame_hash": "9f72754f37b6934c53b534dcc3990badbd9bf972ab3fe4f614b533be5371ac15",
+    "elements": [
+      {
+        "id": "elem_0",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 501,
+        "dy": 314,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_1",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 206,
+        "dy": 361,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_2",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 390,
+        "dy": 190,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_3",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 501,
+        "dy": 169,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_4",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 178,
+        "dy": 220,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_5",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 482,
+        "dy": 200,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_6",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 184,
+        "dy": 377,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_7",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 469,
+        "dy": 279,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_8",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 169,
+        "dy": 141,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_9",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 264,
+        "dy": 291,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_10",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 415,
+        "dy": 339,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_11",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 318,
+        "dy": 385,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_12",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 529,
+        "dy": 236,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_13",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 270,
+        "dy": 238,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_14",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 302,
+        "dy": 270,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_15",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 313,
+        "dy": 410,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_16",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 417,
+        "dy": 278,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_17",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 346,
+        "dy": 199,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_18",
+        "type": "icon",
+        "label": "Icon",
+        "description": "Icon detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 478,
+        "dy": 220,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_19",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 516,
+        "dy": 184,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_20",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 274,
+        "dy": 390,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_21",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 216,
+        "dy": 221,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_22",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 191,
+        "dy": 258,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_23",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 454,
+        "dy": 241,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_24",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 410,
+        "dy": 391,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_25",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 175,
+        "dy": 54,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_26",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 443,
+        "dy": 377,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_27",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 312,
+        "dy": 168,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_28",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 298,
+        "dy": 466,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      },
+      {
+        "id": "elem_29",
+        "type": "input_field",
+        "label": "Input field",
+        "description": "Input field detected in this screen and likely relevant to user interaction.",
+        "state": "normal",
+        "dx": 231,
+        "dy": 374,
+        "confidence": 0.62,
+        "source": "vlm_enriched"
+      }
+    ]
+  }
+]
+2026-03-03 23:35:36,467 | INFO | \u23f1\ufe0f TOTAL Vision Cycle Time: 308.28s
+2026-03-03 23:35:36,467 | INFO | \U0001f9e0 Planning action...
+2026-03-03 23:35:36,467 | INFO | \U0001f9e0 Planner started...
+2026-03-03 23:35:36,468 | INFO | \U0001f4e1 Sending request to LLM /generate_hid...
+2026-03-03 23:39:55,672 | INFO | \u23f1\ufe0f LLM Response Time: 259.20s
+2026-03-03 23:39:55,672 | INFO | \u2705 HID plan generated successfully
+2026-03-03 23:39:55,672 | INFO | \U0001f3af Total Commands: 3
+2026-03-03 23:39:55,672 | INFO | Generated Action Plan:
+{
+  "status": "success",
+  "instruction": "please type \"hi everyone\" in the notepad",
+  "validation": {
+    "is_valid": true,
+    "confidence": 0.3,
+    "reason": "Unable to validate - proceeding with caution",
+    "missing_elements": [],
+    "suggested_actions": []
+  },
+  "rewritten_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "description": "Click notepad input field"
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "description": "Type 'hi everyone' in notepad input field"
+    }
+  ],
+  "action_steps": [
+    {
+      "step": 1,
+      "action": "click",
+      "target": "notepad input field",
+      "x": 501,
+      "y": 169
+    },
+    {
+      "step": 2,
+      "action": "type_text",
+      "target": "notepad input field",
+      "text": "hi everyone"
+    }
+  ],
+  "hid_commands": [
+    {
+      "cmd": "mouse_move",
+      "meta": {
+        "commandId": "ba07e34b-1060-4699-81c2-17c1fbf2b86c"
+      },
+      "dx": 501,
+      "dy": 169
+    },
+    {
+      "cmd": "mouse_click",
+      "meta": {
+        "commandId": "f8a78e83-f33b-45ce-8c87-9a516a50d694"
+      },
+      "button": "left"
+    },
+    {
+      "cmd": "type_text",
+      "meta": {
+        "commandId": "a42740fb-3d87-42d9-aa65-e1a6ac06c1d2"
+      },
+      "text": "hi everyone"
+    }
+  ],
+  "total_commands": 3,
+  "timestamp": "2026-03-03T18:09:55.668121",
+  "execution_time": "256.66s"
+}
+2026-03-03 23:39:55,672 | INFO | \U0001f5b1\ufe0f Acting on plan...
+2026-03-03 23:39:55,672 | INFO | \U0001f680 Starting HID execution process...
+2026-03-03 23:39:55,672 | INFO | \U0001f5b1\ufe0f Executing command 1/3: mouse_move
+2026-03-03 23:39:56,309 | INFO | \u2705 HID response: {'success': True, 'executionTime': '577ms'}
+2026-03-03 23:39:56,510 | INFO | \U0001f5b1\ufe0f Executing command 2/3: mouse_click
+2026-03-03 23:39:56,537 | INFO | \u2705 HID response: {'success': True, 'executionTime': '16ms'}
+2026-03-03 23:39:56,738 | INFO | \U0001f5b1\ufe0f Executing command 3/3: type_text
+2026-03-03 23:39:56,772 | INFO | \u2705 HID response: {'success': True, 'executionTime': '27ms'}
+2026-03-03 23:39:56,973 | INFO | \U0001f389 All HID commands executed successfully.
+2026-03-03 23:39:56,973 | INFO | \U0001f4ca Evaluating result...
+2026-03-03 23:39:56,973 | INFO | \U0001f4ca Evaluation result: {'success': True}
+2026-03-03 23:39:56,973 | INFO | \u2705 Cycle completed.
+2026-03-03 23:39:56,973 | INFO | \u23f1\ufe0f FULL AGENT CYCLE TIME: 568.79s
+2026-03-03 23:54:32,574 | INFO | === Agentic AI System Started ===
+2026-03-03 23:54:51,019 | INFO | === Agentic AI System Started ===
+2026-03-03 23:55:10,286 | INFO | === Agentic AI System Started ===
