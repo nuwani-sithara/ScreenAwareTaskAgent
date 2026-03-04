@@ -16,7 +16,7 @@ HID Protocol commands:
 
 import json
 import uuid
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 from datetime import datetime
 from llm.ollama_client import OllamaClient
 import logging
@@ -75,7 +75,13 @@ class HIDStepGenerator:
         command.update(params)
         return command
 
-    def __init__(self, client: Optional[OllamaClient] = None):
+    def __init__(self, client: Optional[Any] = None):
+        """
+        Initialize HID Step Generator.
+        
+        Args:
+            client: LLM client (OllamaClient or OpenAIClient). Defaults to OllamaClient.
+        """
         self.client = client or OllamaClient()
         
         # HID keycode mappings (most common keys)
@@ -293,7 +299,7 @@ JSON Response:"""
             response = self.client.generate(
                 model=model,
                 prompt=validation_prompt,
-                max_tokens=500,
+                max_tokens=1500,
                 temperature=0.3  # Lower temperature for more deterministic validation
             )
             
@@ -516,7 +522,7 @@ JSON Response:"""
         instruction: str,
         visual_data: Dict[str, Any],
         model: str = "mistral",
-        max_tokens: int = 500
+        max_tokens: int = 1500
     ) -> List[Dict[str, Any]]:
         """
         Stage 1: Generate structured action steps from instruction + visual data
@@ -807,7 +813,7 @@ Output JSON array:"""
         instruction: str,
         visual_data: Dict[str, Any],
         model: str = "mistral",
-        max_tokens: int = 500,
+        max_tokens: int = 1500,
         skip_validation: bool = False
     ) -> Dict[str, Any]:
         """
@@ -990,7 +996,7 @@ def generate_hid_steps_from_visual(
         instruction=instruction,
         visual_data=visual_data,
         model=model,
-        max_tokens=500
+        max_tokens=1500
     )
     hid_commands = generator.convert_actions_to_hid(action_steps) if action_steps else []
     total_commands = len(hid_commands) if hid_commands else 0
