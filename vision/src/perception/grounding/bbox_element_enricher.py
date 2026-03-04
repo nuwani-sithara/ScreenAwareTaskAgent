@@ -467,7 +467,7 @@ def main():
     parser.add_argument("--image-dir", default="data/preprocessed_frames")
     parser.add_argument("--refined-dir", default="data/refined_bboxes")
     parser.add_argument("--out-dir", default="data/final_elements")
-    parser.add_argument("--provider", default="local", choices=["local", "claude", "gpt4v", "ollama"])
+    parser.add_argument("--provider", default="gemini", choices=["gemini", "local", "claude", "gpt4v", "ollama"])
     parser.add_argument("--local-model", default="llava-hf/llava-1.5-7b-hf")
     parser.add_argument("--ollama-model", default="llava:7b")
     parser.add_argument(

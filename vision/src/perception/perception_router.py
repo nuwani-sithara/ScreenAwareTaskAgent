@@ -42,7 +42,7 @@ class PerceptionRouter:
         Initialize perception router.
         
         Args:
-            vlm_provider: "claude", "gpt4v", "local"
+            vlm_provider: "gemini", "claude", "gpt4v", "local"
             yolo_model_path: Path to YOLO model weights
             use_vlm: Enable VLM-based detection
             use_yolo: Enable YOLO-based detection

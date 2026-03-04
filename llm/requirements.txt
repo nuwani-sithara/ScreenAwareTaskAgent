@@ -24,3 +24,6 @@ tqdm
 # Optional: HTTP client for Ollama server
 requests
 httpx  # For async HTTP requests
+
+# Optional: Google Gemini API (free, fast alternative)
+google-generativeai  # Install if using Gemini: pip install google-generativeai

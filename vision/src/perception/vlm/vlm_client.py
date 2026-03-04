@@ -1,7 +1,7 @@
 # src/perception/vlm/vlm_client.py
 """
 VLM (Vision-Language Model) client for UI detection.
-Supports Claude (Anthropic), GPT-4V (OpenAI), Ollama, and local VLMs.
+Supports Gemini, Claude (Anthropic), GPT-4V (OpenAI), Ollama, and local VLMs.
 
 Key design: classify_elements_batch() issues a SINGLE VLM call per frame,
 sending the full image and all element bounding boxes together, which
@@ -580,6 +580,127 @@ class ClaudeVLMClient(VLMClient):
         return data["elements"]
 
 
+class GeminiVLMClient(VLMClient):
+    """Gemini Vision API client."""
+
+    def __init__(self, api_key: Optional[str] = None, model_name: str = "gemini-flash-latest"):
+        super().__init__(api_key or os.getenv("GEMINI_API_KEY"), model_name)
+        if not self.api_key:
+            raise ValueError("GEMINI_API_KEY not set")
+        try:
+            import google.generativeai as genai
+            self._genai = genai
+            self._genai.configure(api_key=self.api_key)
+            self.model_name = self._resolve_model_name(self.model_name)
+            self.client = self._genai.GenerativeModel(self.model_name)
+        except ImportError:
+            raise ImportError(
+                "google-generativeai package not installed. Run: pip install google-generativeai"
+            )
+
+    def _resolve_model_name(self, requested_model: str) -> str:
+        """Pick a generateContent-capable Gemini model, preferring requested model."""
+        try:
+            models = list(self._genai.list_models())
+            supported: List[str] = []
+            for model in models:
+                methods = set(getattr(model, "supported_generation_methods", []) or [])
+                if "generateContent" in methods:
+                    name = str(getattr(model, "name", ""))
+                    if name.startswith("models/"):
+                        name = name.split("/", 1)[1]
+                    if name:
+                        supported.append(name)
+            if not supported:
+                return requested_model
+            if requested_model in supported:
+                return requested_model
+            preferred = [
+                "gemini-flash-latest",
+                "gemini-flash-lite-latest",
+                "gemini-pro-latest",
+                "gemini-2.5-flash",
+                "gemini-2.0-flash-lite",
+                "gemini-2.0-flash",
+            ]
+            for candidate in preferred:
+                if candidate in supported:
+                    logger.warning("Requested Gemini model '%s' unavailable; using '%s'", requested_model, candidate)
+                    return candidate
+            for candidate in supported:
+                if candidate.startswith("gemini-"):
+                    logger.warning("Requested Gemini model '%s' unavailable; using '%s'", requested_model, candidate)
+                    return candidate
+            return requested_model
+        except Exception as exc:
+            logger.warning("Could not list Gemini models, using requested model '%s': %s", requested_model, exc)
+            return requested_model
+
+    def _gemini_vision_call(self, image_path: str, prompt: str, timeout_seconds: float = 60.0) -> str:
+        """Send a vision prompt to Gemini and return text output."""
+        with open(image_path, "rb") as image_file:
+            image_bytes = image_file.read()
+
+        payload = [
+            {"mime_type": "image/jpeg", "data": image_bytes},
+            prompt,
+        ]
+        generation_config = {
+            "temperature": 0,
+            "max_output_tokens": 4096,
+            "response_mime_type": "application/json",
+        }
+        request_options = {"timeout": int(max(1.0, timeout_seconds))}
+
+        try:
+            response = self.client.generate_content(
+                payload,
+                generation_config=generation_config,
+                request_options=request_options,
+            )
+        except Exception as exc:
+            msg = str(exc).lower()
+            if "not found" in msg or "generatecontent" in msg:
+                fallback = self._resolve_model_name(self.model_name)
+                if fallback != self.model_name:
+                    logger.warning("Retrying Gemini call with fallback model '%s'", fallback)
+                    self.model_name = fallback
+                    self.client = self._genai.GenerativeModel(self.model_name)
+                    response = self.client.generate_content(
+                        payload,
+                        generation_config=generation_config,
+                        request_options=request_options,
+                    )
+                else:
+                    raise
+            else:
+                raise
+        text = getattr(response, "text", "")
+        if isinstance(text, str):
+            return text
+        return str(text)
+
+    def analyze_ui(self, image_path: str, prompt: Optional[str] = None, **kwargs) -> UIAnalysisResult:
+        """Analyze UI using Gemini Vision API."""
+        prompt = prompt or get_ui_discovery_prompt()
+        try:
+            width, height = self.get_image_dimensions(image_path)
+            timeout_seconds = float(kwargs.get("timeout_seconds", 60.0))
+            response_text = self._gemini_vision_call(image_path, prompt, timeout_seconds=timeout_seconds)
+            return self.parser.parse_vlm_response(response_text, width, height)
+        except Exception as exc:
+            return UIAnalysisResult(elements=[], parse_successful=False,
+                                    parse_error=f"Gemini API error: {exc}")
+
+    def _do_batch_classify(self, image_path: str, prompt: str, timeout_seconds: float) -> Optional[List[Dict[str, Any]]]:
+        """Single-call batch classification via Gemini."""
+        response_text = self._gemini_vision_call(image_path, prompt, timeout_seconds=timeout_seconds)
+        data = self.parser.extract_json_from_response(response_text)
+        if not _validate_batch_response(data):
+            raise ValueError("Gemini batch response failed schema validation")
+        return data["elements"]
+
+
 class GPT4VClient(VLMClient):
     """GPT-4V (OpenAI) Vision API client."""
 
@@ -795,14 +916,16 @@ def get_vlm_client(provider: str = "claude", **kwargs) -> VLMClient:
     Factory function to create a VLM client.
 
     Args:
-        provider: One of ``"claude"``, ``"gpt4v"``, ``"openai"``, ``"local"``, ``"ollama"``.
+        provider: One of ``"gemini"``, ``"claude"``, ``"gpt4v"``, ``"openai"``, ``"local"``, ``"ollama"``.
         **kwargs: Provider-specific init arguments.
 
     Returns:
         VLMClient instance.
     """
     provider = provider.lower().strip()
-    if provider == "claude":
+    if provider == "gemini":
+        return GeminiVLMClient(**kwargs)
+    elif provider == "claude":
         return ClaudeVLMClient(**kwargs)
     elif provider in ("gpt4v", "openai", "gpt-4v"):
         return GPT4VClient(**kwargs)
