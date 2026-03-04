@@ -1514,11 +1514,40 @@ def capture_once(
     refined_max_elements: int = 120,
     vlm_batch_max_elements: int = 90,
     no_vlm: bool = False,
+    use_current_session: bool = True,
 ):
     """Single-shot capture and pipeline execution. Returns final JSON.
 
     VLM classification uses a single batch call for all detected elements.
     """
+    # Fast path: while streaming is active, grab the latest stream frame and
+    # process it synchronously in the same session without stopping streaming.
+    if use_current_session:
+        with session_lock:
+            active_session = current_session if capture_running and current_session else None
+            frame_snapshot = latest_frame.copy() if active_session is not None and latest_frame is not None else None
+        if active_session is not None:
+            if frame_snapshot is None:
+                return {
+                    "status": "error",
+                    "detail": "Streaming is active but no frame is available yet. Try again shortly.",
+                    "session_id": active_session.get("id"),
+                }
+            frame_name = f"instant_{int(time.time())}_{uuid.uuid4().hex[:6]}.jpg"
+            frame_path = os.path.join(active_session["raw_dir"], frame_name)
+            cv2.imwrite(frame_path, frame_snapshot)
+            try:
+                result = _process_single_frame_item(active_session, active_session["id"], frame_path)
+                result["capture_mode"] = "instant_stream"
+                return result
+            except Exception as e:
+                logging.exception("Instant stream capture failed")
+                return {
+                    "status": "error",
+                    "session_id": active_session.get("id"),
+                    "detail": str(e),
+                }
+
     frame = _capture_single_frame(camera_index=camera_index)
     if frame is None:
         return {"status": "error", "detail": f"Failed to capture frame from camera {camera_index}"}
