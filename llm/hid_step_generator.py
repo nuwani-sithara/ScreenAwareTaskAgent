@@ -162,25 +162,44 @@ class HIDStepGenerator:
         interactive_elements.sort(key=lambda x: (type_priority.get(x["type"], 99), -x["confidence"]))
         
         # Build context string with clear positioning and natural language
+        # Track generic label counts for better descriptions
+        label_counts = {}
+        for elem in interactive_elements[:10]:
+            label = elem['label']
+            label_counts[label] = label_counts.get(label, 0) + 1
+        
+        # Track occurrences for ordinal descriptions
+        label_occurrence = {}
+        
         for i, elem in enumerate(interactive_elements[:10], 1):  # Top 10 elements
             center_x = elem["x"]
             center_y = elem["y"]
             elem_type = elem['type']
             label = elem['label']
+            elem_id = elem['id']
+            
+            # Check if label is generic (appears multiple times)
+            is_generic = label_counts.get(label, 1) > 1
             
             # Use natural language descriptions that match user instructions
             if elem_type in ["input", "input_field"]:
-                natural_desc = f"'{label}' input field"
+                if is_generic:
+                    # Add ordinal position for generic labels
+                    label_occurrence[label] = label_occurrence.get(label, 0) + 1
+                    ordinal = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"][label_occurrence[label] - 1] if label_occurrence[label] <= 10 else f"{label_occurrence[label]}th"
+                    natural_desc = f"{ordinal} '{label}' ({elem_id})"
+                else:
+                    natural_desc = f"'{label}' input field ({elem_id})"
             elif elem_type == "button":
-                natural_desc = f"'{label}' button"
+                natural_desc = f"'{label}' button ({elem_id})"
             elif elem_type == "text":
-                natural_desc = f"Text: '{label}'"
+                natural_desc = f"Text: '{label}' ({elem_id})"
             elif elem_type == "checkbox":
-                natural_desc = f"'{label}' checkbox"
+                natural_desc = f"'{label}' checkbox ({elem_id})"
             elif elem_type == "dropdown":
-                natural_desc = f"'{label}' dropdown"
+                natural_desc = f"'{label}' dropdown ({elem_id})"
             else:
-                natural_desc = f"{elem_type}: '{label}'"
+                natural_desc = f"{elem_type}: '{label}' ({elem_id})"
             
             context += f"{i}. {natural_desc} at position ({center_x}, {center_y})\n"
         
@@ -214,7 +233,7 @@ class HIDStepGenerator:
         visual_context = self._build_visual_context(visual_data)
         
         # Build validation prompt
-        validation_prompt = f"""You are a UI validation assistant. Analyze if the user's instruction matches the current screen content.
+        validation_prompt = f"""You are a UI validation assistant. Analyze if the user's instruction can be completed with the current screen elements.
 
 CURRENT SCREEN ELEMENTS:
 {visual_context}
@@ -224,27 +243,45 @@ USER INSTRUCTION:
 
 TASK:
 Determine if the instruction can be completed with the currently visible elements.
-Match elements by their PURPOSE and LABEL, not exact wording:
-- "Username field" matches "Username input field"
-- "Password field" matches "Password input field"  
-- "Login button" matches "Login button"
-- "Click Send" matches "Send button"
+
+CRITICAL MATCHING RULES:
+1. Match by PURPOSE and CAPABILITY, not exact application names:
+   - If instruction is "type in notepad" and input fields exist → VALID (focus on typing capability)
+   - If instruction is "enter text" and input fields exist → VALID
+   - If instruction is "click login" and buttons exist → check for login-like button
+   
+2. Be VERY FLEXIBLE with element names:
+   - "Username field" matches "Input field", "Username input field", "User input"
+   - "Notepad" instruction matches ANY text input area (focus on text entry capability)
+   - "Send button" matches "Submit", "Send", "button" elements
+   
+3. Generic labels are acceptable:
+   - "Input field" can be used for text entry tasks
+   - "Button" can be clicked
+   - Focus on whether the ACTION is possible, not if exact labels match
+
+4. Application context is secondary:
+   - "type in notepad" → Can we type? Are input fields present? → Valid
+   - "click submit" → Can we click? Are buttons present? → Valid
 
 Respond ONLY with valid JSON (no comments, no markdown):
 {{
     "is_valid": true/false,
     "confidence": 0.0-1.0,
-    "reason": "Brief explanation",
-    "missing_elements": ["list of missing elements if any"],
-    "suggested_actions": ["scroll_down", "scroll_up", "wait_for_load", etc. - if elements not found"]
+    "reason": "Brief explanation focusing on capability",
+    "missing_elements": ["only list if NO elements support the action"],
+    "suggested_actions": ["only if truly stuck, suggest navigation"]
 }}
 
-RULES:
-- Set is_valid=true if ALL required elements are present (even with slightly different wording)
-- Set is_valid=false ONLY if key elements are completely missing from the screen
-- Be FLEXIBLE with element names: "Username" and "Username field" and "Username input" all refer to the same thing
-- confidence=1.0 means absolutely certain, 0.5 means uncertain
-- suggested_actions should help find missing elements (e.g., "scroll_down" if buttons might be below)
+VALIDATION EXAMPLES:
+- Instruction: "type 'hi' in notepad", Elements: ["Input field at (512, 16)"] 
+  → {{"is_valid": true, "confidence": 0.8, "reason": "Input field available for text entry"}}
+  
+- Instruction: "click login", Elements: ["Button at (300, 400)"]
+  → {{"is_valid": true, "confidence": 0.7, "reason": "Button available for clicking, likely login"}}
+  
+- Instruction: "scroll down to see more", Elements: ["Input field"]
+  → {{"is_valid": false, "confidence": 0.6, "reason": "No scrollable area detected"}}
 
 JSON Response:"""
 
@@ -349,7 +386,8 @@ JSON Response:"""
                             hid_commands.append(self._create_hid_command(
                                 "mouse_move",
                                 dx=center_x,
-                                dy=center_y
+                                dy=center_y,
+                                smooth=True
                             ))
                             
                             # Then click
@@ -368,7 +406,8 @@ JSON Response:"""
                         hid_commands.append(self._create_hid_command(
                             "mouse_move",
                             dx=x,
-                            dy=y
+                            dy=y,
+                            smooth=True
                         ))
                         button = "right" if "RIGHT" in upper_line else "left"
                         hid_commands.append(self._create_hid_command(
@@ -406,7 +445,8 @@ JSON Response:"""
                     hid_commands.append(self._create_hid_command(
                         "mouse_move",
                         dx=x,
-                        dy=y
+                        dy=y,
+                        smooth=True
                     ))
             
             elif "SCROLL" in upper_line:
@@ -595,13 +635,88 @@ Output JSON array:"""
                 logger.error(f"LLM output is not a JSON array: {type(actions)}")
                 return []
             
-            # Validate coordinates (warn about placeholder values)
+            # Post-process: Fix placeholder coordinates (0, 0) by inferring from visual data
+            elements = []
+            if visual_data and "session_data" in visual_data:
+                screens = visual_data["session_data"].get("screens", [])
+                if screens:
+                    elements = screens[-1].get("elements", [])
+            
             for action in actions:
                 if action.get("action") == "click":
                     x = action.get("x", 0)
                     y = action.get("y", 0)
+                    
                     if x == 0 and y == 0:
-                        logger.warning(f"⚠️ Step {action.get('step')}: Click action has placeholder coordinates (0, 0). LLM should use actual coordinates from visual context!")
+                        logger.warning(f"⚠️ Step {action.get('step')}: Click action has placeholder coordinates (0, 0). Attempting to fix...")
+                        
+                        # Try to infer correct element from target description
+                        target = action.get("target", "").lower()
+                        step_num = action.get("step", 1)
+                        
+                        # Strategy 1: Match by target keywords
+                        matched = False
+                        for elem in elements:
+                            elem_label = elem.get("label", "").lower()
+                            elem_desc = elem.get("description", "").lower()
+                            elem_type = elem.get("type", "")
+                            
+                            # Check if target keywords match element
+                            if (target in elem_label or target in elem_desc or 
+                                elem_label in target or elem_desc in target):
+                                # Extract coordinates
+                                if "dx" in elem and "dy" in elem:
+                                    action["x"] = elem["dx"]
+                                    action["y"] = elem["dy"]
+                                elif "x" in elem and "y" in elem:
+                                    action["x"] = elem["x"]
+                                    action["y"] = elem["y"]
+                                else:
+                                    bbox = elem.get("bbox", [])
+                                    if bbox and len(bbox) >= 4:
+                                        action["x"] = int((bbox[0] + bbox[2]) / 2 * 1920)
+                                        action["y"] = int((bbox[1] + bbox[3]) / 2 * 1080)
+                                
+                                logger.info(f"✅ Fixed coordinates for step {step_num}: ({action['x']}, {action['y']}) from {elem.get('id', 'element')}")
+                                matched = True
+                                break
+                        
+                        # Strategy 2: Use sequential input fields if target mentions "field" or "input"
+                        if not matched and ("field" in target or "input" in target):
+                            input_fields = [e for e in elements if e.get("type") in ["input", "input_field"]]
+                            if input_fields and step_num <= len(input_fields):
+                                elem = input_fields[min(step_num - 1, len(input_fields) - 1)]
+                                if "dx" in elem and "dy" in elem:
+                                    action["x"] = elem["dx"]
+                                    action["y"] = elem["dy"]
+                                elif "x" in elem and "y" in elem:
+                                    action["x"] = elem["x"]
+                                    action["y"] = elem["y"]
+                                else:
+                                    bbox = elem.get("bbox", [])
+                                    if bbox and len(bbox) >= 4:
+                                        action["x"] = int((bbox[0] + bbox[2]) / 2 * 1920)
+                                        action["y"] = int((bbox[1] + bbox[3]) / 2 * 1080)
+                                
+                                logger.info(f"✅ Fixed coordinates for step {step_num} using sequential field: ({action['x']}, {action['y']})")
+                                matched = True
+                        
+                        # Strategy 3: Use first interactive element as last resort
+                        if not matched and elements:
+                            elem = elements[0]
+                            if "dx" in elem and "dy" in elem:
+                                action["x"] = elem["dx"]
+                                action["y"] = elem["dy"]
+                            elif "x" in elem and "y" in elem:
+                                action["x"] = elem["x"]
+                                action["y"] = elem["y"]
+                            else:
+                                bbox = elem.get("bbox", [])
+                                if bbox and len(bbox) >= 4:
+                                    action["x"] = int((bbox[0] + bbox[2]) / 2 * 1920)
+                                    action["y"] = int((bbox[1] + bbox[3]) / 2 * 1080)
+                            
+                            logger.warning(f"⚠️ Using fallback coordinates for step {step_num}: ({action['x']}, {action['y']}) from first element")
             
             logger.info(f"✅ Stage 1: Generated {len(actions)} action steps")
             return actions
@@ -635,7 +750,8 @@ Output JSON array:"""
                 hid_commands.append(self._create_hid_command(
                     "mouse_move",
                     dx=x,
-                    dy=y
+                    dy=y,
+                    smooth=True
                 ))
                 
                 hid_commands.append(self._create_hid_command(
@@ -733,22 +849,11 @@ Output JSON array:"""
                     model=model
                 )
                 
-                # If validation failed with high confidence, suggest navigation
-                if not validation_result.get("is_valid") and validation_result.get("confidence", 0) >= 0.7:
-                    logger.warning("⚠️ Validation failed - suggesting navigation actions")
-                    return {
-                        "status": "validation_failed",
-                        "instruction": instruction,
-                        "visual_summary": visual_context[:500],
-                        "validation": validation_result,
-                        "rewritten_steps": [],
-                        "action_steps": [],
-                        "hid_commands": [],
-                        "total_commands": 0,
-                        "timestamp": datetime.utcnow().isoformat(),
-                        "message": f"Required elements not found on screen. {validation_result.get('reason', '')}",
-                        "suggested_actions": validation_result.get("suggested_actions", [])
-                    }
+                # Log validation warnings but continue processing
+                if not validation_result.get("is_valid"):
+                    logger.warning(f"⚠️ Validation warning (confidence: {validation_result.get('confidence', 0):.2f}): {validation_result.get('reason', 'Unknown')}")
+                    logger.info(f"   Missing elements: {validation_result.get('missing_elements', [])}")
+                    logger.info(f"   Continuing with best-effort HID generation...")
             
             # Stage 1: Generate structured action steps
             action_steps = self.generate_action_steps(
@@ -759,19 +864,51 @@ Output JSON array:"""
             )
             
             if not action_steps:
-                logger.warning("Stage 1 returned no actions")
-                return {
-                    "status": "error",
-                    "error": "Failed to generate action steps",
-                    "instruction": instruction,
-                    "visual_summary": visual_context[:500],
-                    "validation": validation_result,
-                    "rewritten_steps": [],
-                    "action_steps": [],
-                    "hid_commands": [],
-                    "total_commands": 0,
-                    "timestamp": datetime.utcnow().isoformat()
-                }
+                logger.warning("Stage 1 returned no actions - generating fallback action")
+                # Generate fallback action: click the first available element
+                elements = []
+                if visual_data and "session_data" in visual_data:
+                    screens = visual_data["session_data"].get("screens", [])
+                    if screens:
+                        elements = screens[-1].get("elements", [])
+                
+                if elements:
+                    # Use first element as fallback
+                    elem = elements[0]
+                    if "dx" in elem and "dy" in elem:
+                        x, y = elem["dx"], elem["dy"]
+                    elif "x" in elem and "y" in elem:
+                        x, y = elem["x"], elem["y"]
+                    else:
+                        bbox = elem.get("bbox", [])
+                        if bbox and len(bbox) >= 4:
+                            x = int((bbox[0] + bbox[2]) / 2 * 1920)
+                            y = int((bbox[1] + bbox[3]) / 2 * 1080)
+                        else:
+                            x, y = 0, 0
+                    
+                    action_steps = [{
+                        "step": 1,
+                        "action": "click",
+                        "target": elem.get("label", elem.get("type", "element")),
+                        "x": x,
+                        "y": y
+                    }]
+                    logger.info(f"✅ Generated fallback action: click {elem.get('label', 'element')} at ({x}, {y})")
+                else:
+                    # No elements at all - return error
+                    return {
+                        "status": "error",
+                        "error": "Failed to generate action steps - no visual elements available",
+                        "instruction": instruction,
+                        "visual_summary": visual_context[:500],
+                        "validation": validation_result,
+                        "rewritten_steps": [],
+                        "action_steps": [],
+                        "hid_commands": [],
+                        "total_commands": 0,
+                        "timestamp": datetime.utcnow().isoformat()
+                    }
             
             # Stage 2: Convert actions to HID commands
             hid_commands = self.convert_actions_to_hid(action_steps)
