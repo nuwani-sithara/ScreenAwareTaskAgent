@@ -29,6 +29,7 @@ roboflow==1.1.27
 
 # Web requests (for dataset downloads)
 requests==2.31.0
+python-dotenv>=1.0.1
 
 # YAML parsing (for ui_elements.yaml)
 pyyaml==6.0.1
@@ -46,8 +47,8 @@ paddleocr==2.6.1
 # Claude / Anthropic Vision API
 anthropic==0.28.1
 
-# GPT-4V / OpenAI Vision API
-openai==1.3.8
+# Gemini Vision API
+google-generativeai==0.8.4
 
 # Local VLM models (LLaVA, Qwen)
 transformers>=4.35.0

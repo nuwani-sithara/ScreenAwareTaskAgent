@@ -11,7 +11,13 @@ import shutil
 import json
 import hashlib
 from pathlib import Path
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any, List, Tuple, TYPE_CHECKING
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
 
 from src.capture.webcam_capture import start_webcam_stream
 from src.preprocessing.preprocess import preprocess_all
@@ -20,6 +26,9 @@ from src.perception.grounding.bbox_element_enricher import enrich_frame
 from src.perception.vlm import get_vlm_client, UIElement, get_ui_discovery_prompt
 from src.session_aggregator import SessionAggregator
 from src.vision.detector import detect_ui_elements
+
+if TYPE_CHECKING:
+    from src.vision.pipeline import VisionPipeline
 
 logging.basicConfig(
     level=logging.INFO,
@@ -88,10 +97,22 @@ def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, 
 def _init_vlm_client(provider: str, local_model: str, no_vlm: bool, ollama_base_url: Optional[str] = None):
     if no_vlm:
         return None
+    if provider == "gemini":
+        # Gemini semantic path is handled via VisionPipeline.
+        return None
     kwargs = {"model_name": local_model} if provider in {"local", "ollama"} else {}
     if provider == "ollama" and ollama_base_url:
         kwargs["base_url"] = ollama_base_url
     return get_vlm_client(provider, **kwargs)
+
+
+def _init_semantic_pipeline(provider: str, no_vlm: bool) -> Optional["VisionPipeline"]:
+    """Initialize the Gemini semantic pipeline when requested."""
+    if no_vlm or provider != "gemini":
+        return None
+    from src.vision.pipeline import VisionPipeline
+
+    return VisionPipeline()
 
 
 def _bbox_iou_norm(a: Tuple[float, float, float, float], b: Tuple[float, float, float, float]) -> float:
@@ -738,6 +759,7 @@ def _process_single_frame_item(
         frame_path=frame_path,
         session=session,
         vlm_client=session.get("vlm_client"),
+        semantic_pipeline=session.get("semantic_pipeline"),
         ollama_timeout_seconds=session.get("ollama_timeout_seconds"),
         coarse_max_boxes=int(session.get("coarse_max_boxes", 180)),
         refined_max_elements=int(session.get("refined_max_elements", 120)),
@@ -779,6 +801,7 @@ def _run_pipeline_for_frame(
     frame_path: str,
     session: Dict[str, Any],
     vlm_client=None,
+    semantic_pipeline: Optional["VisionPipeline"] = None,
     ollama_timeout_seconds: Optional[float] = None,
     coarse_max_boxes: int = 180,
     refined_max_elements: int = 120,
@@ -815,6 +838,68 @@ def _run_pipeline_for_frame(
     image = cv2.imread(preprocessed_image)
     if image is None:
         raise RuntimeError(f"Failed to read preprocessed frame: {preprocessed_image}")
+
+    # Gemini semantic path:
+    # - semantic VLM returns dx/dy points (no bbox)
+    # - validation/overlay are handled inside VisionPipeline
+    # - keep existing output file pattern for session compatibility
+    if semantic_pipeline is not None:
+        img_h, img_w = image.shape[:2]
+
+        coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
+        with open(coarse_json_path, "w", encoding="utf-8") as f:
+            json.dump({"bboxes": []}, f, indent=2)
+
+        # Respect provider-advised backoff to avoid repeated quota hammering.
+        next_allowed = float(session.get("semantic_next_allowed_at", 0.0) or 0.0)
+        now_ts = time.time()
+        if next_allowed > now_ts:
+            time.sleep(min(30.0, next_allowed - now_ts))
+
+        semantic_result = semantic_pipeline.run(preprocessed_image)
+        payload = semantic_result.get("vision_output", {})
+        payload = _finalize_elements_with_dxdy(payload, img_w, img_h)
+        semantic_error = str(semantic_result.get("vlm_error_type", "")).strip().lower()
+        retry_after = float(semantic_result.get("vlm_retry_after_seconds", 0.0) or 0.0)
+
+        # Gemini-only retry path for quota/rate limiting.
+        if semantic_error == "quota_exceeded" and retry_after > 0.0:
+            wait_s = min(30.0, retry_after + 0.5)
+            session["semantic_next_allowed_at"] = time.time() + wait_s
+            logging.warning("Gemini quota/rate limit. Retrying this frame in %.1fs", wait_s)
+            time.sleep(wait_s)
+            semantic_result = semantic_pipeline.run(preprocessed_image)
+            payload = semantic_result.get("vision_output", {})
+            payload = _finalize_elements_with_dxdy(payload, img_w, img_h)
+            semantic_error = str(semantic_result.get("vlm_error_type", "")).strip().lower()
+            retry_after = float(semantic_result.get("vlm_retry_after_seconds", 0.0) or 0.0)
+            if semantic_error == "quota_exceeded" and retry_after > 0.0:
+                session["semantic_next_allowed_at"] = time.time() + min(30.0, retry_after + 0.5)
+
+        refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
+        with open(refined_json_path, "w", encoding="utf-8") as f:
+            json.dump({"bboxes": []}, f, indent=2)
+
+        debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
+        generated_debug = semantic_result.get("debug_image")
+        if isinstance(generated_debug, str) and generated_debug and os.path.exists(generated_debug):
+            try:
+                shutil.copyfile(generated_debug, debug_image_path)
+            except Exception as exc:
+                logging.warning("Failed to copy semantic debug image: %s", exc)
+
+        final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
+        with open(final_json_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2)
+
+        return {
+            "status": "completed",
+            "session_id": session["id"],
+            "source_frame": frame_path,
+            "processed_at": time.time(),
+            "final_json_path": final_json_path,
+            "vision_data": payload,
+        }
 
     # Detect UI elements + screen margins.
     coarse_bboxes, _, _ = detect_ui_elements(
@@ -1184,15 +1269,16 @@ def vision_diagnose():
     except ImportError:
         providers["claude"] = {"available": False, "reason": "anthropic not installed"}
 
-    # openai
+    # gemini (semantic pipeline + VLM)
     try:
-        import openai  # type: ignore  # noqa: F401
-        providers["gpt4v"] = {
+        import google.generativeai  # type: ignore  # noqa: F401
+        providers["gemini"] = {
             "available": True,
-            "api_key_set": bool(os.getenv("OPENAI_API_KEY")),
+            "api_key_set": bool(os.getenv("GEMINI_API_KEY")),
+            "mode": "semantic_dxdy_pipeline",
         }
     except ImportError:
-        providers["gpt4v"] = {"available": False, "reason": "openai not installed"}
+        providers["gemini"] = {"available": False, "reason": "google-generativeai not installed"}
 
     results["vlm_providers"] = providers
 
@@ -1201,20 +1287,28 @@ def vision_diagnose():
     if providers.get("ollama", {}).get("available"):
         ollama_models = providers["ollama"].get("models", [])
         recommended_provider = f"ollama  (models: {', '.join(ollama_models) or 'none pulled yet'})"
+    elif providers.get("gemini", {}).get("api_key_set"):
+        recommended_provider = "gemini"
     elif providers.get("claude", {}).get("api_key_set"):
         recommended_provider = "claude"
-    elif providers.get("gpt4v", {}).get("api_key_set"):
-        recommended_provider = "gpt4v"
     elif providers.get("local", {}).get("available"):
         recommended_provider = "local"
 
     results["recommended_provider"] = recommended_provider
-    results["recommended_start_params"] = (
-        "POST /vision/start?camera_index=0&save_interval=1"
-        "&provider=ollama&no_vlm=false"
-        if providers.get("ollama", {}).get("available")
-        else "POST /vision/start?camera_index=0&save_interval=1&no_vlm=true"
-    )
+    if providers.get("ollama", {}).get("available"):
+        results["recommended_start_params"] = (
+            "POST /vision/start?camera_index=0&save_interval=1"
+            "&provider=ollama&no_vlm=false"
+        )
+    elif providers.get("gemini", {}).get("api_key_set"):
+        results["recommended_start_params"] = (
+            "POST /vision/start?camera_index=0&save_interval=1"
+            "&provider=gemini&no_vlm=false"
+        )
+    else:
+        results["recommended_start_params"] = (
+            "POST /vision/start?camera_index=0&save_interval=1&no_vlm=true"
+        )
 
     return results
 
@@ -1223,7 +1317,7 @@ def vision_diagnose():
 def start_vision(
     camera_index: int = 0,
     save_interval: float = 1.0,
-    provider: str = "ollama",
+    provider: str = "gemini",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
     ollama_timeout_seconds: float = 45.0,
@@ -1254,6 +1348,10 @@ def start_vision(
             no_vlm=no_vlm,
             ollama_base_url=ollama_base_url,
         )
+        semantic_pipeline = _init_semantic_pipeline(
+            provider=provider,
+            no_vlm=no_vlm,
+        )
     except Exception as e:
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
@@ -1271,6 +1369,7 @@ def start_vision(
             "vlm_batch_max_elements": vlm_batch_max_elements,
             "no_vlm": no_vlm,
             "vlm_client": vlm_client,
+            "semantic_pipeline": semantic_pipeline,
         }
     )
 
@@ -1407,7 +1506,7 @@ def stop_vision(
 @app.post("/vision/capture")
 def capture_once(
     camera_index: int = 0,
-    provider: str = "ollama",
+    provider: str = "gemini",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
     ollama_timeout_seconds: float = 60.0,
@@ -1431,6 +1530,10 @@ def capture_once(
             no_vlm=no_vlm,
             ollama_base_url=ollama_base_url,
         )
+        semantic_pipeline = _init_semantic_pipeline(
+            provider=provider,
+            no_vlm=no_vlm,
+        )
     except Exception as e:
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
@@ -1453,6 +1556,7 @@ def capture_once(
             frame_path=frame_path,
             session=session,
             vlm_client=vlm_client,
+            semantic_pipeline=semantic_pipeline,
             ollama_timeout_seconds=ollama_timeout_seconds,
             coarse_max_boxes=coarse_max_boxes,
             refined_max_elements=refined_max_elements,
@@ -1504,3 +1608,4 @@ def vision_status():
         "provider": session.get("provider") if session else None,
         "no_vlm": session.get("no_vlm") if session else None,
     }
+

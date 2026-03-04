@@ -162,3 +162,4 @@ def start_webcam_stream(camera_index=0):
 
 if __name__ == "__main__":
     start_webcam_capture()
+

@@ -3,6 +3,7 @@
 
 from .vlm_client import (
     VLMClient,
+    GeminiVLMClient,
     ClaudeVLMClient,
     GPT4VClient,
     LocalVLMClient,
@@ -19,6 +20,7 @@ from .prompt_templates import (
 
 __all__ = [
     "VLMClient",
+    "GeminiVLMClient",
     "ClaudeVLMClient",
     "GPT4VClient",
     "LocalVLMClient",

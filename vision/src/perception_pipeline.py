@@ -52,7 +52,7 @@ class IntegratedPerceptionPipeline:
         Initialize pipeline.
 
         Args:
-            vlm_provider: VLM provider ("claude", "gpt4v", "local")
+            vlm_provider: VLM provider ("gemini", "claude", "gpt4v", "local")
             yolo_model_path: Path to YOLO model
             use_vlm: Enable VLM
             use_yolo: Enable YOLO fast-path
@@ -417,8 +417,8 @@ def main():
     parser.add_argument("--image-dir", help="Directory of images for batch/streaming processing")
     parser.add_argument(
         "--provider",
-        default="claude",
-        choices=["claude", "gpt4v", "local", "ollama"],
+        default="gemini",
+        choices=["gemini", "claude", "gpt4v", "local", "ollama"],
         help="VLM provider",
     )
     parser.add_argument(
@@ -537,8 +537,8 @@ def main():
     parser.add_argument("--image-dir", help="Directory of images for batch processing")
     parser.add_argument(
         "--provider",
-        default="claude",
-        choices=["claude", "gpt4v", "local"],
+        default="gemini",
+        choices=["gemini", "claude", "gpt4v", "local"],
         help="VLM provider",
     )
     parser.add_argument(
