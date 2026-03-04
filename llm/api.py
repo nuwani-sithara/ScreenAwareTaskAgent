@@ -17,6 +17,7 @@ import asyncio
 from llm.interactive_generate import run_interactive
 from llm.ollama_adapter import generate_and_format
 from llm.ollama_client import OllamaClient
+from llm.gemini_client import GeminiClient
 from llm.hid_step_generator import HIDStepGenerator, generate_hid_steps_from_visual
 
 logging.basicConfig(
@@ -85,8 +86,11 @@ class VisualHIDRequest(BaseModel):
     instruction: str
     visual_data: Dict[str, Any]
     model: Optional[str] = "mistral"
-    max_tokens: Optional[int] = 300
+    max_tokens: Optional[int] = 1500
     skip_validation: Optional[bool] = False  # Skip validation check
+    use_gemini: Optional[bool] = False  # Use Google Gemini instead of Ollama
+    gemini_api_key: Optional[str] = None  # Gemini API key (or use GEMINI_API_KEY env var)
+    gemini_model: Optional[str] = "models/gemini-2.5-flash"  # Gemini model (models/gemini-2.5-flash, models/gemini-2.5-pro, models/gemini-flash-latest)
 
 class HealthResponse(BaseModel):
     status: str
@@ -232,11 +236,31 @@ def generate_hid_commands(request: VisualHIDRequest):
         
         start_time = time.time()
         
+        # Create appropriate LLM client
+        client = None
+        model = request.model
+        
+        if request.use_gemini:
+            try:
+                logger.info("💎 Using Google Gemini API")
+                client = GeminiClient(api_key=request.gemini_api_key)
+                model = request.gemini_model or "models/gemini-2.5-flash"
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize Gemini client: {e}")
+                raise HTTPException(
+                    status_code=500, 
+                    detail=f"Gemini initialization failed: {str(e)}. Make sure google-generativeai library is installed: pip install google-generativeai"
+                )
+        else:
+            logger.info("🦙 Using Ollama")
+            client = OllamaClient()
+        
         # Generate HID commands using two-stage pipeline (with validation)
         result = generate_hid_steps_from_visual(
             instruction=request.instruction,
             visual_data=request.visual_data,
-            model=request.model,
+            model=model,
+            client=client,
             skip_validation=request.skip_validation
         )
         
