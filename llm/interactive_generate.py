@@ -150,6 +150,17 @@ RULES:
 5. Keep each step concise (under 100 characters)
 6. Include coordinates when available for click actions
 7. For text input, specify exact text to type
+8. The task must be done successfully, all steps must be generated
+
+HID PROTOCOL CAPABILITIES:
+The following actions will be converted to HID protocol commands:
+- Click actions → mouse_move (to coordinates) + mouse_click (left/right/middle button)
+- Type actions → type_text (sends text string to device)
+- Key press → key_press (sends specific keycode: enter=0x28, tab=0x2B, escape=0x29, backspace=0x2A, space=0x2C, arrows=0x4F-0x52, F1-F12=0x3A-0x45)
+- Key release → key_release (releases specific key or all keys if no key specified)
+- Scroll actions → mouse_scroll (deltaY for vertical, deltaX for horizontal scroll)
+- System control → system (media keys like volume, play/pause - code 0-65535, partially supported)
+- Wait/Delay → delay (duration in milliseconds for timing control)
 
 OUTPUT FORMAT:
 [
