@@ -277,8 +277,8 @@ def run_interactive(
         # Generate with higher token limit for better quality
         gen = ollama_adapter.generate_and_format(
             prompt, 
-            max_tokens=1500,  # Increased to handle complex multi-step tasks
-            timeout=60         # Increased timeout for longer responses
+            max_tokens=1500,  
+            timeout=60         
         )
         
         raw_text = gen.get("cleaned_text") or gen.get("raw_output") or ""
