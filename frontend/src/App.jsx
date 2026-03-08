@@ -9,6 +9,7 @@ export default function App() {
   const [thinking, setThinking] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const chatAreaRef = useRef(null);
+  const [sessionId, setSessionId] = useState(null);
 
 
 
@@ -17,80 +18,99 @@ export default function App() {
   }, [messages, thinking]);
 
   const sendMessage = () => {
-    if (!input.trim() || thinking) return;
+  if (!input.trim() || thinking) return;
 
-    setMessages(prev => [
-      ...prev,
-      {
-        role: 'user',
-        text: input,
-        time: new Date().toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-      }
-    ]);
+  const userMessage = input;
 
-    setInput('');
-    runBackendTask();
-  };
+  setMessages(prev => [
+    ...prev,
+    {
+      role: 'user',
+      text: userMessage,
+      time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }
+  ]);
+
+  setInput('');
+
+  runBackendTask(userMessage);
+};
 
   // 🔹 Converts backend JSON → human-friendly message
-  const runBackendTask = async () => {
+  const runBackendTask = async (message) => {
+
   setThinking(true);
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/run-cycle", {
+
+    const response = await fetch("http://127.0.0.1:8000/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        task: input   // 👈 send user input
+        message: message,
+        session_id: sessionId
       })
     });
 
     const data = await response.json();
 
-    const success = data?.evaluation?.success;
-    const action = data?.action_plan?.action;
-    const target = data?.action_plan?.target;
-
-    let messageText = "";
-
-    if (success) {
-      messageText = `✅ Test completed successfully
-
-🧠 Planned Action:
-• ${action?.toUpperCase()}
-• Target: ${target}
-
-🖱️ Execution:
-• Action executed successfully on the UI
-
-📊 Evaluation:
-• No errors detected
-• System behaved as expected`;
-    } else {
-      messageText = `❌ Test failed during execution
-
-🧠 Planned Action:
-• ${action || "Unknown"}
-• Target: ${target || "Unknown"}
-
-⚠️ Please retry or review UI state.`;
+    if (data.session_id) {
+      setSessionId(data.session_id);
     }
 
-    setMessages(prev => [
-      ...prev,
-      { role: "agent", text: messageText }
-    ]);
+    // ⭐ Missing input check
+    if (data.status === "needs_input") {
+
+      const fields = data.missing_fields.join("\n• ");
+
+      setMessages(prev => [
+        ...prev,
+        {
+          role: "agent",
+          text: `🤖 I need the following information to continue:\n\n• ${fields}`
+        }
+      ]);
+
+      setThinking(false);
+      return;
+    }
+
+    // ⭐ Show main steps
+const steps = data.steps?.map((s, i) => `${i + 1}. ${s}`).join("\n");
+
+const messageText = `
+${data.message}
+
+Execution Steps:
+${steps}
+`;
+
+// Add main agent message
+setMessages(prev => [
+  ...prev,
+  { role: "agent", text: messageText }
+]);
+
+// ⭐ Show screen change message if available
+if (data.screen_change_message) {
+  setMessages(prev => [
+    ...prev,
+    { role: "agent", text: `🖼 Screen Update:\n${data.screen_change_message}` }
+  ]);
+}
 
   } catch (err) {
+
     setMessages(prev => [
       ...prev,
       { role: "agent", text: "❌ Unable to connect to backend service." }
     ]);
+
   }
 
   setThinking(false);

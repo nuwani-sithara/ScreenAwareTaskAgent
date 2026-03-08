@@ -1,45 +1,3 @@
-# from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-
-# from fastapi import Request
-# import logging
-# from backend.core.agentic_loop import run_cycle
-
-# # 1️⃣ Create FastAPI instance
-# app = FastAPI(title="ScreenPilot Backend", version="0.1")
-
-# # 2️⃣ Add CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],   # allow all for dev
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# # 3️⃣ Define routes
-# @app.get("/")
-# def read_root():
-#     return {"message": "ScreenPilot backend is running 🚀"}
-
-# @app.get("/mock-loop")
-# def mock_loop():
-#     return run_cycle()
-
-
-# # 4️⃣ LLM Steps Receiver Endpoint
-# @app.post("/llm/steps")
-# async def receive_llm_steps(request: Request):
-#     """Receive LLM-generated steps as JSON and process them."""
-#     try:
-#         steps = await request.json()
-#         logging.info(f"Received LLM steps: {steps}")
-#         # TODO: Add further processing of steps if needed
-#         return {"status": "received", "steps": steps}
-#     except Exception as e:
-#         logging.error(f"Failed to process LLM steps: {e}")
-#         return {"status": "error", "detail": str(e)}
-
 
 # backend/main.py
 
@@ -50,6 +8,7 @@ import logging
 
 from backend.core.agentic_loop import run_cycle
 from llm.interactive_generate import run_interactive
+from backend.core.chat_controller import handle_chat
 
 # ------------------------------------
 # Logging Setup
@@ -97,37 +56,19 @@ def run_agentic_cycle(request: TaskRequest):
     return result
 
 
-# ------------------------------------
-# Optional LLM Steps Receiver
-# ------------------------------------
-@app.post("/llm/steps")
-async def receive_llm_steps(request: Request):
-    try:
-        payload = await request.json()
-        logging.info(f"📥 Received payload: {payload}")
+class ChatRequest(BaseModel):
+    message: str
+    session_id: str | None = None
 
-        if isinstance(payload, str):
-            instruction = payload
-        elif isinstance(payload, dict):
-            instruction = payload.get("instruction")
-        else:
-            return {"error": "Invalid payload format"}
 
-        if not instruction:
-            return {"error": "No instruction provided"}
+@app.post("/chat")
+def chat(request: ChatRequest):
 
-        result = run_interactive(instruction=instruction)
-        logging.info("📤 Filtered response: %s", result)
-        generated = result.get("generated", {})
-        filtered = {
-            "instruction": generated.get("instruction"),
-            "category": generated.get("category")
-        }
+    logging.info(f"💬 User Message: {request.message}")
 
-        logging.info("📤 Filtered response: %s", filtered)
+    response = handle_chat(
+        request.session_id,
+        request.message
+    )
 
-        return filtered
-
-    except Exception as e:
-        logging.exception("Failed to process LLM steps")
-        return {"status": "error", "detail": str(e)}
+    return response

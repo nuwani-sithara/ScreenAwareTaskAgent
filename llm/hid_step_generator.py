@@ -255,41 +255,69 @@ CRITICAL MATCHING RULES:
    - If instruction is "type in notepad" and input fields exist → VALID (focus on typing capability)
    - If instruction is "enter text" and input fields exist → VALID
    - If instruction is "click login" and buttons exist → check for login-like button
-   
+
 2. Be VERY FLEXIBLE with element names:
    - "Username field" matches "Input field", "Username input field", "User input"
-   - "Notepad" instruction matches ANY text input area (focus on text entry capability)
-   - "Send button" matches "Submit", "Send", "button" elements
-   
+   - "Notepad" instruction matches ANY text input area
+   - "Send button" matches "Submit", "Send", "button"
+
 3. Generic labels are acceptable:
    - "Input field" can be used for text entry tasks
    - "Button" can be clicked
-   - Focus on whether the ACTION is possible, not if exact labels match
 
 4. Application context is secondary:
-   - "type in notepad" → Can we type? Are input fields present? → Valid
-   - "click submit" → Can we click? Are buttons present? → Valid
+   - "type in notepad" → Can we type? → Valid
+   - "click submit" → Can we click? → Valid
+
+------------------------------------------------
+
+DATA VALIDATION RULES:
+
+If the instruction implies authentication or login testing 
+(example: "login", "sign in", "test login", "authenticate"):
+
+Required test data:
+- username
+- password
+
+If these values are NOT provided in the instruction or context:
+- DO NOT invent values
+- DO NOT generate fake usernames or passwords
+- Mark validation as invalid
+- Add them to "missing_elements"
+
+Example:
+
+Instruction: "test login page"
+
+Elements: username input, password input, login button
+
+Response:
+{{
+ "is_valid": false,
+ "confidence": 0.9,
+ "reason": "Login test requires username and password but they were not provided",
+ "missing_elements": ["username", "password"],
+ "suggested_actions": [
+   "Ask user for login credentials",
+   "Provide test username and password"
+ ]
+}}
+
+------------------------------------------------
 
 Respond ONLY with valid JSON (no comments, no markdown):
+
 {{
     "is_valid": true/false,
     "confidence": 0.0-1.0,
-    "reason": "Brief explanation focusing on capability",
-    "missing_elements": ["only list if NO elements support the action"],
-    "suggested_actions": ["only if truly stuck, suggest navigation"]
+    "reason": "Brief explanation",
+    "missing_elements": [],
+    "suggested_actions": []
 }}
 
-VALIDATION EXAMPLES:
-- Instruction: "type 'hi' in notepad", Elements: ["Input field at (512, 16)"] 
-  → {{"is_valid": true, "confidence": 0.8, "reason": "Input field available for text entry"}}
-  
-- Instruction: "click login", Elements: ["Button at (300, 400)"]
-  → {{"is_valid": true, "confidence": 0.7, "reason": "Button available for clicking, likely login"}}
-  
-- Instruction: "scroll down to see more", Elements: ["Input field"]
-  → {{"is_valid": false, "confidence": 0.6, "reason": "No scrollable area detected"}}
-
-JSON Response:"""
+JSON Response:
+"""
 
         try:
             logger.info("🔍 Validating instruction against visual context...")
@@ -571,7 +599,7 @@ UI INTERACTION PATTERNS:
 Action Schema:
 {{
   "step": number,
-  "action": "click" | "type_text" | "press_key" | "navigate" | "wait",
+  "action": "click" | "type_text" | "press_key",
   "target": "element description",
   "x": number (for click),
   "y": number (for click),

@@ -5,7 +5,7 @@ import time
 
 LLM_BASE_URL = "http://localhost:8002"
 
-def plan(user_task: str, perception=None, model: str = "mistral"):
+def plan(user_task: str, perception=None, model: str = "models/gemini-flash-latest"):
     """
     Generate HID action plan using LLM visual reasoning.
 
@@ -36,9 +36,12 @@ def plan(user_task: str, perception=None, model: str = "mistral"):
 
         payload = {
             "instruction": user_task,
-            "visual_data": {"session_data": visual_data},
-            "model": model,
-            "max_tokens": 300
+            "visual_data": {
+                "session_data": visual_data
+            },
+            "use_gemini": True,
+            "gemini_model": model,
+            "skip_validation": False
         }
 
         logging.info("📡 Sending request to LLM /generate_hid...")
