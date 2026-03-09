@@ -13,6 +13,17 @@ import logging
 import time
 import httpx
 import asyncio
+import os
+
+# Load local .env for llm if present (do not hardcode keys in code)
+try:
+    from dotenv import load_dotenv
+    # Prefer llm/.env adjacent to this file
+    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".env"))
+    load_dotenv(env_path)
+except Exception:
+    # dotenv is optional; process environment will be used otherwise
+    pass
 
 from llm.interactive_generate import run_interactive
 from llm.ollama_adapter import generate_and_format
