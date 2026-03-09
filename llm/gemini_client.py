@@ -89,6 +89,9 @@ class GeminiClient:
                 generation_config["top_p"] = kwargs["top_p"]
             if "top_k" in kwargs:
                 generation_config["top_k"] = kwargs["top_k"]
+            # Force JSON output to avoid markdown wrappers and thinking model prefixes
+            if "response_mime_type" in kwargs:
+                generation_config["response_mime_type"] = kwargs["response_mime_type"]
             
             # Generate content
             response = gemini_model.generate_content(
@@ -96,8 +99,19 @@ class GeminiClient:
                 generation_config=generation_config
             )
             
-            # Extract text from response
-            text = response.text.strip()
+            # Extract text — for thinking models, iterate parts to skip thought blocks
+            text = ""
+            try:
+                for part in response.candidates[0].content.parts:
+                    # Skip thought/reasoning parts (present in thinking models)
+                    if getattr(part, 'thought', False):
+                        continue
+                    text += getattr(part, 'text', '') or ''
+                text = text.strip()
+            except Exception:
+                pass
+            if not text:
+                text = response.text.strip()  # fallback
             
             elapsed = time.time() - start
             logger.info(f"✅ Gemini responded in {elapsed:.2f}s")

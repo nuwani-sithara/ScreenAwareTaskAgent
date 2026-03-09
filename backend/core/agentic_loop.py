@@ -42,7 +42,7 @@ def start_vision():
         response = requests.post(
             f"{VISION_BASE_URL}/vision/start",
             params={
-                "camera_index": 1,
+                "camera_index": 0,
                 "save_interval": 1,
                 "provider": "gemini",
                 "local_model": "llava:7b",
@@ -148,6 +148,9 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
     perception = None
 
     vision_start_time = time.time()
+    # Ensure baseline_screen is always defined so later evaluation won't hit
+    # UnboundLocalError when vision is not used or no screens were captured.
+    baseline_screen = None
     # 2️⃣ Start Vision only if needed
     if use_vision:
         if start_delay and start_delay > 0:

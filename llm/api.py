@@ -19,9 +19,15 @@ from llm.ollama_adapter import generate_and_format
 from llm.ollama_client import OllamaClient
 from llm.gemini_client import GeminiClient
 from llm.hid_step_generator import HIDStepGenerator, generate_hid_steps_from_visual
+from llm.gemini_planner import (
+    plan_todo_list as gp_plan_todo_list,
+    plan_step_hid as gp_plan_step_hid,
+    evaluate_step_result as gp_evaluate_step_result,
+    generate_final_report as gp_generate_final_report,
+)
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
@@ -32,6 +38,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("llm.interactive_generate").setLevel(logging.WARNING)
 logging.getLogger("llm.ollama_client").setLevel(logging.WARNING)
 logging.getLogger("llm.ollama_adapter").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("google").setLevel(logging.WARNING)
 
 app = FastAPI(title="LLM Step Generation Service", version="2.0.0")
 
@@ -422,16 +430,140 @@ def get_status():
         "service": "LLM Step Generation Service",
         "version": "2.0.0",
         "status": "running",
-        "endpoints_available": 5,
+        "endpoints_available": 9,
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "features": {
             "full_pipeline": True,
             "validation": True,
             "rewriting": True,
             "simple_generation": True,
-            "visual_hid_generation": True
+            "visual_hid_generation": True,
+            "v2_plan_todos": True,
+            "v2_plan_step_hid": True,
+            "v2_evaluate_step": True,
+            "v2_final_report": True,
         }
     }
+
+
+# ---------------------------------------------------------------------------
+# V2 Agentic Loop Planning Endpoints
+# ---------------------------------------------------------------------------
+
+class PlanTodosRequest(BaseModel):
+    instruction: str
+    visual_data: Dict[str, Any]
+    model: Optional[str] = "models/gemini-flash-latest"
+
+
+class PlanStepHIDRequest(BaseModel):
+    instruction: str
+    visual_data: Dict[str, Any]
+    todo_list: List[Dict[str, Any]]
+    current_step: Dict[str, Any]
+    model: Optional[str] = "models/gemini-flash-latest"
+
+
+class EvaluateStepRequest(BaseModel):
+    instruction: str
+    visual_data: Dict[str, Any]
+    step: Dict[str, Any]
+    todo_list: List[Dict[str, Any]]
+    model: Optional[str] = "models/gemini-flash-latest"
+
+
+class FinalReportRequest(BaseModel):
+    instruction: str
+    visual_data: Dict[str, Any]
+    todo_list: List[Dict[str, Any]]
+    model: Optional[str] = "models/gemini-flash-latest"
+
+
+@app.post("/llm/plan_todos", response_model=Dict[str, Any])
+def plan_todos_endpoint(request: PlanTodosRequest):
+    """
+    V2: Analyze screen + task → ordered todo list.
+
+    Returns a JSON object with a 'steps' list, 'notes', and
+    'estimated_complexity'.
+    """
+    try:
+        logger.info("📋 plan_todos: %s", request.instruction[:80])
+        result = gp_plan_todo_list(request.visual_data, request.instruction, request.model)
+        return result
+    except Exception as exc:
+        logger.exception("plan_todos failed")
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.post("/llm/plan_step_hid", response_model=Dict[str, Any])
+def plan_step_hid_endpoint(request: PlanStepHIDRequest):
+    """
+    V2: Current screen + step context → HID command sequence.
+
+    Generates the minimal set of HID commands to execute a single step.
+    """
+    try:
+        logger.info(
+            "🎯 plan_step_hid: step %s", request.current_step.get("id")
+        )
+        result = gp_plan_step_hid(
+            request.visual_data,
+            request.todo_list,
+            request.current_step,
+            request.instruction,
+            request.model,
+        )
+        return result
+    except Exception as exc:
+        logger.exception("plan_step_hid failed")
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.post("/llm/evaluate_step", response_model=Dict[str, Any])
+def evaluate_step_endpoint(request: EvaluateStepRequest):
+    """
+    V2: Post-execution screen + step → success evaluation.
+
+    Returns status: "done" | "retry" | "needs_input" | "fatal_error"
+    plus confidence, reason, and optional question/field for user input.
+    """
+    try:
+        logger.info(
+            "🔍 evaluate_step: step %s", request.step.get("id")
+        )
+        result = gp_evaluate_step_result(
+            request.visual_data,
+            request.step,
+            request.instruction,
+            request.todo_list,
+            request.model,
+        )
+        return result
+    except Exception as exc:
+        logger.exception("evaluate_step failed")
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.post("/llm/final_report", response_model=Dict[str, Any])
+def final_report_endpoint(request: FinalReportRequest):
+    """
+    V2: Final screen + completed todo list → human-readable summary report.
+
+    Returns success flag, summary, full message, issues, and recommendations.
+    """
+    try:
+        logger.info("📊 final_report: %s", request.instruction[:80])
+        result = gp_generate_final_report(
+            request.visual_data,
+            request.instruction,
+            request.todo_list,
+            request.model,
+        )
+        return result
+    except Exception as exc:
+        logger.exception("final_report failed")
+        raise HTTPException(status_code=500, detail=str(exc))
 
 
 if __name__ == "__main__":

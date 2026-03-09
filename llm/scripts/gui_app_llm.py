@@ -21,7 +21,7 @@ class TextGenerationGUI:
         self.root.geometry("800x600")
         
         # Gemini API setup
-        GEMINI_API_KEY = "AIzaSyCrsfAxlOVPBJCwYocLgEgc8mo9ySrC7Qk"
+        GEMINI_API_KEY = "AIzaSyDmFDeC0Fl8EjRx6UqER0awFQDVm1x-60Y"
         self.gemini_client = genai.Client(api_key=GEMINI_API_KEY)
         # Try different models in order of preference
         self.models_to_try = ['gemini-2.0-flash', 'gemini-flash-latest', 'gemini-pro-latest']
