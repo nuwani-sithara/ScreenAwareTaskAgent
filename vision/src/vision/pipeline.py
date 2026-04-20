@@ -12,6 +12,7 @@ from src.vision.debug.overlay_generator import generate_overlay
 from src.vision.validation.coordinate_validator import validate_coordinates
 from src.vision.validation.schema_validator import build_empty_response, validate_schema
 from src.vision.vlm.gemini_vlm import GeminiVLM
+from src.vision.config import GEMINI_TIMEOUT_SECONDS
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,9 @@ class VisionPipeline:
     """Run semantic VLM analysis and enforce reliability checks."""
 
     def __init__(self) -> None:
-        self.vlm = GeminiVLM()
+        # Pass configured timeout for Gemini RPCs so we can tune network timeouts
+        # via the vision/.env `GEMINI_TIMEOUT_SECONDS` value.
+        self.vlm = GeminiVLM(timeout_seconds=float(GEMINI_TIMEOUT_SECONDS))
 
     def run(self, image_path: str, debug_output_path: str | None = None) -> Dict[str, Any]:
         """
