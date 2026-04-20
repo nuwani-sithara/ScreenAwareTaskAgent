@@ -225,6 +225,32 @@ class GeminiVLM(BaseVLM):
         return s
 
     @staticmethod
+    def _close_unbalanced_json(s: str) -> str:
+        """Best-effort closure for truncated JSON text."""
+        depth = 0
+        in_str = False
+        esc = False
+        stack: List[str] = []
+        for ch in s:
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == "\\":
+                    esc = True
+                elif ch == "\"":
+                    in_str = False
+                continue
+            if ch == "\"":
+                in_str = True
+                continue
+            if ch in "{[":
+                stack.append("}" if ch == "{" else "]")
+            elif ch in "}]":
+                if stack and stack[-1] == ch:
+                    stack.pop()
+        return s + "".join(reversed(stack))
+
+    @staticmethod
     def _coerce_json_text(text: str) -> str:
         """Best-effort conversion of a JS-like object string into valid JSON."""
         s = text.replace("```json", "").replace("```", "")
@@ -261,7 +287,8 @@ class GeminiVLM(BaseVLM):
             parsed = json.loads(candidate)
         except json.JSONDecodeError:
             extracted = self._extract_best_json_object(candidate)
-            if not extracted:
+            extracted_array = candidate if candidate.lstrip().startswith("[") else ""
+            if not extracted and not extracted_array:
                 try:
                     debug_path = f"{image_path}.gemini_raw.txt"
                     with open(debug_path, "w", encoding="utf-8") as fh:
@@ -274,28 +301,39 @@ class GeminiVLM(BaseVLM):
                     image_path, image_width, image_height, vlm_error_type="parse_error"
                 )
 
-            try:
-                parsed = json.loads(extracted)
-            except json.JSONDecodeError:
-                try:
-                    sanitized = self._sanitize_json_string(extracted)
-                    parsed = json.loads(sanitized)
-                except json.JSONDecodeError:
-                    coerced = self._coerce_json_text(extracted)
+            parse_candidates = [c for c in (extracted, extracted_array) if c]
+            parsed = None
+            for text in parse_candidates:
+                for variant in (
+                    text,
+                    self._sanitize_json_string(text),
+                    self._coerce_json_text(text),
+                    self._close_unbalanced_json(self._sanitize_json_string(text)),
+                    self._close_unbalanced_json(self._coerce_json_text(text)),
+                ):
                     try:
-                        parsed = json.loads(coerced)
+                        parsed = json.loads(variant)
+                        break
                     except json.JSONDecodeError:
-                        try:
-                            debug_path = f"{image_path}.gemini_raw.txt"
-                            with open(debug_path, "w", encoding="utf-8") as fh:
-                                fh.write(candidate[:20000])
-                            logger.warning("Wrote raw Gemini response to %s", debug_path)
-                        except Exception:
-                            logger.exception("Failed writing raw Gemini response to disk")
-                        logger.exception("Failed parsing Gemini JSON response after coercion")
-                        return self._safe_empty_response(
-                            image_path, image_width, image_height, vlm_error_type="parse_error"
-                        )
+                        continue
+                if parsed is not None:
+                    break
+
+            if parsed is None:
+                try:
+                    debug_path = f"{image_path}.gemini_raw.txt"
+                    with open(debug_path, "w", encoding="utf-8") as fh:
+                        fh.write(candidate[:20000])
+                    logger.warning("Wrote raw Gemini response to %s", debug_path)
+                except Exception:
+                    logger.exception("Failed writing raw Gemini response to disk")
+                logger.exception("Failed parsing Gemini JSON response after repair attempts")
+                return self._safe_empty_response(
+                    image_path, image_width, image_height, vlm_error_type="parse_error"
+                )
+
+        if isinstance(parsed, list) and parsed:
+            parsed = parsed[0] if isinstance(parsed[0], dict) else None
 
         if not isinstance(parsed, dict):
             logger.warning("Parsed Gemini response is not a JSON object")

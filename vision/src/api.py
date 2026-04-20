@@ -737,10 +737,31 @@ def _capture_single_frame(camera_index: int = 0):
         return None
     frame = None
     try:
-        for _ in range(5):
+        # Match the streaming path: try to negotiate a larger native frame size
+        # instead of sticking to the camera default (often 640x480).
+        try:
+            cur_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) or 0)
+            cur_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) or 0)
+            if max(cur_w, cur_h) <= 640:
+                preferred = [(1920, 1080), (1280, 720), (1600, 1200), (1024, 768)]
+                for pw, ph in preferred:
+                    cap.set(cv2.CAP_PROP_FRAME_WIDTH, float(pw))
+                    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, float(ph))
+                    rw = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) or 0)
+                    rh = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) or 0)
+                    if rw >= pw - 16 and rh >= ph - 16:
+                        break
+        except Exception:
+            pass
+
+        # Discard a few warm-up frames so the first read is not a black frame.
+        for _ in range(8):
             ok, f = cap.read()
             if ok:
                 frame = f
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                if float(gray.mean()) > 8.0 and float(cv2.countNonZero(gray)) / float(gray.size) > 0.01:
+                    break
             time.sleep(0.03)
     finally:
         cap.release()
@@ -904,33 +925,37 @@ def _run_pipeline_for_frame(
             if semantic_error == "quota_exceeded" and retry_after > 0.0:
                 session["semantic_next_allowed_at"] = time.time() + min(30.0, retry_after + 0.5)
 
-        refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
-        with open(refined_json_path, "w", encoding="utf-8") as f:
-            json.dump({"bboxes": []}, f, indent=2)
-        logger.debug("Wrote semantic placeholder refined JSON to %s", refined_json_path)
+        semantic_has_elements = bool(isinstance(payload, dict) and int(payload.get("element_count", 0) or 0) > 0)
+        if semantic_has_elements:
+            refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
+            with open(refined_json_path, "w", encoding="utf-8") as f:
+                json.dump({"bboxes": []}, f, indent=2)
+            logger.debug("Wrote semantic placeholder refined JSON to %s", refined_json_path)
 
-        debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
-        generated_debug = semantic_result.get("debug_image")
-        if isinstance(generated_debug, str) and generated_debug and os.path.exists(generated_debug):
-            try:
-                shutil.copyfile(generated_debug, debug_image_path)
-                logger.debug("Copied semantic debug image to %s", debug_image_path)
-            except Exception as exc:
-                logger.warning("Failed to copy semantic debug image: %s", exc)
+            debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
+            generated_debug = semantic_result.get("debug_image")
+            if isinstance(generated_debug, str) and generated_debug and os.path.exists(generated_debug):
+                try:
+                    shutil.copyfile(generated_debug, debug_image_path)
+                    logger.debug("Copied semantic debug image to %s", debug_image_path)
+                except Exception as exc:
+                    logger.warning("Failed to copy semantic debug image: %s", exc)
 
-        final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
-        with open(final_json_path, "w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=2)
-        logger.info("Wrote semantic final JSON to %s", final_json_path)
+            final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
+            with open(final_json_path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2)
+            logger.info("Wrote semantic final JSON to %s", final_json_path)
 
-        return {
-            "status": "completed",
-            "session_id": session["id"],
-            "source_frame": frame_path,
-            "processed_at": time.time(),
-            "final_json_path": final_json_path,
-            "vision_data": payload,
-        }
+            return {
+                "status": "completed",
+                "session_id": session["id"],
+                "source_frame": frame_path,
+                "processed_at": time.time(),
+                "final_json_path": final_json_path,
+                "vision_data": payload,
+            }
+
+        logger.warning("Gemini semantic pipeline returned zero elements; falling back to detector pipeline")
 
     # Detect UI elements + screen margins.
     coarse_bboxes, _, _ = detect_ui_elements(

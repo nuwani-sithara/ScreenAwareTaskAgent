@@ -2,6 +2,9 @@ import cv2
 import os
 import time
 import platform
+import logging
+
+logger = logging.getLogger(__name__)
 
 def _gui_available():
     """
@@ -64,6 +67,16 @@ def select_camera(available_cameras):
                 print("Invalid choice. Try again.")
         except ValueError:
             print("Please enter a valid number.")
+
+
+def _is_mostly_black_frame(frame, mean_threshold: float = 8.0, nonzero_ratio_threshold: float = 0.01) -> bool:
+    """Heuristic to detect warm-up / unexposed frames from a camera feed."""
+    if frame is None or frame.size == 0:
+        return True
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    mean_brightness = float(gray.mean())
+    nonzero_ratio = float(cv2.countNonZero(gray)) / float(gray.size)
+    return mean_brightness <= mean_threshold or nonzero_ratio <= nonzero_ratio_threshold
 
 def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="auto", interval=1):
     os.makedirs(save_dir, exist_ok=True)
@@ -185,9 +198,26 @@ def start_webcam_stream(camera_index=0, width: int | None = None, height: int | 
         raise RuntimeError(f"Unable to open camera index {camera_index}")
 
     try:
+        # Discard initial warm-up frames. Many cameras return a black or
+        # unexposed frame immediately after opening.
+        warmup_reads = 8
+        for i in range(warmup_reads):
+            ret, frame = cap.read()
+            if not ret:
+                time.sleep(0.05)
+                continue
+            if i >= 2 and not _is_mostly_black_frame(frame):
+                yield frame
+                break
+            time.sleep(0.05)
+
         while True:
             ret, frame = cap.read()
             if not ret:
+                continue
+            if _is_mostly_black_frame(frame):
+                logger.debug("Skipping mostly-black webcam frame during warm-up")
+                time.sleep(0.03)
                 continue
             yield frame
     finally:
