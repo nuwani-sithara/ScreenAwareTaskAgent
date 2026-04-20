@@ -14,3 +14,7 @@ try:
 	GEMINI_TIMEOUT_SECONDS = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "45"))
 except Exception:
 	GEMINI_TIMEOUT_SECONDS = 45.0
+
+# Whether to attempt automatic screen boundary detection and crop dark borders.
+# Set to "0" in environment to disable cropping and always use full-frame images.
+DETECT_SCREEN_BOUNDARIES = os.getenv("VISION_DETECT_BOUNDARIES", "0") != "0"

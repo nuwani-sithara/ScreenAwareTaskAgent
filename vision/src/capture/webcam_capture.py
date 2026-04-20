@@ -140,13 +140,46 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
     if gui_ok:
         cv2.destroyAllWindows()
 
-def start_webcam_stream(camera_index=0):
+def start_webcam_stream(camera_index=0, width: int | None = None, height: int | None = None):
     """
     Generator-style webcam stream for Vision API.
     Returns frames continuously until stopped.
     """
     backend = cv2.CAP_DSHOW if platform.system() == "Windows" else 0
     cap = cv2.VideoCapture(camera_index, backend)
+
+    # If a desired frame size is provided, attempt to set it on the capture.
+    # Some cameras/drivers may not honor these values but OpenCV will try.
+    if width is not None:
+        try:
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, float(width))
+        except Exception:
+            pass
+    if height is not None:
+        try:
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, float(height))
+        except Exception:
+            pass
+    else:
+        # No explicit request: attempt to probe and, if the camera reports a
+        # small default (commonly 640x480), try a list of preferred larger
+        # resolutions and pick the best one accepted by the driver.
+        try:
+            cur_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) or 0)
+            cur_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) or 0)
+            if max(cur_w, cur_h) <= 640:
+                preferred = [(1920, 1080), (1280, 720), (1600, 1200), (1024, 768)]
+                for pw, ph in preferred:
+                    cap.set(cv2.CAP_PROP_FRAME_WIDTH, float(pw))
+                    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, float(ph))
+                    # re-query
+                    rw = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) or 0)
+                    rh = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT) or 0)
+                    if rw >= pw - 16 and rh >= ph - 16:
+                        # driver honored size (allow small delta)
+                        break
+        except Exception:
+            pass
 
     if not cap.isOpened():
         raise RuntimeError(f"Unable to open camera index {camera_index}")

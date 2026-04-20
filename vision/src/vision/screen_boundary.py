@@ -3,6 +3,8 @@ from typing import Tuple
 import cv2
 import numpy as np
 
+from src.vision import config
+
 
 def detect_screen_boundaries(image: np.ndarray) -> Tuple[np.ndarray, int, int]:
     """
@@ -12,6 +14,11 @@ def detect_screen_boundaries(image: np.ndarray) -> Tuple[np.ndarray, int, int]:
         cropped_image, margin_left, margin_top
     """
     if image is None or image.size == 0:
+        return image, 0, 0
+
+    # Allow disabling automatic cropping via config for workflows that
+    # require preserving the original full-frame dimensions end-to-end.
+    if not getattr(config, "DETECT_SCREEN_BOUNDARIES", True):
         return image, 0, 0
 
     h, w = image.shape[:2]

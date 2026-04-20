@@ -35,7 +35,7 @@ class VisionPipeline:
         5) Generate debug overlay
         6) Return structured output
         """
-        logger.info("Vision pipeline started for image: %s", image_path)
+        logger.info("Vision pipeline started image=%s", image_path)
 
         image = cv2.imread(image_path)
         if image is None:
@@ -44,10 +44,12 @@ class VisionPipeline:
             return {"vision_output": safe_empty, "debug_image": ""}
 
         image_height, image_width = image.shape[:2]
-        logger.info("Loaded image size: width=%d height=%d", image_width, image_height)
+        logger.info("Loaded image size width=%d height=%d", image_width, image_height)
 
         logger.info("Calling Gemini VLM")
         raw_output = self.vlm.analyze(image_path=image_path, image_width=image_width, image_height=image_height)
+        if isinstance(raw_output, dict):
+            logger.debug("Gemini raw output keys: %s", sorted(raw_output.keys()))
         vlm_error_type = str(raw_output.get("_vlm_error_type", "")).strip().lower() if isinstance(raw_output, dict) else ""
         try:
             vlm_retry_after = float(raw_output.get("_vlm_retry_after_seconds", 0.0)) if isinstance(raw_output, dict) else 0.0
@@ -61,6 +63,7 @@ class VisionPipeline:
             image_width=image_width,
             image_height=image_height,
         )
+        logger.info("Schema validation produced %d elements", schema_validated.get("element_count", 0))
 
         logger.info("Running coordinate/confidence validation")
         cleaned = validate_coordinates(
@@ -68,6 +71,7 @@ class VisionPipeline:
             image_width=image_width,
             image_height=image_height,
         )
+        logger.info("Coordinate validation produced %d elements", cleaned.get("element_count", 0))
 
         if cleaned.get("element_count", 0) <= 0:
             logger.warning("No elements detected after validation; returning safe empty response")
@@ -81,7 +85,13 @@ class VisionPipeline:
             logger.exception("Failed to generate debug overlay")
             debug_path = ""
 
-        logger.info("Vision pipeline completed")
+        logger.info(
+            "Vision pipeline completed image=%s elements=%d error_type=%s retry_after=%.1f",
+            image_path,
+            cleaned.get("element_count", 0),
+            vlm_error_type or "none",
+            vlm_retry_after,
+        )
         return {
             "vision_output": cleaned,
             "debug_image": debug_path,

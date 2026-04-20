@@ -34,6 +34,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Vision Service")
 
@@ -87,7 +88,7 @@ def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, 
         agg = SessionAggregator(
             output_dir=root,
             detect_deltas=True,
-            dedup_frames=True,
+            dedup_frames=False,
         )
         agg.start(session_id=session_id)
         session["aggregator"] = agg
@@ -96,13 +97,16 @@ def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, 
 
 def _init_vlm_client(provider: str, local_model: str, no_vlm: bool, ollama_base_url: Optional[str] = None):
     if no_vlm:
+        logger.info("VLM disabled via no_vlm flag")
         return None
     if provider == "gemini":
         # Gemini semantic path is handled via VisionPipeline.
+        logger.info("Gemini provider selected; using semantic pipeline instead of per-frame VLM client")
         return None
     kwargs = {"model_name": local_model} if provider in {"local", "ollama"} else {}
     if provider == "ollama" and ollama_base_url:
         kwargs["base_url"] = ollama_base_url
+    logger.info("Initializing VLM client provider=%s kwargs=%s", provider, sorted(kwargs.keys()))
     return get_vlm_client(provider, **kwargs)
 
 
@@ -112,6 +116,7 @@ def _init_semantic_pipeline(provider: str, no_vlm: bool) -> Optional["VisionPipe
         return None
     from src.vision.pipeline import VisionPipeline
 
+    logger.info("Initializing Gemini semantic pipeline")
     return VisionPipeline()
 
 
@@ -755,6 +760,7 @@ def _process_single_frame_item(
     session_id: str,
     frame_path: str,
 ) -> Dict[str, Any]:
+    logger.info("Processing frame session_id=%s frame=%s", session_id, Path(frame_path).name)
     result = _run_pipeline_for_frame(
         frame_path=frame_path,
         session=session,
@@ -770,8 +776,9 @@ def _process_single_frame_item(
     if agg is not None and agg.is_active:
         try:
             agg.append_frame(frame_path, result)
+            logger.debug("Appended frame result to session aggregator session_id=%s", session_id)
         except Exception as _agg_exc:
-            logging.warning("SessionAggregator.append_frame failed: %s", _agg_exc)
+            logger.warning("SessionAggregator.append_frame failed: %s", _agg_exc)
 
     processed_queue.put(result)
     return result
@@ -818,6 +825,12 @@ def _run_pipeline_for_frame(
     """
     frame_name = Path(frame_path).name
     frame_stem = Path(frame_path).stem
+    logger.info(
+        "Pipeline started frame=%s session_id=%s semantic=%s",
+        frame_name,
+        session["id"],
+        semantic_pipeline is not None,
+    )
 
     proc_root = os.path.join(session["proc_dir"], f"proc_{int(time.time())}_{uuid.uuid4().hex[:6]}")
     proc_raw = os.path.join(proc_root, "raw_frames")
@@ -827,13 +840,16 @@ def _run_pipeline_for_frame(
 
     isolated_raw = os.path.join(proc_raw, frame_name)
     shutil.copyfile(frame_path, isolated_raw)
+    logger.debug("Copied raw frame to %s", isolated_raw)
 
+    logger.info("Running preprocessing for %s", frame_name)
     preprocess_all(raw_dir=proc_raw, out_dir=proc_pre)
     preprocessed_image = os.path.join(proc_pre, frame_name)
 
     # Persist preprocessed image in session folder
     session_preprocessed = os.path.join(session["preproc_dir"], frame_name)
     shutil.copyfile(preprocessed_image, session_preprocessed)
+    logger.debug("Persisted preprocessed frame to %s", session_preprocessed)
 
     image = cv2.imread(preprocessed_image)
     if image is None:
@@ -844,29 +860,41 @@ def _run_pipeline_for_frame(
     # - validation/overlay are handled inside VisionPipeline
     # - keep existing output file pattern for session compatibility
     if semantic_pipeline is not None:
+        logger.info("Using Gemini semantic pipeline for %s", frame_name)
         img_h, img_w = image.shape[:2]
 
         coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
         with open(coarse_json_path, "w", encoding="utf-8") as f:
             json.dump({"bboxes": []}, f, indent=2)
+        logger.debug("Wrote semantic placeholder coarse JSON to %s", coarse_json_path)
 
         # Respect provider-advised backoff to avoid repeated quota hammering.
         next_allowed = float(session.get("semantic_next_allowed_at", 0.0) or 0.0)
         now_ts = time.time()
         if next_allowed > now_ts:
+            logger.info("Gemini backoff active for %.1fs before processing %s", next_allowed - now_ts, frame_name)
             time.sleep(min(30.0, next_allowed - now_ts))
 
+        logger.info("Calling semantic pipeline for %s", frame_name)
         semantic_result = semantic_pipeline.run(preprocessed_image)
+        logger.debug("Semantic pipeline result keys: %s", sorted(semantic_result.keys()))
         payload = semantic_result.get("vision_output", {})
         payload = _finalize_elements_with_dxdy(payload, img_w, img_h)
         semantic_error = str(semantic_result.get("vlm_error_type", "")).strip().lower()
         retry_after = float(semantic_result.get("vlm_retry_after_seconds", 0.0) or 0.0)
+        logger.info(
+            "Semantic pipeline completed frame=%s elements=%d error_type=%s retry_after=%.1f",
+            frame_name,
+            payload.get("element_count", 0) if isinstance(payload, dict) else 0,
+            semantic_error or "none",
+            retry_after,
+        )
 
         # Gemini-only retry path for quota/rate limiting.
         if semantic_error == "quota_exceeded" and retry_after > 0.0:
             wait_s = min(30.0, retry_after + 0.5)
             session["semantic_next_allowed_at"] = time.time() + wait_s
-            logging.warning("Gemini quota/rate limit. Retrying this frame in %.1fs", wait_s)
+            logger.warning("Gemini quota/rate limit. Retrying this frame in %.1fs", wait_s)
             time.sleep(wait_s)
             semantic_result = semantic_pipeline.run(preprocessed_image)
             payload = semantic_result.get("vision_output", {})
@@ -879,18 +907,21 @@ def _run_pipeline_for_frame(
         refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
         with open(refined_json_path, "w", encoding="utf-8") as f:
             json.dump({"bboxes": []}, f, indent=2)
+        logger.debug("Wrote semantic placeholder refined JSON to %s", refined_json_path)
 
         debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
         generated_debug = semantic_result.get("debug_image")
         if isinstance(generated_debug, str) and generated_debug and os.path.exists(generated_debug):
             try:
                 shutil.copyfile(generated_debug, debug_image_path)
+                logger.debug("Copied semantic debug image to %s", debug_image_path)
             except Exception as exc:
-                logging.warning("Failed to copy semantic debug image: %s", exc)
+                logger.warning("Failed to copy semantic debug image: %s", exc)
 
         final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
         with open(final_json_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2)
+        logger.info("Wrote semantic final JSON to %s", final_json_path)
 
         return {
             "status": "completed",
@@ -906,6 +937,7 @@ def _run_pipeline_for_frame(
         image,
         max_boxes=max(20, int(coarse_max_boxes)),
     )
+    logger.info("Coarse detection produced %d boxes for %s", len(coarse_bboxes), frame_name)
     coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
     with open(coarse_json_path, "w", encoding="utf-8") as f:
         json.dump({"bboxes": coarse_bboxes}, f, indent=2)
@@ -938,11 +970,13 @@ def _run_pipeline_for_frame(
                     "confidence": item.get("confidence", 0.5),
                 }
             )
+    logger.info("Refined %d boxes for %s", len(refined_bboxes), frame_name)
 
     # Optional full-image VLM discovery pass:
     # supplements missed boxes and enriches type/label/description before final ranking.
     if vlm_client is not None:
         try:
+            logger.info("Running full-image VLM discovery for %s", frame_name)
             discovery_prompt = get_ui_discovery_prompt(
                 image_context=(
                     "Desktop/web app screenshot. Detect every visible interactive and textual UI element. "
@@ -954,6 +988,7 @@ def _run_pipeline_for_frame(
                 prompt=discovery_prompt,
             )
             if discovery_result and discovery_result.parse_successful and discovery_result.elements:
+                logger.info("VLM discovery found %d elements", len(discovery_result.elements))
                 refined_bboxes = _merge_vlm_discovery_into_refined(
                     refined_bboxes=refined_bboxes,
                     vlm_elements=discovery_result.elements,
@@ -961,20 +996,20 @@ def _run_pipeline_for_frame(
                     image_h=img_h,
                 )
         except Exception as exc:
-            logging.warning("VLM discovery merge failed: %s", exc)
+            logger.warning("VLM discovery merge failed: %s", exc)
 
     # Generic cleanup pipeline:
     # raw detections -> confidence -> min area -> nms -> merge neighbors -> contained cleanup
     conf_thr = 0.55
     refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
-    print("After confidence:", len(refined_bboxes))
+    logger.debug("After confidence filter: %d", len(refined_bboxes))
     refined_bboxes = _filter_by_min_area_ratio(
         refined_bboxes,
         image_w=img_w,
         image_h=img_h,
         min_area_ratio=0.0008,
     )
-    print("After area filter:", len(refined_bboxes))
+    logger.debug("After area filter: %d", len(refined_bboxes))
     if len(refined_bboxes) > 50:
         # adaptive noise control: tighten confidence threshold and rerun filtering
         conf_thr = min(0.65, conf_thr + 0.05)
@@ -985,18 +1020,18 @@ def _run_pipeline_for_frame(
             image_h=img_h,
             min_area_ratio=0.0008,
         )
-        print("After adaptive confidence:", len(refined_bboxes))
+        logger.debug("After adaptive confidence filter: %d", len(refined_bboxes))
     refined_bboxes = apply_nms(refined_bboxes, iou_threshold=0.4)
-    print("After NMS:", len(refined_bboxes))
+    logger.debug("After NMS: %d", len(refined_bboxes))
     refined_bboxes = merge_nearby_elements(
         refined_bboxes,
         image_w=img_w,
         image_h=img_h,
         distance_threshold=None,  # 2% diagonal default
     )
-    print("After merge:", len(refined_bboxes))
+    logger.debug("After merge nearby elements: %d", len(refined_bboxes))
     refined_bboxes = _remove_contained_elements_generic(refined_bboxes, img_w, img_h)
-    print("After containment:", len(refined_bboxes))
+    logger.debug("After containment cleanup: %d", len(refined_bboxes))
 
     # Dynamic cap per resolution (typical 10-40, ~30 for 640x480).
     area_scale = (img_w * img_h) / float(640 * 480)
@@ -1036,6 +1071,7 @@ def _run_pipeline_for_frame(
 
         raw_elements = payload.get("elements", [])
         if raw_elements:
+            logger.info("Running batch VLM classification on %d elements", len(raw_elements))
             ui_elements = [UIElement.from_dict(e) for e in raw_elements]
             try:
                 batch_limit = max(20, int(vlm_batch_max_elements))
@@ -1059,8 +1095,9 @@ def _run_pipeline_for_frame(
                         merged.extend(chunk)
                     ui_elements = merged
                 payload["elements"] = [e.to_dict() for e in ui_elements]
+                logger.info("Batch VLM classification completed for %s", frame_name)
             except Exception as exc:
-                logging.warning("Batch VLM classification failed: %s", exc)
+                logger.warning("Batch VLM classification failed: %s", exc)
 
         with open(final_json_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=2)
@@ -1082,19 +1119,23 @@ def _run_pipeline_for_frame(
     }
 
 
-def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float = 1.0):
+def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float = 1.0, cam_width: int | None = None, cam_height: int | None = None):
     """Capture loop with basic change detection. Enqueues frame paths for processing."""
     global capture_running, latest_frame, latest_result
 
-    logging.info("Webcam capture loop started")
+    logger.info(
+        "Webcam capture loop started camera_index=%s save_dir=%s interval=%.2f",
+        camera_index,
+        save_dir,
+        save_interval,
+    )
     os.makedirs(save_dir, exist_ok=True)
 
     last_saved = 0.0
     last_saved_small = None
-    change_threshold = 0.01
 
     try:
-        stream = start_webcam_stream(camera_index)
+        stream = start_webcam_stream(camera_index, width=cam_width, height=cam_height)
         for frame in stream:
             if not capture_running:
                 break
@@ -1115,15 +1156,14 @@ def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float =
                 max_dim = 320
                 scale = max_dim / max(h, w) if max(h, w) > max_dim else 1.0
                 small = cv2.resize(gray, (int(w * scale), int(h * scale))) if scale != 1.0 else gray
-
                 if last_saved_small is None:
                     save_flag = True
                 else:
                     diff = cv2.absdiff(small, last_saved_small)
                     _, thresh = cv2.threshold(diff, 30, 255, cv2.THRESH_BINARY)
                     ratio = int(cv2.countNonZero(thresh)) / float(thresh.size)
-                    if ratio >= change_threshold:
-                        save_flag = True
+                    save_flag = True
+                    logger.debug("Frame change ratio=%.4f session_id=%s", ratio, current_session["id"] if current_session else None)
             except Exception:
                 save_flag = True
                 small = None
@@ -1137,6 +1177,7 @@ def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float =
                     sid = current_session["id"] if current_session else None
                 if sid:
                     processing_queue.put({"session_id": sid, "frame_path": frame_path})
+                    logger.debug("Enqueued frame for processing session_id=%s frame=%s", sid, filename)
 
                 last_saved = now
                 if small is not None:
@@ -1145,15 +1186,15 @@ def webcam_capture_loop(camera_index: int, save_dir: str, save_interval: float =
             time.sleep(0.05)
 
     except Exception as e:
-        logging.error(f"Webcam error: {e}")
+        logger.exception("Webcam error: %s", e)
 
-    logging.info("Webcam capture loop stopped")
+    logger.info("Webcam capture loop stopped")
 
 
 def processing_worker():
     """Background worker that processes enqueued frames."""
     global current_session, processing_inflight
-    logging.info("Processing worker started")
+    logger.info("Processing worker started")
 
     while True:
         try:
@@ -1175,30 +1216,13 @@ def processing_worker():
                 session = sessions_by_id.get(session_id)
 
             if not session:
-                logging.warning("Dropping frame for unknown session_id=%s", session_id)
+                logger.warning("Dropping frame for unknown session_id=%s", session_id)
                 continue
-
-            try:
-                frame_hash = _file_sha256(frame_path)
-                last_hash = session.get("_last_frame_hash")
-                if last_hash == frame_hash:
-                    processed_queue.put(
-                        {
-                            "status": "skipped_unchanged",
-                            "session_id": session_id,
-                            "source_frame": frame_path,
-                            "processed_at": time.time(),
-                        }
-                    )
-                    continue
-                session["_last_frame_hash"] = frame_hash
-            except Exception:
-                pass
 
             _process_single_frame_item(session, session_id, frame_path)
 
         except Exception as e:
-            logging.exception("Per-frame pipeline failed")
+            logger.exception("Per-frame pipeline failed")
             processed_queue.put(
                 {
                     "status": "error",
@@ -1317,6 +1341,8 @@ def vision_diagnose():
 def start_vision(
     camera_index: int = 0,
     save_interval: float = 1.0,
+    camera_width: int | None = None,
+    camera_height: int | None = None,
     provider: str = "gemini",
     local_model: str = "llava:7b",
     ollama_base_url: Optional[str] = None,
@@ -1333,9 +1359,18 @@ def start_vision(
     is written to the session root directory.
     """
     global capture_running, capture_thread, processing_thread, current_session
+    logger.info(
+        "Received /vision/start camera_index=%s save_interval=%.2f provider=%s no_vlm=%s local_model=%s",
+        camera_index,
+        save_interval,
+        provider,
+        no_vlm,
+        local_model,
+    )
 
     with session_lock:
         if capture_running and current_session:
+            logger.info("Vision session already running session_id=%s", current_session.get("id"))
             return {
                 "status": "already_running",
                 "session_id": current_session.get("id"),
@@ -1353,12 +1388,15 @@ def start_vision(
             no_vlm=no_vlm,
         )
     except Exception as e:
+        logger.exception("VLM init failed")
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
     session = _new_session(prefix="session", aggregate=True)
     session.update(
         {
             "camera_index": camera_index,
+            "camera_width": camera_width,
+            "camera_height": camera_height,
             "save_interval": save_interval,
             "provider": provider,
             "local_model": local_model,
@@ -1377,10 +1415,11 @@ def start_vision(
         current_session = session
         capture_running = True
         sessions_by_id[session["id"]] = session
+    logger.info("Vision session started session_id=%s root=%s", session["id"], session["root"])
 
     capture_thread = threading.Thread(
         target=webcam_capture_loop,
-        args=(camera_index, session["raw_dir"], save_interval),
+        args=(camera_index, session["raw_dir"], save_interval, camera_width, camera_height),
         daemon=True,
     )
     capture_thread.start()
@@ -1414,12 +1453,24 @@ def stop_vision(
 ):
     """Stop continuous capture session."""
     global capture_running, capture_thread, current_session
+    logger.info(
+        "Received /vision/stop session_id=%s wait_for_processing=%s timeout=%.1f",
+        session_id,
+        wait_for_processing,
+        processing_timeout,
+    )
 
     with session_lock:
         if not capture_running or current_session is None:
+            logger.info("Stop requested but no active session is running")
             return {"status": "not_running"}
 
         if session_id and current_session.get("id") != session_id:
+            logger.warning(
+                "Stop session mismatch expected=%s received=%s",
+                current_session.get("id"),
+                session_id,
+            )
             return {
                 "status": "session_mismatch",
                 "expected": current_session.get("id"),
@@ -1430,10 +1481,12 @@ def stop_vision(
         capture_running = False
 
     if capture_thread and capture_thread.is_alive():
+        logger.info("Waiting for capture thread to stop")
         capture_thread.join(timeout=10)
 
     if wait_for_processing:
         deadline = time.time() + max(0.0, processing_timeout)
+        logger.info("Waiting for processing queue to drain until %.1f seconds from now", processing_timeout)
         while time.time() < deadline:
             with session_lock:
                 inflight = processing_inflight.get(session["id"], 0)
@@ -1465,7 +1518,7 @@ def stop_vision(
             try:
                 _process_single_frame_item(session, session["id"], frame_path)
             except Exception as exc:
-                logging.exception("Synchronous drain processing failed: %s", exc)
+                logger.exception("Synchronous drain processing failed: %s", exc)
 
     # Finalise SessionAggregator → writes session_summary.json
     session_summary_path: Optional[str] = None
@@ -1477,12 +1530,12 @@ def stop_vision(
             session_summary_path = str(
                 Path(session["root"]) / f"{agg.session_id}_summary.json"
             )
-            logging.info(
+            logger.info(
                 "Session summary saved: %s  screens=%d",
                 session_summary_path, session_doc.get("screen_count", 0),
             )
         except Exception as _fin_exc:
-            logging.warning("SessionAggregator.finalize failed: %s", _fin_exc)
+            logger.warning("SessionAggregator.finalize failed: %s", _fin_exc)
 
     summary = {
         "status": "stopped",
@@ -1499,6 +1552,8 @@ def stop_vision(
     with session_lock:
         current_session = None
         sessions_by_id.pop(session["id"], None)
+
+    logger.info("Vision session stopped session_id=%s", session["id"])
 
     return summary
 
@@ -1541,7 +1596,7 @@ def capture_once(
                 result["capture_mode"] = "instant_stream"
                 return result
             except Exception as e:
-                logging.exception("Instant stream capture failed")
+                logger.exception("Instant stream capture failed")
                 return {
                     "status": "error",
                     "session_id": active_session.get("id"),
@@ -1593,7 +1648,7 @@ def capture_once(
         )
         return result
     except Exception as e:
-        logging.exception("Single-shot pipeline failed")
+        logger.exception("Single-shot pipeline failed")
         return {
             "status": "error",
             "session_id": session["id"],

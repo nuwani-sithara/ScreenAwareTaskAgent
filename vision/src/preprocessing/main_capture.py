@@ -9,7 +9,8 @@ import subprocess
 
 # Adjust commands/params as needed
 CAPTURE_CMD = "python src/capture/game_capture.py --interval 1 --limit 200"
-PREPROCESS_CMD = "python src/preprocessing/preprocess.py --resize 640"
+# Do not force a resize by default; keep original frame dimensions.
+PREPROCESS_CMD = "python src/preprocessing/preprocess.py"
 
 def run_cmd(cmd):
     print("Running:", cmd)
