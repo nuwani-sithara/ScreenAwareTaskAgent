@@ -355,3 +355,6 @@
 2026-03-09 11:48:54,646 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
 2026-03-09 11:49:21,395 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
 2026-03-09 11:49:35,021 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-03-23 09:16:29,717 | INFO | === Agentic AI System Started ===
+2026-03-23 09:16:29,756 | INFO | === Agentic AI System Started ===
+2026-03-23 09:16:33,779 | WARNING | HID server dist not found at E:\sliit-project\ScreenAwareTaskAgent\hid\api-server\dist\server.js — skipping auto-start.
