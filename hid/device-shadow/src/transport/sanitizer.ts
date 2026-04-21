@@ -39,13 +39,13 @@ export class Sanitizer {
   
   /**
    * Sanitize mouse_move command
-   * Clamps movement to HID-safe range (-127 to 127 per report)
+   * Preserve intended movement so the normalizer can split large deltas
+   * into HID-safe (-127..127) per-report chunks.
    */
   private static sanitizeMouseMove(cmd: any): any {
-    // Clamp to safe range for single HID report
-    // Note: Large movements will be split by normalizer
-    cmd.dx = Math.round(this.clamp(cmd.dx, -127, 127));
-    cmd.dy = Math.round(this.clamp(cmd.dy, -127, 127));
+    // Keep full-range movement; normalizer handles report-size chunking.
+    cmd.dx = Math.round(this.clamp(cmd.dx, -32767, 32767));
+    cmd.dy = Math.round(this.clamp(cmd.dy, -32767, 32767));
     
     return cmd;
   }

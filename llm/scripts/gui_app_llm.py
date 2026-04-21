@@ -8,7 +8,30 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox
 import threading
 import queue
+import os
 from google import genai
+
+
+def _load_env_file():
+    """Load llm/.env without requiring a hard dependency on python-dotenv."""
+    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
+    if not os.path.exists(env_path):
+        return
+
+    try:
+        from dotenv import load_dotenv
+    except Exception:
+        # Minimal fallback parser for simple KEY=VALUE lines.
+        with open(env_path, "r", encoding="utf-8") as env_file:
+            for raw_line in env_file:
+                line = raw_line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+        return
+
+    load_dotenv(env_path)
 
 
 class TextGenerationGUI:
@@ -20,9 +43,15 @@ class TextGenerationGUI:
         self.root.title("Automation Step Generator - Powered by Gemini AI")
         self.root.geometry("800x600")
         
+        # Load Gemini settings from llm/.env before reading environment variables.
+        _load_env_file()
+
         # Gemini API setup
-        GEMINI_API_KEY = ""
-        self.gemini_client = genai.Client(api_key=GEMINI_API_KEY)
+        gemini_api_key = os.getenv("GEMINI_API_KEY")
+        if not gemini_api_key:
+            raise ValueError("GEMINI_API_KEY is not set. Add it to llm/.env.")
+
+        self.gemini_client = genai.Client(api_key=gemini_api_key)
         # Try different models in order of preference
         self.models_to_try = ['gemini-2.0-flash', 'gemini-flash-latest', 'gemini-pro-latest']
         self.model_name = self.models_to_try[0]

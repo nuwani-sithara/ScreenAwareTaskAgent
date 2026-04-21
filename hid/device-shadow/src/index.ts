@@ -111,21 +111,8 @@ export class DeviceShadow {
       });
     };
 
-    // If this is a mouse_move or mouse_drag, first execute a deterministic anchor move to top-left
-    if (command.cmd === 'mouse_move' || command.cmd === 'mouse_drag') {
-      const anchor = {
-        cmd: 'mouse_move',
-        dx: -1000,
-        dy: -1000,
-        smooth: true,
-        duration: 300
-      };
-
-      // Execute anchor first (will go through full normalization/smoothing pipeline)
-      await processOneCommand(anchor);
-    }
-
-    // Finally execute the original command
+    // Execute the original command without implicit cursor anchoring.
+    // Absolute-position orchestration (if needed) must be handled by caller.
     await processOneCommand(command);
   }
   

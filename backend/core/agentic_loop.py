@@ -5,7 +5,6 @@ import time
 from backend.core.perceive import perceive, stream_vision
 from backend.core.plan import plan
 from backend.core.act import act_with_retry
-from vision.src import perception
 import json
 from backend.utils.file_utils import create_run_folder, save_json
 from plyer import notification
