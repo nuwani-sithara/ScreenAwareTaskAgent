@@ -72,19 +72,30 @@ def validate_schema(payload: Dict[str, Any], image_path: str, image_width: int, 
             continue
 
         try:
-            valid_elements.append(
-                {
-                    "id": str(element["id"]),
-                    "type": str(element["type"]),
-                    "label": str(element["label"]),
-                    "description": str(element["description"]),
-                    "state": str(element["state"]),
-                    "dx": int(round(float(element["dx"]))),
-                    "dy": int(round(float(element["dy"]))),
-                    "confidence": float(element["confidence"]),
-                    "source": str(element["source"]),
-                }
-            )
+            bbox = element.get("bbox")
+            if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+                try:
+                    bbox_out = [int(round(float(v))) for v in bbox]
+                except Exception:
+                    bbox_out = None
+            else:
+                bbox_out = None
+
+            normalized_element = {
+                "id": str(element["id"]),
+                "type": str(element["type"]),
+                "label": str(element["label"]),
+                "description": str(element["description"]),
+                "state": str(element["state"]),
+                "dx": int(round(float(element["dx"]))),
+                "dy": int(round(float(element["dy"]))),
+                "confidence": float(element["confidence"]),
+                "source": str(element["source"]),
+            }
+            if bbox_out is not None:
+                normalized_element["bbox"] = bbox_out
+
+            valid_elements.append(normalized_element)
         except Exception:
             logger.debug("Dropping malformed element at index %d", idx, exc_info=True)
 

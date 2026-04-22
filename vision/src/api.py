@@ -21,11 +21,9 @@ except Exception:
 
 from src.capture.webcam_capture import start_webcam_stream
 from src.preprocessing.preprocess import preprocess_all
-from src.perception.grounding.bbox_refiner import BBoxRefiner
 from src.perception.grounding.bbox_element_enricher import enrich_frame
 from src.perception.vlm import get_vlm_client, UIElement, get_ui_discovery_prompt
 from src.session_aggregator import SessionAggregator
-from src.vision.detector import detect_ui_elements
 
 if TYPE_CHECKING:
     from src.vision.pipeline import VisionPipeline
@@ -95,24 +93,17 @@ def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, 
     return session
 
 
-def _init_vlm_client(provider: str, local_model: str, no_vlm: bool, ollama_base_url: Optional[str] = None):
+def _init_vlm_client(no_vlm: bool):
     if no_vlm:
         logger.info("VLM disabled via no_vlm flag")
         return None
-    if provider == "gemini":
-        # Gemini semantic path is handled via VisionPipeline.
-        logger.info("Gemini provider selected; using semantic pipeline instead of per-frame VLM client")
-        return None
-    kwargs = {"model_name": local_model} if provider in {"local", "ollama"} else {}
-    if provider == "ollama" and ollama_base_url:
-        kwargs["base_url"] = ollama_base_url
-    logger.info("Initializing VLM client provider=%s kwargs=%s", provider, sorted(kwargs.keys()))
-    return get_vlm_client(provider, **kwargs)
+    logger.info("Initializing Gemini VLM client")
+    return get_vlm_client()
 
 
-def _init_semantic_pipeline(provider: str, no_vlm: bool) -> Optional["VisionPipeline"]:
+def _init_semantic_pipeline(no_vlm: bool) -> Optional["VisionPipeline"]:
     """Initialize the Gemini semantic pipeline when requested."""
-    if no_vlm or provider != "gemini":
+    if no_vlm:
         return None
     from src.vision.pipeline import VisionPipeline
 
@@ -637,6 +628,25 @@ def _specific_description(etype: str, label: str, dx: int, dy: int) -> str:
     )
 
 
+def _strip_internal_fields(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a copy of the payload without internal-only fields."""
+    if not isinstance(payload, dict):
+        return payload
+    out = dict(payload)
+    elements = out.get("elements", [])
+    if isinstance(elements, list):
+        cleaned_elements: List[Dict[str, Any]] = []
+        for element in elements:
+            if not isinstance(element, dict):
+                cleaned_elements.append(element)
+                continue
+            cleaned = dict(element)
+            cleaned.pop("bbox", None)
+            cleaned_elements.append(cleaned)
+        out["elements"] = cleaned_elements
+    return out
+
+
 def _finalize_elements_with_dxdy(
     payload: Dict[str, Any],
     image_width: int,
@@ -675,12 +685,12 @@ def _finalize_elements_with_dxdy(
         if not desc or desc in {
             "No VLM available",
             "VLM classification failed",
-            "Skipped VLM classification (Ollama call budget)",
+            "Skipped VLM classification (provider budget)",
         }:
             desc = ""
 
         bbox = elem.get("bbox")
-        if ("dx" not in elem or "dy" not in elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
             try:
                 x1 = float(bbox[0])
                 y1 = float(bbox[1])
@@ -688,8 +698,8 @@ def _finalize_elements_with_dxdy(
                 y2 = float(bbox[3])
                 cx = ((x1 + x2) * 0.5) * image_width
                 cy = ((y1 + y2) * 0.5) * image_height
-                elem.setdefault("dx", int(round(max(0.0, cx))))
-                elem.setdefault("dy", int(round(max(0.0, cy))))
+                elem["dx"] = int(round(max(0.0, cx)))
+                elem["dy"] = int(round(max(0.0, cy)))
             except Exception:
                 pass
         try:
@@ -713,19 +723,18 @@ def _finalize_elements_with_dxdy(
         confidence = max(0.0, min(1.0, confidence))
 
         final_source = str(elem.get("source", "")).strip() or "ui_detector"
-        finalized.append(
-            {
-                "id": str(elem.get("id", "elem_0")),
-                "type": etype,
-                "label": label,
-                "description": desc if desc else _specific_description(etype, label, dx, dy),
-                "state": state,
-                "dx": dx,
-                "dy": dy,
-                "confidence": confidence,
-                "source": final_source,
-            }
-        )
+        final_elem = {
+            "id": str(elem.get("id", "elem_0")),
+            "type": etype,
+            "label": label,
+            "description": desc if desc else _specific_description(etype, label, dx, dy),
+            "state": state,
+            "dx": dx,
+            "dy": dy,
+            "confidence": confidence,
+            "source": final_source,
+        }
+        finalized.append(final_elem)
     payload["elements"] = finalized
     return payload
 
@@ -787,7 +796,6 @@ def _process_single_frame_item(
         session=session,
         vlm_client=session.get("vlm_client"),
         semantic_pipeline=session.get("semantic_pipeline"),
-        ollama_timeout_seconds=session.get("ollama_timeout_seconds"),
         coarse_max_boxes=int(session.get("coarse_max_boxes", 180)),
         refined_max_elements=int(session.get("refined_max_elements", 120)),
         vlm_batch_max_elements=int(session.get("vlm_batch_max_elements", 90)),
@@ -830,19 +838,16 @@ def _run_pipeline_for_frame(
     session: Dict[str, Any],
     vlm_client=None,
     semantic_pipeline: Optional["VisionPipeline"] = None,
-    ollama_timeout_seconds: Optional[float] = None,
     coarse_max_boxes: int = 180,
     refined_max_elements: int = 120,
     vlm_batch_max_elements: int = 90,
 ) -> Dict[str, Any]:
     """
-    Run full pipeline for one frame:
-      preprocess → coarse bbox → refine bbox → enrich (layout/fallback) →
-      VLM single-call batch classification → save final JSON.
+    Run the Gemini-only pipeline for one frame:
+      preprocess → Gemini semantic analysis → save final JSON.
 
-    VLM classification uses ``classify_elements_batch()`` which issues ONE
-    call per frame regardless of element count, eliminating the per-element
-    budget problem.
+    The session still writes the expected artifact files, but it no longer
+    invokes any non-Gemini detector or fallback vision backend.
     """
     frame_name = Path(frame_path).name
     frame_stem = Path(frame_path).stem
@@ -922,225 +927,68 @@ def _run_pipeline_for_frame(
             payload = _finalize_elements_with_dxdy(payload, img_w, img_h)
             semantic_error = str(semantic_result.get("vlm_error_type", "")).strip().lower()
             retry_after = float(semantic_result.get("vlm_retry_after_seconds", 0.0) or 0.0)
-            if semantic_error == "quota_exceeded" and retry_after > 0.0:
-                session["semantic_next_allowed_at"] = time.time() + min(30.0, retry_after + 0.5)
+        if semantic_error == "quota_exceeded" and retry_after > 0.0:
+            session["semantic_next_allowed_at"] = time.time() + min(30.0, retry_after + 0.5)
 
         semantic_has_elements = bool(isinstance(payload, dict) and int(payload.get("element_count", 0) or 0) > 0)
+        final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
+        refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
+        coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
+
         if semantic_has_elements:
-            refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
-            with open(refined_json_path, "w", encoding="utf-8") as f:
-                json.dump({"bboxes": []}, f, indent=2)
-            logger.debug("Wrote semantic placeholder refined JSON to %s", refined_json_path)
+            logger.debug("Gemini returned elements; writing semantic session artifacts")
+        else:
+            logger.warning("Gemini semantic pipeline returned zero elements; keeping empty Gemini output")
 
-            debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
-            generated_debug = semantic_result.get("debug_image")
-            if isinstance(generated_debug, str) and generated_debug and os.path.exists(generated_debug):
-                try:
-                    shutil.copyfile(generated_debug, debug_image_path)
-                    logger.debug("Copied semantic debug image to %s", debug_image_path)
-                except Exception as exc:
-                    logger.warning("Failed to copy semantic debug image: %s", exc)
+        with open(coarse_json_path, "w", encoding="utf-8") as f:
+            json.dump({"bboxes": []}, f, indent=2)
+        with open(refined_json_path, "w", encoding="utf-8") as f:
+            json.dump({"bboxes": []}, f, indent=2)
 
-            final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
-            with open(final_json_path, "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2)
-            logger.info("Wrote semantic final JSON to %s", final_json_path)
-
-            return {
-                "status": "completed",
-                "session_id": session["id"],
-                "source_frame": frame_path,
-                "processed_at": time.time(),
-                "final_json_path": final_json_path,
-                "vision_data": payload,
-            }
-
-        logger.warning("Gemini semantic pipeline returned zero elements; falling back to detector pipeline")
-
-    # Detect UI elements + screen margins.
-    coarse_bboxes, _, _ = detect_ui_elements(
-        image,
-        max_boxes=max(20, int(coarse_max_boxes)),
-    )
-    logger.info("Coarse detection produced %d boxes for %s", len(coarse_bboxes), frame_name)
-    coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
-    with open(coarse_json_path, "w", encoding="utf-8") as f:
-        json.dump({"bboxes": coarse_bboxes}, f, indent=2)
-
-    # Refine bboxes
-    refiner = BBoxRefiner()
-    refined_bboxes = []
-    img_h, img_w = image.shape[:2]
-    for item in coarse_bboxes:
-        screen_bbox = (0.0, 0.0, 1.0, 1.0)
-        refined = refiner.refine_bbox(
-            image=image,
-            bbox_normalized=refiner.item_to_bbox(item),
-            use_edge_detection=True,
-            use_grid_snap=False,
-        )
-        if refiner.validate_bbox(refined):
-            x1, y1, x2, y2 = refined
-            center_x = int(round(((x1 + x2) * 0.5) * img_w))
-            center_y = int(round(((y1 + y2) * 0.5) * img_h))
-            refined_bboxes.append(
-                {
-                    "bbox": list(refined),
-                    "dxdy": list(refiner.bbox_to_dxdy(refined, screen_bbox)),
-                    "dx": max(0, min(img_w - 1, center_x)),
-                    "dy": max(0, min(img_h - 1, center_y)),
-                    "screen_bbox": [0.0, 0.0, 1.0, 1.0],
-                    "source": item.get("source", "ui_detector"),
-                    "type": item.get("type", "unknown"),
-                    "confidence": item.get("confidence", 0.5),
-                }
-            )
-    logger.info("Refined %d boxes for %s", len(refined_bboxes), frame_name)
-
-    # Optional full-image VLM discovery pass:
-    # supplements missed boxes and enriches type/label/description before final ranking.
-    if vlm_client is not None:
-        try:
-            logger.info("Running full-image VLM discovery for %s", frame_name)
-            discovery_prompt = get_ui_discovery_prompt(
-                image_context=(
-                    "Desktop/web app screenshot. Detect every visible interactive and textual UI element. "
-                    "Use specific labels and non-generic descriptions."
-                )
-            )
-            discovery_result = vlm_client.analyze_ui(
-                session_preprocessed,
-                prompt=discovery_prompt,
-            )
-            if discovery_result and discovery_result.parse_successful and discovery_result.elements:
-                logger.info("VLM discovery found %d elements", len(discovery_result.elements))
-                refined_bboxes = _merge_vlm_discovery_into_refined(
-                    refined_bboxes=refined_bboxes,
-                    vlm_elements=discovery_result.elements,
-                    image_w=img_w,
-                    image_h=img_h,
-                )
-        except Exception as exc:
-            logger.warning("VLM discovery merge failed: %s", exc)
-
-    # Generic cleanup pipeline:
-    # raw detections -> confidence -> min area -> nms -> merge neighbors -> contained cleanup
-    conf_thr = 0.55
-    refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
-    logger.debug("After confidence filter: %d", len(refined_bboxes))
-    refined_bboxes = _filter_by_min_area_ratio(
-        refined_bboxes,
-        image_w=img_w,
-        image_h=img_h,
-        min_area_ratio=0.0008,
-    )
-    logger.debug("After area filter: %d", len(refined_bboxes))
-    if len(refined_bboxes) > 50:
-        # adaptive noise control: tighten confidence threshold and rerun filtering
-        conf_thr = min(0.65, conf_thr + 0.05)
-        refined_bboxes = _filter_by_confidence(refined_bboxes, conf_thr)
-        refined_bboxes = _filter_by_min_area_ratio(
-            refined_bboxes,
-            image_w=img_w,
-            image_h=img_h,
-            min_area_ratio=0.0008,
-        )
-        logger.debug("After adaptive confidence filter: %d", len(refined_bboxes))
-    refined_bboxes = apply_nms(refined_bboxes, iou_threshold=0.4)
-    logger.debug("After NMS: %d", len(refined_bboxes))
-    refined_bboxes = merge_nearby_elements(
-        refined_bboxes,
-        image_w=img_w,
-        image_h=img_h,
-        distance_threshold=None,  # 2% diagonal default
-    )
-    logger.debug("After merge nearby elements: %d", len(refined_bboxes))
-    refined_bboxes = _remove_contained_elements_generic(refined_bboxes, img_w, img_h)
-    logger.debug("After containment cleanup: %d", len(refined_bboxes))
-
-    # Dynamic cap per resolution (typical 10-40, ~30 for 640x480).
-    area_scale = (img_w * img_h) / float(640 * 480)
-    dynamic_cap = int(round(30.0 * max(0.75, min(2.0, area_scale))))
-    dynamic_cap = max(20, min(60, dynamic_cap))
-
-    refined_bboxes = _dedupe_and_rank_refined_bboxes(
-        refined_bboxes,
-        max_elements=min(max(20, int(refined_max_elements)), dynamic_cap),
-        image_w=img_w,
-        image_h=img_h,
-    )
-
-    refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
-    with open(refined_json_path, "w", encoding="utf-8") as f:
-        json.dump({"bboxes": refined_bboxes}, f, indent=2)
-    debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
-    _write_refined_debug_image(image, refined_bboxes, debug_image_path)
-
-    # Enrich elements using layout heuristics only (no per-element VLM calls).
-    # VLM classification is done below in a single batch call.
-    final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
-    enrich_frame(
-        image_path=Path(session_preprocessed),
-        refined_bbox_path=Path(refined_json_path),
-        out_path=Path(final_json_path),
-        vlm_client=None,          # disable per-element VLM inside enrich_frame
-        ollama_call_budget=0,
-        ollama_timeout_seconds=ollama_timeout_seconds,
-    )
-
-    # Single-call batch VLM classification (ISSUE 1 fix).
-    # Converts all "unknown" / low-confidence elements in ONE model call.
-    if vlm_client is not None:
-        with open(final_json_path, "r", encoding="utf-8") as f:
-            payload = json.load(f)
-
-        raw_elements = payload.get("elements", [])
-        if raw_elements:
-            logger.info("Running batch VLM classification on %d elements", len(raw_elements))
-            ui_elements = [UIElement.from_dict(e) for e in raw_elements]
+        debug_image_path = os.path.join(session["refined_debug_dir"], frame_name)
+        generated_debug = semantic_result.get("debug_image")
+        if isinstance(generated_debug, str) and generated_debug and os.path.exists(generated_debug):
             try:
-                batch_limit = max(20, int(vlm_batch_max_elements))
-                if len(ui_elements) <= batch_limit:
-                    ui_elements = vlm_client.classify_elements_batch(
-                        image_path=session_preprocessed,
-                        elements=ui_elements,
-                        max_retries=2,
-                        timeout_seconds=ollama_timeout_seconds or 60.0,
-                    )
-                else:
-                    merged: List[UIElement] = []
-                    for start in range(0, len(ui_elements), batch_limit):
-                        chunk = ui_elements[start:start + batch_limit]
-                        chunk = vlm_client.classify_elements_batch(
-                            image_path=session_preprocessed,
-                            elements=chunk,
-                            max_retries=2,
-                            timeout_seconds=ollama_timeout_seconds or 60.0,
-                        )
-                        merged.extend(chunk)
-                    ui_elements = merged
-                payload["elements"] = [e.to_dict() for e in ui_elements]
-                logger.info("Batch VLM classification completed for %s", frame_name)
+                shutil.copyfile(generated_debug, debug_image_path)
+                logger.debug("Copied semantic debug image to %s", debug_image_path)
             except Exception as exc:
-                logger.warning("Batch VLM classification failed: %s", exc)
+                logger.warning("Failed to copy semantic debug image: %s", exc)
 
+        final_payload = _strip_internal_fields(payload)
         with open(final_json_path, "w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=2)
-    else:
-        with open(final_json_path, "r", encoding="utf-8") as f:
-            payload = json.load(f)
+            json.dump(final_payload, f, indent=2)
 
-    payload = _finalize_elements_with_dxdy(payload, image.shape[1], image.shape[0])
+        payload = _finalize_elements_with_dxdy(payload, image.shape[1], image.shape[0])
+        final_payload = _strip_internal_fields(payload)
+        with open(final_json_path, "w", encoding="utf-8") as f:
+            json.dump(final_payload, f, indent=2)
+
+        return {
+            "status": "completed",
+            "session_id": session["id"],
+            "source_frame": frame_path,
+            "processed_at": time.time(),
+            "final_json_path": final_json_path,
+            "vision_data": final_payload,
+        }
+
+    final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
+    empty_payload = {
+        "image": preprocessed_image,
+        "image_size": {"width": image.shape[1], "height": image.shape[0]},
+        "coordinate_system": "pixel",
+        "element_count": 0,
+        "elements": [],
+    }
     with open(final_json_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2)
-
+        json.dump(empty_payload, f, indent=2)
     return {
         "status": "completed",
         "session_id": session["id"],
         "source_frame": frame_path,
         "processed_at": time.time(),
         "final_json_path": final_json_path,
-        "vision_data": payload,
+        "vision_data": empty_payload,
     }
 
 
@@ -1269,7 +1117,7 @@ def processing_worker():
 def vision_diagnose():
     """
     Run pre-flight checks and report what is available:
-    camera, VLM providers, installed packages.
+    camera, Gemini VLM, installed packages.
     """
     results: Dict[str, Any] = {}
 
@@ -1285,40 +1133,8 @@ def vision_diagnose():
         results["camera_error"] = str(_exc)
     results["camera_index_0_available"] = camera_ok
 
-    # --- VLM provider availability ---
+    # --- Gemini availability ---
     providers: Dict[str, Any] = {}
-
-    # ollama
-    try:
-        from urllib import request as _req
-        r = _req.urlopen("http://127.0.0.1:11434/api/tags", timeout=3)
-        import json as _json
-        tags = _json.loads(r.read())
-        providers["ollama"] = {
-            "available": True,
-            "models": [m["name"] for m in tags.get("models", [])],
-        }
-    except Exception as _exc:
-        providers["ollama"] = {"available": False, "reason": str(_exc)}
-
-    # torch / local
-    try:
-        import torch  # type: ignore
-        providers["local"] = {"available": True, "cuda": torch.cuda.is_available()}
-    except ImportError:
-        providers["local"] = {"available": False, "reason": "torch not installed"}
-
-    # anthropic
-    try:
-        import anthropic  # type: ignore  # noqa: F401
-        providers["claude"] = {
-            "available": True,
-            "api_key_set": bool(os.getenv("ANTHROPIC_API_KEY")),
-        }
-    except ImportError:
-        providers["claude"] = {"available": False, "reason": "anthropic not installed"}
-
-    # gemini (semantic pipeline + VLM)
     try:
         import google.generativeai  # type: ignore  # noqa: F401
         providers["gemini"] = {
@@ -1333,30 +1149,18 @@ def vision_diagnose():
 
     # --- recommended start params ---
     recommended_provider = "no_vlm"
-    if providers.get("ollama", {}).get("available"):
-        ollama_models = providers["ollama"].get("models", [])
-        recommended_provider = f"ollama  (models: {', '.join(ollama_models) or 'none pulled yet'})"
-    elif providers.get("gemini", {}).get("api_key_set"):
+    if providers.get("gemini", {}).get("api_key_set"):
         recommended_provider = "gemini"
-    elif providers.get("claude", {}).get("api_key_set"):
-        recommended_provider = "claude"
-    elif providers.get("local", {}).get("available"):
-        recommended_provider = "local"
 
     results["recommended_provider"] = recommended_provider
-    if providers.get("ollama", {}).get("available"):
+    if providers.get("gemini", {}).get("api_key_set"):
         results["recommended_start_params"] = (
-            "POST /vision/start?camera_index=0&save_interval=1"
-            "&provider=ollama&no_vlm=false"
-        )
-    elif providers.get("gemini", {}).get("api_key_set"):
-        results["recommended_start_params"] = (
-            "POST /vision/start?camera_index=0&save_interval=1"
-            "&provider=gemini&no_vlm=false"
+            "POST /vision/start?camera_index=1&save_interval=1"
+            "&no_vlm=false"
         )
     else:
         results["recommended_start_params"] = (
-            "POST /vision/start?camera_index=0&save_interval=1&no_vlm=true"
+            "POST /vision/start?camera_index=1&save_interval=1&no_vlm=true"
         )
 
     return results
@@ -1368,10 +1172,6 @@ def start_vision(
     save_interval: float = 1.0,
     camera_width: int | None = None,
     camera_height: int | None = None,
-    provider: str = "gemini",
-    local_model: str = "llava:7b",
-    ollama_base_url: Optional[str] = None,
-    ollama_timeout_seconds: float = 45.0,
     coarse_max_boxes: int = 180,
     refined_max_elements: int = 120,
     vlm_batch_max_elements: int = 90,
@@ -1385,12 +1185,10 @@ def start_vision(
     """
     global capture_running, capture_thread, processing_thread, current_session
     logger.info(
-        "Received /vision/start camera_index=%s save_interval=%.2f provider=%s no_vlm=%s local_model=%s",
+        "Received /vision/start camera_index=%s save_interval=%.2f no_vlm=%s",
         camera_index,
         save_interval,
-        provider,
         no_vlm,
-        local_model,
     )
 
     with session_lock:
@@ -1402,16 +1200,8 @@ def start_vision(
             }
 
     try:
-        vlm_client = _init_vlm_client(
-            provider=provider,
-            local_model=local_model,
-            no_vlm=no_vlm,
-            ollama_base_url=ollama_base_url,
-        )
-        semantic_pipeline = _init_semantic_pipeline(
-            provider=provider,
-            no_vlm=no_vlm,
-        )
+        vlm_client = _init_vlm_client(no_vlm=no_vlm)
+        semantic_pipeline = _init_semantic_pipeline(no_vlm=no_vlm)
     except Exception as e:
         logger.exception("VLM init failed")
         return {"status": "error", "detail": f"VLM init failed: {e}"}
@@ -1423,10 +1213,6 @@ def start_vision(
             "camera_width": camera_width,
             "camera_height": camera_height,
             "save_interval": save_interval,
-            "provider": provider,
-            "local_model": local_model,
-            "ollama_base_url": ollama_base_url,
-            "ollama_timeout_seconds": ollama_timeout_seconds,
             "coarse_max_boxes": coarse_max_boxes,
             "refined_max_elements": refined_max_elements,
             "vlm_batch_max_elements": vlm_batch_max_elements,
@@ -1458,10 +1244,6 @@ def start_vision(
         "session_id": session["id"],
         "camera_index": camera_index,
         "save_interval": save_interval,
-        "provider": provider,
-        "local_model": local_model,
-        "ollama_base_url": ollama_base_url,
-        "ollama_timeout_seconds": ollama_timeout_seconds,
         "coarse_max_boxes": coarse_max_boxes,
         "refined_max_elements": refined_max_elements,
         "vlm_batch_max_elements": vlm_batch_max_elements,
@@ -1586,10 +1368,6 @@ def stop_vision(
 @app.post("/vision/capture")
 def capture_once(
     camera_index: int = 0,
-    provider: str = "gemini",
-    local_model: str = "llava:7b",
-    ollama_base_url: Optional[str] = None,
-    ollama_timeout_seconds: float = 60.0,
     coarse_max_boxes: int = 180,
     refined_max_elements: int = 120,
     vlm_batch_max_elements: int = 90,
@@ -1633,16 +1411,8 @@ def capture_once(
         return {"status": "error", "detail": f"Failed to capture frame from camera {camera_index}"}
 
     try:
-        vlm_client = _init_vlm_client(
-            provider=provider,
-            local_model=local_model,
-            no_vlm=no_vlm,
-            ollama_base_url=ollama_base_url,
-        )
-        semantic_pipeline = _init_semantic_pipeline(
-            provider=provider,
-            no_vlm=no_vlm,
-        )
+        vlm_client = _init_vlm_client(no_vlm=no_vlm)
+        semantic_pipeline = _init_semantic_pipeline(no_vlm=no_vlm)
     except Exception as e:
         return {"status": "error", "detail": f"VLM init failed: {e}"}
 
@@ -1666,7 +1436,6 @@ def capture_once(
             session=session,
             vlm_client=vlm_client,
             semantic_pipeline=semantic_pipeline,
-            ollama_timeout_seconds=ollama_timeout_seconds,
             coarse_max_boxes=coarse_max_boxes,
             refined_max_elements=refined_max_elements,
             vlm_batch_max_elements=vlm_batch_max_elements,
@@ -1714,7 +1483,7 @@ def vision_status():
         "running": running,
         "session_id": session.get("id") if session else None,
         "camera_index": session.get("camera_index") if session else None,
-        "provider": session.get("provider") if session else None,
         "no_vlm": session.get("no_vlm") if session else None,
+        "vlm": "gemini" if session and session.get("vlm_client") is not None else "disabled",
     }
 

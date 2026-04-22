@@ -42,7 +42,7 @@ class IntegratedPerceptionPipeline:
 
     def __init__(
         self,
-        vlm_provider: str = "claude",
+        vlm_provider: str = "gemini",
         yolo_model_path: Optional[str] = None,
         use_vlm: bool = True,
         use_yolo: bool = True,
@@ -52,7 +52,7 @@ class IntegratedPerceptionPipeline:
         Initialize pipeline.
 
         Args:
-            vlm_provider: VLM provider ("gemini", "claude", "gpt4v", "local")
+            vlm_provider: VLM provider ("gemini" only)
             yolo_model_path: Path to YOLO model
             use_vlm: Enable VLM
             use_yolo: Enable YOLO fast-path
@@ -249,7 +249,7 @@ class StreamingPerceptionPipeline:
 
     def __init__(
         self,
-        vlm_provider: str = "claude",
+        vlm_provider: str = "gemini",
         yolo_model_path: Optional[str] = None,
         use_vlm: bool = True,
         use_yolo: bool = True,
@@ -418,8 +418,8 @@ def main():
     parser.add_argument(
         "--provider",
         default="gemini",
-        choices=["gemini", "claude", "gpt4v", "local", "ollama"],
-        help="VLM provider",
+        choices=["gemini"],
+        help="VLM provider (Gemini only)",
     )
     parser.add_argument(
         "--strategy",
@@ -431,7 +431,7 @@ def main():
     parser.add_argument(
         "--local-model",
         default="llava-hf/llava-1.5-7b-hf",
-        help="Hugging Face model name for --provider local",
+        help="Legacy option kept for compatibility; ignored.",
     )
     parser.add_argument("--no-refine", action="store_true", help="Skip refinement")
     parser.add_argument("--no-save", action="store_true", help="Don't save per-image outputs")
@@ -448,7 +448,7 @@ def main():
     )
 
     args = parser.parse_args()
-    vlm_kwargs = {"model_name": args.local_model} if args.provider == "local" else None
+    vlm_kwargs = None
 
     # ---- streaming mode ----
     if args.streaming:
@@ -538,8 +538,8 @@ def main():
     parser.add_argument(
         "--provider",
         default="gemini",
-        choices=["gemini", "claude", "gpt4v", "local"],
-        help="VLM provider",
+        choices=["gemini"],
+        help="VLM provider (Gemini only)",
     )
     parser.add_argument(
         "--strategy",
@@ -551,7 +551,7 @@ def main():
     parser.add_argument(
         "--local-model",
         default="llava-hf/llava-1.5-7b-hf",
-        help="Hugging Face model name for --provider local",
+        help="Legacy option kept for compatibility; ignored.",
     )
     parser.add_argument("--no-refine", action="store_true", help="Skip refinement")
     parser.add_argument("--no-save", action="store_true", help="Don't save outputs")
@@ -562,7 +562,7 @@ def main():
     pipeline = IntegratedPerceptionPipeline(
         vlm_provider=args.provider,
         yolo_model_path=args.yolo_model,
-        vlm_kwargs={"model_name": args.local_model} if args.provider == "local" else None,
+        vlm_kwargs=None,
     )
 
     if args.stats:

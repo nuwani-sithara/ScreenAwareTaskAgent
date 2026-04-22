@@ -9,7 +9,7 @@ import cv2
 
 
 def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str = "debug_detected.png") -> str:
-    """Draw detected (dx, dy) points and labels, then save a debug image."""
+    """Draw detected points or boxes and labels, then save a debug image."""
     image = cv2.imread(image_path)
     if image is None:
         raise ValueError(f"Could not load image: {image_path}")
@@ -21,6 +21,29 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
         label = str(element.get("label", "unknown"))
         elem_type = str(element.get("type", "unknown"))
         text = f"{elem_type}:{label}"[:80]
+
+        bbox = element.get("bbox")
+        if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+            try:
+                x1 = int(round(float(bbox[0])))
+                y1 = int(round(float(bbox[1])))
+                x2 = int(round(float(bbox[2])))
+                y2 = int(round(float(bbox[3])))
+                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
+                cv2.putText(
+                    image,
+                    text,
+                    (max(0, x1), max(15, y1 - 8)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.45,
+                    (0, 255, 0),
+                    1,
+                    cv2.LINE_AA,
+                )
+                continue
+            except Exception:
+                pass
 
         cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
         cv2.putText(

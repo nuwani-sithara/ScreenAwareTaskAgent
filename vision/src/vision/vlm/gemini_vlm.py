@@ -6,12 +6,16 @@ import json
 import logging
 import re
 import time
+import warnings
 from typing import Any, Dict, List
+
+import cv2
 
 from src.vision.config import GEMINI_API_KEY, MODEL_NAME
 from src.vision.vlm.base_vlm import BaseVLM
 
 logger = logging.getLogger(__name__)
+warnings.simplefilter("ignore", FutureWarning)
 
 
 class GeminiVLM(BaseVLM):
@@ -27,6 +31,11 @@ class GeminiVLM(BaseVLM):
             )
 
         try:
+            warnings.filterwarnings(
+                "ignore",
+                category=FutureWarning,
+                message=r".*google\.generativeai.*",
+            )
             import google.generativeai as genai
         except ImportError as exc:
             raise ImportError(
@@ -139,22 +148,27 @@ class GeminiVLM(BaseVLM):
         return (
             "You are a UI detector for automation. Output ONLY valid JSON. "
             "Do not output markdown. Do not output explanations. "
-            "Detect visible screen and application UI elements that matter for automation, "
+            "Do not use double quotes inside label or description text. "
+            "Keep descriptions short, factual, and free of line breaks. "
+            "Detect every visible screen and application UI element that helps understand the screen, "
             "including buttons, inputs, links, tabs, menus, checkboxes, radios, dropdowns, toggles, "
-            "panes, taskbar items, toolbar controls, and meaningful labels. "
-            "Do not include decorative text-only or background elements. "
+            "panes, taskbar items, toolbar controls, browser chrome, window chrome, sidebar entries, "
+            "headings, labels, icons, status bars, and meaningful text. "
+            "Prefer high recall over minimalism. If the screen is complex, return many small elements. "
+            "Do not collapse the whole screen into only a few detections. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
             "elements must be an array of objects with fields: "
-            "id, type, label, description, state, dx, dy, confidence, source. "
+            "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
+            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
             "element_count must equal elements array length. "
-            "When uncertain, return fewer elements instead of guessing, but do not return an empty list "
-            "if a visible application screen is present. "
+            "When uncertain, prefer a smaller accurate element over a wrong one, but do not omit visible UI "
+            "that is clearly present. "
             "If no interactive elements are present, return element_count=0 and elements=[]."
         )
 
@@ -162,20 +176,76 @@ class GeminiVLM(BaseVLM):
     def _broader_system_prompt(image_width: int, image_height: int) -> str:
         return (
             "You are a screen understanding model for desktop automation. Output ONLY valid JSON. "
+            "Do not use double quotes inside label or description text. "
+            "Keep descriptions short, factual, and free of line breaks. "
             "Detect any visible UI structure that helps understand the screen, including tabs, panes, menus, "
-            "buttons, inputs, taskbar items, terminal controls, status bars, labels, icons, and window chrome. "
-            "Prefer reporting visible UI rather than returning an empty list. "
+            "buttons, inputs, taskbar items, terminal controls, status bars, labels, icons, browser chrome, "
+            "window chrome, sidebars, headings, and text. "
+            "Prefer exhaustive reporting. Return many elements if the screen is dense. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
             "elements must be an array of objects with fields: "
-            "id, type, label, description, state, dx, dy, confidence, source. "
+            "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
+            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
             "element_count must equal elements array length."
         )
+
+    @staticmethod
+    def _encode_image_array(
+        image: Any,
+        max_side: int = 1280,
+    ) -> tuple[bytes, int, int, float, float]:
+        if image is None:
+            raise RuntimeError("Failed to prepare Gemini request image")
+
+        original_h, original_w = image.shape[:2]
+        req_w, req_h = original_w, original_h
+        scale_x = 1.0
+        scale_y = 1.0
+
+        longest = max(original_w, original_h)
+        if longest > max_side:
+            scale = float(max_side) / float(longest)
+            req_w = max(1, int(round(original_w * scale)))
+            req_h = max(1, int(round(original_h * scale)))
+            image = cv2.resize(image, (req_w, req_h), interpolation=cv2.INTER_AREA)
+            scale_x = float(original_w) / float(req_w)
+            scale_y = float(original_h) / float(req_h)
+
+        ok, buffer = cv2.imencode(".jpg", image, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
+        if not ok:
+            raise RuntimeError("Failed to encode Gemini request image")
+        return buffer.tobytes(), req_w, req_h, scale_x, scale_y
+
+    @staticmethod
+    def _translate_bbox(
+        bbox: Any,
+        scale_x: float,
+        scale_y: float,
+        origin_x: int,
+        origin_y: int,
+        image_width: int,
+        image_height: int,
+    ) -> List[int] | None:
+        if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
+            return None
+        try:
+            x1 = int(round(float(bbox[0]) * float(scale_x))) + int(origin_x)
+            y1 = int(round(float(bbox[1]) * float(scale_y))) + int(origin_y)
+            x2 = int(round(float(bbox[2]) * float(scale_x))) + int(origin_x)
+            y2 = int(round(float(bbox[3]) * float(scale_y))) + int(origin_y)
+        except Exception:
+            return None
+        x1 = max(0, min(image_width - 1, x1))
+        y1 = max(0, min(image_height - 1, y1))
+        x2 = max(x1 + 1, min(image_width, x2))
+        y2 = max(y1 + 1, min(image_height, y2))
+        return [x1, y1, x2, y2]
 
     @staticmethod
     def _extract_best_json_object(text: str) -> str:
@@ -264,6 +334,115 @@ class GeminiVLM(BaseVLM):
         s = re.sub(r"\bNone\b", "null", s)
         return s
 
+    @staticmethod
+    def _region_specs(image_width: int, image_height: int) -> List[tuple[str, int, int, int, int]]:
+        overlap_x = max(80, int(round(image_width * 0.18)))
+        overlap_y = max(80, int(round(image_height * 0.18)))
+        mid_x = image_width // 2
+        mid_y = image_height // 2
+
+        def _clamp_bounds(x1: int, y1: int, x2: int, y2: int) -> tuple[int, int, int, int]:
+            x1 = max(0, min(image_width - 1, x1))
+            y1 = max(0, min(image_height - 1, y1))
+            x2 = max(x1 + 1, min(image_width, x2))
+            y2 = max(y1 + 1, min(image_height, y2))
+            return x1, y1, x2, y2
+
+        return [
+            ("top_left", *_clamp_bounds(0, 0, mid_x + overlap_x, mid_y + overlap_y)),
+            ("top_right", *_clamp_bounds(mid_x - overlap_x, 0, image_width, mid_y + overlap_y)),
+            ("bottom_left", *_clamp_bounds(0, mid_y - overlap_y, mid_x + overlap_x, image_height)),
+            ("bottom_right", *_clamp_bounds(mid_x - overlap_x, mid_y - overlap_y, image_width, image_height)),
+        ]
+
+    @staticmethod
+    def _extract_partial_elements(response_text: str) -> List[Dict[str, Any]]:
+        """
+        Recover complete element objects from a truncated Gemini response.
+
+        The model occasionally stops mid-array. We keep any fully closed element
+        objects that appear before the truncation point so the pipeline can
+        continue with partial but useful output.
+        """
+        key_match = re.search(r'"elements"\s*:\s*\[', response_text)
+        if not key_match:
+            return []
+
+        idx = key_match.end()
+        elements: List[Dict[str, Any]] = []
+        in_str = False
+        esc = False
+        brace_depth = 0
+        obj_start: int | None = None
+
+        while idx < len(response_text):
+            ch = response_text[idx]
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == "\\":
+                    esc = True
+                elif ch == '"':
+                    in_str = False
+            else:
+                if ch == '"':
+                    in_str = True
+                elif ch == "{":
+                    if brace_depth == 0:
+                        obj_start = idx
+                    brace_depth += 1
+                elif ch == "}":
+                    if brace_depth > 0:
+                        brace_depth -= 1
+                        if brace_depth == 0 and obj_start is not None:
+                            candidate = response_text[obj_start : idx + 1].strip()
+                            parsed: Any = None
+                            for variant in (
+                                candidate,
+                                GeminiVLM._sanitize_json_string(candidate),
+                                GeminiVLM._coerce_json_text(candidate),
+                                GeminiVLM._close_unbalanced_json(candidate),
+                                GeminiVLM._close_unbalanced_json(GeminiVLM._sanitize_json_string(candidate)),
+                                GeminiVLM._close_unbalanced_json(GeminiVLM._coerce_json_text(candidate)),
+                            ):
+                                try:
+                                    parsed = json.loads(variant)
+                                    break
+                                except json.JSONDecodeError:
+                                    continue
+                            if isinstance(parsed, dict):
+                                elements.append(parsed)
+                            obj_start = None
+                elif ch == "]" and brace_depth == 0:
+                    break
+            idx += 1
+
+        return elements
+
+    def _recover_partial_payload(
+        self,
+        raw_text: str,
+        image_path: str,
+        image_width: int,
+        image_height: int,
+    ) -> Dict[str, Any] | None:
+        partial_elements = self._extract_partial_elements(raw_text)
+        if not partial_elements:
+            return None
+
+        logger.warning(
+            "Recovered %d complete elements from truncated Gemini response",
+            len(partial_elements),
+        )
+        return {
+            "image": image_path,
+            "image_size": {"width": int(image_width), "height": int(image_height)},
+            "coordinate_system": "pixel",
+            "element_count": len(partial_elements),
+            "elements": partial_elements,
+            "_vlm_error_type": "partial_recovery",
+        }
+
     def _parse_json_payload(
         self,
         raw_text: str,
@@ -289,6 +468,9 @@ class GeminiVLM(BaseVLM):
             extracted = self._extract_best_json_object(candidate)
             extracted_array = candidate if candidate.lstrip().startswith("[") else ""
             if not extracted and not extracted_array:
+                recovered = self._recover_partial_payload(candidate, image_path, image_width, image_height)
+                if recovered is not None:
+                    return recovered
                 try:
                     debug_path = f"{image_path}.gemini_raw.txt"
                     with open(debug_path, "w", encoding="utf-8") as fh:
@@ -320,6 +502,9 @@ class GeminiVLM(BaseVLM):
                     break
 
             if parsed is None:
+                recovered = self._recover_partial_payload(candidate, image_path, image_width, image_height)
+                if recovered is not None:
+                    return recovered
                 try:
                     debug_path = f"{image_path}.gemini_raw.txt"
                     with open(debug_path, "w", encoding="utf-8") as fh:
@@ -421,6 +606,10 @@ class GeminiVLM(BaseVLM):
         image_path: str,
         image_width: int,
         image_height: int,
+        scale_x: float = 1.0,
+        scale_y: float = 1.0,
+        origin_x: int = 0,
+        origin_y: int = 0,
     ) -> Dict[str, Any]:
         normalized = GeminiVLM._safe_empty_response(image_path, image_width, image_height)
         normalized["image"] = image_path
@@ -435,11 +624,24 @@ class GeminiVLM(BaseVLM):
             if not isinstance(element, dict):
                 continue
 
+            translated_bbox = GeminiVLM._translate_bbox(
+                element.get("bbox"),
+                scale_x=scale_x,
+                scale_y=scale_y,
+                origin_x=origin_x,
+                origin_y=origin_y,
+                image_width=image_width,
+                image_height=image_height,
+            )
+
             try:
-                dx = int(round(float(element.get("dx", 0))))
-                dy = int(round(float(element.get("dy", 0))))
+                dx = int(round(float(element.get("dx", 0)) * float(scale_x))) + int(origin_x)
+                dy = int(round(float(element.get("dy", 0)) * float(scale_y))) + int(origin_y)
             except Exception:
                 dx, dy = 0, 0
+            if translated_bbox is not None:
+                dx = int(round((translated_bbox[0] + translated_bbox[2]) * 0.5))
+                dy = int(round((translated_bbox[1] + translated_bbox[3]) * 0.5))
 
             try:
                 confidence = float(element.get("confidence", 0.0))
@@ -455,6 +657,7 @@ class GeminiVLM(BaseVLM):
                     "state": str(element.get("state", "normal")),
                     "dx": dx,
                     "dy": dy,
+                    "bbox": translated_bbox,
                     "confidence": max(0.0, min(1.0, confidence)),
                     "source": str(element.get("source", "gemini_vlm")),
                 }
@@ -467,6 +670,189 @@ class GeminiVLM(BaseVLM):
                 normalized[key] = payload[key]
         return normalized
 
+    @staticmethod
+    def _response_schema(image_width: int, image_height: int) -> Dict[str, Any]:
+        return {
+            "type": "object",
+            "properties": {
+                "image": {"type": "string"},
+                "image_size": {
+                    "type": "object",
+                    "properties": {
+                        "width": {"type": "integer"},
+                        "height": {"type": "integer"},
+                    },
+                    "required": ["width", "height"],
+                },
+                "coordinate_system": {"type": "string"},
+                "element_count": {"type": "integer"},
+                "elements": {
+                    "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "type": {"type": "string"},
+                            "label": {"type": "string"},
+                            "description": {"type": "string"},
+                        "state": {"type": "string"},
+                        "dx": {"type": "integer"},
+                        "dy": {"type": "integer"},
+                        "bbox": {
+                            "type": "array",
+                            "items": {"type": "integer"},
+                        },
+                        "confidence": {"type": "number"},
+                        "source": {"type": "string"},
+                    },
+                    "required": [
+                        "id",
+                            "type",
+                            "label",
+                            "description",
+                        "state",
+                        "dx",
+                        "dy",
+                        "confidence",
+                        "source",
+                    ],
+                },
+            },
+            },
+            "required": ["image", "image_size", "coordinate_system", "element_count", "elements"],
+        }
+
+    @staticmethod
+    def _prepare_request_image(
+        image_path: str,
+        max_side: int = 1280,
+    ) -> tuple[bytes, int, int, float, float]:
+        image = cv2.imread(image_path)
+        if image is None:
+            raise RuntimeError(f"Failed to read image: {image_path}")
+        original_h, original_w = image.shape[:2]
+        req_w, req_h = original_w, original_h
+        scale_x = 1.0
+        scale_y = 1.0
+
+        longest = max(original_w, original_h)
+        if longest > max_side:
+            scale = float(max_side) / float(longest)
+            req_w = max(1, int(round(original_w * scale)))
+            req_h = max(1, int(round(original_h * scale)))
+            image = cv2.resize(image, (req_w, req_h), interpolation=cv2.INTER_AREA)
+            scale_x = float(original_w) / float(req_w)
+            scale_y = float(original_h) / float(req_h)
+
+        ok, buffer = cv2.imencode(".jpg", image, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
+        if not ok:
+            raise RuntimeError("Failed to encode Gemini request image")
+        return buffer.tobytes(), req_w, req_h, scale_x, scale_y
+
+    @staticmethod
+    def _dedupe_elements(elements: List[Dict[str, Any]], distance_threshold: int = 42) -> List[Dict[str, Any]]:
+        def _norm_label(label: Any) -> str:
+            return " ".join(str(label or "").strip().lower().split())
+
+        kept: List[Dict[str, Any]] = []
+        for element in sorted(elements, key=lambda e: float(e.get("confidence", 0.0)), reverse=True):
+            try:
+                dx = int(round(float(element.get("dx", 0))))
+                dy = int(round(float(element.get("dy", 0))))
+            except Exception:
+                dx, dy = 0, 0
+            elem_type = str(element.get("type", "unknown")).strip().lower()
+            label = _norm_label(element.get("label", ""))
+            duplicate = False
+            for existing in kept:
+                existing_type = str(existing.get("type", "unknown")).strip().lower()
+                existing_label = _norm_label(existing.get("label", ""))
+                if elem_type != existing_type:
+                    continue
+                if not label or not existing_label or label != existing_label:
+                    continue
+                try:
+                    ex_dx = int(round(float(existing.get("dx", 0))))
+                    ex_dy = int(round(float(existing.get("dy", 0))))
+                except Exception:
+                    ex_dx, ex_dy = 0, 0
+                if abs(dx - ex_dx) <= distance_threshold and abs(dy - ex_dy) <= distance_threshold:
+                    duplicate = True
+                    break
+            if not duplicate:
+                kept.append(element)
+        return kept
+
+    def _analyze_region(
+        self,
+        full_image: Any,
+        image_path: str,
+        image_width: int,
+        image_height: int,
+        region_name: str,
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+        request_options: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        crop = full_image[y1:y2, x1:x2]
+        if crop is None or crop.size == 0:
+            return []
+
+        try:
+            image_bytes, request_width, request_height, scale_x, scale_y = self._encode_image_array(crop)
+        except Exception:
+            logger.exception("Failed to prepare Gemini crop for region=%s", region_name)
+            return []
+
+        region_prompt = (
+            self._system_prompt(request_width, request_height)
+            + "\n\n"
+            f"You are analyzing the {region_name} crop of a larger screen.\n"
+            f"The crop corresponds to full-image coordinates x={x1}..{x2} and y={y1}..{y2}.\n"
+            "Report dx and dy in crop-local pixels.\n"
+            "Return every visible UI element in this crop, including text, labels, icons, controls, tabs, "
+            "browser chrome, window chrome, sidebars, toolbars, headings, and panels.\n"
+            "Prefer exhaustive recall over minimalism."
+        )
+        generation_config = {
+            "temperature": 0,
+            "max_output_tokens": 8192,
+            "response_mime_type": "application/json",
+            "response_schema": self._response_schema(request_width, request_height),
+        }
+
+        try:
+            response = self.client.generate_content(
+                [
+                    {"mime_type": "image/jpeg", "data": image_bytes},
+                    region_prompt,
+                ],
+                generation_config=generation_config,
+                request_options=request_options,
+            )
+        except Exception:
+            logger.exception("Gemini region scan failed for %s", region_name)
+            return []
+
+        raw_text = str(getattr(response, "text", "") or "")
+        parsed = self._parse_json_payload(raw_text, image_path, request_width, request_height)
+        if int(parsed.get("element_count", 0) or 0) <= 0:
+            return []
+
+        normalized = self._normalize_payload(
+            parsed,
+            image_path,
+            image_width,
+            image_height,
+            scale_x=scale_x,
+            scale_y=scale_y,
+            origin_x=x1,
+            origin_y=y1,
+        )
+        return list(normalized.get("elements", []))
+
     def analyze(self, image_path: str, image_width: int, image_height: int) -> Dict[str, Any]:
         """Analyze a screenshot using Gemini and return structured UI coordinates."""
         logger.info(
@@ -477,22 +863,23 @@ class GeminiVLM(BaseVLM):
             self.model_name,
         )
 
-        with open(image_path, "rb") as image_file:
-            image_bytes = image_file.read()
+        image_bytes, request_width, request_height, scale_x, scale_y = self._prepare_request_image(image_path)
+        full_image = cv2.imread(image_path)
 
         full_prompt = (
-            self._system_prompt(image_width, image_height)
+            self._system_prompt(request_width, request_height)
             + "\n\nAnalyze this screenshot and return only the JSON object."
         )
 
         payload = [
-            {"mime_type": "image/png", "data": image_bytes},
+            {"mime_type": "image/jpeg", "data": image_bytes},
             full_prompt,
         ]
         generation_config = {
             "temperature": 0,
             "max_output_tokens": 8192,
             "response_mime_type": "application/json",
+            "response_schema": self._response_schema(request_width, request_height),
         }
         request_options = {"timeout": int(max(1.0, self.timeout_seconds))}
 
@@ -556,34 +943,81 @@ class GeminiVLM(BaseVLM):
 
         raw_text = str(getattr(response, "text", "") or "")
         logger.info("Gemini returned %d characters", len(raw_text))
-        parsed = self._parse_json_payload(raw_text, image_path, image_width, image_height)
+        parsed = self._parse_json_payload(raw_text, image_path, request_width, request_height)
         parsed_error = str(parsed.get("_vlm_error_type", "")).strip().lower()
 
-        if parsed_error == "parse_error":
-            logger.warning("Gemini returned malformed JSON; retrying with strict compact JSON prompt")
-            parsed = self._request_strict_json_retry(
-                image_bytes=image_bytes,
-                image_path=image_path,
-                image_width=image_width,
-                image_height=image_height,
-                request_options=request_options,
+        if parsed_error == "parse_error" and int(parsed.get("element_count", 0) or 0) <= 0:
+            logger.warning("First Gemini parse failed; retrying with a stricter JSON prompt")
+            retry_payload = self._request_strict_json_retry(
+                image_bytes,
+                image_path,
+                request_width,
+                request_height,
+                request_options,
             )
-            parsed_error = str(parsed.get("_vlm_error_type", "")).strip().lower()
+            retry_error = str(retry_payload.get("_vlm_error_type", "")).strip().lower()
+            if int(retry_payload.get("element_count", 0) or 0) > 0 and retry_error != "parse_error":
+                parsed = retry_payload
+                parsed_error = retry_error
+            else:
+                logger.warning("Strict JSON retry did not recover elements; trying broader prompt")
+                broader_payload = self._request_broader_retry(
+                    image_bytes,
+                    image_path,
+                    request_width,
+                    request_height,
+                    request_options,
+                )
+                broader_error = str(broader_payload.get("_vlm_error_type", "")).strip().lower()
+                if int(broader_payload.get("element_count", 0) or 0) > 0 and broader_error != "parse_error":
+                    parsed = broader_payload
+                    parsed_error = broader_error
+
+        normalized = self._normalize_payload(
+            parsed,
+            image_path,
+            image_width,
+            image_height,
+            scale_x=scale_x,
+            scale_y=scale_y,
+        )
 
         if (
-            parsed_error not in {"api_error", "quota_exceeded"}
-            and int(parsed.get("element_count", 0) or 0) <= 0
+            full_image is not None
+            and int(normalized.get("element_count", 0) or 0) < 8
+            and image_width >= 1280
+            and image_height >= 720
         ):
-            logger.warning("Gemini returned zero elements; retrying with broader screen prompt")
-            parsed = self._request_broader_retry(
-                image_bytes=image_bytes,
-                image_path=image_path,
-                image_width=image_width,
-                image_height=image_height,
-                request_options=request_options,
+            logger.info(
+                "Gemini full-frame result is sparse (%d elements); running region scans",
+                int(normalized.get("element_count", 0) or 0),
             )
+            region_elements: List[Dict[str, Any]] = []
+            for region_name, x1, y1, x2, y2 in self._region_specs(image_width, image_height):
+                region_elements.extend(
+                    self._analyze_region(
+                        full_image=full_image,
+                        image_path=image_path,
+                        image_width=image_width,
+                        image_height=image_height,
+                        region_name=region_name,
+                        x1=x1,
+                        y1=y1,
+                        x2=x2,
+                        y2=y2,
+                        request_options=request_options,
+                    )
+                )
 
-        normalized = self._normalize_payload(parsed, image_path, image_width, image_height)
+            if region_elements:
+                combined = self._dedupe_elements(list(normalized.get("elements", [])) + region_elements)
+                normalized["elements"] = combined
+                normalized["element_count"] = len(combined)
+                if normalized.get("_vlm_error_type") in {"parse_error", "partial_recovery"}:
+                    normalized["_vlm_error_type"] = "region_recovery"
+                elif not normalized.get("_vlm_error_type"):
+                    normalized["_vlm_error_type"] = "region_augmented"
+
         logger.info(
             "Gemini analyze completed image=%s elements=%d error_type=%s",
             image_path,

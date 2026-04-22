@@ -43,13 +43,5 @@ typing_extensions==4.10.0
 # Optional OCR fallback (install paddleocr and its dependencies per your platform)
 # NOTE: PaddleOCR requires a compatible paddlepaddle installation. See https://www.paddlepaddle.org for install instructions
 paddleocr==2.6.1
-# Vision-Language Model (VLM) Support
-# Claude / Anthropic Vision API
-anthropic==0.28.1
-
 # Gemini Vision API
 google-generativeai==0.8.4
-
-# Local VLM models (LLaVA, Qwen)
-transformers>=4.35.0
-pillow>=10.0.0

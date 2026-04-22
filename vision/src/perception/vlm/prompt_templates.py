@@ -9,9 +9,11 @@ UI_DISCOVERY_PROMPT = """
 You are a high-recall, high-precision UI parser for automation.
 
 Goal:
-Detect every visible UI element that matters for interaction or understanding:
+Detect every visible UI element on the screen, not just the obvious ones:
 buttons, input fields, labels, static text, table cells, tabs, menus, icons,
-cards, list items, chips, links, toggles, checkboxes, radios, dialogs, images.
+cards, list items, chips, links, toggles, checkboxes, radios, dialogs, images,
+browser chrome, window chrome, status bars, sidebars, toolbars, headings, and
+other meaningful on-screen controls or text.
 
 Hard constraints:
 1. Return ONLY a valid JSON object (no markdown, no commentary).
@@ -25,6 +27,8 @@ Hard constraints:
    shows or does in context.
 8. Use type "unknown" only as last resort.
 9. Keep confidence realistic (0.0-1.0).
+10. Prefer recall over minimalism. If the screen is complex, return many small
+    elements instead of collapsing them into only a few large ones.
 
 Allowed types:
 button, input_field, text, label, icon, dropdown, checkbox, radio, menu, tab,

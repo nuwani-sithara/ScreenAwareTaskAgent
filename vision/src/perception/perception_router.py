@@ -1,7 +1,7 @@
 # src/perception/perception_router.py
 """
 Main perception pipeline router.
-Decides between VLM (zero-shot), YOLO (fast-path), or hybrid approaches.
+Uses Gemini VLM for zero-shot detection with optional YOLO fast-path.
 """
 
 import os
@@ -33,7 +33,7 @@ class PerceptionRouter:
     """
 
     def __init__(self,
-                 vlm_provider: str = "claude",
+                 vlm_provider: str = "gemini",
                  yolo_model_path: Optional[str] = None,
                  use_vlm: bool = True,
                  use_yolo: bool = True,
@@ -42,7 +42,7 @@ class PerceptionRouter:
         Initialize perception router.
         
         Args:
-            vlm_provider: "gemini", "claude", "gpt4v", "local"
+            vlm_provider: Must be "gemini"
             yolo_model_path: Path to YOLO model weights
             use_vlm: Enable VLM-based detection
             use_yolo: Enable YOLO-based detection
@@ -64,6 +64,10 @@ class PerceptionRouter:
         # Initialize VLM if enabled
         if self.use_vlm:
             try:
+                if vlm_provider != "gemini":
+                    raise ValueError(
+                        f"Unsupported VLM provider: {vlm_provider!r}. Gemini is the only supported provider."
+                    )
                 vlm_kwargs = vlm_kwargs or {}
                 self.vlm_client = get_vlm_client(vlm_provider, **vlm_kwargs)
             except Exception as e:

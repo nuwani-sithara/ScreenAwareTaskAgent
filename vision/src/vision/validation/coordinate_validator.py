@@ -44,6 +44,23 @@ def validate_coordinates(payload: Dict[str, Any], image_width: int, image_height
         element["dx"] = dx
         element["dy"] = dy
         element["confidence"] = max(0.0, min(1.0, confidence))
+
+        bbox = element.get("bbox")
+        if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+            try:
+                x1 = int(round(float(bbox[0])))
+                y1 = int(round(float(bbox[1])))
+                x2 = int(round(float(bbox[2])))
+                y2 = int(round(float(bbox[3])))
+                element["bbox"] = [
+                    max(0, min(image_width - 1, x1)),
+                    max(0, min(image_height - 1, y1)),
+                    max(0, min(image_width, x2)),
+                    max(0, min(image_height, y2)),
+                ]
+            except Exception:
+                element.pop("bbox", None)
+
         cleaned.append(element)
 
     payload["elements"] = cleaned

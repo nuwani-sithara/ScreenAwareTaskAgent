@@ -1,5 +1,5 @@
 """
-Enrich refined bounding boxes with semantic element metadata using a local VLM.
+Enrich refined bounding boxes with semantic element metadata using Gemini VLM.
 
 Input:
 - data/preprocessed_frames/*.jpg
@@ -288,8 +288,6 @@ def enrich_frame(
     refined_bbox_path: Path,
     out_path: Path,
     vlm_client=None,
-    ollama_call_budget: Optional[int] = None,
-    ollama_timeout_seconds: Optional[float] = None,
 ) -> None:
     image = cv2.imread(str(image_path))
     if image is None:
@@ -300,118 +298,89 @@ def enrich_frame(
         refined = json.load(f)
     boxes = refined.get("bboxes", [])
 
-    # Ollama can be too slow when called once per box on dense UIs.
-    # Use configurable budget/timeout so final JSON is still emitted.
-    is_ollama_client = (
-        vlm_client is not None and vlm_client.__class__.__name__ == "OllamaVLMClient"
-    )
-    original_timeout = None
-    if is_ollama_client and hasattr(vlm_client, "timeout_seconds"):
-        try:
-            original_timeout = float(vlm_client.timeout_seconds)
-            if ollama_timeout_seconds is not None:
-                vlm_client.timeout_seconds = max(1.0, float(ollama_timeout_seconds))
-        except Exception:
-            original_timeout = None
-    if is_ollama_client:
-        if ollama_call_budget is None:
-            max_vlm_calls = len(boxes)
-        else:
-            max_vlm_calls = max(0, int(ollama_call_budget))
-    else:
-        max_vlm_calls = len(boxes)
+    max_vlm_calls = len(boxes)
     vlm_calls_used = 0
 
     staged: List[Dict[str, Any]] = []
-    try:
-        for idx, item in enumerate(boxes):
-            bbox = _item_to_bbox(item)
-            expanded_bbox = _expand_bbox_norm(bbox, pad_ratio=0.10)
-            x1, y1, x2, y2 = _to_pixel_bbox(expanded_bbox, w, h)
-            crop = image[y1:y2, x1:x2]
-            crop = _prepare_crop_for_vlm(crop, min_side=224)
-            heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
-            dx, dy = _bbox_center_pixels(bbox, w, h)
-            ocr_text = extract_text_from_region(image, bbox)
-            detected_type = _safe_str(item.get("type", "")).strip().lower()
-            seed_label = " ".join(_safe_str(item.get("label", "")).split()).strip()
-            seed_description = _safe_str(item.get("description", "")).strip()
-            seed_state = _safe_str(item.get("state", "")).strip().lower() or "normal"
+    for idx, item in enumerate(boxes):
+        bbox = _item_to_bbox(item)
+        expanded_bbox = _expand_bbox_norm(bbox, pad_ratio=0.10)
+        x1, y1, x2, y2 = _to_pixel_bbox(expanded_bbox, w, h)
+        crop = image[y1:y2, x1:x2]
+        crop = _prepare_crop_for_vlm(crop, min_side=224)
+        heuristic = _heuristic_meta(crop, source=_safe_str(item.get("source", "")))
+        dx, dy = _bbox_center_pixels(bbox, w, h)
+        ocr_text = extract_text_from_region(image, bbox)
+        detected_type = _safe_str(item.get("type", "")).strip().lower()
+        seed_label = " ".join(_safe_str(item.get("label", "")).split()).strip()
+        seed_description = _safe_str(item.get("description", "")).strip()
+        seed_state = _safe_str(item.get("state", "")).strip().lower() or "normal"
 
-            meta = {
-                "type": detected_type if detected_type else heuristic["type"],
-                "label": seed_label if seed_label else (ocr_text if ocr_text else heuristic["label"]),
-                "description": seed_description,
-                "state": seed_state if seed_state != "unknown" else heuristic["state"],
-                "confidence": max(float(item.get("confidence", 0.5)), float(heuristic["confidence"])),
-            }
+        meta = {
+            "type": detected_type if detected_type else heuristic["type"],
+            "label": seed_label if seed_label else (ocr_text if ocr_text else heuristic["label"]),
+            "description": seed_description,
+            "state": seed_state if seed_state != "unknown" else heuristic["state"],
+            "confidence": max(float(item.get("confidence", 0.5)), float(heuristic["confidence"])),
+        }
 
-            should_call_vlm = (
-                vlm_client is not None and crop.size > 0 and vlm_calls_used < max_vlm_calls
-            )
-            if should_call_vlm:
-                with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
-                    crop_path = tmp.name
-                try:
-                    cv2.imwrite(crop_path, crop)
-                    meta = _classify_crop_with_vlm(
-                        vlm_client,
-                        crop_path,
-                        type_hint=meta["type"],
-                    )
-                except Exception:
-                    meta = {
-                        "type": heuristic["type"],
-                        "label": heuristic["label"],
-                        "description": "VLM classification failed",
-                        "state": heuristic["state"],
-                        "confidence": max(0.1, float(heuristic["confidence"])),
-                    }
-                finally:
-                    if os.path.exists(crop_path):
-                        os.remove(crop_path)
-                vlm_calls_used += 1
-            elif is_ollama_client:
-                meta["description"] = ""
-
-            if not _safe_str(meta.get("label")).strip() and ocr_text:
-                meta["label"] = ocr_text
-            if not _safe_str(meta.get("description")).strip():
-                meta["description"] = describe_ui_element(
-                    vlm_client=None,
-                    crop=crop,
-                    label=_safe_str(meta.get("label")),
-                    type_hint=_safe_str(meta.get("type", heuristic["type"])),
-                )
-
-            staged.append(
-                {
-                    "id": f"elem_{idx}",
-                    "type": str(meta.get("type", "unknown")).strip().lower() or "unknown",
-                    "label": " ".join(str(meta.get("label", "")).split()).strip(),
-                    "description": str(meta.get("description", "")).strip(),
-                    "state": str(meta.get("state", "normal")).strip().lower() or "normal",
-                    "dx": int(item.get("dx", dx)),
-                    "dy": int(item.get("dy", dy)),
-                    "bbox": list(bbox),
-                    "dxdy": item.get("dxdy", []),
-                    "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
-                    "ocr_text": ocr_text,
-                    "confidence": float(meta.get("confidence", 0.5)),
-                    "source": (
-                        item.get("source", "ui_detector")
-                        if str(item.get("source", "")).strip() == "vlm_discovery"
-                        else ("ocr_enriched" if ocr_text else item.get("source", "ui_detector"))
-                    ),
-                }
-            )
-    finally:
-        if original_timeout is not None and hasattr(vlm_client, "timeout_seconds"):
+        should_call_vlm = (
+            vlm_client is not None and crop.size > 0 and vlm_calls_used < max_vlm_calls
+        )
+        if should_call_vlm:
+            with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+                crop_path = tmp.name
             try:
-                vlm_client.timeout_seconds = original_timeout
+                cv2.imwrite(crop_path, crop)
+                meta = _classify_crop_with_vlm(
+                    vlm_client,
+                    crop_path,
+                    type_hint=meta["type"],
+                )
             except Exception:
-                pass
+                meta = {
+                    "type": heuristic["type"],
+                    "label": heuristic["label"],
+                    "description": "VLM classification failed",
+                    "state": heuristic["state"],
+                    "confidence": max(0.1, float(heuristic["confidence"])),
+                }
+            finally:
+                if os.path.exists(crop_path):
+                    os.remove(crop_path)
+            vlm_calls_used += 1
 
+        if not _safe_str(meta.get("label")).strip() and ocr_text:
+            meta["label"] = ocr_text
+        if not _safe_str(meta.get("description")).strip():
+            meta["description"] = describe_ui_element(
+                vlm_client=None,
+                crop=crop,
+                label=_safe_str(meta.get("label")),
+                type_hint=_safe_str(meta.get("type", heuristic["type"])),
+            )
+
+        staged.append(
+            {
+                "id": f"elem_{idx}",
+                "type": str(meta.get("type", "unknown")).strip().lower() or "unknown",
+                "label": " ".join(str(meta.get("label", "")).split()).strip(),
+                "description": str(meta.get("description", "")).strip(),
+                "state": str(meta.get("state", "normal")).strip().lower() or "normal",
+                "dx": int(item.get("dx", dx)),
+                "dy": int(item.get("dy", dy)),
+                "bbox": list(bbox),
+                "dxdy": item.get("dxdy", []),
+                "screen_bbox": item.get("screen_bbox", [0.0, 0.0, 1.0, 1.0]),
+                "ocr_text": ocr_text,
+                "confidence": float(meta.get("confidence", 0.5)),
+                "source": (
+                    item.get("source", "ui_detector")
+                    if str(item.get("source", "")).strip() == "vlm_discovery"
+                    else ("ocr_enriched" if ocr_text else item.get("source", "ui_detector"))
+                ),
+            }
+        )
     # Strict OCR/context label enforcement for interactive elements.
     elements: List[Dict[str, Any]] = []
     for i, e in enumerate(staged):
@@ -467,21 +436,6 @@ def main():
     parser.add_argument("--image-dir", default="data/preprocessed_frames")
     parser.add_argument("--refined-dir", default="data/refined_bboxes")
     parser.add_argument("--out-dir", default="data/final_elements")
-    parser.add_argument("--provider", default="gemini", choices=["gemini", "local", "claude", "gpt4v", "ollama"])
-    parser.add_argument("--local-model", default="llava-hf/llava-1.5-7b-hf")
-    parser.add_argument("--ollama-model", default="llava:7b")
-    parser.add_argument(
-        "--ollama-call-budget",
-        type=int,
-        default=None,
-        help="Max element crops to send to Ollama per frame (default: all).",
-    )
-    parser.add_argument(
-        "--ollama-timeout-seconds",
-        type=float,
-        default=None,
-        help="Optional temporary Ollama timeout while enriching one frame.",
-    )
     parser.add_argument("--no-vlm", action="store_true", help="Skip VLM classification and output unknown types.")
     args = parser.parse_args()
 
@@ -491,14 +445,7 @@ def main():
         import sys
         sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
         from perception.vlm import get_vlm_client
-
-        if args.provider == "local":
-            kwargs = {"model_name": args.local_model}
-        elif args.provider == "ollama":
-            kwargs = {"model_name": args.ollama_model}
-        else:
-            kwargs = {}
-        vlm_client = get_vlm_client(args.provider, **kwargs)
+        vlm_client = get_vlm_client()
 
     image_dir = Path(args.image_dir)
     refined_dir = Path(args.refined_dir)
@@ -521,8 +468,6 @@ def main():
             f,
             out_path,
             vlm_client=vlm_client,
-            ollama_call_budget=args.ollama_call_budget,
-            ollama_timeout_seconds=args.ollama_timeout_seconds,
         )
         print(f"[BBoxEnricher] Wrote {out_path.name}")
 

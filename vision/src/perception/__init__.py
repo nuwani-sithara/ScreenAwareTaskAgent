@@ -1,45 +1,31 @@
-# src/perception/__init__.py
-"""
-Visual Perception Layer - Generalized UI detection using VLM + optional YOLO fast-path.
-"""
+"""Visual Perception Layer - Gemini-only VLM detection with optional YOLO fast-path."""
 
 from .perception_router import PerceptionRouter
 from .feedback_logger import FeedbackLogger
 from .vlm import (
     VLMClient,
-    ClaudeVLMClient,
-    GPT4VClient,
-    LocalVLMClient,
-    OllamaVLMClient,
+    GeminiVLMClient,
     get_vlm_client,
     UIElement,
     UIAnalysisResult,
-    UIParser
+    UIParser,
 )
 from .grounding import (
     BBoxRefiner,
     OverlapResolver,
     EdgeInfo,
-    BBoxGroup
+    BBoxGroup,
 )
 
 __all__ = [
-    # Main router
     "PerceptionRouter",
     "FeedbackLogger",
-    
-    # VLM components
     "VLMClient",
-    "ClaudeVLMClient",
-    "GPT4VClient",
-    "LocalVLMClient",
-    "OllamaVLMClient",
+    "GeminiVLMClient",
     "get_vlm_client",
     "UIElement",
     "UIAnalysisResult",
     "UIParser",
-    
-    # Grounding components
     "BBoxRefiner",
     "OverlapResolver",
     "EdgeInfo",

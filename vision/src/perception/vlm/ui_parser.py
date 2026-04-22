@@ -130,6 +130,88 @@ class UIParser:
             "tab_item": "tab",
         }
 
+    @staticmethod
+    def _sanitize_json_string(s: str) -> str:
+        if not s:
+            return s
+        s = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", s)
+        s = re.sub(r",\s*}\s*", "}", s)
+        s = re.sub(r",\s*\]\s*", "]", s)
+        return s
+
+    @staticmethod
+    def _coerce_json_text(text: str) -> str:
+        s = text.replace("```json", "").replace("```", "")
+        s = re.sub(r"//.*?$|/\*.*?\*/", "", s, flags=re.DOTALL | re.MULTILINE)
+        s = s.replace("\u2018", "'").replace("\u2019", "'")
+        s = re.sub(r"'([^'\\]*(?:\\.[^'\\]*)*)'", r'"\1"', s)
+        s = re.sub(r'([\{,\s])([A-Za-z_][A-Za-z0-9_]*)\s*:', r'\1"\2":', s)
+        s = re.sub(r",\s*([}\]])", r"\1", s)
+        s = re.sub(r"\bTrue\b", "true", s)
+        s = re.sub(r"\bFalse\b", "false", s)
+        s = re.sub(r"\bNone\b", "null", s)
+        return s
+
+    @staticmethod
+    def _extract_partial_elements(response_text: str) -> List[Dict[str, Any]]:
+        """
+        Recover complete element objects from a truncated response.
+
+        Gemini sometimes stops mid-array. When that happens, we can still keep any
+        fully closed element objects that appeared before the truncation point.
+        """
+        key_match = re.search(r'"elements"\s*:\s*\[', response_text)
+        if not key_match:
+            return []
+
+        idx = key_match.end()
+        elements: List[Dict[str, Any]] = []
+        in_str = False
+        esc = False
+        brace_depth = 0
+        obj_start: Optional[int] = None
+
+        while idx < len(response_text):
+            ch = response_text[idx]
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == "\\":
+                    esc = True
+                elif ch == '"':
+                    in_str = False
+            else:
+                if ch == '"':
+                    in_str = True
+                elif ch == "{":
+                    if brace_depth == 0:
+                        obj_start = idx
+                    brace_depth += 1
+                elif ch == "}":
+                    if brace_depth > 0:
+                        brace_depth -= 1
+                        if brace_depth == 0 and obj_start is not None:
+                            candidate = response_text[obj_start : idx + 1].strip()
+                            parsed: Any = None
+                            for variant in (
+                                candidate,
+                                UIParser._sanitize_json_string(candidate),
+                                UIParser._coerce_json_text(candidate),
+                            ):
+                                try:
+                                    parsed = json.loads(variant)
+                                    break
+                                except json.JSONDecodeError:
+                                    continue
+                            if isinstance(parsed, dict):
+                                elements.append(parsed)
+                            obj_start = None
+                elif ch == "]" and brace_depth == 0:
+                    break
+            idx += 1
+
+        return elements
+
     def extract_json_from_response(self, response_text: str) -> Any:
         """
         Extract JSON from VLM response text.
@@ -138,18 +220,39 @@ class UIParser:
         # Remove markdown code blocks
         response_text = re.sub(r'```json\n?', '', response_text)
         response_text = re.sub(r'```\n?', '', response_text)
-        
+
         # Try to find JSON object
         json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
         if json_match:
             json_str = json_match.group(0)
-            return json.loads(json_str)
+            for variant in (
+                json_str,
+                self._sanitize_json_string(json_str),
+                self._coerce_json_text(json_str),
+            ):
+                try:
+                    return json.loads(variant)
+                except json.JSONDecodeError:
+                    continue
 
         # Try JSON array root
         json_array_match = re.search(r'\[.*\]', response_text, re.DOTALL)
         if json_array_match:
-            return json.loads(json_array_match.group(0))
-        
+            json_array = json_array_match.group(0)
+            for variant in (
+                json_array,
+                self._sanitize_json_string(json_array),
+                self._coerce_json_text(json_array),
+            ):
+                try:
+                    return json.loads(variant)
+                except json.JSONDecodeError:
+                    continue
+
+        partial_elements = self._extract_partial_elements(response_text)
+        if partial_elements:
+            return {"elements": partial_elements}
+
         # Fallback: try direct JSON parse
         return json.loads(response_text)
 

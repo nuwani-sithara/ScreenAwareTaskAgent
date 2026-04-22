@@ -424,7 +424,7 @@ class FeedbackLogger:
         num_elements_classified: Elements successfully classified.
         used_cache:              Whether the result was served from cache.
         used_fallback:           Whether the fallback classifier was invoked.
-        provider:                VLM provider name (e.g. "ollama").
+        provider:                VLM provider name (Gemini-only).
         """
         record = {
             "event_type":             "vlm_batch_classification",
