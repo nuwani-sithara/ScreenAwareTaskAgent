@@ -1,0 +1,52 @@
+@startuml
+!theme plain
+skinparam componentStyle uml2
+
+title Vision Feature - Component Diagram
+
+package "Vision API Layer" {
+  [FastAPI App\nsrc/api.py] as API
+  [Session Manager\n(session lifecycle + paths)] as Session
+  [Frame Queue / Worker\n(async processing queues)] as Queue
+}
+
+package "Vision Processing Pipeline" {
+  [Capture Module\nsrc/capture/webcam_capture.py] as Capture
+  [Preprocessing\nsrc/preprocessing/preprocess.py] as Preprocess
+  [UI Detector\nsrc/vision/detector.py] as Detector
+  [BBox Refiner\nsrc/perception/grounding/bbox_refiner.py] as Refiner
+  [Element Enricher\nsrc/perception/grounding/bbox_element_enricher.py] as Enricher
+  [Semantic/VLM Layer\nsrc/perception/vlm/*] as VLM
+  [Session Aggregator\nsrc/session_aggregator.py] as Aggregator
+}
+
+package "Vision Storage" {
+  [raw_frames/] as Raw
+  [preprocessed_frames/] as Prep
+  [coarse_bboxes/] as Coarse
+  [refined_bboxes/] as Refined
+  [final_elements/] as Final
+}
+
+API --> Session : create/update session
+API --> Capture : acquire frames
+Capture --> Raw : save changed frames
+
+API --> Queue : enqueue frame jobs
+Queue --> Preprocess : normalize frames
+Preprocess --> Prep : write output
+
+Prep --> Detector : detect UI elements
+Detector --> Coarse : save coarse detections
+
+Coarse --> Refiner : refine boxes
+Refiner --> Refined : save refined boxes
+
+Refined --> Enricher : enrich metadata
+Enricher --> VLM : semantic labeling
+VLM --> Final : save final elements JSON
+
+Final --> Aggregator : aggregate per-session state
+Aggregator --> API : return response payload
+
+@enduml

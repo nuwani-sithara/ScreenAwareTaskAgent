@@ -1,0 +1,55 @@
+@startuml
+!theme plain
+skinparam componentStyle uml2
+
+title Vision Feature - Architecture Diagram
+
+node "Vision Service Runtime" {
+  component "FastAPI Service\n(src/api.py)" as Service
+
+  frame "Capture Subsystem" {
+    component "Webcam/IP Stream Capture" as RuntimeCapture
+    component "Change Detection" as ChangeDetect
+  }
+
+  frame "Perception Subsystem" {
+    component "Preprocessing" as RuntimePreprocess
+    component "UI Detection" as RuntimeDetect
+    component "BBox Refinement" as RuntimeRefine
+    component "Element Enrichment" as RuntimeEnrich
+    component "Semantic Interpretation" as RuntimeSemantic
+  }
+
+  frame "Session Subsystem" {
+    component "Session Aggregator" as RuntimeAggregate
+    database "Session Artifacts\nvision/data/sessions" as RuntimeStorage
+  }
+}
+
+cloud "Model/Engine Dependencies" {
+  component "YOLO Weights\n(yolov8n.pt / yolov8s.pt)" as YoloWeights
+  component "VLM Provider\n(gemini/claude/gpt4v/local)" as VlmProvider
+  component "OCR / CV Libraries\n(OpenCV, optional OCR stack)" as OcrCv
+}
+
+Service --> RuntimeCapture : start/stop/capture
+RuntimeCapture --> ChangeDetect : frame stream
+ChangeDetect --> RuntimeStorage : raw frame writes
+
+Service --> RuntimePreprocess : process request
+RuntimePreprocess --> RuntimeDetect
+RuntimeDetect --> RuntimeRefine
+RuntimeRefine --> RuntimeEnrich
+RuntimeEnrich --> RuntimeSemantic
+
+RuntimeSemantic --> RuntimeAggregate : frame-level outputs
+RuntimeAggregate --> RuntimeStorage : session summary + artifacts
+RuntimeStorage --> Service : final JSON result
+
+RuntimeDetect ..> YoloWeights : load/infer
+RuntimeSemantic ..> VlmProvider : prompt/response
+RuntimePreprocess ..> OcrCv : image ops
+RuntimeRefine ..> OcrCv
+RuntimeEnrich ..> OcrCv
+
+@enduml
