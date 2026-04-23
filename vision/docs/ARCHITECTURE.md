@@ -5,7 +5,7 @@ This document explains the Vision microservice (FastAPI) used by the agentic cor
 
 ## High-level components
 - **API (src/api.py)** — FastAPI endpoints and orchestration:
-  - POST `/vision/start` — start session-based capture (camera_index=1)
+  - POST `/vision/start` — start session-based capture (camera_index=0)
   - POST `/vision/stop` — stop capture, run pipeline (preprocess → detect → extract), return JSON
   - POST `/vision/capture` — save a single frame; with `?run_pipeline=true` runs full pipeline for the shot
 - **Capture (src/capture/webcam_capture.py)** — generator-style webcam stream and helper capture methods.

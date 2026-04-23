@@ -163,7 +163,7 @@ print("  - Interval: 1 second (should capture ~5 images)")
 print("\nPress Ctrl+C to stop\n")
 
 start_webcam_capture(
-    camera_index=1,
+    camera_index=0,
     save_dir=test_dir,
     mode="auto",
     interval=1
@@ -175,19 +175,19 @@ EOF
 
 **Test A: 1-second interval (5 frames in 5 seconds)**
 ```python
-start_webcam_capture(camera_index=1, save_dir="test_output/1sec", mode="auto", interval=1)
+start_webcam_capture(camera_index=0, save_dir="test_output/1sec", mode="auto", interval=1)
 # Run for 5 seconds, should get ~5 images
 ```
 
 **Test B: 0.5-second interval (10 frames in 5 seconds)**
 ```python
-start_webcam_capture(camera_index=1, save_dir="test_output/half_sec", mode="auto", interval=0.5)
+start_webcam_capture(camera_index=0, save_dir="test_output/half_sec", mode="auto", interval=0.5)
 # Run for 5 seconds, should get ~10 images
 ```
 
 **Test C: 2-second interval (2-3 frames in 5 seconds)**
 ```python
-start_webcam_capture(camera_index=1, save_dir="test_output/2sec", mode="auto", interval=2)
+start_webcam_capture(camera_index=0, save_dir="test_output/2sec", mode="auto", interval=2)
 # Run for 5 seconds, should get ~2-3 images
 ```
 
@@ -249,7 +249,7 @@ print("  - Press 'q' to stop")
 print("\nTry capturing 3-5 images by pressing 's'\n")
 
 start_webcam_capture(
-    camera_index=1,
+    camera_index=0,
     save_dir=test_dir,
     mode="selective",
     interval=1  # Ignored in selective mode
