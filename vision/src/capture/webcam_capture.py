@@ -153,7 +153,7 @@ def start_webcam_capture(camera_index=None, save_dir="data/raw_frames", mode="au
     if gui_ok:
         cv2.destroyAllWindows()
 
-def start_webcam_stream(camera_index=1, width: int | None = None, height: int | None = None):
+def start_webcam_stream(camera_index=0, width: int | None = None, height: int | None = None):
     """
     Generator-style webcam stream for Vision API.
     Returns frames continuously until stopped.
