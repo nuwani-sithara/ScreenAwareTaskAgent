@@ -1,0 +1,31 @@
+@startuml
+title Output Validation Pipeline
+start
+
+:Receive raw Gemini payload;
+:Run schema validation;
+
+if (Payload is a dict and has required fields?) then (yes)
+  :Normalize root fields;
+  :Drop malformed elements;
+  :Coerce dx, dy, confidence, bbox;
+  :Recompute element_count;
+
+  :Run coordinate/confidence validation;
+  if (Any elements pass thresholds?) then (yes)
+    :Clamp coordinates to image bounds;
+    :Keep valid elements;
+    :Generate debug overlay;
+    :Save final validated JSON;
+  else (no)
+    :Build safe empty response;
+    :Set element_count = 0;
+    :Generate empty debug overlay;
+  endif
+else (no)
+  :Build safe empty response;
+  :Set element_count = 0;
+endif
+
+stop
+@enduml

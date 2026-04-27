@@ -1,0 +1,45 @@
+@startuml
+title Vision Data Flow Diagram
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+actor "Agent / UI" as Agent
+actor "Camera / Webcam" as Camera
+cloud "Google Gemini API" as GeminiAPI
+
+rectangle "Process 1\nCapture Frame" as P1
+rectangle "Process 2\nPreprocess Image" as P2
+rectangle "Process 3\nSemantic Detection" as P3
+rectangle "Process 4\nValidation + Overlay" as P4
+rectangle "Process 5\nPersist Results" as P5
+
+database "D1 Raw Frames" as D1
+database "D2 Preprocessed Frames" as D2
+database "D3 Final JSON" as D3
+database "D4 Debug Overlay" as D4
+database "D5 Session Metadata" as D5
+
+Camera --> P1 : image frame
+Agent --> P1 : /vision/start, /vision/capture, /vision/stop
+P1 --> D1 : raw_frame.jpg
+P1 --> P2 : raw image path
+
+P2 --> D2 : preprocessed_frame.jpg
+P2 --> P3 : cleaned image
+
+P3 --> GeminiAPI : image + prompt
+GeminiAPI --> P3 : structured UI JSON
+P3 --> P4 : candidate elements
+
+P4 --> P5 : validated elements
+P4 --> D4 : debug_detected.png
+P5 --> D3 : final_elements.json
+P5 --> D5 : session / processing metadata
+
+note bottom of P3
+Optional OCR and YOLO modules exist in the repo,
+but the active API path is Gemini-centered.
+end note
+
+@enduml

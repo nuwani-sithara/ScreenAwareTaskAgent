@@ -1,0 +1,45 @@
+@startuml
+title Vision Endpoint Flow Diagram
+skinparam shadowing false
+skinparam sequenceArrowThickness 1
+autonumber
+
+actor "Client / Agent" as Client
+participant "FastAPI\nsrc/api.py" as API
+participant "Webcam Capture\nsrc/capture/webcam_capture.py" as Capture
+participant "VisionPipeline\nsrc/vision/pipeline.py" as Pipeline
+participant "GeminiVLM\nsrc/vision/vlm/gemini_vlm.py" as Gemini
+participant "Validators" as Validators
+participant "Overlay Generator" as Overlay
+database "Session Folder" as Store
+
+Client -> API : POST /vision/start
+API -> Capture : open stream / start worker
+API -> Store : create session directories
+API --> Client : session_id + started
+
+Client -> API : POST /vision/capture
+API -> Capture : grab frame
+Capture -> Store : save raw frame
+API -> Pipeline : preprocess + analyze frame
+Pipeline -> Gemini : analyze(image)
+Gemini --> Pipeline : raw JSON
+Pipeline -> Validators : schema + coordinate checks
+Validators --> Pipeline : cleaned payload
+Pipeline -> Overlay : generate debug image
+Overlay -> Store : debug_detected.png
+Pipeline -> Store : final_elements.json
+API --> Client : vision_data + debug image path
+
+Client -> API : POST /vision/stop
+API -> Capture : stop stream / worker
+API -> Store : finalize session artifacts
+API --> Client : completed + summary
+
+Client -> API : GET /vision/status
+API --> Client : running state + latest status
+
+Client -> API : GET /vision/stream
+API --> Client : MJPEG stream
+
+@enduml

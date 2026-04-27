@@ -1,0 +1,36 @@
+@startuml
+title Vision Preprocessing Workflow
+start
+
+:Capture frame from webcam or stream;
+:Save raw frame into session/raw_frames;
+:Copy raw frame into isolated processing folder;
+:Run preprocessing_all();
+
+if (Frame readable?) then (yes)
+  :Resize / normalize / enhance image;
+  :Write preprocessed image to processing/preprocessed_frames;
+  :Load preprocessed image with OpenCV;
+  :Send image to Gemini semantic pipeline;
+
+  if (Gemini returns payload?) then (yes)
+    :Parse JSON response;
+    :Validate schema;
+    :Validate coordinates and confidence;
+    if (Elements remain?) then (yes)
+      :Generate debug overlay;
+      :Save final JSON to final_elements;
+    else (no)
+      :Return safe empty response;
+      :Generate empty overlay;
+    endif
+  else (no)
+    :Return safe empty response;
+  endif
+else (no)
+  :Log image load failure;
+  :Return empty response;
+endif
+
+stop
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+title Image Preprocessing Pipeline
+start
+
+:Read image files from raw_frames;
+:Load image with OpenCV;
+
+if (Image valid?) then (yes)
+  if (Center crop requested?) then (yes)
+    :Compute centered crop box;
+    :Clamp crop box to image bounds;
+    :Crop image;
+  endif
+
+  if (Resize requested?) then (yes)
+    :Compute scale from max dimension;
+    :Preserve aspect ratio;
+    :Resize with INTER_AREA;
+  endif
+
+  :Write output image to preprocessed_frames;
+  :Return preprocessed frame path;
+else (no)
+  :Skip file;
+  :Log "Skipping (not an image)";
+endif
+
+stop
+@enduml

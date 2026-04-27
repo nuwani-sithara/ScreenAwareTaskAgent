@@ -1,0 +1,54 @@
+@startuml
+title Vision Component Diagram
+left to right direction
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+actor "Agent/Core" as Agent
+actor "Operator" as User
+
+package "Vision Service" {
+  [FastAPI API\nsrc/api.py] as API
+  [Capture Layer\nsrc/capture/webcam_capture.py] as Capture
+  [Preprocessing\nsrc/preprocessing/preprocess.py] as Preprocess
+  [Semantic Vision Pipeline\nsrc/vision/pipeline.py] as Pipeline
+  [Gemini VLM\nsrc/vision/vlm/gemini_vlm.py] as Gemini
+  [Validation\nschema + coordinates] as Validation
+  [Debug Overlay\nsrc/vision/debug/overlay_generator.py] as Overlay
+  [Session Storage\nvision/data/sessions/] as Storage
+  [Optional OCR\npytesseract / EasyOCR / PaddleOCR] as OCR
+  [Optional YOLO Fast-Path\nultralytics] as YOLO
+}
+
+cloud "Google Gemini API" as GeminiAPI
+database "Session Artifacts" as Sessions
+
+User --> API : HTTP requests
+Agent --> API : /vision/* endpoints
+
+API --> Capture : start / stop / stream
+API --> Preprocess : preprocess_all()
+API --> Pipeline : single-shot processing
+API --> Storage : write frames / JSON / overlays
+
+Capture --> Storage : raw frames
+Preprocess --> Storage : preprocessed frames
+Pipeline --> Gemini : analyze()
+Pipeline --> Validation : validate schema / coordinates
+Pipeline --> Overlay : generate debug overlay
+Pipeline --> Storage : final JSON + debug image
+
+Gemini --> GeminiAPI : generate_content()
+Validation --> Storage : cleaned output
+OCR ..> Pipeline : enrichment support
+YOLO ..> Pipeline : optional fast-path / legacy support
+
+Sessions <-- Storage
+
+note right of Pipeline
+Main live path is Gemini semantic analysis.
+Validation keeps only coordinate-safe detections.
+end note
+
+@enduml
