@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 logger = logging.getLogger(__name__)
 
 
-_REQUIRED_ROOT_FIELDS = {"image", "image_size", "coordinate_system", "element_count", "elements"}
+_REQUIRED_ROOT_FIELDS = {"image", "image_size", "screen_bbox", "screen_size", "coordinate_system", "element_count", "elements"}
 _REQUIRED_ELEMENT_FIELDS = {
     "id",
     "type",
@@ -27,6 +27,8 @@ def build_empty_response(image_path: str, image_width: int, image_height: int) -
     return {
         "image": image_path,
         "image_size": {"width": int(image_width), "height": int(image_height)},
+        "screen_bbox": [0, 0, int(image_width), int(image_height)],
+        "screen_size": {"width": int(image_width), "height": int(image_height)},
         "coordinate_system": "pixel",
         "element_count": 0,
         "elements": [],
@@ -51,6 +53,8 @@ def validate_schema(payload: Dict[str, Any], image_path: str, image_width: int, 
     normalized: Dict[str, Any] = {
         "image": payload.get("image", image_path),
         "image_size": payload.get("image_size", {"width": int(image_width), "height": int(image_height)}),
+        "screen_bbox": payload.get("screen_bbox", [0, 0, int(image_width), int(image_height)]),
+        "screen_size": payload.get("screen_size", {"width": int(image_width), "height": int(image_height)}),
         "coordinate_system": "pixel",
         "elements": [],
     }

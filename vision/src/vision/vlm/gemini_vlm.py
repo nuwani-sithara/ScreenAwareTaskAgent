@@ -11,6 +11,7 @@ from typing import Any, Dict, List
 
 import cv2
 
+from src.perception.grounding.coarse_bbox_generator import detect_screen_bbox
 from src.vision.config import GEMINI_API_KEY, MODEL_NAME
 from src.vision.vlm.base_vlm import BaseVLM
 
@@ -74,12 +75,12 @@ class GeminiVLM(BaseVLM):
                 return requested_model
 
             preferred = [
-                "gemini-flash-latest",
-                "gemini-flash-lite-latest",
-                "gemini-pro-latest",
-                "gemini-2.5-flash",
                 "gemini-2.0-flash-lite",
                 "gemini-2.0-flash",
+                "gemini-flash-lite-latest",
+                "gemini-flash-latest",
+                "gemini-2.5-flash",
+                "gemini-pro-latest",
             ]
             for candidate in preferred:
                 if candidate in supported:
@@ -120,6 +121,8 @@ class GeminiVLM(BaseVLM):
         payload: Dict[str, Any] = {
             "image": image_path,
             "image_size": {"width": int(image_width), "height": int(image_height)},
+            "screen_bbox": [0, 0, int(image_width), int(image_height)],
+            "screen_size": {"width": int(image_width), "height": int(image_height)},
             "coordinate_system": "pixel",
             "element_count": 0,
             "elements": [],
@@ -150,7 +153,7 @@ class GeminiVLM(BaseVLM):
             "Do not output markdown. Do not output explanations. "
             "Do not use double quotes inside label or description text. "
             "Keep descriptions short, factual, and free of line breaks. "
-            "Detect every visible screen and application UI element that helps understand the screen, "
+            "The input image is already a crop of the visible screen. Detect every visible UI element inside that crop. "
             "including buttons, inputs, links, tabs, menus, checkboxes, radios, dropdowns, toggles, "
             "panes, taskbar items, toolbar controls, browser chrome, window chrome, sidebar entries, "
             "headings, labels, icons, status bars, and meaningful text. "
@@ -159,10 +162,12 @@ class GeminiVLM(BaseVLM):
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
+            "All element coordinates must be relative to the crop/screen, not the full camera frame. "
             "elements must be an array of objects with fields: "
             "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
-            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element. "
+            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element, "
+            "using screen-local pixels. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
@@ -178,21 +183,36 @@ class GeminiVLM(BaseVLM):
             "You are a screen understanding model for desktop automation. Output ONLY valid JSON. "
             "Do not use double quotes inside label or description text. "
             "Keep descriptions short, factual, and free of line breaks. "
-            "Detect any visible UI structure that helps understand the screen, including tabs, panes, menus, "
+            "The input image is already a crop of the visible screen. Detect any visible UI structure inside that crop, including tabs, panes, menus, "
             "buttons, inputs, taskbar items, terminal controls, status bars, labels, icons, browser chrome, "
             "window chrome, sidebars, headings, and text. "
             "Prefer exhaustive reporting. Return many elements if the screen is dense. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
+            "All element coordinates must be relative to the crop/screen, not the full camera frame. "
             "elements must be an array of objects with fields: "
             "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
-            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element. "
+            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element, "
+            "using screen-local pixels. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
             "element_count must equal elements array length."
+        )
+
+    @staticmethod
+    def _screen_detection_prompt(image_width: int, image_height: int) -> str:
+        return (
+            "You are locating the visible laptop or monitor screen in a camera photo. "
+            "Output ONLY valid JSON. "
+            "Detect the screen/display area inside the camera image, not the desk, keyboard, bezel, or other surroundings. "
+            "Return the visible screen boundary as a tight pixel rectangle [x_min, y_min, x_max, y_max] in camera-image pixels. "
+            "Also return the screen width and height as screen_size. "
+            "If the display is partially visible, estimate the visible display area only. "
+            "Return this exact root shape: {screen_bbox, screen_size}. "
+            f"screen_bbox values must fit within x in [0,{image_width}] and y in [0,{image_height}]."
         )
 
     @staticmethod
@@ -221,6 +241,72 @@ class GeminiVLM(BaseVLM):
         if not ok:
             raise RuntimeError("Failed to encode Gemini request image")
         return buffer.tobytes(), req_w, req_h, scale_x, scale_y
+
+    def _detect_screen_region(self, full_image: Any, request_options: Dict[str, Any]) -> tuple[int, int, int, int]:
+        """Localize the visible screen in the camera frame."""
+        h, w = full_image.shape[:2]
+
+        try:
+            bbox = detect_screen_bbox(full_image)
+            x1, y1, x2, y2 = (int(v) for v in bbox)
+            if x2 - x1 >= 32 and y2 - y1 >= 32:
+                logger.info("Heuristic screen localization bbox=%s", [x1, y1, x2, y2])
+                return (x1, y1, x2, y2)
+        except Exception:
+            logger.exception("Heuristic screen localization failed")
+
+        image_bytes, request_width, request_height, _, _ = self._encode_image_array(full_image)
+        prompt = self._screen_detection_prompt(request_width, request_height)
+        generation_config = {
+            "temperature": 0,
+            "max_output_tokens": 1024,
+            "response_mime_type": "application/json",
+            "response_schema": {
+                "type": "object",
+                "properties": {
+                    "screen_bbox": {
+                        "type": "array",
+                        "items": {"type": "integer"},
+                    },
+                    "screen_size": {
+                        "type": "object",
+                        "properties": {
+                            "width": {"type": "integer"},
+                            "height": {"type": "integer"},
+                        },
+                        "required": ["width", "height"],
+                    },
+                },
+                "required": ["screen_bbox", "screen_size"],
+            },
+        }
+
+        try:
+            response = self.client.generate_content(
+                [
+                    {"mime_type": "image/jpeg", "data": image_bytes},
+                    prompt,
+                ],
+                generation_config=generation_config,
+                request_options=request_options,
+            )
+            raw_text = str(getattr(response, "text", "") or "").strip()
+            candidate = self._extract_best_json_object(raw_text) or raw_text
+            data = json.loads(candidate)
+            bbox = data.get("screen_bbox", [])
+            if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+                x1, y1, x2, y2 = (int(round(float(v))) for v in bbox)
+                x1 = max(0, min(w - 1, x1))
+                y1 = max(0, min(h - 1, y1))
+                x2 = max(x1 + 1, min(w, x2))
+                y2 = max(y1 + 1, min(h, y2))
+                if x2 - x1 >= 32 and y2 - y1 >= 32:
+                    logger.info("Gemini localized screen bbox=%s", [x1, y1, x2, y2])
+                    return (x1, y1, x2, y2)
+        except Exception:
+            logger.exception("Gemini screen localization failed; falling back to full frame")
+
+        return (0, 0, w, h)
 
     @staticmethod
     def _translate_bbox(
@@ -610,10 +696,21 @@ class GeminiVLM(BaseVLM):
         scale_y: float = 1.0,
         origin_x: int = 0,
         origin_y: int = 0,
+        screen_width: int | None = None,
+        screen_height: int | None = None,
     ) -> Dict[str, Any]:
         normalized = GeminiVLM._safe_empty_response(image_path, image_width, image_height)
         normalized["image"] = image_path
         normalized["image_size"] = {"width": int(image_width), "height": int(image_height)}
+        screen_w = max(1, int(screen_width if screen_width is not None else image_width))
+        screen_h = max(1, int(screen_height if screen_height is not None else image_height))
+        normalized["screen_bbox"] = [
+            max(0, int(origin_x)),
+            max(0, int(origin_y)),
+            max(0, int(origin_x + screen_w)),
+            max(0, int(origin_y + screen_h)),
+        ]
+        normalized["screen_size"] = {"width": screen_w, "height": screen_h}
 
         raw_elements = payload.get("elements", [])
         if not isinstance(raw_elements, list):
@@ -628,15 +725,15 @@ class GeminiVLM(BaseVLM):
                 element.get("bbox"),
                 scale_x=scale_x,
                 scale_y=scale_y,
-                origin_x=origin_x,
-                origin_y=origin_y,
-                image_width=image_width,
-                image_height=image_height,
+                origin_x=0,
+                origin_y=0,
+                image_width=screen_w,
+                image_height=screen_h,
             )
 
             try:
-                dx = int(round(float(element.get("dx", 0)) * float(scale_x))) + int(origin_x)
-                dy = int(round(float(element.get("dy", 0)) * float(scale_y))) + int(origin_y)
+                dx = int(round(float(element.get("dx", 0)) * float(scale_x)))
+                dy = int(round(float(element.get("dy", 0)) * float(scale_y)))
             except Exception:
                 dx, dy = 0, 0
             if translated_bbox is not None:
@@ -655,9 +752,25 @@ class GeminiVLM(BaseVLM):
                     "label": str(element.get("label", "")),
                     "description": str(element.get("description", "")),
                     "state": str(element.get("state", "normal")),
-                    "dx": dx,
-                    "dy": dy,
+                    "dx": max(0, min(screen_w, dx)),
+                    "dy": max(0, min(screen_h, dy)),
                     "bbox": translated_bbox,
+                    "frame_bbox": (
+                        [
+                            max(0, min(image_width - 1, int(round(origin_x + translated_bbox[0])))),
+                            max(0, min(image_height - 1, int(round(origin_y + translated_bbox[1])))),
+                            max(0, min(image_width, int(round(origin_x + translated_bbox[2])))),
+                            max(0, min(image_height, int(round(origin_y + translated_bbox[3])))),
+                        ]
+                        if translated_bbox is not None
+                        else None
+                    ),
+                    "frame_dx": (
+                        max(0, min(image_width - 1, int(round(origin_x + dx))))
+                    ),
+                    "frame_dy": (
+                        max(0, min(image_height - 1, int(round(origin_y + dy))))
+                    ),
                     "confidence": max(0.0, min(1.0, confidence)),
                     "source": str(element.get("source", "gemini_vlm")),
                 }
@@ -863,8 +976,20 @@ class GeminiVLM(BaseVLM):
             self.model_name,
         )
 
-        image_bytes, request_width, request_height, scale_x, scale_y = self._prepare_request_image(image_path)
         full_image = cv2.imread(image_path)
+        if full_image is None:
+            logger.error("Failed to load image: %s", image_path)
+            return self._safe_empty_response(image_path, image_width, image_height, vlm_error_type="api_error")
+
+        request_options = {"timeout": int(max(1.0, self.timeout_seconds))}
+        screen_x1, screen_y1, screen_x2, screen_y2 = self._detect_screen_region(full_image, request_options)
+        screen_crop = full_image[screen_y1:screen_y2, screen_x1:screen_x2]
+        if screen_crop is None or screen_crop.size == 0:
+            logger.warning("Screen crop was empty; falling back to full frame")
+            screen_x1, screen_y1, screen_x2, screen_y2 = 0, 0, full_image.shape[1], full_image.shape[0]
+            screen_crop = full_image
+
+        image_bytes, request_width, request_height, scale_x, scale_y = self._encode_image_array(screen_crop)
 
         full_prompt = (
             self._system_prompt(request_width, request_height)
@@ -881,7 +1006,6 @@ class GeminiVLM(BaseVLM):
             "response_mime_type": "application/json",
             "response_schema": self._response_schema(request_width, request_height),
         }
-        request_options = {"timeout": int(max(1.0, self.timeout_seconds))}
 
         try:
             logger.debug(
@@ -980,43 +1104,11 @@ class GeminiVLM(BaseVLM):
             image_height,
             scale_x=scale_x,
             scale_y=scale_y,
+            origin_x=screen_x1,
+            origin_y=screen_y1,
+            screen_width=screen_crop.shape[1],
+            screen_height=screen_crop.shape[0],
         )
-
-        if (
-            full_image is not None
-            and int(normalized.get("element_count", 0) or 0) < 8
-            and image_width >= 1280
-            and image_height >= 720
-        ):
-            logger.info(
-                "Gemini full-frame result is sparse (%d elements); running region scans",
-                int(normalized.get("element_count", 0) or 0),
-            )
-            region_elements: List[Dict[str, Any]] = []
-            for region_name, x1, y1, x2, y2 in self._region_specs(image_width, image_height):
-                region_elements.extend(
-                    self._analyze_region(
-                        full_image=full_image,
-                        image_path=image_path,
-                        image_width=image_width,
-                        image_height=image_height,
-                        region_name=region_name,
-                        x1=x1,
-                        y1=y1,
-                        x2=x2,
-                        y2=y2,
-                        request_options=request_options,
-                    )
-                )
-
-            if region_elements:
-                combined = self._dedupe_elements(list(normalized.get("elements", [])) + region_elements)
-                normalized["elements"] = combined
-                normalized["element_count"] = len(combined)
-                if normalized.get("_vlm_error_type") in {"parse_error", "partial_recovery"}:
-                    normalized["_vlm_error_type"] = "region_recovery"
-                elif not normalized.get("_vlm_error_type"):
-                    normalized["_vlm_error_type"] = "region_augmented"
 
         logger.info(
             "Gemini analyze completed image=%s elements=%d error_type=%s",

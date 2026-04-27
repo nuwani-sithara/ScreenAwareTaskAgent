@@ -14,6 +14,34 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
     if image is None:
         raise ValueError(f"Could not load image: {image_path}")
 
+    screen_bbox = None
+    if isinstance(payload, dict):
+        root_bbox = payload.get("screen_bbox")
+        if isinstance(root_bbox, (list, tuple)) and len(root_bbox) == 4:
+            try:
+                screen_bbox = tuple(int(round(float(v))) for v in root_bbox)
+            except Exception:
+                screen_bbox = None
+
+    if screen_bbox is not None:
+        cv2.rectangle(
+            image,
+            (screen_bbox[0], screen_bbox[1]),
+            (screen_bbox[2], screen_bbox[3]),
+            (0, 0, 255),
+            2,
+        )
+        cv2.putText(
+            image,
+            "screen",
+            (max(0, screen_bbox[0]), max(15, screen_bbox[1] - 8)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            (0, 0, 255),
+            1,
+            cv2.LINE_AA,
+        )
+
     elements = payload.get("elements", []) if isinstance(payload, dict) else []
     for element in elements:
         dx = int(element.get("dx", 0))
@@ -29,6 +57,13 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
                 y1 = int(round(float(bbox[1])))
                 x2 = int(round(float(bbox[2])))
                 y2 = int(round(float(bbox[3])))
+                if screen_bbox is not None:
+                    x1 += screen_bbox[0]
+                    y1 += screen_bbox[1]
+                    x2 += screen_bbox[0]
+                    y2 += screen_bbox[1]
+                    dx += screen_bbox[0]
+                    dy += screen_bbox[1]
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
                 cv2.putText(
@@ -45,6 +80,9 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
             except Exception:
                 pass
 
+        if screen_bbox is not None:
+            dx += screen_bbox[0]
+            dy += screen_bbox[1]
         cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
         cv2.putText(
             image,

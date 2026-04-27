@@ -17,6 +17,15 @@ def validate_coordinates(payload: Dict[str, Any], image_width: int, image_height
     Research note:
     This reliability gate removes noisy detections before click automation.
     """
+    screen_size = payload.get("screen_size", {})
+    try:
+        screen_width = int(round(float(screen_size.get("width", image_width)))) if isinstance(screen_size, dict) else image_width
+        screen_height = int(round(float(screen_size.get("height", image_height)))) if isinstance(screen_size, dict) else image_height
+    except Exception:
+        screen_width, screen_height = image_width, image_height
+    screen_width = max(1, screen_width)
+    screen_height = max(1, screen_height)
+
     raw_elements = payload.get("elements", [])
     if not isinstance(raw_elements, list):
         payload["elements"] = []
@@ -36,9 +45,9 @@ def validate_coordinates(payload: Dict[str, Any], image_width: int, image_height
         if confidence < CONFIDENCE_THRESHOLD:
             continue
 
-        if dx < 0 or dx > image_width:
+        if dx < 0 or dx > screen_width:
             continue
-        if dy < 0 or dy > image_height:
+        if dy < 0 or dy > screen_height:
             continue
 
         element["dx"] = dx
@@ -53,10 +62,10 @@ def validate_coordinates(payload: Dict[str, Any], image_width: int, image_height
                 x2 = int(round(float(bbox[2])))
                 y2 = int(round(float(bbox[3])))
                 element["bbox"] = [
-                    max(0, min(image_width - 1, x1)),
-                    max(0, min(image_height - 1, y1)),
-                    max(0, min(image_width, x2)),
-                    max(0, min(image_height, y2)),
+                    max(0, min(screen_width - 1, x1)),
+                    max(0, min(screen_height - 1, y1)),
+                    max(0, min(screen_width, x2)),
+                    max(0, min(screen_height, y2)),
                 ]
             except Exception:
                 element.pop("bbox", None)

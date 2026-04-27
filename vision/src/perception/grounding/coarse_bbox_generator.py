@@ -27,18 +27,18 @@ def detect_screen_bbox(image: np.ndarray) -> Tuple[int, int, int, int]:
         return (0, 0, w, h)
 
     image_area = float(w * h)
+    border_margin = max(8, int(round(min(w, h) * 0.02)))
     best = None
     best_score = -1.0
 
     for cnt in contours:
-        area = float(cv2.contourArea(cnt))
-        if area < 0.08 * image_area:
-            continue
-
         x, y, bw, bh = cv2.boundingRect(cnt)
-        if bw < 0.25 * w or bh < 0.25 * h:
+        if bw < 0.40 * w or bh < 0.35 * h:
+            continue
+        if x <= border_margin or y <= border_margin or x + bw >= (w - border_margin) or y + bh >= (h - border_margin):
             continue
 
+        area = float(cv2.contourArea(cnt))
         rect_area = float(bw * bh)
         fill_ratio = area / max(1.0, rect_area)
         center_x = x + bw / 2.0
@@ -47,14 +47,17 @@ def detect_screen_bbox(image: np.ndarray) -> Tuple[int, int, int, int]:
             (abs(center_x - (w / 2.0)) / max(1.0, w / 2.0)) * 0.5
             + (abs(center_y - (h / 2.0)) / max(1.0, h / 2.0)) * 0.5
         )
-        score = (rect_area / image_area) * 0.7 + fill_ratio * 0.2 + center_bias * 0.1
+        score = (rect_area / image_area) * 0.75 + fill_ratio * 0.15 + center_bias * 0.10
 
         if score > best_score:
             best_score = score
             best = (x, y, x + bw, y + bh)
 
     if best is None:
-        return (0, 0, w, h)
+        # Conservative fallback: use an inner frame rather than the whole camera image.
+        pad_x = max(8, int(round(w * 0.06)))
+        pad_y = max(8, int(round(h * 0.06)))
+        return (pad_x, pad_y, max(pad_x + 1, w - pad_x), max(pad_y + 1, h - pad_y))
 
     x1, y1, x2, y2 = best
     pad_x = int((x2 - x1) * 0.01)

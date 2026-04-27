@@ -11,9 +11,9 @@ CONFIDENCE_THRESHOLD = 0.65
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 # Timeout (seconds) for Gemini RPCs. Can be overridden in vision/.env
 try:
-	GEMINI_TIMEOUT_SECONDS = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "90"))
+	GEMINI_TIMEOUT_SECONDS = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "180"))
 except Exception:
-	GEMINI_TIMEOUT_SECONDS = 90.0
+	GEMINI_TIMEOUT_SECONDS = 180.0
 
 # Whether to attempt automatic screen boundary detection and crop dark borders.
 # Set to "0" in environment to disable cropping and always use full-frame images.

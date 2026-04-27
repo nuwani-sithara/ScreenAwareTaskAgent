@@ -656,6 +656,27 @@ def _finalize_elements_with_dxdy(
     if not isinstance(elements, list):
         return payload
 
+    screen_bbox = payload.get("screen_bbox")
+    if isinstance(screen_bbox, (list, tuple)) and len(screen_bbox) == 4:
+        try:
+            sx1, sy1, sx2, sy2 = (float(v) for v in screen_bbox)
+        except Exception:
+            sx1, sy1, sx2, sy2 = 0.0, 0.0, float(image_width), float(image_height)
+    else:
+        sx1, sy1, sx2, sy2 = 0.0, 0.0, float(image_width), float(image_height)
+
+    screen_size = payload.get("screen_size")
+    if isinstance(screen_size, dict):
+        try:
+            screen_width = max(1, int(round(float(screen_size.get("width", sx2 - sx1)))))
+            screen_height = max(1, int(round(float(screen_size.get("height", sy2 - sy1)))))
+        except Exception:
+            screen_width = max(1, int(round(sx2 - sx1)))
+            screen_height = max(1, int(round(sy2 - sy1)))
+    else:
+        screen_width = max(1, int(round(sx2 - sx1)))
+        screen_height = max(1, int(round(sy2 - sy1)))
+
     finalized: List[Dict[str, Any]] = []
     for elem in elements:
         if not isinstance(elem, dict):
@@ -696,10 +717,18 @@ def _finalize_elements_with_dxdy(
                 y1 = float(bbox[1])
                 x2 = float(bbox[2])
                 y2 = float(bbox[3])
-                cx = ((x1 + x2) * 0.5) * image_width
-                cy = ((y1 + y2) * 0.5) * image_height
-                elem["dx"] = int(round(max(0.0, cx)))
-                elem["dy"] = int(round(max(0.0, cy)))
+                cx = int(round(max(0.0, (x1 + x2) * 0.5)))
+                cy = int(round(max(0.0, (y1 + y2) * 0.5)))
+                elem["dx"] = max(0, min(screen_width, cx))
+                elem["dy"] = max(0, min(screen_height, cy))
+                elem["frame_bbox"] = [
+                    max(0, min(image_width - 1, int(round(sx1 + x1)))),
+                    max(0, min(image_height - 1, int(round(sy1 + y1)))),
+                    max(0, min(image_width, int(round(sx1 + x2)))),
+                    max(0, min(image_height, int(round(sy1 + y2)))),
+                ]
+                elem["frame_dx"] = max(0, min(image_width - 1, int(round(sx1 + cx))))
+                elem["frame_dy"] = max(0, min(image_height - 1, int(round(sy1 + cy))))
             except Exception:
                 pass
         try:
@@ -710,8 +739,25 @@ def _finalize_elements_with_dxdy(
             dy = int(round(float(elem.get("dy", 0)))) if str(elem.get("dy", "")).strip() else 0
         except Exception:
             dy = 0
-        dx = max(0, min(image_width - 1, dx))
-        dy = max(0, min(image_height - 1, dy))
+        dx = max(0, min(screen_width, dx))
+        dy = max(0, min(screen_height, dy))
+
+        frame_dx = elem.get("frame_dx")
+        frame_dy = elem.get("frame_dy")
+        if frame_dx is None:
+            frame_dx = max(0, min(image_width - 1, int(round(sx1 + dx))))
+        else:
+            try:
+                frame_dx = int(round(float(frame_dx)))
+            except Exception:
+                frame_dx = max(0, min(image_width - 1, int(round(sx1 + dx))))
+        if frame_dy is None:
+            frame_dy = max(0, min(image_height - 1, int(round(sy1 + dy))))
+        else:
+            try:
+                frame_dy = int(round(float(frame_dy)))
+            except Exception:
+                frame_dy = max(0, min(image_height - 1, int(round(sy1 + dy))))
 
         # no coordinate-based label fallback
 
@@ -731,9 +777,14 @@ def _finalize_elements_with_dxdy(
             "state": state,
             "dx": dx,
             "dy": dy,
+            "frame_dx": frame_dx,
+            "frame_dy": frame_dy,
             "confidence": confidence,
             "source": final_source,
         }
+        frame_bbox = elem.get("frame_bbox")
+        if isinstance(frame_bbox, list) and len(frame_bbox) == 4:
+            final_elem["frame_bbox"] = frame_bbox
         finalized.append(final_elem)
     payload["elements"] = finalized
     return payload
@@ -931,6 +982,7 @@ def _run_pipeline_for_frame(
             session["semantic_next_allowed_at"] = time.time() + min(30.0, retry_after + 0.5)
 
         semantic_has_elements = bool(isinstance(payload, dict) and int(payload.get("element_count", 0) or 0) > 0)
+
         final_json_path = os.path.join(session["final_dir"], f"{frame_stem}.json")
         refined_json_path = os.path.join(session["refined_dir"], f"{frame_stem}.json")
         coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
