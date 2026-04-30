@@ -108,6 +108,74 @@ class GeminiVLM(BaseVLM):
             )
             return requested_model
 
+    def _fallback_model_candidates(self, current_model: str) -> List[str]:
+        """Return candidate Gemini models to try when the current one fails."""
+        supported: List[str] = []
+        try:
+            models = list(self._genai.list_models())
+            for model in models:
+                methods = set(getattr(model, "supported_generation_methods", []) or [])
+                if "generateContent" not in methods:
+                    continue
+                name = str(getattr(model, "name", ""))
+                if name.startswith("models/"):
+                    name = name.split("/", 1)[1]
+                if name:
+                    supported.append(name)
+        except Exception as exc:
+            logger.warning("Failed to refresh Gemini model list for failover: %s", exc)
+
+        preferred = [
+            "gemini-2.5-flash",
+            "gemini-flash-latest",
+            "gemini-2.5-pro",
+            "gemini-pro-latest",
+            "gemini-1.5-flash",
+            "gemini-1.5-pro",
+        ]
+
+        ordered: List[str] = []
+        for candidate in preferred:
+            if candidate in supported and candidate != current_model and candidate not in ordered:
+                ordered.append(candidate)
+
+        for candidate in supported:
+            if candidate != current_model and candidate.startswith("gemini-") and candidate not in ordered:
+                ordered.append(candidate)
+
+        return ordered
+
+    def _retry_with_alternate_model(
+        self,
+        payload: List[Dict[str, Any]],
+        generation_config: Dict[str, Any],
+        request_options: Dict[str, Any],
+        current_error: str,
+    ) -> Any | None:
+        """Try alternate Gemini models and return a response if one succeeds."""
+        for candidate in self._fallback_model_candidates(self.model_name):
+            logger.warning(
+                "Retrying Gemini request with alternate model '%s' after error on '%s': %s",
+                candidate,
+                self.model_name,
+                current_error,
+            )
+            try:
+                alt_client = self._genai.GenerativeModel(candidate)
+                response = alt_client.generate_content(
+                    payload,
+                    generation_config=generation_config,
+                    request_options=request_options,
+                )
+                self.model_name = candidate
+                self.client = alt_client
+                logger.info("Gemini failover succeeded with model '%s'", candidate)
+                return response
+            except Exception as exc:
+                logger.warning("Gemini failover candidate '%s' failed: %s", candidate, exc)
+
+        return None
+
     @staticmethod
     def _safe_empty_response(
         image_path: str,
@@ -600,6 +668,67 @@ class GeminiVLM(BaseVLM):
         raw = str(getattr(response, "text", "") or "")
         return self._parse_json_payload(raw, image_path, image_width, image_height)
 
+    def _request_fast_retry(
+        self,
+        image_path: str,
+        image_width: int,
+        image_height: int,
+        request_options: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Timeout recovery path: smaller image + lighter prompt/config for faster Gemini response.
+        """
+        try:
+            image_bytes, request_width, request_height, scale_x, scale_y = self._prepare_request_image(
+                image_path,
+                max_side=768,
+            )
+        except Exception:
+            logger.exception("Failed to prepare image for Gemini fast retry")
+            return self._safe_empty_response(
+                image_path, image_width, image_height, vlm_error_type="api_error"
+            )
+
+        fast_prompt = (
+            self._broader_system_prompt(request_width, request_height)
+            + " IMPORTANT: Return up to 50 most relevant visible elements only. "
+            "Prioritize interactive controls and nearby labels. Keep JSON concise."
+        )
+
+        fast_timeout = int(max(20, min(60, float(request_options.get("timeout", self.timeout_seconds)))))
+        try:
+            response = self.client.generate_content(
+                [
+                    {"mime_type": "image/jpeg", "data": image_bytes},
+                    fast_prompt,
+                ],
+                generation_config={
+                    "temperature": 0,
+                    "max_output_tokens": 3072,
+                    "response_mime_type": "application/json",
+                },
+                request_options={"timeout": fast_timeout},
+            )
+        except Exception:
+            logger.exception("Gemini fast retry failed")
+            return self._safe_empty_response(
+                image_path, image_width, image_height, vlm_error_type="api_error"
+            )
+
+        raw = str(getattr(response, "text", "") or "")
+        parsed = self._parse_json_payload(raw, image_path, request_width, request_height)
+        normalized = self._normalize_payload(
+            parsed,
+            image_path,
+            image_width,
+            image_height,
+            scale_x=scale_x,
+            scale_y=scale_y,
+        )
+        if int(normalized.get("element_count", 0) or 0) > 0:
+            normalized["_vlm_error_type"] = "timeout_recovery"
+        return normalized
+
     @staticmethod
     def _normalize_payload(
         payload: Dict[str, Any],
@@ -725,7 +854,7 @@ class GeminiVLM(BaseVLM):
     @staticmethod
     def _prepare_request_image(
         image_path: str,
-        max_side: int = 1280,
+        max_side: int = 1024,
     ) -> tuple[bytes, int, int, float, float]:
         image = cv2.imread(image_path)
         if image is None:
@@ -818,7 +947,7 @@ class GeminiVLM(BaseVLM):
         )
         generation_config = {
             "temperature": 0,
-            "max_output_tokens": 8192,
+            "max_output_tokens": 4096,
             "response_mime_type": "application/json",
             "response_schema": self._response_schema(request_width, request_height),
         }
@@ -896,47 +1025,62 @@ class GeminiVLM(BaseVLM):
             )
         except Exception as exc:
             msg = str(exc).lower()
-            if "not found" in msg or "generatecontent" in msg:
-                fallback = self._resolve_model_name(self.model_name)
-                if fallback != self.model_name:
-                    logger.warning("Retrying Gemini call with fallback model '%s'", fallback)
-                    self.model_name = fallback
-                    self.client = self._genai.GenerativeModel(self.model_name)
-                    try:
-                        response = self.client.generate_content(
-                            payload,
-                            generation_config=generation_config,
-                            request_options=request_options,
-                        )
-                    except Exception:
-                        logger.exception("Gemini API request failed after fallback retry")
-                        return self._safe_empty_response(
-                            image_path,
-                            image_width,
-                            image_height,
-                            vlm_error_type="api_error",
-                        )
+            model_unavailable = (
+                "not found" in msg
+                or "generatecontent" in msg
+                or "no longer available" in msg
+                or "not available to new users" in msg
+            )
+            quota_or_rate = "resource_exhausted" in msg or "quota exceeded" in msg
+
+            if model_unavailable or quota_or_rate:
+                retry_response = self._retry_with_alternate_model(
+                    payload=payload,
+                    generation_config=generation_config,
+                    request_options=request_options,
+                    current_error=str(exc),
+                )
+                if retry_response is not None:
+                    response = retry_response
                 else:
-                    logger.exception("Gemini API request failed")
+                    logger.exception("Gemini API request failed and failover exhausted")
+                    error_type = "quota_exceeded" if quota_or_rate else "model_unavailable"
+                    retry_after = self._extract_retry_after_seconds(str(exc))
                     return self._safe_empty_response(
                         image_path,
                         image_width,
                         image_height,
-                        vlm_error_type="model_unavailable",
+                        vlm_error_type=error_type,
+                        vlm_error=str(exc),
+                        vlm_retry_after_seconds=retry_after,
                     )
+            elif "deadline_exceeded" in msg or "timed out" in msg or "timeout" in msg:
+                logger.warning("Gemini timed out; trying fast retry path")
+                fast_payload = self._request_fast_retry(
+                    image_path=image_path,
+                    image_width=image_width,
+                    image_height=image_height,
+                    request_options=request_options,
+                )
+                if int(fast_payload.get("element_count", 0) or 0) > 0:
+                    return fast_payload
+                logger.exception("Gemini timeout persisted after fast retry")
+                return self._safe_empty_response(
+                    image_path,
+                    image_width,
+                    image_height,
+                    vlm_error_type="api_error",
+                    vlm_error=str(exc),
+                    vlm_retry_after_seconds=self._extract_retry_after_seconds(str(exc)),
+                )
             else:
                 logger.exception("Gemini API request failed")
-                error_type = (
-                    "quota_exceeded"
-                    if "resource_exhausted" in msg or "quota exceeded" in msg
-                    else "api_error"
-                )
                 retry_after = self._extract_retry_after_seconds(str(exc))
                 return self._safe_empty_response(
                     image_path,
                     image_width,
                     image_height,
-                    vlm_error_type=error_type,
+                    vlm_error_type="api_error",
                     vlm_error=str(exc),
                     vlm_retry_after_seconds=retry_after,
                 )
@@ -987,6 +1131,7 @@ class GeminiVLM(BaseVLM):
             and int(normalized.get("element_count", 0) or 0) < 8
             and image_width >= 1280
             and image_height >= 720
+            and str(normalized.get("_vlm_error_type", "")).strip().lower() not in {"timeout_recovery"}
         ):
             logger.info(
                 "Gemini full-frame result is sparse (%d elements); running region scans",

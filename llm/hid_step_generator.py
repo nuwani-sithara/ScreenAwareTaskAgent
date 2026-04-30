@@ -1019,13 +1019,18 @@ def generate_hid_steps_from_visual(
         model=model
     )
 
-    # Step 2b: Generate action_steps and hid_commands
-    action_steps = generator.generate_action_steps(
-        instruction=instruction,
-        visual_data=visual_data,
-        model=model,
-        max_tokens=1500
-    )
+    # Prefer the rewritten steps from run_interactive to avoid duplicate LLM calls
+    action_steps = llm_result.get("rewritten_steps") or []
+
+    # If run_interactive did not produce structured steps, fall back to generator LLM call
+    if not action_steps:
+        action_steps = generator.generate_action_steps(
+            instruction=instruction,
+            visual_data=visual_data,
+            model=model,
+            max_tokens=1500
+        )
+
     hid_commands = generator.convert_actions_to_hid(action_steps) if action_steps else []
     total_commands = len(hid_commands) if hid_commands else 0
 

@@ -25,5 +25,8 @@ tqdm
 requests
 httpx  # For async HTTP requests
 
-# Optional: Google Gemini API (free, fast alternative)
-google-generativeai  # Install if using Gemini: pip install google-generativeai
+# Google Gemini API SDK (current)
+google-genai==1.14.0
+
+# Legacy SDK (deprecated; fallback only)
+# google-generativeai

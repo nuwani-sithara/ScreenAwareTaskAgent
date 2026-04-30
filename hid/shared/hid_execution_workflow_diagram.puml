@@ -1,0 +1,61 @@
+@startuml HID_Execution_Workflow_Diagram
+title HID Execution Workflow Diagram
+
+top to bottom direction
+scale max 3200 width
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+skinparam rectangle {
+  RoundCorner 0
+  BorderColor #222222
+  FontColor #111111
+  BackgroundColor #F6F6F6
+}
+skinparam ArrowColor #222222
+skinparam ArrowThickness 1
+
+rectangle "Execution Request\n(Agent / API trigger)" as Req
+rectangle "Load and Validate Command Batch\n(schema, bounds, safety checks)" as Validate
+rectangle "Normalize to HID Primitives\n(move, click, key, scroll)" as Normalize
+rectangle "Build Execution Queue\n(order + timing + retries)" as Queue
+rectangle "Open Serial Session\n(connect to ESP32-S3)" as Connect
+rectangle "Dispatch Next HID Command\n(send NDJSON with commandId)" as Dispatch
+rectangle "Wait for Device Response\nACK + readyForNext" as WaitAck
+
+rectangle "Decision: ACK Received?" as D1
+rectangle "Decision: Retry Budget Left?" as D2
+rectangle "Decision: More Commands?" as D3
+
+rectangle "Retry Send\n(requeue current command)" as Retry
+rectangle "Mark Command Failed\n(log error and continue/abort)" as Fail
+rectangle "Update Runtime State\n(history, metrics, latency)" as Update
+rectangle "Apply HID on Host\n(mouse/keyboard event observed)" as Apply
+rectangle "Finalize Execution\n(summary + status response)" as Done
+
+Req --> Validate
+Validate --> Normalize
+Normalize --> Queue
+Queue --> Connect
+Connect --> Dispatch
+Dispatch --> WaitAck
+WaitAck --> D1
+
+D1 --> Update : Yes
+D1 --> D2 : No
+
+D2 --> Retry : Yes
+D2 --> Fail : No
+Retry --> Dispatch
+Fail --> D3
+
+Update --> Apply
+Apply --> D3
+
+D3 --> Dispatch : Yes
+D3 --> Done : No
+
+rectangle "Output Snapshot\n\nstatus: success | partial | failed\nexecuted_count: N\nfailed_count: M\nlast_error: <optional>" as Out
+Done --> Out
+
+@enduml

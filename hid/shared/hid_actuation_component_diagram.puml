@@ -1,0 +1,53 @@
+@startuml HID_Actuation_Component_Diagram
+title HID Actuation Component Diagram
+
+top to bottom direction
+scale max 3200 width
+
+skinparam shadowing false
+skinparam defaultTextAlignment center
+skinparam rectangle {
+  RoundCorner 0
+  BorderColor #222222
+  FontColor #111111
+  BackgroundColor #F6F6F6
+}
+skinparam ArrowColor #222222
+skinparam ArrowThickness 1
+
+rectangle "Agent Client\n(Planner / External Controller)" as Client
+rectangle "HID API Service\n(Command ingress + status)" as Api
+
+rectangle "Device Shadow\n(HID Orchestrator)\n\n- Validate and sanitize\n- Normalize actions\n- Queue and schedule\n- Manage serial link" as Shadow
+
+rectangle "HID Actuation Pipeline\n(Three-Stage Execution)" as Pipeline
+
+rectangle "Stage 0\nInput Validation\n(Optional strict checks)" as S0
+rectangle "Stage 1\nAction Steps\n(Intent-level sequence)" as S1
+rectangle "Stage 2\nHID Commands\n(Protocol primitives)" as S2
+
+rectangle "Validation Output\n\nis_valid: true/false\nreason: <text>\nmissing_elements: [...]" as O0
+rectangle "Action Steps Output\n\n[{step: 1, action: \"move\", target: \"button\"},\n {step: 2, action: \"click\", target: \"button\"}]" as O1
+rectangle "HID Command Output\n\n[{cmd: \"mouse_move\", dx: 120, dy: -40},\n {cmd: \"mouse_click\", button: \"left\"}]" as O2
+
+rectangle "USB CDC Serial Link\n(NDJSON + commandId)" as Link
+rectangle "ESP32-S3 Firmware\n(Command parser + HID report generator)" as Fw
+rectangle "Host OS Input Stack\n(Native keyboard/mouse events)" as Host
+
+Client --> Api
+Api --> Shadow
+Shadow --> Pipeline
+
+Pipeline --> S0
+Pipeline --> S1
+Pipeline --> S2
+
+S0 --> O0
+S1 --> O1
+S2 --> O2
+
+S2 --> Link
+Link --> Fw
+Fw --> Host
+
+@enduml

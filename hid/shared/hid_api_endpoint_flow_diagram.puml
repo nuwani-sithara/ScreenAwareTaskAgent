@@ -1,0 +1,74 @@
+@startuml HID_API_Endpoint_Flow_Diagram
+title HID API Endpoints Diagram
+
+top to bottom direction
+scale max 2600 width
+
+skinparam shadowing false
+skinparam linetype ortho
+skinparam dpi 160
+skinparam backgroundColor #F7FAFC
+skinparam defaultTextAlignment center
+skinparam defaultFontName Segoe UI
+skinparam roundcorner 8
+skinparam nodesep 70
+skinparam ranksep 70
+skinparam rectangle {
+  BorderColor #2D3748
+  FontColor #1A202C
+  BackgroundColor #EDF2F7
+}
+skinparam package {
+  BorderColor #CBD5E0
+  FontColor #1A202C
+  BackgroundColor #FFFFFF
+}
+skinparam ArrowColor #4A5568
+skinparam ArrowThickness 1
+
+rectangle "Node.js HID API Server\nPort: 3015" as Api #DCFCE7
+
+package "Available Endpoints" {
+  rectangle "GET /\n\nReturns API metadata and endpoint list" as EpRoot #EAF2FF
+
+  rectangle "GET /health\n\nHealth check\nstatus, service, version, timestamp" as EpHealth #EAF2FF
+
+  rectangle "GET /hid/status\n\nDevice connection + stats\nfirmwareVersion, portPath, uptime" as EpStatus #EAF2FF
+
+  rectangle "POST /hid/command\n\nExecute HID command\nBody: { type, payload }\nReturns success + executionTime" as EpCommand #EAF2FF
+}
+
+package "Supported Command Types\n(for POST /hid/command)" {
+  rectangle "mouse_move" as CmdMove #F0FDF4
+  rectangle "mouse_click" as CmdClick #F0FDF4
+  rectangle "mouse_drag" as CmdDrag #F0FDF4
+  rectangle "mouse_scroll" as CmdScroll #F0FDF4
+  rectangle "key_combo" as CmdCombo #F0FDF4
+  rectangle "type_text" as CmdText #F0FDF4
+}
+
+Api -[#2563EB]-> EpRoot : exposes
+Api -[#2563EB]-> EpHealth : exposes
+Api -[#2563EB]-> EpStatus : exposes
+Api -[#2563EB]-> EpCommand : exposes
+
+EpCommand -[#0F766E]-> CmdMove : type
+EpCommand -[#0F766E]-> CmdClick : type
+EpCommand -[#0F766E]-> CmdDrag : type
+EpCommand -[#0F766E]-> CmdScroll : type
+EpCommand -[#0F766E]-> CmdCombo : type
+EpCommand -[#0F766E]-> CmdText : type
+
+legend bottom
+  == Source of Truth ==
+  Endpoints are taken from hid/api-server/src/server.ts
+  and represent the current implemented routes.
+
+  == Included Endpoints ==
+  GET /
+  GET /health
+  GET /hid/status
+  POST /hid/command
+end legend
+
+@enduml

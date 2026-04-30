@@ -464,7 +464,7 @@ def get_status():
 class PlanTodosRequest(BaseModel):
     instruction: str
     visual_data: Dict[str, Any]
-    model: Optional[str] = "models/gemini-flash-latest"
+    model: Optional[str] = "models/gemini-2.5-flash"
 
 
 class PlanStepHIDRequest(BaseModel):
@@ -472,7 +472,7 @@ class PlanStepHIDRequest(BaseModel):
     visual_data: Dict[str, Any]
     todo_list: List[Dict[str, Any]]
     current_step: Dict[str, Any]
-    model: Optional[str] = "models/gemini-flash-latest"
+    model: Optional[str] = "models/gemini-2.5-flash"
 
 
 class EvaluateStepRequest(BaseModel):
@@ -480,14 +480,14 @@ class EvaluateStepRequest(BaseModel):
     visual_data: Dict[str, Any]
     step: Dict[str, Any]
     todo_list: List[Dict[str, Any]]
-    model: Optional[str] = "models/gemini-flash-latest"
+    model: Optional[str] = "models/gemini-2.5-flash"
 
 
 class FinalReportRequest(BaseModel):
     instruction: str
     visual_data: Dict[str, Any]
     todo_list: List[Dict[str, Any]]
-    model: Optional[str] = "models/gemini-flash-latest"
+    model: Optional[str] = "models/gemini-2.5-flash"
 
 
 @app.post("/llm/plan_todos", response_model=Dict[str, Any])

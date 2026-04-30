@@ -696,8 +696,13 @@ def _finalize_elements_with_dxdy(
                 y1 = float(bbox[1])
                 x2 = float(bbox[2])
                 y2 = float(bbox[3])
-                cx = ((x1 + x2) * 0.5) * image_width
-                cy = ((y1 + y2) * 0.5) * image_height
+                # If bbox looks normalized (<=1), scale to pixels; otherwise assume pixel coords.
+                if max(x1, y1, x2, y2) <= 1.5:
+                    cx = ((x1 + x2) * 0.5) * image_width
+                    cy = ((y1 + y2) * 0.5) * image_height
+                else:
+                    cx = (x1 + x2) * 0.5
+                    cy = (y1 + y2) * 0.5
                 elem["dx"] = int(round(max(0.0, cx)))
                 elem["dy"] = int(round(max(0.0, cy)))
             except Exception:

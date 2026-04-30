@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 
-MODEL_NAME = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-lite")
+MODEL_NAME = os.getenv("GEMINI_MODEL_NAME", "gemini-2.5-flash")
 CONFIDENCE_THRESHOLD = 0.65
 
 # GEMINI API key from environment

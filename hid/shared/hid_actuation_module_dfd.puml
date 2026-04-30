@@ -1,0 +1,85 @@
+@startuml HID_Actuation_Module_DFD
+title DFD - HID Actuation Module
+
+left to right direction
+scale max 3400 width
+
+skinparam shadowing false
+skinparam linetype polyline
+skinparam dpi 160
+skinparam backgroundColor #F4F7FB
+skinparam defaultTextAlignment center
+skinparam defaultFontName Segoe UI
+skinparam roundcorner 6
+skinparam nodesep 90
+skinparam ranksep 90
+skinparam rectangle {
+  BorderColor #2F3A4A
+  FontColor #1A2230
+  BackgroundColor #EAF0F8
+}
+skinparam database {
+  BorderColor #3E5168
+  FontColor #1A2230
+  BackgroundColor #FFF8E6
+}
+skinparam ArrowColor #2F3A4A
+skinparam ArrowThickness 1
+
+' External entities
+rectangle "Agentic AI Core" as E_Agent #D9E8FF
+rectangle "Target Machine\n(OS + Applications)" as E_Target #D9E8FF
+
+' Internal processes (HID Actuation Module)
+rectangle "Node.js API\n(ingress, validation, orchestration)" as P_API #DFF5E3
+rectangle "HID Dispatcher\n(queue, framing, retries)" as P_Dispatch #DFF5E3
+rectangle "ESP32 Firmware\n(parse + HID report execution)" as P_ESP #DFF5E3
+
+' Data stores
+database "D1 Command Log" as D_CommandLog #FFF1C9
+database "D2 ACK Record" as D_Ack #FFF1C9
+database "D3 Execution Trace" as D_Trace #FFF1C9
+
+' Keep processes on top row and data stores on a separate lower row
+E_Agent -[hidden]right-> P_API
+P_API -[hidden]right-> P_Dispatch
+P_Dispatch -[hidden]right-> P_ESP
+P_ESP -[hidden]right-> E_Target
+
+D_CommandLog -[hidden]right-> D_Ack
+D_Ack -[hidden]right-> D_Trace
+
+P_API -[hidden]down-> D_CommandLog
+P_Dispatch -[hidden]down-> D_Ack
+P_ESP -[hidden]down-> D_Trace
+
+' Main linear flow
+E_Agent -[#1F78B4]-> P_API : Action request
+P_API -[#1F78B4]-> P_Dispatch : Normalized command batch
+P_Dispatch -[#1F78B4]-> P_ESP : NDJSON command stream
+P_ESP -[#1F78B4]-> E_Target : HID events
+
+' Control feedback
+P_ESP -[#8A2BE2,dashed]left-> P_Dispatch : ACK
+P_Dispatch -[#8A2BE2,dashed]left-> P_API : Status
+P_API -[#8A2BE2,dashed]left-> E_Agent : Response
+
+' Minimal persistent data flows
+P_API -[#C27000]down-> D_CommandLog : Log request
+P_Dispatch -[#C27000]down-> D_Ack : Log ACK
+P_ESP -[#C27000]down-> D_Trace : Log trace
+D_Trace -[#C27000]up-> P_API : Metrics
+
+legend bottom
+  == DFD Scope ==
+  Clear primary path: Agentic AI Core -> Node.js API -> HID Dispatcher -> ESP32 -> Target Machine
+  Three stores: Command Log, ACK Record, Execution Trace
+  Feedback path: ESP32 ACK -> Dispatcher -> API -> Agentic AI Core
+
+  == Color Key ==
+  Blue arrows: Main command flow
+  Violet arrows: ACK and status feedback
+  Amber arrows: Data-store read/write
+end legend
+
+@enduml

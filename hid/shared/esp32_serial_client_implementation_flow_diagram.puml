@@ -1,0 +1,88 @@
+@startuml ESP32_Serial_Client_Implementation_Flow
+title ESP32 Serial Client Implementation Flow Diagram
+
+top to bottom direction
+scale max 1800 width
+
+skinparam shadowing false
+skinparam linetype ortho
+skinparam dpi 140
+skinparam backgroundColor #F7FAFC
+skinparam defaultTextAlignment center
+skinparam defaultFontName Segoe UI
+skinparam roundcorner 8
+skinparam nodesep 40
+skinparam ranksep 45
+skinparam rectangle {
+  BorderColor #2D3748
+  FontColor #1A202C
+  BackgroundColor #EDF2F7
+}
+skinparam package {
+  BorderColor #CBD5E0
+  FontColor #1A202C
+  BackgroundColor #FFFFFF
+}
+skinparam ArrowColor #4A5568
+skinparam ArrowThickness 1
+
+rectangle "Caller\n(DeviceShadow / API layer)" as Caller #DBEAFE
+
+package "Connection Initialization" {
+  rectangle "Discover Port\nlast_port -> VID/PID -> fallback" as Discover #DCFCE7
+  rectangle "Open Serial (115200)\ncreate line parser" as Open #DCFCE7
+  rectangle "Handshake\nhello else ping/pong" as Handshake #DCFCE7
+  rectangle "Ready\nconnected + firmwareVersion" as Ready #D1FAE5
+}
+
+package "Command Execution" {
+  rectangle "Build Command\nattach meta.commandId" as Build #EAF2FF
+  rectangle "Track In-Flight\nstart timeout timer" as Track #EAF2FF
+  rectangle "Send NDJSON\nUSB CDC write" as Send #EAF2FF
+  rectangle "Device Executes\nparse + perform HID" as Execute #FEF3C7
+  rectangle "Receive ACK\nmatch commandId" as Ack #EAF2FF
+  rectangle "Wait readyForNext\nflow-control gate" as Gate #EAF2FF
+  rectangle "Complete\nresolve + cleanup" as Done #D1FAE5
+}
+
+package "Failure Handling" {
+  rectangle "Retry Once\nresend command" as Retry #FEE2E2
+  rectangle "Reconnect\nbackoff then rediscover" as Reconnect #FEE2E2
+}
+
+Caller -[#2563EB]-> Discover : connect()
+Discover -[#2563EB]-> Open
+Open -[#2563EB]-> Handshake
+Handshake -[#2563EB]-> Ready
+
+Caller -[#1D4ED8]-> Build : executeCommand()
+Build -[#1D4ED8]-> Track
+Track -[#1D4ED8]-> Send
+Send -[#1D4ED8]-> Execute
+Execute -[#7C3AED,dashed]-> Ack : ack(commandId,status)
+Ack -[#7C3AED,dashed]-> Gate : readyForNext
+Gate -[#16A34A]-> Done
+Done -[#16A34A,dashed]-> Caller : success
+
+Open -[#DC2626,dashed]-> Reconnect : open error
+Ack -[#DC2626]-> Retry : timeout/error
+Retry -[#1D4ED8]-> Send : retry
+Retry -[#DC2626,dashed]-> Reconnect : retry exhausted
+Reconnect -[#DC2626]-> Discover : next attempt
+Retry -[#DC2626,dashed]-> Caller : failure
+
+legend bottom
+  == Implementation Notes ==
+  - Port selection: last_port -> VID/PID -> fallback ports
+  - Reliability: commandId correlation + timeout + retry
+  - Flow control: ACK then readyForNext
+  - Recovery: reconnect with backoff on failure
+
+  == Color Key ==
+  Blue: primary command/control flow
+  Violet dashed: firmware responses and control signals
+  Green: success completion
+  Red: error, retry, reconnect
+end legend
+
+@enduml

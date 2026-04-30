@@ -203,6 +203,88 @@ def _snap_to_detected_elements(
     return snapped
 
 
+def _find_best_element(detected: List[dict], keywords: List[str]) -> Optional[dict]:
+    """Return the best matching detected element for a set of keywords."""
+    best_element: Optional[dict] = None
+    best_score = 0
+    for element in detected:
+        haystack = " ".join(
+            str(part).lower()
+            for part in [
+                element.get("type", ""),
+                element.get("label", ""),
+                element.get("description", ""),
+            ]
+        )
+        score = sum(1 for keyword in keywords if keyword in haystack)
+        if score > best_score:
+            best_score = score
+            best_element = element
+    return best_element if best_score > 0 else None
+
+
+def _extract_credential_value(text: str, field_names: List[str]) -> Optional[str]:
+    """Extract a credential-like value from freeform text."""
+    if not text:
+        return None
+    for field_name in field_names:
+        patterns = [
+            rf"{field_name}\s*[:=]\s*['\"]?([^,'\"\s\)]+)",
+            rf"{field_name}\s+(?:is\s+)?['\"]?([^,'\"\s\)]+)",
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, text, flags=re.IGNORECASE)
+            if match:
+                value = match.group(1).strip()
+                if value:
+                    return value
+    return None
+
+
+def _build_login_hid_fallback(
+    screen_data: dict,
+    current_step: dict,
+    user_task: str,
+) -> List[dict]:
+    """Build a deterministic HID sequence for login-style steps."""
+    detected = _extract_elements(screen_data)
+    if not detected:
+        return []
+
+    step_text = " ".join(
+        str(current_step.get(key, ""))
+        for key in ("action", "target", "expected_result")
+    )
+    task_text = f"{user_task} {step_text}"
+
+    username = current_step.get("user_input") or _extract_credential_value(task_text, ["username", "user name", "login", "userid", "email"])
+    password = current_step.get("password") or _extract_credential_value(task_text, ["password", "passcode", "pin"])
+
+    commands: List[dict] = []
+
+    username_element = _find_best_element(detected, ["username", "user name", "email", "login id", "userid", "enter username"])
+    password_element = _find_best_element(detected, ["password", "passcode", "enter password"])
+    submit_element = _find_best_element(detected, ["login", "sign in", "submit", "log in"])
+
+    if username_element and username:
+        commands.append({"cmd": "mouse_move", "dx": username_element["dx"], "dy": username_element["dy"]})
+        commands.append({"cmd": "mouse_click", "button": "left"})
+        commands.append({"cmd": "type_text", "text": username})
+
+    if password_element and password:
+        commands.append({"cmd": "mouse_move", "dx": password_element["dx"], "dy": password_element["dy"]})
+        commands.append({"cmd": "mouse_click", "button": "left"})
+        commands.append({"cmd": "type_text", "text": password})
+
+    if submit_element:
+        commands.append({"cmd": "mouse_move", "dx": submit_element["dx"], "dy": submit_element["dy"]})
+        commands.append({"cmd": "mouse_click", "button": "left"})
+    elif username or password:
+        commands.append({"cmd": "key_press", "key": "enter"})
+
+    return commands
+
+
 # ---------------------------------------------------------------------------
 # Screen data → readable text
 # ---------------------------------------------------------------------------
@@ -283,7 +365,7 @@ def _screen_to_text(screen_data: dict) -> str:
 def plan_todo_list(
     screen_data: dict,
     user_task: str,
-    model: str = "models/gemini-flash-latest",
+    model: str = "models/gemini-2.5-flash",
 ) -> dict:
     """
     Analyze the current screen and produce an ordered todo list.
@@ -395,7 +477,7 @@ def plan_step_hid(
     todo_list: List[dict],
     current_step: dict,
     user_task: str,
-    model: str = "models/gemini-flash-latest",
+    model: str = "models/gemini-2.5-flash",
 ) -> dict:
     """
     Generate a HID command sequence for ONE specific step.
@@ -477,8 +559,20 @@ Respond with ONLY this JSON (no markdown):
         )
         logger.debug("plan_step_hid raw response: %s", raw[:600])
         result = _extract_json(raw)
-        if "hid_commands" not in result:
-            raise ValueError("Response missing 'hid_commands'")
+        if not isinstance(result, dict):
+            raise ValueError("Response was not a JSON object")
+
+        hid_commands = result.get("hid_commands") or []
+        if not hid_commands:
+            fallback = _build_login_hid_fallback(screen_data, current_step, user_task)
+            if fallback:
+                logger.warning("plan_step_hid used deterministic fallback HID commands")
+                result = {
+                    "hid_commands": fallback,
+                    "reasoning": "Deterministic login fallback used after Gemini response was missing hid_commands",
+                }
+            else:
+                raise ValueError("Response missing 'hid_commands'")
 
         # Snap any mouse_move coordinates to the exact detected element positions
         # to correct for LLM rounding / hallucination.
@@ -500,7 +594,7 @@ def evaluate_step_result(
     step: dict,
     user_task: str,
     todo_list: List[dict],
-    model: str = "models/gemini-flash-latest",
+    model: str = "models/gemini-2.5-flash",
 ) -> dict:
     """
     Evaluate whether a step succeeded by examining the new screen state.
@@ -585,7 +679,7 @@ def generate_final_report(
     final_screen: dict,
     user_task: str,
     todo_list: List[dict],
-    model: str = "models/gemini-flash-latest",
+    model: str = "models/gemini-2.5-flash",
 ) -> dict:
     """
     Generate a final human-readable report after the loop completes.
