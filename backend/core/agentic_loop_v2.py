@@ -70,6 +70,35 @@ class AgentRunRecorder:
         self.step_results: Dict[int, dict] = {}    # evaluation outcomes
         self.final_report: dict = {}
 
+    def _normalize_perception(self, screen_data: dict) -> dict:
+        """Normalize various vision service response wrappers into a
+        consistent perception dict that contains `elements` and related keys.
+
+        This is a compatibility shim for older callers that expected the
+        vision payload at the top level. Do not change semantics of the
+        original data — only prefer nested `vision_data`/`vision_output`.
+        """
+        if not isinstance(screen_data, dict):
+            return screen_data or {}
+
+        # Common wrappers used by the vision service
+        if "vision_data" in screen_data and isinstance(screen_data["vision_data"], dict):
+            return screen_data["vision_data"]
+        if "vision_output" in screen_data and isinstance(screen_data["vision_output"], dict):
+            return screen_data["vision_output"]
+        # Some endpoints return the final payload under 'vision' or 'final'
+        if "vision" in screen_data and isinstance(screen_data["vision"], dict):
+            return screen_data["vision"]
+        if "final" in screen_data and isinstance(screen_data["final"], dict):
+            return screen_data["final"]
+
+        # Already in expected shape (has elements) — return as-is
+        if "elements" in screen_data or "element_count" in screen_data:
+            return screen_data
+
+        # Fallback: return original object so nothing is lost
+        return screen_data
+
         logger.info("AgentRunRecorder: run dir → %s", self.run_dir)
 
     # ------------------------------------------------------------------
@@ -83,14 +112,16 @@ class AgentRunRecorder:
 
     # ------------------------------------------------------------------
     def record_initial_screen(self, screen_data: dict) -> None:
-        self.initial_screen = screen_data
-        self.latest_screen = screen_data
-        self._write("perception.json", screen_data)
-        self._write("latest_perception.json", screen_data)
+        norm = self._normalize_perception(screen_data)
+        self.initial_screen = norm
+        self.latest_screen = norm
+        self._write("perception.json", norm)
+        self._write("latest_perception.json", norm)
 
     def record_screen(self, screen_data: dict) -> None:
-        self.latest_screen = screen_data
-        self._write("latest_perception.json", screen_data)
+        norm = self._normalize_perception(screen_data)
+        self.latest_screen = norm
+        self._write("latest_perception.json", norm)
 
     def record_todo(self, todo_result: dict) -> None:
         self.todo_result = todo_result
