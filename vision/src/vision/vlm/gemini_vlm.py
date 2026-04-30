@@ -964,6 +964,59 @@ class GeminiVLM(BaseVLM):
             origin_x=x1,
             origin_y=y1,
         )
+        # Attempt bbox refinement using image evidence to improve dx/dy accuracy
+        try:
+            from src.perception.grounding.bbox_refiner import BBoxRefiner
+            import numpy as np
+
+            refiner = BBoxRefiner()
+            # Load the screen crop as numpy array (already available as screen_crop)
+            # We have the screen_crop in the outer scope; reuse it if present.
+            # As a fallback, reload from image_path and crop by screen bbox.
+            try:
+                img = screen_crop
+            except NameError:
+                full_img = cv2.imread(image_path)
+                if full_img is None:
+                    img = None
+                else:
+                    sx1, sy1, sx2, sy2 = x1, y1, x2, y2
+                    img = full_img[sy1:sy2, sx1:sx2]
+
+            if img is not None and getattr(img, 'size', 1) != 0:
+                # For each element, refine bbox and recompute dx/dy
+                refined_elements = []
+                h, w = img.shape[:2]
+                for elem in normalized.get("elements", []):
+                    bbox = elem.get("bbox")
+                    if bbox:
+                        # Convert normalized bbox to pixel bbox for refiner
+                        bx1 = int(round(bbox[0] * w))
+                        by1 = int(round(bbox[1] * h))
+                        bx2 = int(round(bbox[2] * w))
+                        by2 = int(round(bbox[3] * h))
+                        refined_norm = refiner.refine_bbox(
+                            img,
+                            refiner.normalize_bbox((bx1, by1, bx2, by2), w, h),
+                        )
+                        # Compute refined pixel bbox and center
+                        rx1 = int(round(refined_norm[0] * w))
+                        ry1 = int(round(refined_norm[1] * h))
+                        rx2 = int(round(refined_norm[2] * w))
+                        ry2 = int(round(refined_norm[3] * h))
+                        cx = int(round((rx1 + rx2) / 2.0))
+                        cy = int(round((ry1 + ry2) / 2.0))
+
+                        # Update element coordinates (crop-local), frame coords add origin later
+                        elem["bbox"] = refined_norm
+                        elem["dx"] = max(0, min(w, cx))
+                        elem["dy"] = max(0, min(h, cy))
+                    refined_elements.append(elem)
+                normalized["elements"] = refined_elements
+        except Exception:
+            # Do not fail analysis if refinement fails; keep original normalized payload
+            logger.exception("BBox refinement failed; continuing with original detections")
+
         return list(normalized.get("elements", []))
 
     def analyze(self, image_path: str, image_width: int, image_height: int) -> Dict[str, Any]:

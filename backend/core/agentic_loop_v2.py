@@ -435,18 +435,46 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
                 # LLM provides absolute screen coords — convert to relative delta.
                 target_x = int(cmd.get("dx", 0))
                 target_y = int(cmd.get("dy", 0))
+
+                # Break large moves into smaller steps to improve accuracy on HID devices.
+                max_step = 80  # pixels per HID move chunk
                 rel_dx = target_x - cursor_x
                 rel_dy = target_y - cursor_y
-                payload = {
-                    "type": "mouse_move",
-                    "payload": {"dx": rel_dx, "dy": rel_dy},
-                }
-                cursor_x = target_x
-                cursor_y = target_y
-                logger.debug(
-                    "HID mouse_move: abs(%d,%d) → rel(%d,%d)",
-                    target_x, target_y, rel_dx, rel_dy,
-                )
+
+                # If move is small, send single command
+                if abs(rel_dx) <= max_step and abs(rel_dy) <= max_step:
+                    payloads = [
+                        {"type": "mouse_move", "payload": {"dx": rel_dx, "dy": rel_dy, "smooth": bool(cmd.get("smooth", False))}}
+                    ]
+                else:
+                    # Chunk the movement
+                    steps = max(1, int(max(abs(rel_dx), abs(rel_dy)) / float(max_step)) )
+                    payloads = []
+                    for s in range(1, steps + 1):
+                        step_dx = int(round(rel_dx * (s / steps))) - int(round(rel_dx * ((s - 1) / steps)))
+                        step_dy = int(round(rel_dy * (s / steps))) - int(round(rel_dy * ((s - 1) / steps)))
+                        payloads.append({"type": "mouse_move", "payload": {"dx": step_dx, "dy": step_dy, "smooth": bool(cmd.get("smooth", False))}})
+
+                # Send each payload sequentially and update virtual cursor
+                for p in payloads:
+                    try:
+                        resp = await client.post(HID_API_URL, json=p)
+                        if resp.status_code == 503:
+                            body = resp.json()
+                            msg = body.get("message") or body.get("error") or "Device offline"
+                            logger.error("HID command device offline: %s", msg)
+                            return {"status": "failed", "error": f"HID device offline: {msg}", "failed_at": idx}
+                        resp.raise_for_status()
+                        logger.info("HID [%d/%d] mouse_move chunk → %d", idx + 1, len(commands), resp.status_code)
+                    except Exception as exc:
+                        logger.error("HID mouse_move chunk failed: %s", exc)
+                        return {"status": "failed", "error": str(exc), "failed_at": idx}
+                    # Update virtual cursor by the chunk
+                    cursor_x += int(p["payload"].get("dx", 0))
+                    cursor_y += int(p["payload"].get("dy", 0))
+                    await asyncio.sleep(0.04)
+                # Done handling mouse_move, skip default send below
+                continue
             else:
                 payload = {
                     "type": cmd_type,
@@ -504,6 +532,60 @@ async def run_agentic_loop_v2(
         await event_queue.put(json.dumps(event))
 
     recorder = AgentRunRecorder(user_task, run_id)
+
+    async def _attempt_coordinate_fix_and_recheck(evaluation: dict, step: dict) -> dict:
+        """If evaluation suggests coordinate updates, parse and try a direct click once.
+
+        Returns the new evaluation dict after performing the click and re-evaluating,
+        or the original evaluation if no coord fix was performed.
+        """
+        # Avoid repeated coord-fix attempts for the same step
+        if step.get("_coord_fix_tried"):
+            return evaluation
+
+        # Search in recommendations or reason for a coordinate pair like (79, 54)
+        candidates = []
+        if isinstance(evaluation.get("recommendations"), list):
+            candidates.extend(evaluation.get("recommendations"))
+        if evaluation.get("reason"):
+            candidates.append(evaluation.get("reason"))
+
+        import re
+        for text in candidates:
+            if not text:
+                continue
+            m = re.search(r"\(\s*(\d{1,5})\s*,\s*(\d{1,5})\s*\)", str(text))
+            if m:
+                x = int(m.group(1))
+                y = int(m.group(2))
+                logger.info("Parsed recommended coordinates (%d, %d) from evaluation", x, y)
+
+                # Build HID click commands and execute them
+                click_cmds = [
+                    {"cmd": "mouse_move", "meta": {"commandId": "coord_fix"}, "dx": x, "dy": y, "smooth": True},
+                    {"cmd": "mouse_click", "meta": {"commandId": "coord_fix"}, "button": "left"},
+                ]
+
+                step["_coord_fix_tried"] = True
+                exec_result = await _execute_hid_commands(click_cmds)
+                if exec_result.get("status") == "failed":
+                    logger.warning("Coordinate-fix click failed: %s", exec_result.get("error"))
+                    return evaluation
+
+                # Wait briefly for UI reaction, capture and re-evaluate
+                await asyncio.sleep(UI_SETTLE_DELAY)
+                new_screen = await _capture_screen()
+                recorder.record_screen(new_screen)
+
+                try:
+                    new_eval = await _evaluate_step(new_screen, step, user_task, todo_list)
+                    logger.info("Re-evaluation after coord-fix: %s", new_eval.get("status"))
+                    return new_eval
+                except Exception as exc:
+                    logger.error("Re-evaluation after coord-fix failed: %s", exc)
+                    return evaluation
+
+        return evaluation
 
     try:
         # ── Phase 0: Pre-flight HID health check ────────────────────────────
@@ -598,6 +680,19 @@ async def run_agentic_loop_v2(
                     )
                     hid_commands = hid_result.get("hid_commands", [])
                     reasoning = hid_result.get("reasoning", "")
+                    # If LLM failed to produce hid_commands but returned action_steps,
+                    # attempt to convert them locally to avoid blocking the loop.
+                    if not hid_commands and hid_result.get("action_steps"):
+                        try:
+                            from llm.hid_step_generator import HIDStepGenerator
+
+                            logger.info("LLM returned no hid_commands — converting action_steps locally")
+                            converter = HIDStepGenerator()
+                            hid_commands = converter.convert_actions_to_hid(hid_result.get("action_steps", []))
+                            reasoning += " | Converted action_steps -> hid_commands locally"
+                        except Exception as exc:
+                            logger.warning("Local conversion of action_steps failed: %s", exc)
+
                     recorder.record_step_plan(step, hid_commands, reasoning)
                 except Exception as exc:
                     await emit(
@@ -750,6 +845,27 @@ async def run_agentic_loop_v2(
                             "attempt": attempt + 1,
                         }
                     )
+
+                    # If evaluation suggests coordinate adjustments, attempt a one-time coord-fix
+                    try:
+                        new_eval = await _attempt_coordinate_fix_and_recheck(evaluation, step)
+                        # If re-evaluation returned a different status, use it
+                        if new_eval is not None and new_eval.get("status") != evaluation.get("status"):
+                            evaluation = new_eval
+                            status = evaluation.get("status", "retry")
+                            confidence = evaluation.get("confidence", 0.0)
+                            reason = evaluation.get("reason", "")
+                            # Record updated evaluation outcome
+                            recorder.record_step_result(step, exec_result, evaluation, attempt + 1)
+                            if status == "done":
+                                step["status"] = "done"
+                                step_success = True
+                                await emit({"type": "step_done", "step_index": step_index, "confidence": confidence, "reason": reason})
+                                break
+                    except Exception as exc:
+                        logger.error("Coord-fix attempt failed: %s", exc)
+
+                    # Still retrying — increment attempt
                     attempt += 1
 
             # Exhausted retries without success
