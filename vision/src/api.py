@@ -1160,12 +1160,12 @@ def vision_diagnose():
     results["recommended_provider"] = recommended_provider
     if providers.get("gemini", {}).get("api_key_set"):
         results["recommended_start_params"] = (
-            "POST /vision/start?camera_index=1&save_interval=1"
+            "POST /vision/start?camera_index=0&save_interval=1"
             "&no_vlm=false"
         )
     else:
         results["recommended_start_params"] = (
-            "POST /vision/start?camera_index=1&save_interval=1&no_vlm=true"
+            "POST /vision/start?camera_index=0&save_interval=1&no_vlm=true"
         )
 
     return results
