@@ -163,11 +163,13 @@ class GeminiVLM(BaseVLM):
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
             "All element coordinates must be relative to the crop/screen, not the full camera frame. "
+            "You may return bounding boxes either as absolute pixel coordinates (integers) or as normalized fractions in [0,1]. "
+            "If using normalized fractions, they are relative to the crop width/height. "
             "elements must be an array of objects with fields: "
             "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
             "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element, "
-            "using screen-local pixels. "
+            "using screen-local pixels, or a normalized [x_min, y_min, x_max, y_max] in [0,1]. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
@@ -227,7 +229,6 @@ class GeminiVLM(BaseVLM):
         req_w, req_h = original_w, original_h
         scale_x = 1.0
         scale_y = 1.0
-
         longest = max(original_w, original_h)
         if longest > max_side:
             scale = float(max_side) / float(longest)
@@ -321,10 +322,22 @@ class GeminiVLM(BaseVLM):
         if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
             return None
         try:
-            x1 = int(round(float(bbox[0]) * float(scale_x))) + int(origin_x)
-            y1 = int(round(float(bbox[1]) * float(scale_y))) + int(origin_y)
-            x2 = int(round(float(bbox[2]) * float(scale_x))) + int(origin_x)
-            y2 = int(round(float(bbox[3]) * float(scale_y))) + int(origin_y)
+            # Support two common bbox formats returned by VLMs:
+            # 1) Absolute pixel coordinates in the request image (e.g., [x1_px, y1_px, x2_px, y2_px])
+            # 2) Normalized fractions in [0,1] relative to the crop (e.g., [x1_frac, y1_frac, x2_frac, y2_frac])
+            vals = [float(v) for v in bbox]
+            # If values are normalized fractions (all <= 1.0), map to crop pixels using image_width/height
+            if all(0.0 <= v <= 1.0 for v in vals):
+                x1 = int(round(vals[0] * float(image_width))) + int(origin_x)
+                y1 = int(round(vals[1] * float(image_height))) + int(origin_y)
+                x2 = int(round(vals[2] * float(image_width))) + int(origin_x)
+                y2 = int(round(vals[3] * float(image_height))) + int(origin_y)
+            else:
+                # Values are in request-image pixels; scale them back to crop pixels using scale_x/scale_y
+                x1 = int(round(vals[0] * float(scale_x))) + int(origin_x)
+                y1 = int(round(vals[1] * float(scale_y))) + int(origin_y)
+                x2 = int(round(vals[2] * float(scale_x))) + int(origin_x)
+                y2 = int(round(vals[3] * float(scale_y))) + int(origin_y)
         except Exception:
             return None
         x1 = max(0, min(image_width - 1, x1))
@@ -925,6 +938,7 @@ class GeminiVLM(BaseVLM):
             f"You are analyzing the {region_name} crop of a larger screen.\n"
             f"The crop corresponds to full-image coordinates x={x1}..{x2} and y={y1}..{y2}.\n"
             "Report dx and dy in crop-local pixels.\n"
+            "You may return bbox either as pixel coordinates or normalized fractions in [0,1].\n"
             "Return every visible UI element in this crop, including text, labels, icons, controls, tabs, "
             "browser chrome, window chrome, sidebars, toolbars, headings, and panels.\n"
             "Prefer exhaustive recall over minimalism."
