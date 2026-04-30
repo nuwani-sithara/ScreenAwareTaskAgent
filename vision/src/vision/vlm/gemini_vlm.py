@@ -797,6 +797,74 @@ class GeminiVLM(BaseVLM):
         return normalized
 
     @staticmethod
+    def _refine_elements_with_image(
+        elements: List[Dict[str, Any]],
+        image: Any,
+        origin_x: int = 0,
+        origin_y: int = 0,
+        frame_width: int | None = None,
+        frame_height: int | None = None,
+    ) -> List[Dict[str, Any]]:
+        """Refine pixel bboxes against image evidence and keep frame coordinates in sync."""
+        if image is None or getattr(image, "size", 0) == 0:
+            return elements
+
+        try:
+            from src.perception.grounding.bbox_refiner import BBoxRefiner
+        except Exception:
+            logger.exception("BBox refiner import failed; keeping original detections")
+            return elements
+
+        try:
+            refiner = BBoxRefiner()
+            h, w = image.shape[:2]
+        except Exception:
+            logger.exception("BBox refiner initialization failed; keeping original detections")
+            return elements
+
+        frame_w = int(frame_width if frame_width is not None else w)
+        frame_h = int(frame_height if frame_height is not None else h)
+        refined_elements: List[Dict[str, Any]] = []
+
+        for elem in elements:
+            updated = dict(elem)
+            bbox = updated.get("bbox")
+            if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+                try:
+                    x1, y1, x2, y2 = (float(v) for v in bbox)
+                    bbox_norm = (
+                        max(0.0, min(1.0, x1 / float(w))),
+                        max(0.0, min(1.0, y1 / float(h))),
+                        max(0.0, min(1.0, x2 / float(w))),
+                        max(0.0, min(1.0, y2 / float(h))),
+                    )
+                    refined_norm = refiner.refine_bbox(image, bbox_norm)
+                    rx1 = int(round(refined_norm[0] * float(w)))
+                    ry1 = int(round(refined_norm[1] * float(h)))
+                    rx2 = int(round(refined_norm[2] * float(w)))
+                    ry2 = int(round(refined_norm[3] * float(h)))
+                    cx = int(round((rx1 + rx2) / 2.0))
+                    cy = int(round((ry1 + ry2) / 2.0))
+
+                    updated["bbox"] = [rx1, ry1, rx2, ry2]
+                    updated["dx"] = max(0, min(w, cx))
+                    updated["dy"] = max(0, min(h, cy))
+                    updated["frame_bbox"] = [
+                        max(0, min(frame_w - 1, int(round(origin_x + rx1)))),
+                        max(0, min(frame_h - 1, int(round(origin_y + ry1)))),
+                        max(0, min(frame_w, int(round(origin_x + rx2)))),
+                        max(0, min(frame_h, int(round(origin_y + ry2)))),
+                    ]
+                    updated["frame_dx"] = max(0, min(frame_w - 1, int(round(origin_x + cx))))
+                    updated["frame_dy"] = max(0, min(frame_h - 1, int(round(origin_y + cy))))
+                except Exception:
+                    logger.exception("BBox refinement failed for element id=%s", updated.get("id", "unknown"))
+
+            refined_elements.append(updated)
+
+        return refined_elements
+
+    @staticmethod
     def _response_schema(image_width: int, image_height: int) -> Dict[str, Any]:
         return {
             "type": "object",
@@ -978,58 +1046,14 @@ class GeminiVLM(BaseVLM):
             origin_x=x1,
             origin_y=y1,
         )
-        # Attempt bbox refinement using image evidence to improve dx/dy accuracy
-        try:
-            from src.perception.grounding.bbox_refiner import BBoxRefiner
-            import numpy as np
-
-            refiner = BBoxRefiner()
-            # Load the screen crop as numpy array (already available as screen_crop)
-            # We have the screen_crop in the outer scope; reuse it if present.
-            # As a fallback, reload from image_path and crop by screen bbox.
-            try:
-                img = screen_crop
-            except NameError:
-                full_img = cv2.imread(image_path)
-                if full_img is None:
-                    img = None
-                else:
-                    sx1, sy1, sx2, sy2 = x1, y1, x2, y2
-                    img = full_img[sy1:sy2, sx1:sx2]
-
-            if img is not None and getattr(img, 'size', 1) != 0:
-                # For each element, refine bbox and recompute dx/dy
-                refined_elements = []
-                h, w = img.shape[:2]
-                for elem in normalized.get("elements", []):
-                    bbox = elem.get("bbox")
-                    if bbox:
-                        # Convert normalized bbox to pixel bbox for refiner
-                        bx1 = int(round(bbox[0] * w))
-                        by1 = int(round(bbox[1] * h))
-                        bx2 = int(round(bbox[2] * w))
-                        by2 = int(round(bbox[3] * h))
-                        refined_norm = refiner.refine_bbox(
-                            img,
-                            refiner.normalize_bbox((bx1, by1, bx2, by2), w, h),
-                        )
-                        # Compute refined pixel bbox and center
-                        rx1 = int(round(refined_norm[0] * w))
-                        ry1 = int(round(refined_norm[1] * h))
-                        rx2 = int(round(refined_norm[2] * w))
-                        ry2 = int(round(refined_norm[3] * h))
-                        cx = int(round((rx1 + rx2) / 2.0))
-                        cy = int(round((ry1 + ry2) / 2.0))
-
-                        # Update element coordinates (crop-local), frame coords add origin later
-                        elem["bbox"] = refined_norm
-                        elem["dx"] = max(0, min(w, cx))
-                        elem["dy"] = max(0, min(h, cy))
-                    refined_elements.append(elem)
-                normalized["elements"] = refined_elements
-        except Exception:
-            # Do not fail analysis if refinement fails; keep original normalized payload
-            logger.exception("BBox refinement failed; continuing with original detections")
+        normalized["elements"] = self._refine_elements_with_image(
+            list(normalized.get("elements", [])),
+            screen_crop,
+            origin_x=screen_x1,
+            origin_y=screen_y1,
+            frame_width=image_width,
+            frame_height=image_height,
+        )
 
         return list(normalized.get("elements", []))
 
