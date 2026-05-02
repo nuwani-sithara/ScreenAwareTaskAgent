@@ -717,10 +717,10 @@ def _finalize_elements_with_dxdy(
                 y1 = float(bbox[1])
                 x2 = float(bbox[2])
                 y2 = float(bbox[3])
-                cx = int(round(max(0.0, (x1 + x2) * 0.5)))
-                cy = int(round(max(0.0, (y1 + y2) * 0.5)))
-                elem["dx"] = max(0, min(screen_width, cx))
-                elem["dy"] = max(0, min(screen_height, cy))
+                cx = (x1 + x2) * 0.5
+                cy = (y1 + y2) * 0.5
+                elem["dx"] = cx
+                elem["dy"] = cy
                 elem["frame_bbox"] = [
                     max(0, min(image_width - 1, int(round(sx1 + x1)))),
                     max(0, min(image_height - 1, int(round(sy1 + y1)))),
@@ -732,13 +732,22 @@ def _finalize_elements_with_dxdy(
             except Exception:
                 pass
         try:
-            dx = int(round(float(elem.get("dx", 0)))) if str(elem.get("dx", "")).strip() else 0
+            raw_dx = float(elem.get("dx", 0)) if str(elem.get("dx", "")).strip() else 0.0
         except Exception:
-            dx = 0
+            raw_dx = 0.0
         try:
-            dy = int(round(float(elem.get("dy", 0)))) if str(elem.get("dy", "")).strip() else 0
+            raw_dy = float(elem.get("dy", 0)) if str(elem.get("dy", "")).strip() else 0.0
         except Exception:
-            dy = 0
+            raw_dy = 0.0
+            
+        screen_w_img = max(1e-9, sx2 - sx1)
+        screen_h_img = max(1e-9, sy2 - sy1)
+        
+        rel_x = (raw_dx - sx1) / screen_w_img
+        rel_y = (raw_dy - sy1) / screen_h_img
+        
+        dx = int(round(rel_x * screen_width))
+        dy = int(round(rel_y * screen_height))
         dx = max(0, min(screen_width, dx))
         dy = max(0, min(screen_height, dy))
 
@@ -769,14 +778,20 @@ def _finalize_elements_with_dxdy(
         confidence = max(0.0, min(1.0, confidence))
 
         final_source = str(elem.get("source", "")).strip() or "ui_detector"
+        # Use frame_dx/frame_dy as the primary dx/dy — these are pixel-space
+        # coordinates that map directly to HID mouse_move targets.
+        # The earlier normalized (0-1) dx/dy fractions rounded to 0 or 1,
+        # causing every mouse move to go to (0,0).
+        pixel_dx = frame_dx
+        pixel_dy = frame_dy
         final_elem = {
             "id": str(elem.get("id", "elem_0")),
             "type": etype,
             "label": label,
-            "description": desc if desc else _specific_description(etype, label, dx, dy),
+            "description": desc if desc else _specific_description(etype, label, pixel_dx, pixel_dy),
             "state": state,
-            "dx": dx,
-            "dy": dy,
+            "dx": pixel_dx,
+            "dy": pixel_dy,
             "frame_dx": frame_dx,
             "frame_dy": frame_dy,
             "confidence": confidence,
@@ -1006,11 +1021,10 @@ def _run_pipeline_for_frame(
             except Exception as exc:
                 logger.warning("Failed to copy semantic debug image: %s", exc)
 
-        final_payload = _strip_internal_fields(payload)
-        with open(final_json_path, "w", encoding="utf-8") as f:
-            json.dump(final_payload, f, indent=2)
-
-        payload = _finalize_elements_with_dxdy(payload, image.shape[1], image.shape[0])
+        # Write final JSON once (not twice) — _finalize_elements_with_dxdy was
+        # already called on line 968 with (img_w, img_h).  Calling it again with
+        # image.shape dimensions (which should be identical) would only re-apply
+        # the same transform, but had previously double-normalized coordinates.
         final_payload = _strip_internal_fields(payload)
         with open(final_json_path, "w", encoding="utf-8") as f:
             json.dump(final_payload, f, indent=2)
@@ -1424,7 +1438,8 @@ def capture_once(
     refined_max_elements: int = 120,
     vlm_batch_max_elements: int = 90,
     no_vlm: bool = False,
-    use_current_session: bool = True,
+    use_current_session: bool = False,
+    provider: str = "gemini",
 ):
     """Single-shot capture and pipeline execution. Returns final JSON.
 
@@ -1462,11 +1477,22 @@ def capture_once(
     if frame is None:
         return {"status": "error", "detail": f"Failed to capture frame from camera {camera_index}"}
 
-    try:
-        vlm_client = _init_vlm_client(no_vlm=no_vlm)
-        semantic_pipeline = _init_semantic_pipeline(no_vlm=no_vlm)
-    except Exception as e:
-        return {"status": "error", "detail": f"VLM init failed: {e}"}
+    # Re-use VLM pipeline if one is already alive in the current session to
+    # avoid the 3-5 second Gemini client re-initialization cost per capture.
+    with session_lock:
+        _reuse_session = current_session if capture_running and current_session else None
+
+    if _reuse_session is not None and not no_vlm:
+        vlm_client = _reuse_session.get("vlm_client")
+        semantic_pipeline = _reuse_session.get("semantic_pipeline")
+    else:
+        try:
+            vlm_client = _init_vlm_client(no_vlm=no_vlm)
+            semantic_pipeline = _init_semantic_pipeline(no_vlm=no_vlm)
+        except Exception as e:
+            return {"status": "error", "detail": f"VLM init failed: {e}"}
+
+    _reuse_session = None  # don't hold ref into session dict
 
     session = _new_session(prefix="shot")
     session.update(

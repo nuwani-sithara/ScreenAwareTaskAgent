@@ -29,7 +29,7 @@ import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import httpx
 
@@ -99,7 +99,8 @@ class AgentRunRecorder:
         # Fallback: return original object so nothing is lost
         return screen_data
 
-        logger.info("AgentRunRecorder: run dir → %s", self.run_dir)
+        # NOTE: the logger.info below was dead code (unreachable after return).
+        # Removed in fix pass.
 
     # ------------------------------------------------------------------
     def _write(self, filename: str, data: Any) -> None:
@@ -222,6 +223,144 @@ MAX_STEP_RETRIES = 3        # maximum execution attempts per step
 UI_SETTLE_DELAY = 1.5       # seconds to wait for UI to react after HID commands
 INPUT_TIMEOUT = 300.0       # seconds to wait for user-provided data
 
+# Cursor reset: push cursor to top-left by sending a large negative relative move.
+# -5000 px is more than enough for any screen up to 4K (3840×2160).
+# Using -32767 created ~500 serial chunks (127px each) causing ~3s latency;
+# -5000 creates ~80 chunks — still reliable but 6× faster.
+_CURSOR_RESET_MAGNITUDE = -5000
+
+
+# ---------------------------------------------------------------------------
+# HID key name → USB HID keycode lookup
+# ---------------------------------------------------------------------------
+_KEY_NAME_TO_HID: dict = {
+    # Special keys that the Gemini planner emits as strings
+    "enter":     0x28,
+    "return":    0x28,
+    "tab":       0x2B,
+    "escape":    0x29,
+    "esc":       0x29,
+    "backspace": 0x2A,
+    "space":     0x2C,
+    "delete":    0x4C,
+    "del":       0x4C,
+    "insert":    0x49,
+    "home":      0x4A,
+    "end":       0x4D,
+    "pageup":    0x4B,
+    "page_up":   0x4B,
+    "pagedown":  0x4E,
+    "page_down": 0x4E,
+    "arrowup":   0x52,
+    "up":        0x52,
+    "arrowdown": 0x51,
+    "down":      0x51,
+    "arrowleft": 0x50,
+    "left":      0x50,
+    "arrowright":0x4F,
+    "right":     0x4F,
+    "f1": 0x3A, "f2": 0x3B, "f3": 0x3C, "f4": 0x3D,
+    "f5": 0x3E, "f6": 0x3F, "f7": 0x40, "f8": 0x41,
+    "f9": 0x42, "f10": 0x43, "f11": 0x44, "f12": 0x45,
+}
+
+
+def _translate_key_to_hid_code(key: str) -> Optional[int]:
+    """Return the USB HID keycode integer for a string key name, or None."""
+    if isinstance(key, int):
+        return key
+    if not isinstance(key, str):
+        return None
+    normalized = key.strip().lower()
+    if normalized in _KEY_NAME_TO_HID:
+        return _KEY_NAME_TO_HID[normalized]
+    # Single printable ASCII character — map via Arduino HID table
+    if len(normalized) == 1:
+        c = normalized[0]
+        if 'a' <= c <= 'z':
+            return 0x04 + (ord(c) - ord('a'))  # KEY_A = 0x04
+        if '1' <= c <= '9':
+            return 0x1E + (ord(c) - ord('1'))  # KEY_1 = 0x1E
+        if c == '0':
+            return 0x27
+    return None
+
+
+def _screen_fingerprint(screen_data: dict) -> str:
+    """Return a short hash representing the current UI element layout.
+
+    Used to detect whether the screen actually changed after a HID action.
+    If before == after, the action likely had no effect and should be retried.
+    """
+    import hashlib
+    elements = []
+    if isinstance(screen_data, dict):
+        elems = (
+            screen_data.get("elements")
+            or screen_data.get("vision_data", {}).get("elements", [])
+        )
+        if isinstance(elems, list):
+            for e in elems[:30]:   # cap to 30 for speed
+                if isinstance(e, dict):
+                    # Label + coordinates + type are stable identifiers
+                    elements.append(
+                        f"{e.get('type','')}|{e.get('label','')}|"
+                        f"{e.get('dx','')}|{e.get('dy','')}"
+                    )
+    raw = ";".join(sorted(elements))
+    return hashlib.md5(raw.encode(), usedforsecurity=False).hexdigest()[:12]
+
+
+def _validate_hid_commands(commands: list) -> tuple[list, list]:
+    """Validate a list of HID commands and return (valid_commands, errors).
+
+    Translates string key values to integer HID codes so the ESP32
+    firmware does not reject them with ``invalid_key``.
+    """
+    from typing import Optional as _Optional
+    valid: list = []
+    errors: list = []
+    for i, cmd in enumerate(commands):
+        if not isinstance(cmd, dict):
+            errors.append(f"cmd[{i}]: not a dict")
+            continue
+        ctype = cmd.get("cmd")
+        if not ctype:
+            errors.append(f"cmd[{i}]: missing 'cmd' field")
+            continue
+
+        # --- Field-level validation and key translation ---
+        if ctype == "mouse_move":
+            if "dx" not in cmd or "dy" not in cmd:
+                errors.append(f"cmd[{i}] mouse_move: missing dx or dy")
+                continue
+        elif ctype == "mouse_click":
+            if "button" not in cmd:
+                # Default to left click rather than skipping
+                cmd = {**cmd, "button": "left"}
+        elif ctype in ("key_press", "key_release"):
+            key = cmd.get("key")
+            if isinstance(key, str):
+                code = _translate_key_to_hid_code(key)
+                if code is None:
+                    errors.append(f"cmd[{i}] {ctype}: unknown string key '{key}'")
+                    continue
+                cmd = {**cmd, "key": code}
+            elif key is None:
+                errors.append(f"cmd[{i}] {ctype}: missing 'key' field")
+                continue
+        elif ctype == "type_text":
+            if "text" not in cmd:
+                errors.append(f"cmd[{i}] type_text: missing 'text' field")
+                continue
+        elif ctype == "mouse_scroll":
+            if "deltaY" not in cmd and "deltaX" not in cmd and "scroll" not in cmd:
+                errors.append(f"cmd[{i}] mouse_scroll: missing deltaY/deltaX/scroll")
+                continue
+        # key_combo, mouse_drag, mouse_down, mouse_up — pass through
+        valid.append(cmd)
+    return valid, errors
+
 
 # =============================================================================
 # Vision helpers
@@ -262,6 +401,9 @@ async def _capture_screen() -> dict:
     Does NOT require a streaming session — creates its own disposable session,
     processes one frame, and returns.  This avoids accumulating hundreds of
     background stream frames on disk.
+
+    VLM re-initialization is skipped when a session with a live pipeline exists
+    (handled inside the vision service since api.py v2 fix).
     """
     async with httpx.AsyncClient(timeout=120.0) as client:
         try:
@@ -409,10 +551,9 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
 
     Returns {"status": "success"} or {"status": "failed", ...}.
     """
-    RESET_MOVE = {"type": "mouse_move", "payload": {"dx": -32767, "dy": -32767}}
-
     async with httpx.AsyncClient(timeout=30.0) as client:
         # Push cursor to screen top-left so our virtual tracker starts at (0, 0).
+        RESET_MOVE = {"type": "mouse_move", "payload": {"dx": _CURSOR_RESET_MAGNITUDE, "dy": _CURSOR_RESET_MAGNITUDE}}
         try:
             reset_resp = await client.post(HID_API_URL, json=RESET_MOVE)
             if reset_resp.status_code == 503:
@@ -448,7 +589,7 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
                     ]
                 else:
                     # Chunk the movement
-                    steps = max(1, int(max(abs(rel_dx), abs(rel_dy)) / float(max_step)) )
+                    steps = max(1, int(max(abs(rel_dx), abs(rel_dy)) / float(max_step)))
                     payloads = []
                     for s in range(1, steps + 1):
                         step_dx = int(round(rel_dx * (s / steps))) - int(round(rel_dx * ((s - 1) / steps)))
@@ -692,6 +833,14 @@ async def run_agentic_loop_v2(
                             reasoning += " | Converted action_steps -> hid_commands locally"
                         except Exception as exc:
                             logger.warning("Local conversion of action_steps failed: %s", exc)
+
+                    # Validate & translate commands (string keys → HID codes, required fields)
+                    hid_commands, validation_errors = _validate_hid_commands(hid_commands)
+                    if validation_errors:
+                        logger.warning(
+                            "HID validation warnings for step %d: %s",
+                            step_index + 1, validation_errors
+                        )
 
                     recorder.record_step_plan(step, hid_commands, reasoning)
                 except Exception as exc:

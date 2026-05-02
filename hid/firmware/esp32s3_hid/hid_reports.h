@@ -54,7 +54,7 @@ struct KeyboardReport {
 } __attribute__((packed));
 
 // ============================================================================
-// HID KEYBOARD MODIFIERS
+// HID KEYBOARD MODIFIERS (raw HID modifier byte bits)
 // ============================================================================
 
 #define KEY_MOD_LCTRL  0x01
@@ -65,6 +65,19 @@ struct KeyboardReport {
 #define KEY_MOD_RSHIFT 0x20
 #define KEY_MOD_RALT   0x40
 #define KEY_MOD_RGUI   0x80
+
+// Arduino USBHIDKeyboard modifier key constants (used with Keyboard.press())
+// These are in the 0x80–0x87 range as defined by Arduino's HID keyboard layer.
+#ifndef KEY_LEFT_CTRL
+#define KEY_LEFT_CTRL   0x80
+#define KEY_LEFT_SHIFT  0x81
+#define KEY_LEFT_ALT    0x82
+#define KEY_LEFT_GUI    0x83
+#define KEY_RIGHT_CTRL  0x84
+#define KEY_RIGHT_SHIFT 0x85
+#define KEY_RIGHT_ALT   0x86
+#define KEY_RIGHT_GUI   0x87
+#endif
 
 // ============================================================================
 // COMMON HID KEY CODES (USB HID Usage Tables)

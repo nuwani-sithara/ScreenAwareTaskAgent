@@ -50,6 +50,7 @@ void handleMouseUp();
 void handleMouseScroll();
 void handleKeyPress();
 void handleKeyRelease();
+void handleKeyCombo();
 void handleTypeText();
 void handleSystemControl();
 void sendHello();
@@ -58,6 +59,7 @@ void sendAck(const char* status, const char* message = nullptr);
 void sendReadyForNext();
 void sendSuccess(const char* cmd);
 void sendError(const char* errorType, const char* message);
+uint8_t resolveKeyName(const char* name);
 
 // ============================================================================
 // SETUP
@@ -198,6 +200,9 @@ void processCommand(const String& cmdLine) {
   }
   else if (strcmp(cmd, CMD_KEY_RELEASE) == 0) {
     handleKeyRelease();
+  }
+  else if (strcmp(cmd, CMD_KEY_COMBO) == 0) {
+    handleKeyCombo();
   }
   else if (strcmp(cmd, CMD_TYPE_TEXT) == 0) {
     handleTypeText();
@@ -344,29 +349,143 @@ void handleMouseScroll() {
 // KEYBOARD HANDLERS
 // ============================================================================
 
+/**
+ * Resolve a human-readable key name (e.g. "enter", "escape") to a USB HID keycode.
+ * Returns 0 if the name is unknown.
+ */
+uint8_t resolveKeyName(const char* name) {
+  if (!name) return 0;
+  // Special keys
+  if (strcasecmp(name, "enter") == 0 || strcasecmp(name, "return") == 0) return KEY_ENTER;
+  if (strcasecmp(name, "escape") == 0 || strcasecmp(name, "esc") == 0) return KEY_ESC;
+  if (strcasecmp(name, "backspace") == 0) return KEY_BACKSPACE;
+  if (strcasecmp(name, "tab") == 0) return KEY_TAB;
+  if (strcasecmp(name, "space") == 0) return KEY_SPACE;
+  if (strcasecmp(name, "delete") == 0 || strcasecmp(name, "del") == 0) return KEY_DELETE;
+  if (strcasecmp(name, "insert") == 0) return KEY_INSERT;
+  if (strcasecmp(name, "home") == 0) return KEY_HOME;
+  if (strcasecmp(name, "end") == 0) return KEY_END;
+  if (strcasecmp(name, "pageup") == 0 || strcasecmp(name, "page_up") == 0) return KEY_PAGE_UP;
+  if (strcasecmp(name, "pagedown") == 0 || strcasecmp(name, "page_down") == 0) return KEY_PAGE_DOWN;
+  if (strcasecmp(name, "up") == 0 || strcasecmp(name, "arrowup") == 0) return KEY_UP;
+  if (strcasecmp(name, "down") == 0 || strcasecmp(name, "arrowdown") == 0) return KEY_DOWN;
+  if (strcasecmp(name, "left") == 0 || strcasecmp(name, "arrowleft") == 0) return KEY_LEFT;
+  if (strcasecmp(name, "right") == 0 || strcasecmp(name, "arrowright") == 0) return KEY_RIGHT;
+  // Function keys
+  if (strcasecmp(name, "f1") == 0) return KEY_F1;
+  if (strcasecmp(name, "f2") == 0) return KEY_F2;
+  if (strcasecmp(name, "f3") == 0) return KEY_F3;
+  if (strcasecmp(name, "f4") == 0) return KEY_F4;
+  if (strcasecmp(name, "f5") == 0) return KEY_F5;
+  if (strcasecmp(name, "f6") == 0) return KEY_F6;
+  if (strcasecmp(name, "f7") == 0) return KEY_F7;
+  if (strcasecmp(name, "f8") == 0) return KEY_F8;
+  if (strcasecmp(name, "f9") == 0) return KEY_F9;
+  if (strcasecmp(name, "f10") == 0) return KEY_F10;
+  if (strcasecmp(name, "f11") == 0) return KEY_F11;
+  if (strcasecmp(name, "f12") == 0) return KEY_F12;
+  // Single letter / digit
+  if (strlen(name) == 1) {
+    char c = tolower(name[0]);
+    if (c >= 'a' && c <= 'z') return KEY_A + (c - 'a');
+    if (c >= '1' && c <= '9') return KEY_1 + (c - '1');
+    if (c == '0') return KEY_0;
+  }
+  // Modifier names (for key_combo)
+  if (strcasecmp(name, "ctrl") == 0 || strcasecmp(name, "control") == 0) return KEY_MOD_LCTRL;  // modifier byte, not HID scancode
+  if (strcasecmp(name, "shift") == 0) return KEY_MOD_LSHIFT;
+  if (strcasecmp(name, "alt") == 0) return KEY_MOD_LALT;
+  if (strcasecmp(name, "meta") == 0 || strcasecmp(name, "win") == 0 || strcasecmp(name, "gui") == 0) return KEY_MOD_LGUI;
+  return 0;
+}
+
 void handleKeyPress() {
+  // Primary: integer keycode in "key" field
   int key = jsonDoc["key"] | 0;
-  
+
+  // Fallback: string key name in "keyName" field (or string "key")
   if (key == 0) {
-    sendError("invalid_key", "Key code must be non-zero");
+    const char* keyName = jsonDoc["keyName"] | jsonDoc["key"].as<const char*>();
+    if (keyName) {
+      key = (int)resolveKeyName(keyName);
+    }
+  }
+
+  if (key == 0) {
+    sendError("invalid_key", "Key code must be non-zero or a valid key name");
     return;
   }
-  
+
   Keyboard.press(key);
   sendAck("ok");
   sendReadyForNext();
 }
 
 void handleKeyRelease() {
+  // Support integer keycode or string keyName
   int key = jsonDoc["key"] | 0;
-  
+  if (key == 0) {
+    const char* keyName = jsonDoc["keyName"] | jsonDoc["key"].as<const char*>();
+    if (keyName) key = (int)resolveKeyName(keyName);
+  }
+
   if (key == 0) {
     // Release all keys
     Keyboard.releaseAll();
   } else {
     Keyboard.release(key);
   }
-  
+
+  sendAck("ok");
+  sendReadyForNext();
+}
+
+void handleKeyCombo() {
+  // Read modifiers array: ["ctrl", "shift", "alt", "meta"]
+  JsonArray modifiers = jsonDoc["modifiers"].as<JsonArray>();
+  int mainKey = 0;
+
+  // Resolve main key
+  const char* keyStr = jsonDoc["key"];
+  if (keyStr) {
+    mainKey = (int)resolveKeyName(keyStr);
+  } else {
+    mainKey = jsonDoc["key"] | 0;
+  }
+
+  if (mainKey == 0) {
+    sendError("invalid_key", "key_combo: could not resolve 'key' field");
+    return;
+  }
+
+  // Press each modifier — these are real scancodes for Ctrl/Shift/Alt/GUI
+  // Arduino Keyboard.press() accepts scancodes directly
+  for (JsonVariant mod : modifiers) {
+    const char* modName = mod.as<const char*>();
+    if (!modName) continue;
+    // Map modifier names to Arduino modifier keycodes
+    // Arduino uses 0x80-0x87 range for modifier keys in its API
+    if (strcasecmp(modName, "ctrl") == 0 || strcasecmp(modName, "control") == 0)
+      Keyboard.press(KEY_LEFT_CTRL);
+    else if (strcasecmp(modName, "shift") == 0)
+      Keyboard.press(KEY_LEFT_SHIFT);
+    else if (strcasecmp(modName, "alt") == 0)
+      Keyboard.press(KEY_LEFT_ALT);
+    else if (strcasecmp(modName, "meta") == 0 || strcasecmp(modName, "win") == 0 || strcasecmp(modName, "gui") == 0)
+      Keyboard.press(KEY_LEFT_GUI);
+    delay(5);
+  }
+
+  // Press and release main key
+  delay(10);
+  Keyboard.press(mainKey);
+  delay(10);
+  Keyboard.release(mainKey);
+  delay(5);
+
+  // Release all modifiers in reverse order
+  Keyboard.releaseAll();
+
   sendAck("ok");
   sendReadyForNext();
 }

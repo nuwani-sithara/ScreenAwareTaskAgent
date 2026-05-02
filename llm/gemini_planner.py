@@ -119,7 +119,12 @@ def _extract_elements(screen_data: dict) -> List[dict]:
     """
     Extract detected UI elements with exact pixel coordinates from raw vision data.
     Returns a list of dicts: {type, label, dx, dy}.
-    Coordinates are taken verbatim from what the vision service reported.
+
+    Coordinate priority:
+      1. frame_dx / frame_dy  — always pixel-space (set by _finalize_elements_with_dxdy)
+      2. dx / dy              — may be pixel-space after the coordinate fix, or
+                                fractional (0-1) on older captures; treated as pixel
+                                only when value > 1.
     """
     raw_elements: List[dict] = []
     if "elements" in screen_data:
@@ -137,6 +142,27 @@ def _extract_elements(screen_data: dict) -> List[dict]:
 
     result: List[dict] = []
     for i, el in enumerate(raw_elements):
+        # --- Prefer frame_dx/frame_dy (guaranteed pixel-space) ---
+        fdx = el.get("frame_dx")
+        fdy = el.get("frame_dy")
+        if fdx is not None and fdy is not None:
+            try:
+                x = int(round(float(fdx)))
+                y = int(round(float(fdy)))
+                if x > 1 or y > 1:   # accept only genuinely positioned elements
+                    result.append({
+                        "id": i + 1,
+                        "type": el.get("type", "element"),
+                        "label": el.get("label") or el.get("text") or "",
+                        "description": el.get("description") or "",
+                        "dx": x,
+                        "dy": y,
+                    })
+                    continue
+            except (TypeError, ValueError):
+                pass
+
+        # --- Fallback: dx/dy (pixel-space only when > 1) ---
         bbox = el.get("bbox") or {}
         x = (
             el.get("dx") or el.get("x") or el.get("cx")
@@ -148,21 +174,26 @@ def _extract_elements(screen_data: dict) -> List[dict]:
         )
         if x is None or y is None:
             continue
+        ix, iy = int(round(float(x))), int(round(float(y)))
+        if ix <= 1 and iy <= 1:
+            # Likely still a fractional value that rounded to 0 or 1 — skip
+            continue
         result.append({
             "id": i + 1,
             "type": el.get("type", "element"),
             "label": el.get("label") or el.get("text") or "",
             "description": el.get("description") or "",
-            "dx": int(x),
-            "dy": int(y),
+            "dx": ix,
+            "dy": iy,
         })
     return result
+
 
 
 def _snap_to_detected_elements(
     hid_commands: List[dict],
     detected: List[dict],
-    threshold: int = 120,
+    threshold: int = 50,   # reduced from 120 — avoids wrong snapping on dense UIs
 ) -> List[dict]:
     """
     For every mouse_move in hid_commands, replace its dx/dy with the
@@ -353,37 +384,44 @@ Respond with ONLY this JSON object (no markdown):
 }}"""
 
     client = GeminiClient()
-    try:
-        raw = client.generate(
-            prompt, model=model, max_tokens=4000, temperature=0.2,
-            response_mime_type="application/json",
-        )
-        logger.debug("plan_todo_list raw response: %s", raw[:600])
-        result = _extract_json(raw)
-        steps = result.get("steps")
-        # Handle case where LLM returns steps as a single dict instead of a list
-        if isinstance(steps, dict):
-            steps = [steps]
-            result["steps"] = steps
-        if not isinstance(steps, list) or not steps:
-            raise ValueError(f"Response missing valid 'steps' list. Got: {type(steps).__name__}")
-        return result
-    except Exception as exc:
-        logger.error("plan_todo_list failed: %s", exc)
-        return {
-            "steps": [
-                {
-                    "id": 1,
-                    "action": user_task,
-                    "target": "screen",
-                    "expected_result": "Task accomplished",
-                    "needs_user_data": False,
-                    "user_data_field": None,
-                }
-            ],
-            "notes": f"Fallback single-step plan (LLM error: {exc})",
-            "estimated_complexity": "unknown",
-        }
+    last_exc: Exception = RuntimeError("No attempts made")
+    for _attempt in range(3):
+        try:
+            raw = client.generate(
+                prompt, model=model, max_tokens=4000, temperature=0.2,
+                response_mime_type="application/json",
+            )
+            logger.debug("plan_todo_list raw response: %s", raw[:600])
+            result = _extract_json(raw)
+            steps = result.get("steps")
+            # Handle case where LLM returns steps as a single dict instead of a list
+            if isinstance(steps, dict):
+                steps = [steps]
+                result["steps"] = steps
+            if not isinstance(steps, list) or not steps:
+                raise ValueError(f"Response missing valid 'steps' list. Got: {type(steps).__name__}")
+            return result
+        except Exception as exc:
+            last_exc = exc
+            import time as _time
+            wait = 2 ** _attempt
+            logger.warning("plan_todo_list attempt %d failed (%s) — retrying in %ds", _attempt + 1, exc, wait)
+            _time.sleep(wait)
+    logger.error("plan_todo_list failed after 3 attempts: %s", last_exc)
+    return {
+        "steps": [
+            {
+                "id": 1,
+                "action": user_task,
+                "target": "screen",
+                "expected_result": "Task accomplished",
+                "needs_user_data": False,
+                "user_data_field": None,
+            }
+        ],
+        "notes": f"Fallback single-step plan (LLM error: {last_exc})",
+        "estimated_complexity": "unknown",
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -470,83 +508,90 @@ Respond with ONLY this JSON (no markdown):
 }}"""
 
     client = GeminiClient()
-    try:
-        raw = client.generate(
-            prompt, model=model, max_tokens=2000, temperature=0.1,
-            response_mime_type="application/json",
-        )
-        logger.debug("plan_step_hid raw response: %s", raw[:600])
-        result = _extract_json(raw)
-        if "hid_commands" not in result:
-            raise ValueError("Response missing 'hid_commands'")
-
-        # Snap any mouse_move coordinates to the exact detected element positions
-        # to correct for LLM rounding / hallucination.
-        result["hid_commands"] = _snap_to_detected_elements(
-            result["hid_commands"], detected_elements
-        )
-        return result
-    except Exception as exc:
-        logger.error("plan_step_hid failed: %s", exc)
-        # Fallback: attempt to synthesize a safe local action using detected elements
+    last_exc: Exception = RuntimeError("No attempts made")
+    for _attempt in range(3):
         try:
-            logger.info("Attempting local fallback for plan_step_hid")
-            from llm.hid_step_generator import HIDStepGenerator
+            raw = client.generate(
+                prompt, model=model, max_tokens=2000, temperature=0.1,
+                response_mime_type="application/json",
+            )
+            logger.debug("plan_step_hid raw response: %s", raw[:600])
+            result = _extract_json(raw)
+            if "hid_commands" not in result:
+                raise ValueError("Response missing 'hid_commands'")
 
-            # Try to match current_step target to a detected element
-            target = current_step.get("target", "").lower()
-            chosen = None
-            for elem in detected_elements:
-                label = (elem.get("label") or "").lower()
-                desc = (elem.get("description") or "").lower()
-                if label and label in target or desc and desc in target:
-                    chosen = elem
-                    break
+            # Snap any mouse_move coordinates to the exact detected element positions
+            # to correct for LLM rounding / hallucination.
+            result["hid_commands"] = _snap_to_detected_elements(
+                result["hid_commands"], detected_elements
+            )
+            return result
+        except Exception as exc:
+            last_exc = exc
+            import time as _time
+            wait = 2 ** _attempt
+            logger.warning("plan_step_hid attempt %d failed (%s) — retrying in %ds", _attempt + 1, exc, wait)
+            _time.sleep(wait)
+    logger.error("plan_step_hid failed after 3 attempts: %s", last_exc)
+    # Fallback: attempt to synthesize a safe local action using detected elements
+    try:
+        logger.info("Attempting local fallback for plan_step_hid")
+        from llm.hid_step_generator import HIDStepGenerator
 
-            # If no label match, but current_step contains explicit coords, use them
-            x = current_step.get("x") or current_step.get("dx")
-            y = current_step.get("y") or current_step.get("dy")
+        # Try to match current_step target to a detected element
+        target = current_step.get("target", "").lower()
+        chosen = None
+        for elem in detected_elements:
+            label = (elem.get("label") or "").lower()
+            desc = (elem.get("description") or "").lower()
+            if label and label in target or desc and desc in target:
+                chosen = elem
+                break
 
-            action_steps = []
-            if chosen:
-                if "dx" in chosen and "dy" in chosen:
-                    cx, cy = chosen["dx"], chosen["dy"]
-                elif "x" in chosen and "y" in chosen:
-                    cx, cy = chosen["x"], chosen["y"]
+        # If no label match, but current_step contains explicit coords, use them
+        x = current_step.get("x") or current_step.get("dx")
+        y = current_step.get("y") or current_step.get("dy")
+
+        action_steps = []
+        if chosen:
+            if "dx" in chosen and "dy" in chosen:
+                cx, cy = chosen["dx"], chosen["dy"]
+            elif "x" in chosen and "y" in chosen:
+                cx, cy = chosen["x"], chosen["y"]
+            else:
+                bbox = chosen.get("bbox", [])
+                if bbox and len(bbox) >= 4:
+                    cx = int((bbox[0] + bbox[2]) / 2 * 1920)
+                    cy = int((bbox[1] + bbox[3]) / 2 * 1080)
                 else:
-                    bbox = chosen.get("bbox", [])
-                    if bbox and len(bbox) >= 4:
-                        cx = int((bbox[0] + bbox[2]) / 2 * 1920)
-                        cy = int((bbox[1] + bbox[3]) / 2 * 1080)
-                    else:
-                        cx, cy = 0, 0
-                action_steps.append({"step": 1, "action": "click", "target": chosen.get("label", "element"), "x": cx, "y": cy})
-            elif x and y:
-                action_steps.append({"step": 1, "action": "click", "target": current_step.get("target", "element"), "x": x, "y": y})
-            elif detected_elements:
-                # Last resort: click the first detected element
-                e = detected_elements[0]
-                if "dx" in e and "dy" in e:
-                    cx, cy = e["dx"], e["dy"]
-                elif "x" in e and "y" in e:
-                    cx, cy = e["x"], e["y"]
+                    cx, cy = 0, 0
+            action_steps.append({"step": 1, "action": "click", "target": chosen.get("label", "element"), "x": cx, "y": cy})
+        elif x and y:
+            action_steps.append({"step": 1, "action": "click", "target": current_step.get("target", "element"), "x": x, "y": y})
+        elif detected_elements:
+            # Last resort: click the first detected element
+            e = detected_elements[0]
+            if "dx" in e and "dy" in e:
+                cx, cy = e["dx"], e["dy"]
+            elif "x" in e and "y" in e:
+                cx, cy = e["x"], e["y"]
+            else:
+                bbox = e.get("bbox", [])
+                if bbox and len(bbox) >= 4:
+                    cx = int((bbox[0] + bbox[2]) / 2 * 1920)
+                    cy = int((bbox[1] + bbox[3]) / 2 * 1080)
                 else:
-                    bbox = e.get("bbox", [])
-                    if bbox and len(bbox) >= 4:
-                        cx = int((bbox[0] + bbox[2]) / 2 * 1920)
-                        cy = int((bbox[1] + bbox[3]) / 2 * 1080)
-                    else:
-                        cx, cy = 0, 0
-                action_steps.append({"step": 1, "action": "click", "target": e.get("label", e.get("type", "element")), "x": cx, "y": cy})
+                    cx, cy = 0, 0
+            action_steps.append({"step": 1, "action": "click", "target": e.get("label", e.get("type", "element")), "x": cx, "y": cy})
 
-            if action_steps:
-                gen = HIDStepGenerator()
-                hid_cmds = gen.convert_actions_to_hid(action_steps)
-                return {"hid_commands": hid_cmds, "reasoning": f"Fallback generated {len(hid_cmds)} commands from detected elements"}
-        except Exception as fallback_exc:
-            logger.error("Fallback generation failed: %s", fallback_exc)
+        if action_steps:
+            gen = HIDStepGenerator()
+            hid_cmds = gen.convert_actions_to_hid(action_steps)
+            return {"hid_commands": hid_cmds, "reasoning": f"Fallback generated {len(hid_cmds)} commands from detected elements"}
+    except Exception as fallback_exc:
+        logger.error("Fallback generation failed: %s", fallback_exc)
 
-        return {"hid_commands": [], "reasoning": f"Command generation failed: {exc}"}
+    return {"hid_commands": [], "reasoning": f"Command generation failed: {last_exc}"}
 
 
 # ---------------------------------------------------------------------------
@@ -613,26 +658,33 @@ For a needs_input example:
 }}"""
 
     client = GeminiClient()
-    try:
-        raw = client.generate(
-            prompt, model=model, max_tokens=600, temperature=0.1,
-            response_mime_type="application/json",
-        )
-        logger.debug("evaluate_step_result raw response: %s", raw[:400])
-        result = _extract_json(raw)
-        valid = {"done", "retry", "needs_input", "fatal_error"}
-        if result.get("status") not in valid:
-            raise ValueError(f"Invalid status '{result.get('status')}'")
-        return result
-    except Exception as exc:
-        logger.error("evaluate_step_result failed: %s", exc)
-        return {
-            "status": "retry",
-            "confidence": 0.0,
-            "reason": f"Evaluation error: {exc}",
-            "question": None,
-            "field": None,
-        }
+    last_exc: Exception = RuntimeError("No attempts made")
+    for _attempt in range(3):
+        try:
+            raw = client.generate(
+                prompt, model=model, max_tokens=600, temperature=0.1,
+                response_mime_type="application/json",
+            )
+            logger.debug("evaluate_step_result raw response: %s", raw[:400])
+            result = _extract_json(raw)
+            valid = {"done", "retry", "needs_input", "fatal_error"}
+            if result.get("status") not in valid:
+                raise ValueError(f"Invalid status '{result.get('status')}'")
+            return result
+        except Exception as exc:
+            last_exc = exc
+            import time as _time
+            wait = 2 ** _attempt
+            logger.warning("evaluate_step_result attempt %d failed (%s) — retrying in %ds", _attempt + 1, exc, wait)
+            _time.sleep(wait)
+    logger.error("evaluate_step_result failed after 3 attempts: %s", last_exc)
+    return {
+        "status": "retry",
+        "confidence": 0.0,
+        "reason": f"Evaluation error: {last_exc}",
+        "question": None,
+        "field": None,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -706,26 +758,33 @@ Respond with ONLY this JSON (no markdown):
 }}"""
 
     client = GeminiClient()
-    try:
-        raw = client.generate(
-            prompt, model=model, max_tokens=1500, temperature=0.2,
-            response_mime_type="application/json",
-        )
-        logger.debug("generate_final_report raw response: %s", raw[:600])
-        result = _extract_json(raw)
-        return result
-    except Exception as exc:
-        logger.error("generate_final_report failed: %s", exc)
-        success = len(failed) == 0
-        return {
-            "success": success,
-            "summary": f"{'Completed' if success else 'Partially completed'}: {user_task[:80]}",
-            "message": (
-                f"Task {'completed successfully' if success else 'partially completed'}.\n"
-                f"{len(done)}/{total} steps succeeded."
-            ),
-            "steps_completed": len(done),
-            "steps_failed": len(failed),
-            "issues": [f"Step {s['id']} failed: {s['action']}" for s in failed],
-            "recommendations": [],
-        }
+    last_exc: Exception = RuntimeError("No attempts made")
+    for _attempt in range(3):
+        try:
+            raw = client.generate(
+                prompt, model=model, max_tokens=1500, temperature=0.2,
+                response_mime_type="application/json",
+            )
+            logger.debug("generate_final_report raw response: %s", raw[:600])
+            result = _extract_json(raw)
+            return result
+        except Exception as exc:
+            last_exc = exc
+            import time as _time
+            wait = 2 ** _attempt
+            logger.warning("generate_final_report attempt %d failed (%s) — retrying in %ds", _attempt + 1, exc, wait)
+            _time.sleep(wait)
+    logger.error("generate_final_report failed after 3 attempts: %s", last_exc)
+    success = len(failed) == 0
+    return {
+        "success": success,
+        "summary": f"{'Completed' if success else 'Partially completed'}: {user_task[:80]}",
+        "message": (
+            f"Task {'completed successfully' if success else 'partially completed'}.\n"
+            f"{len(done)}/{total} steps succeeded."
+        ),
+        "steps_completed": len(done),
+        "steps_failed": len(failed),
+        "issues": [f"Step {s['id']} failed: {s['action']}" for s in failed],
+        "recommendations": [],
+    }
