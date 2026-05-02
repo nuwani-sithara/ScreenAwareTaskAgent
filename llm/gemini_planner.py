@@ -122,30 +122,53 @@ def _extract_elements(screen_data: dict) -> List[dict]:
     Coordinates are taken verbatim from what the vision service reported.
     """
     raw_elements: List[dict] = []
-    if "elements" in screen_data:
+    if "resolved_elements" in screen_data and isinstance(screen_data.get("resolved_elements"), list):
+        raw_elements = screen_data.get("resolved_elements", [])
+    elif "current_elements" in screen_data and isinstance(screen_data.get("current_elements"), list):
+        raw_elements = screen_data.get("current_elements", [])
+    elif "elements" in screen_data:
         raw_elements = screen_data.get("elements", [])
     elif "vision_data" in screen_data:
-        raw_elements = screen_data["vision_data"].get("elements", [])
+        vd = screen_data["vision_data"]
+        if isinstance(vd, dict):
+            raw_elements = vd.get("resolved_elements") or vd.get("current_elements") or vd.get("elements", [])
     elif "session_data" in screen_data:
-        screens = screen_data["session_data"].get("screens", [])
-        if screens:
-            raw_elements = screens[-1].get("elements", [])
+        session_data = screen_data["session_data"]
+        if isinstance(session_data, dict):
+            kb = session_data.get("knowledge_base")
+            if isinstance(kb, dict):
+                raw_elements = kb.get("resolved_elements") or kb.get("current_elements") or []
+            if not raw_elements:
+                screens = session_data.get("screens", [])
+                if screens:
+                    latest = screens[-1]
+                    if isinstance(latest, dict):
+                        raw_elements = latest.get("elements", [])
     elif "screens" in screen_data:
         screens = screen_data.get("screens", [])
         if screens:
-            raw_elements = screens[-1].get("elements", [])
+            latest = screens[-1]
+            if isinstance(latest, dict):
+                raw_elements = latest.get("elements", [])
 
     result: List[dict] = []
     for i, el in enumerate(raw_elements):
-        bbox = el.get("bbox") or {}
-        x = (
-            el.get("dx") or el.get("x") or el.get("cx")
-            or bbox.get("x") or bbox.get("cx")
-        )
-        y = (
-            el.get("dy") or el.get("y") or el.get("cy")
-            or bbox.get("y") or bbox.get("cy")
-        )
+        bbox = el.get("bbox")
+        bbox_dict = bbox if isinstance(bbox, dict) else {}
+        bbox_list = bbox if isinstance(bbox, (list, tuple)) and len(bbox) == 4 else None
+        if bbox_list is not None:
+            x1, y1, x2, y2 = bbox_list
+            x = el.get("dx") or el.get("x") or el.get("cx") or int(round((float(x1) + float(x2)) / 2))
+            y = el.get("dy") or el.get("y") or el.get("cy") or int(round((float(y1) + float(y2)) / 2))
+        else:
+            x = (
+                el.get("dx") or el.get("x") or el.get("cx")
+                or bbox_dict.get("x") or bbox_dict.get("cx")
+            )
+            y = (
+                el.get("dy") or el.get("y") or el.get("cy")
+                or bbox_dict.get("y") or bbox_dict.get("cy")
+            )
         if x is None or y is None:
             continue
         result.append({
@@ -218,7 +241,19 @@ def _screen_to_text(screen_data: dict) -> str:
     elements: List[dict] = []
     description: str = ""
 
-    if "elements" in screen_data:
+    if "resolved_elements" in screen_data and isinstance(screen_data.get("resolved_elements"), list):
+        elements = screen_data.get("resolved_elements", [])
+        description = (
+            screen_data.get("visual_summary", "")
+            or screen_data.get("scene_description", "")
+        )
+    elif "current_elements" in screen_data and isinstance(screen_data.get("current_elements"), list):
+        elements = screen_data.get("current_elements", [])
+        description = (
+            screen_data.get("visual_summary", "")
+            or screen_data.get("scene_description", "")
+        )
+    elif "elements" in screen_data:
         elements = screen_data.get("elements", [])
         description = (
             screen_data.get("visual_summary", "")
@@ -227,18 +262,28 @@ def _screen_to_text(screen_data: dict) -> str:
     elif "vision_data" in screen_data:
         # Single-shot /vision/capture response: elements are nested under 'vision_data'
         vd = screen_data["vision_data"]
-        elements = vd.get("elements", [])
-        description = vd.get("visual_summary", "") or vd.get("scene_description", "")
+        if isinstance(vd, dict):
+            elements = vd.get("resolved_elements") or vd.get("current_elements") or vd.get("elements", [])
+            description = vd.get("visual_summary", "") or vd.get("scene_description", "")
     elif "session_data" in screen_data:
-        screens = screen_data["session_data"].get("screens", [])
-        if screens:
-            latest = screens[-1]
-            elements = latest.get("elements", [])
-            description = latest.get("visual_summary", "")
+        session_data = screen_data["session_data"]
+        if isinstance(session_data, dict):
+            kb = session_data.get("knowledge_base")
+            if isinstance(kb, dict):
+                elements = kb.get("resolved_elements") or kb.get("current_elements") or []
+            if not elements:
+                screens = session_data.get("screens", [])
+                if screens:
+                    latest = screens[-1]
+                    if isinstance(latest, dict):
+                        elements = latest.get("elements", [])
+                        description = latest.get("visual_summary", "")
     elif "screens" in screen_data:
         screens = screen_data.get("screens", [])
         if screens:
-            elements = screens[-1].get("elements", [])
+            latest = screens[-1]
+            if isinstance(latest, dict):
+                elements = latest.get("elements", [])
 
     lines: List[str] = []
     if description:
@@ -250,20 +295,29 @@ def _screen_to_text(screen_data: dict) -> str:
             el_type = el.get("type", "element")
             label = el.get("label") or el.get("text") or ""
             desc  = el.get("description") or ""
-            bbox  = el.get("bbox") or {}
+            bbox = el.get("bbox")
+            bbox_dict = bbox if isinstance(bbox, dict) else {}
+            bbox_list = bbox if isinstance(bbox, (list, tuple)) and len(bbox) == 4 else None
 
-            # Vision service uses 'dx'/'dy' as pixel-space centre coordinates.
-            # Fall back to common alternatives for forward-compatibility.
-            x = (
-                el.get("dx") or el.get("x") or el.get("cx")
-                or bbox.get("x") or bbox.get("cx")
-            )
-            y = (
-                el.get("dy") or el.get("y") or el.get("cy")
-                or bbox.get("y") or bbox.get("cy")
-            )
-            w = el.get("w") or el.get("width")  or bbox.get("width")
-            h = el.get("h") or el.get("height") or bbox.get("height")
+            if bbox_list is not None:
+                x1, y1, x2, y2 = bbox_list
+                x = el.get("dx") or el.get("x") or el.get("cx") or int(round((float(x1) + float(x2)) / 2))
+                y = el.get("dy") or el.get("y") or el.get("cy") or int(round((float(y1) + float(y2)) / 2))
+                w = el.get("w") or el.get("width") or abs(float(x2) - float(x1))
+                h = el.get("h") or el.get("height") or abs(float(y2) - float(y1))
+            else:
+                # Vision service uses 'dx'/'dy' as pixel-space centre coordinates.
+                # Fall back to common alternatives for forward-compatibility.
+                x = (
+                    el.get("dx") or el.get("x") or el.get("cx")
+                    or bbox_dict.get("x") or bbox_dict.get("cx")
+                )
+                y = (
+                    el.get("dy") or el.get("y") or el.get("cy")
+                    or bbox_dict.get("y") or bbox_dict.get("cy")
+                )
+                w = el.get("w") or el.get("width") or bbox_dict.get("width")
+                h = el.get("h") or el.get("height") or bbox_dict.get("height")
 
             pos  = f" @ ({int(x)}, {int(y)})" if x is not None and y is not None else ""
             size = f" [{int(w)}×{int(h)}]" if w and h else ""

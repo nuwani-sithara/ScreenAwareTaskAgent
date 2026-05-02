@@ -24,6 +24,7 @@ from src.preprocessing.preprocess import preprocess_all
 from src.perception.grounding.bbox_element_enricher import enrich_frame
 from src.perception.vlm import get_vlm_client, UIElement, get_ui_discovery_prompt
 from src.session_aggregator import SessionAggregator
+from src.session_knowledge_base import SessionKnowledgeBase
 
 if TYPE_CHECKING:
     from src.vision.pipeline import VisionPipeline
@@ -81,6 +82,7 @@ def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, 
         "proc_dir": proc_dir,
         "created_at": time.time(),
         "aggregator": None,
+        "knowledge_base": SessionKnowledgeBase(session_id=session_id),
     }
     if aggregate:
         agg = SessionAggregator(
@@ -90,6 +92,7 @@ def _new_session(prefix: str = "session", aggregate: bool = False) -> Dict[str, 
         )
         agg.start(session_id=session_id)
         session["aggregator"] = agg
+        session["knowledge_base"] = agg.knowledge_base
     return session
 
 
@@ -902,6 +905,7 @@ def _run_pipeline_for_frame(
     """
     frame_name = Path(frame_path).name
     frame_stem = Path(frame_path).stem
+    kb: Optional[SessionKnowledgeBase] = session.get("knowledge_base")
     logger.info(
         "Pipeline started frame=%s session_id=%s semantic=%s",
         frame_name,
@@ -1007,14 +1011,23 @@ def _run_pipeline_for_frame(
                 logger.warning("Failed to copy semantic debug image: %s", exc)
 
         final_payload = _strip_internal_fields(payload)
+        if kb is not None and isinstance(final_payload, dict):
+            snapshot = kb.update(
+                elements=list(final_payload.get("elements", [])),
+                frame_name=frame_name,
+                frame_index=kb.frame_count,
+                image_size=final_payload.get("image_size"),
+                source="vision",
+            )
+            final_payload["current_elements"] = snapshot["current_elements"]
+            final_payload["resolved_elements"] = snapshot["resolved_elements"]
+            final_payload["session_knowledge_base"] = snapshot
+            final_payload["elements"] = snapshot["resolved_elements"] or final_payload.get("elements", [])
+            final_payload["element_count"] = len(final_payload.get("elements", []))
         with open(final_json_path, "w", encoding="utf-8") as f:
             json.dump(final_payload, f, indent=2)
 
-        payload = _finalize_elements_with_dxdy(payload, image.shape[1], image.shape[0])
-        final_payload = _strip_internal_fields(payload)
-        with open(final_json_path, "w", encoding="utf-8") as f:
-            json.dump(final_payload, f, indent=2)
-
+        # NOTE: _finalize_elements_with_dxdy already called above; do not call again.
         return {
             "status": "completed",
             "session_id": session["id"],
@@ -1032,6 +1045,18 @@ def _run_pipeline_for_frame(
         "element_count": 0,
         "elements": [],
     }
+    if kb is not None:
+        snapshot = kb.update(
+            elements=[],
+            frame_name=frame_name,
+            frame_index=kb.frame_count,
+            image_size=empty_payload.get("image_size"),
+            source="vision",
+        )
+        empty_payload["current_elements"] = snapshot["current_elements"]
+        empty_payload["resolved_elements"] = snapshot["resolved_elements"]
+        empty_payload["session_knowledge_base"] = snapshot
+        empty_payload["element_count"] = len(empty_payload.get("elements", []))
     with open(final_json_path, "w", encoding="utf-8") as f:
         json.dump(empty_payload, f, indent=2)
     return {

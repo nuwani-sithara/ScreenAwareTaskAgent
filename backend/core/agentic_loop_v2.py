@@ -23,13 +23,15 @@ entirely inside a FastAPI asyncio event-loop without blocking the server.
 """
 
 import asyncio
+import ctypes
 import json
 import logging
 import os
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import httpx
 
@@ -64,6 +66,7 @@ class AgentRunRecorder:
         # Mutable accumulators
         self.initial_screen: dict = {}
         self.latest_screen: dict = {}
+        self.session_memory = RunPerceptionMemory(self.run_dir, run_id, user_task)
         self.todo_result: dict = {}
         # per-step records: keyed by step id
         self.step_plans: Dict[int, dict] = {}      # hid commands + reasoning
@@ -99,8 +102,6 @@ class AgentRunRecorder:
         # Fallback: return original object so nothing is lost
         return screen_data
 
-        logger.info("AgentRunRecorder: run dir → %s", self.run_dir)
-
     # ------------------------------------------------------------------
     def _write(self, filename: str, data: Any) -> None:
         path = self.run_dir / filename
@@ -111,17 +112,21 @@ class AgentRunRecorder:
             logger.warning("AgentRunRecorder: failed to write %s — %s", filename, exc)
 
     # ------------------------------------------------------------------
-    def record_initial_screen(self, screen_data: dict) -> None:
+    def record_initial_screen(self, screen_data: dict) -> dict:
         norm = self._normalize_perception(screen_data)
-        self.initial_screen = norm
-        self.latest_screen = norm
-        self._write("perception.json", norm)
-        self._write("latest_perception.json", norm)
+        merged = self.session_memory.merge_screen(norm)
+        self.initial_screen = merged
+        self.latest_screen = merged
+        self._write("perception.json", merged)
+        self._write("latest_perception.json", merged)
+        return merged
 
-    def record_screen(self, screen_data: dict) -> None:
+    def record_screen(self, screen_data: dict) -> dict:
         norm = self._normalize_perception(screen_data)
-        self.latest_screen = norm
-        self._write("latest_perception.json", norm)
+        merged = self.session_memory.merge_screen(norm)
+        self.latest_screen = merged
+        self._write("latest_perception.json", merged)
+        return merged
 
     def record_todo(self, todo_result: dict) -> None:
         self.todo_result = todo_result
@@ -202,10 +207,203 @@ class AgentRunRecorder:
             "step_plans": list(self.step_plans.values()),
             "step_results": list(self.step_results.values()),
             "final_report": self.final_report,
+            "session_memory": self.session_memory.snapshot(),
         }
         self._write("full_cycle.json", data)
         # Also keep latest_perception up-to-date
         self._write("latest_perception.json", self.latest_screen)
+
+
+class RunPerceptionMemory:
+    """
+    Run-scoped fallback memory for repeated one-shot perception calls.
+
+    Tracks the best-known bbox for each logical element and emits a merged
+    screen payload that includes cached fallbacks when the latest frame misses
+    a target.
+    """
+
+    def __init__(
+        self,
+        run_dir: Path,
+        run_id: str,
+        user_task: str,
+        stale_after_misses: int = 2,
+        confidence_floor: float = 0.40,
+        decay_per_miss: float = 0.90,
+    ) -> None:
+        self.run_dir = Path(run_dir)
+        self.run_id = run_id
+        self.user_task = user_task
+        self.started_at = datetime.now(timezone.utc).isoformat()
+        self.updated_at = self.started_at
+        self.stale_after_misses = max(1, int(stale_after_misses))
+        self.confidence_floor = max(0.0, min(1.0, float(confidence_floor)))
+        self.decay_per_miss = max(0.0, min(1.0, float(decay_per_miss)))
+        self.frame_index = 0
+        self.known_elements: Dict[str, Dict[str, Any]] = {}
+
+    @staticmethod
+    def _normalize_text(value: Any) -> str:
+        return str(value or "").strip().lower()
+
+    def _key(self, element: Dict[str, Any]) -> str:
+        element_type = self._normalize_text(element.get("type"))
+        label = self._normalize_text(element.get("label"))
+        element_id = self._normalize_text(element.get("id"))
+        if label and element_type:
+            return f"{element_type}:{label}"
+        if label:
+            return f"label:{label}"
+        if element_id:
+            return f"id:{element_id}"
+        return f"type:{element_type or 'unknown'}"
+
+    @staticmethod
+    def _copy_bbox(element: Dict[str, Any]) -> list[float] | None:
+        bbox = element.get("bbox") or element.get("frame_bbox")
+        if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
+            return None
+        try:
+            return [float(v) for v in bbox]
+        except Exception:
+            return None
+
+    def _persist(self, snapshot: Dict[str, Any]) -> None:
+        try:
+            path = self.run_dir / "session_memory.json"
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(snapshot, f, indent=2, default=str)
+        except Exception as exc:
+            logger.warning("RunPerceptionMemory: failed to write session_memory.json — %s", exc)
+
+    def update(self, screen_data: dict) -> Dict[str, Any]:
+        elements = screen_data.get("current_elements") or screen_data.get("elements") or []
+        current_keys = set()
+        current_elements: List[Dict[str, Any]] = []
+        self.updated_at = datetime.now(timezone.utc).isoformat()
+
+        for element in elements:
+            if not isinstance(element, dict):
+                continue
+            key = self._key(element)
+            current_keys.add(key)
+            bbox = self._copy_bbox(element)
+            confidence = float(element.get("confidence", 0.0) or 0.0)
+            record = self.known_elements.get(key)
+
+            if record is None:
+                record = {
+                    "element_key": key,
+                    "element_type": str(element.get("type") or ""),
+                    "label": str(element.get("label") or ""),
+                    "bbox": bbox,
+                    "confidence": confidence,
+                    "source": str(element.get("source") or "vision"),
+                    "first_seen_frame": screen_data.get("frame_name"),
+                    "last_seen_frame": screen_data.get("frame_name"),
+                    "first_seen_index": self.frame_index,
+                    "last_seen_index": self.frame_index,
+                    "first_seen_at": self.updated_at,
+                    "last_seen_at": self.updated_at,
+                    "seen_count": 1,
+                    "miss_count": 0,
+                    "stale": False,
+                    "cached": False,
+                }
+                self.known_elements[key] = record
+            else:
+                if bbox is not None and (record.get("bbox") is None or confidence >= float(record.get("confidence", 0.0))):
+                    record["bbox"] = bbox
+                if confidence >= float(record.get("confidence", 0.0)):
+                    record["confidence"] = confidence
+                if element.get("source"):
+                    record["source"] = str(element.get("source"))
+                record["element_type"] = str(element.get("type") or record.get("element_type") or "")
+                record["label"] = str(element.get("label") or record.get("label") or "")
+                record["last_seen_frame"] = screen_data.get("frame_name")
+                record["last_seen_index"] = self.frame_index
+                record["last_seen_at"] = self.updated_at
+                record["seen_count"] = int(record.get("seen_count", 0)) + 1
+                record["miss_count"] = 0
+                record["stale"] = False
+                record["cached"] = False
+
+            normalized = dict(element)
+            normalized["session_memory_key"] = key
+            normalized["cached"] = False
+            current_elements.append(normalized)
+
+        for key, record in self.known_elements.items():
+            if key in current_keys:
+                continue
+            record["miss_count"] = int(record.get("miss_count", 0)) + 1
+            record["cached"] = True
+            if record["miss_count"] >= self.stale_after_misses:
+                record["stale"] = True
+            confidence = float(record.get("confidence", 0.0) or 0.0)
+            if confidence > 0.0:
+                record["confidence"] = max(self.confidence_floor, round(confidence * self.decay_per_miss, 4))
+
+        self.frame_index += 1
+        snapshot = self.snapshot(screen_data=screen_data, current_elements=current_elements)
+        self._persist(snapshot)
+        return snapshot
+
+    def merge_screen(self, screen_data: dict) -> dict:
+        snapshot = self.update(screen_data)
+        merged = dict(screen_data)
+        merged["current_elements"] = snapshot["current_elements"]
+        merged["resolved_elements"] = snapshot["resolved_elements"]
+        merged["session_memory"] = snapshot
+        merged["elements"] = snapshot["resolved_elements"] or snapshot["current_elements"] or merged.get("elements", [])
+        merged["element_count"] = len(merged.get("elements", []))
+        return merged
+
+    def snapshot(self, screen_data: Optional[dict] = None, current_elements: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+        current_elements = current_elements or []
+        current_keys = {self._key(elem) for elem in current_elements if isinstance(elem, dict)}
+        resolved_elements: List[Dict[str, Any]] = []
+
+        for element in current_elements:
+            if isinstance(element, dict):
+                resolved_elements.append(dict(element))
+
+        for key, record in self.known_elements.items():
+            if key in current_keys or record.get("stale") or not record.get("bbox"):
+                continue
+            resolved_elements.append(
+                {
+                    "id": f"memory_{key}",
+                    "type": record.get("element_type", ""),
+                    "label": record.get("label", ""),
+                    "description": "Cached from an earlier frame in the same run",
+                    "state": "cached",
+                    "bbox": list(record.get("bbox") or []),
+                    "confidence": float(record.get("confidence", 0.0) or 0.0),
+                    "source": record.get("source", "session_memory"),
+                    "last_seen_frame": record.get("last_seen_frame"),
+                    "last_seen_index": record.get("last_seen_index"),
+                    "stale": True,
+                    "cached": True,
+                    "session_memory_key": key,
+                }
+            )
+
+        return {
+            "run_id": self.run_id,
+            "user_task": self.user_task,
+            "started_at": self.started_at,
+            "updated_at": self.updated_at,
+            "stale_after_misses": self.stale_after_misses,
+            "confidence_floor": self.confidence_floor,
+            "decay_per_miss": self.decay_per_miss,
+            "frame_index": self.frame_index,
+            "known_elements": self.known_elements,
+            "current_elements": current_elements,
+            "resolved_elements": resolved_elements,
+            "screen_data": screen_data or {},
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -214,6 +412,81 @@ class AgentRunRecorder:
 VISION_BASE_URL = "http://localhost:8001"
 LLM_BASE_URL = "http://localhost:8002"
 HID_API_URL = "http://localhost:3015/hid/command"
+
+
+def _remap_to_absolute_coords(screen_data: dict) -> dict:
+    """
+    Remap each element's dx/dy to use absolute webcam-frame coordinates
+    (frame_dx / frame_dy) instead of screen-relative coordinates.
+
+    The vision pipeline produces both:
+      dx/dy       -- screen-relative (offset from cropped screen top-left)
+      frame_dx/dy -- absolute (offset from full webcam frame top-left)
+
+    The LLM uses dx/dy values to generate HID mouse_move commands, so we must
+    replace dx/dy with frame_dx/dy before sending vision data to the LLM so
+    that generated coordinates are correct for the physical HID device.
+    """
+    return _remap_coordinate_payload(screen_data)
+
+
+def _remap_coordinate_payload(payload: Any) -> Any:
+    if isinstance(payload, list):
+        return [_remap_coordinate_payload(item) for item in payload]
+    if not isinstance(payload, dict):
+        return payload
+
+    remapped: Dict[str, Any] = {}
+    for key, value in payload.items():
+        if key in ("elements", "current_elements", "resolved_elements") and isinstance(value, list):
+            remapped[key] = [_remap_element_coords(elem) for elem in value]
+        else:
+            remapped[key] = _remap_coordinate_payload(value)
+    return remapped
+
+
+def _remap_element_coords(elem: Any) -> Any:
+    if not isinstance(elem, dict):
+        return elem
+
+    new_elem = dict(elem)
+    frame_dx = new_elem.get("frame_dx")
+    frame_dy = new_elem.get("frame_dy")
+    if frame_dx is not None:
+        try:
+            new_elem["dx"] = int(round(float(frame_dx)))
+        except Exception:
+            pass
+    if frame_dy is not None:
+        try:
+            new_elem["dy"] = int(round(float(frame_dy)))
+        except Exception:
+            pass
+
+    bbox = new_elem.get("bbox")
+    if ("dx" not in new_elem or "dy" not in new_elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        try:
+            x1, y1, x2, y2 = (float(v) for v in bbox)
+            new_elem["dx"] = int(round((x1 + x2) * 0.5))
+            new_elem["dy"] = int(round((y1 + y2) * 0.5))
+        except Exception:
+            pass
+
+    return new_elem
+
+
+def _get_cursor_position() -> tuple[int, int]:
+    """Best-effort current cursor position on Windows."""
+    try:
+        class POINT(ctypes.Structure):
+            _fields_ = [("x", ctypes.c_long), ("y", ctypes.c_long)]
+
+        point = POINT()
+        if ctypes.windll.user32.GetCursorPos(ctypes.byref(point)):
+            return int(point.x), int(point.y)
+    except Exception:
+        pass
+    return 0, 0
 
 # ---------------------------------------------------------------------------
 # Tunables
@@ -500,6 +773,251 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
     return {"status": "success", "total": len(commands)}
 
 
+async def _execute_hid_commands_v2(commands: List[dict]) -> dict:
+    """
+    Corrected HID executor that uses the real cursor position as the anchor
+    and does not force the pointer to the top-left corner.
+    """
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        cursor_x, cursor_y = _get_cursor_position()
+
+        for idx, cmd in enumerate(commands):
+            cmd_type = cmd.get("cmd")
+
+            if cmd_type == "mouse_move":
+                target_x = int(cmd.get("dx", 0))
+                target_y = int(cmd.get("dy", 0))
+
+                max_step = 80
+                rel_dx = target_x - cursor_x
+                rel_dy = target_y - cursor_y
+
+                if abs(rel_dx) <= max_step and abs(rel_dy) <= max_step:
+                    payloads = [
+                        {"type": "mouse_move", "payload": {"dx": rel_dx, "dy": rel_dy, "smooth": bool(cmd.get("smooth", False))}}
+                    ]
+                else:
+                    steps = max(1, int(max(abs(rel_dx), abs(rel_dy)) / float(max_step)))
+                    payloads = []
+                    for s in range(1, steps + 1):
+                        step_dx = int(round(rel_dx * (s / steps))) - int(round(rel_dx * ((s - 1) / steps)))
+                        step_dy = int(round(rel_dy * (s / steps))) - int(round(rel_dy * ((s - 1) / steps)))
+                        payloads.append(
+                            {
+                                "type": "mouse_move",
+                                "payload": {
+                                    "dx": step_dx,
+                                    "dy": step_dy,
+                                    "smooth": bool(cmd.get("smooth", False)),
+                                },
+                            }
+                        )
+
+                for p in payloads:
+                    try:
+                        resp = await client.post(HID_API_URL, json=p)
+                        if resp.status_code == 503:
+                            body = resp.json()
+                            msg = body.get("message") or body.get("error") or "Device offline"
+                            logger.error("HID command device offline: %s", msg)
+                            return {"status": "failed", "error": f"HID device offline: {msg}", "failed_at": idx}
+                        resp.raise_for_status()
+                    except Exception as exc:
+                        logger.error("HID mouse_move chunk failed: %s", exc)
+                        return {"status": "failed", "error": str(exc), "failed_at": idx}
+                    cursor_x += int(p["payload"].get("dx", 0))
+                    cursor_y += int(p["payload"].get("dy", 0))
+                    await asyncio.sleep(0.04)
+                continue
+
+            payload = {
+                "type": cmd_type,
+                "payload": {k: v for k, v in cmd.items() if k not in ("cmd", "meta")},
+            }
+
+            try:
+                resp = await client.post(HID_API_URL, json=payload)
+                if resp.status_code == 503:
+                    body = resp.json()
+                    msg = body.get("message") or body.get("error") or "Device offline"
+                    logger.error("HID command %d device offline: %s", idx + 1, msg)
+                    return {"status": "failed", "error": f"HID device offline: {msg}", "failed_at": idx}
+                resp.raise_for_status()
+            except Exception as exc:
+                logger.error("HID command %d failed: %s", idx + 1, exc)
+                return {"status": "failed", "error": str(exc), "failed_at": idx}
+            await asyncio.sleep(0.2)
+
+    return {"status": "success", "total": len(commands)}
+
+
+def _extract_point_from_element(element: Dict[str, Any]) -> Optional[tuple[int, int]]:
+    """Return the best click point for a detected element, if available."""
+    if not isinstance(element, dict):
+        return None
+
+    for x_key, y_key in (("dx", "dy"), ("x", "y"), ("cx", "cy")):
+        x = element.get(x_key)
+        y = element.get(y_key)
+        if x is not None and y is not None:
+            try:
+                return int(round(float(x))), int(round(float(y)))
+            except Exception:
+                pass
+
+    bbox = element.get("bbox")
+    if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        try:
+            x1, y1, x2, y2 = (float(v) for v in bbox)
+            return int(round((x1 + x2) * 0.5)), int(round((y1 + y2) * 0.5))
+        except Exception:
+            return None
+
+    return None
+
+
+def _get_candidate_elements(screen_data: dict) -> List[Dict[str, Any]]:
+    """Return the most relevant visible elements for click-based fallback."""
+    if not isinstance(screen_data, dict):
+        return []
+
+    for key in ("current_elements", "resolved_elements", "elements"):
+        value = screen_data.get(key)
+        if isinstance(value, list) and value:
+            return [item for item in value if isinstance(item, dict)]
+    return []
+
+
+def _build_click_candidate_targets(
+    screen_data: dict,
+    step: dict,
+    hid_commands: List[dict],
+    user_task: str,
+    max_candidates: int = 3,
+) -> List[Dict[str, Any]]:
+    """
+    Build an ordered list of possible click targets for a HID step.
+
+    The first candidate is always the planner's chosen coordinate. Other
+    plausible interactive elements from the current screen are then added so
+    the executor can try multiple targets when the UI exposes more than one
+    likely input.
+    """
+    candidates: List[Dict[str, Any]] = []
+    seen_points: set[tuple[int, int]] = set()
+
+    def add_candidate(x: int, y: int, label: str, source: str, score: float) -> None:
+        point = (int(x), int(y))
+        if point in seen_points:
+            return
+        seen_points.add(point)
+        candidates.append(
+            {
+                "x": point[0],
+                "y": point[1],
+                "label": label,
+                "source": source,
+                "score": float(score),
+            }
+        )
+
+    primary_move = next(
+        (
+            cmd
+            for cmd in hid_commands
+            if isinstance(cmd, dict) and cmd.get("cmd") == "mouse_move"
+        ),
+        None,
+    )
+    primary_point: Optional[tuple[int, int]] = None
+    if isinstance(primary_move, dict):
+        try:
+            primary_point = (
+                int(round(float(primary_move.get("dx", 0)))),
+                int(round(float(primary_move.get("dy", 0)))),
+            )
+            add_candidate(primary_point[0], primary_point[1], "planned target", "hid_plan", 1000.0)
+        except Exception:
+            primary_point = None
+
+    elements = _get_candidate_elements(screen_data)
+    if not elements:
+        return candidates
+
+    step_text = " ".join(
+        str(part or "")
+        for part in (
+            step.get("action"),
+            step.get("target"),
+            step.get("expected_result"),
+            user_task,
+        )
+    ).lower()
+    typing_intent = any(token in step_text for token in ("type", "search", "input", "text", "query"))
+    click_intent = any(token in step_text for token in ("click", "press", "focus", "open"))
+    keywords = [token for token in re.findall(r"[a-z0-9]+", step_text) if len(token) > 2]
+
+    for element in elements:
+        point = _extract_point_from_element(element)
+        if point is None:
+            continue
+
+        element_type = str(element.get("type") or "").strip().lower()
+        label = str(element.get("label") or element.get("text") or "").strip()
+        description = str(element.get("description") or "").strip()
+        combined = f"{element_type} {label} {description}".lower()
+
+        interactive_types = {
+            "input",
+            "textbox",
+            "text_field",
+            "search",
+            "button",
+            "link",
+            "tab",
+        }
+        if element_type and element_type not in interactive_types:
+            continue
+
+        confidence = float(element.get("confidence", 0.0) or 0.0)
+        score = confidence
+
+        if typing_intent and element_type in {"input", "textbox", "search", "text_field"}:
+            score += 3.0
+        if click_intent and element_type in {"button", "link", "tab"}:
+            score += 1.5
+
+        for keyword in keywords:
+            if keyword in combined:
+                score += 0.4
+
+        if primary_point is not None and point == primary_point:
+            score += 5.0
+
+        add_candidate(point[0], point[1], label or element_type or "element", element_type or "screen", score)
+
+    candidates.sort(key=lambda item: (-item["score"], item["x"], item["y"]))
+    return candidates[:max_candidates]
+
+
+def _inject_click_target(hid_commands: List[dict], x: int, y: int) -> List[dict]:
+    """Return a copy of hid_commands with the first mouse_move replaced."""
+    updated: List[dict] = []
+    replaced = False
+
+    for cmd in hid_commands:
+        if not replaced and isinstance(cmd, dict) and cmd.get("cmd") == "mouse_move":
+            new_cmd = dict(cmd)
+            new_cmd["dx"] = int(x)
+            new_cmd["dy"] = int(y)
+            updated.append(new_cmd)
+            replaced = True
+        else:
+            updated.append(dict(cmd) if isinstance(cmd, dict) else cmd)
+
+    return updated
+
+
 # =============================================================================
 # Main V2 loop
 # =============================================================================
@@ -567,7 +1085,7 @@ async def run_agentic_loop_v2(
                 ]
 
                 step["_coord_fix_tried"] = True
-                exec_result = await _execute_hid_commands(click_cmds)
+                exec_result = await _execute_hid_commands_v2(click_cmds)
                 if exec_result.get("status") == "failed":
                     logger.warning("Coordinate-fix click failed: %s", exec_result.get("error"))
                     return evaluation
@@ -575,7 +1093,7 @@ async def run_agentic_loop_v2(
                 # Wait briefly for UI reaction, capture and re-evaluate
                 await asyncio.sleep(UI_SETTLE_DELAY)
                 new_screen = await _capture_screen()
-                recorder.record_screen(new_screen)
+                new_screen = recorder.record_screen(new_screen)
 
                 try:
                     new_eval = await _evaluate_step(new_screen, step, user_task, todo_list)
@@ -587,6 +1105,213 @@ async def run_agentic_loop_v2(
 
         return evaluation
 
+    async def _execute_with_candidate_targets(
+        current_screen: dict,
+        step: dict,
+        hid_commands: List[dict],
+        step_index: int,
+        attempt: int,
+    ) -> dict:
+        """
+        Try a multi-target HID execution pass when the current screen exposes
+        more than one plausible click target.
+
+        Returns a small control dict:
+            {
+              "handled": bool,
+              "step_success": bool,
+              "increment_attempt": bool,
+              "abort": bool,
+            }
+        """
+        nonlocal user_task
+
+        candidate_targets = _build_click_candidate_targets(
+            current_screen, step, hid_commands, user_task
+        )
+        if len(candidate_targets) <= 1:
+            return {"handled": False}
+
+        for candidate_index, candidate in enumerate(candidate_targets):
+            if candidate_index > 0:
+                await emit(
+                    {
+                        "type": "alternate_target",
+                        "step_index": step_index,
+                        "attempt": attempt + 1,
+                        "candidate_index": candidate_index + 1,
+                        "candidate_total": len(candidate_targets),
+                        "label": candidate.get("label", "element"),
+                        "x": candidate["x"],
+                        "y": candidate["y"],
+                        "source": candidate.get("source", "screen"),
+                    }
+                )
+                await emit(
+                    {
+                        "type": "log",
+                        "message": (
+                            f"↩️ Trying alternate target {candidate_index + 1}/"
+                            f"{len(candidate_targets)}: {candidate.get('label', 'element')} "
+                            f"at ({candidate['x']}, {candidate['y']})"
+                        ),
+                    }
+                )
+                await asyncio.sleep(0.35)
+
+            candidate_hid_commands = _inject_click_target(
+                hid_commands, candidate["x"], candidate["y"]
+            )
+            exec_result = await _execute_hid_commands_v2(candidate_hid_commands)
+            if exec_result.get("status") == "failed":
+                if candidate_index < len(candidate_targets) - 1:
+                    logger.info(
+                        "Candidate target (%d, %d) failed; trying next target: %s",
+                        candidate["x"],
+                        candidate["y"],
+                        exec_result.get("error"),
+                    )
+                    continue
+
+                await emit(
+                    {
+                        "type": "step_error",
+                        "step_index": step_index,
+                        "error": exec_result.get("error", "HID execution failed"),
+                        "attempt": attempt + 1,
+                    }
+                )
+                return {"handled": True, "increment_attempt": True}
+
+            await asyncio.sleep(UI_SETTLE_DELAY)
+
+            await emit({"type": "log", "message": f"🔍 Validating step {step_index + 1}..."})
+            new_screen = await _capture_screen()
+            new_screen = recorder.record_screen(new_screen)
+
+            try:
+                evaluation = await _evaluate_step(
+                    _remap_to_absolute_coords(new_screen), step, user_task, todo_list
+                )
+            except Exception as exc:
+                logger.error("Step evaluation error: %s", exc)
+                evaluation = {
+                    "status": "retry",
+                    "confidence": 0.0,
+                    "reason": f"Evaluation service error: {exc}",
+                }
+
+            status = evaluation.get("status", "retry")
+            confidence = evaluation.get("confidence", 0.0)
+            reason = evaluation.get("reason", "")
+            recorder.record_step_result(step, exec_result, evaluation, attempt + 1)
+
+            if status == "done":
+                step["status"] = "done"
+                await emit(
+                    {
+                        "type": "step_done",
+                        "step_index": step_index,
+                        "confidence": confidence,
+                        "reason": reason,
+                    }
+                )
+                return {"handled": True, "step_success": True}
+
+            if status == "needs_input":
+                question = evaluation.get("question") or "Please provide the required information"
+                field = evaluation.get("field") or "input"
+                step["status"] = "waiting_input"
+
+                input_event.clear()
+                input_data_store.clear()
+
+                await emit(
+                    {
+                        "type": "needs_input",
+                        "step_index": step_index,
+                        "question": question,
+                        "field": field,
+                    }
+                )
+
+                try:
+                    await asyncio.wait_for(input_event.wait(), timeout=INPUT_TIMEOUT)
+                except asyncio.TimeoutError:
+                    await emit(
+                        {
+                            "type": "error",
+                            "message": "Timed out waiting for user input (5-minute limit).",
+                        }
+                    )
+                    return {"handled": True, "abort": True}
+
+                user_input = input_data_store.get("value", "")
+                step["user_input"] = user_input
+                user_task = f"{user_task}\n[User provided '{field}']: {user_input}"
+                step["status"] = "executing"
+
+                await emit({"type": "input_received", "step_index": step_index, "field": field})
+                return {"handled": True, "increment_attempt": True}
+
+            if status == "fatal_error":
+                step["status"] = "failed"
+                await emit(
+                    {
+                        "type": "fatal_error",
+                        "step_index": step_index,
+                        "message": f"Fatal error at step {step_index + 1}: {reason}",
+                    }
+                )
+                return {"handled": True, "abort": True}
+
+            if candidate_index < len(candidate_targets) - 1:
+                await emit(
+                    {
+                        "type": "log",
+                        "message": (
+                            f"Candidate target ({candidate['x']}, {candidate['y']}) did not "
+                            "validate; trying next target."
+                        ),
+                    }
+                )
+                continue
+
+            await emit(
+                {
+                    "type": "step_error",
+                    "step_index": step_index,
+                    "error": reason or "Step did not succeed",
+                    "attempt": attempt + 1,
+                }
+            )
+
+            try:
+                new_eval = await _attempt_coordinate_fix_and_recheck(evaluation, step)
+                if new_eval is not None and new_eval.get("status") != evaluation.get("status"):
+                    evaluation = new_eval
+                    status = evaluation.get("status", "retry")
+                    confidence = evaluation.get("confidence", 0.0)
+                    reason = evaluation.get("reason", "")
+                    recorder.record_step_result(step, exec_result, evaluation, attempt + 1)
+                    if status == "done":
+                        step["status"] = "done"
+                        await emit(
+                            {
+                                "type": "step_done",
+                                "step_index": step_index,
+                                "confidence": confidence,
+                                "reason": reason,
+                            }
+                        )
+                        return {"handled": True, "step_success": True}
+            except Exception as exc:
+                logger.error("Coord-fix attempt failed: %s", exc)
+
+            return {"handled": True, "increment_attempt": True}
+
+        return {"handled": True, "increment_attempt": True}
+
     try:
         # ── Phase 0: Pre-flight HID health check ────────────────────────────
         hid_health = await _check_hid_health()
@@ -597,13 +1322,13 @@ async def run_agentic_loop_v2(
         # ── Phase 1: Capture initial screen ─────────────────────────────────
         await emit({"type": "log", "message": "📸 Capturing initial screen…"})
         initial_screen = await _capture_screen()
-        recorder.record_initial_screen(initial_screen)
+        initial_screen = recorder.record_initial_screen(initial_screen)
         await emit({"type": "screen_captured", "phase": "initial"})
 
         # ── Phase 2: Generate todo list ──────────────────────────────────────
         await emit({"type": "log", "message": "🧠 Planning steps for your task…"})
         try:
-            todo_result = await _plan_todo_list(initial_screen, user_task)
+            todo_result = await _plan_todo_list(_remap_to_absolute_coords(initial_screen), user_task)
         except Exception as exc:
             await emit({"type": "error", "message": f"Planning failed: {exc}"})
             return
@@ -665,7 +1390,7 @@ async def run_agentic_loop_v2(
                     {"type": "log", "message": f"📸 Screen snapshot for step {step_index + 1}…"}
                 )
                 current_screen = await _capture_screen()
-                recorder.record_screen(current_screen)
+                current_screen = recorder.record_screen(current_screen)
 
                 # ── 3b. Generate HID commands ────────────────────────────────
                 await emit(
@@ -676,7 +1401,7 @@ async def run_agentic_loop_v2(
                 )
                 try:
                     hid_result = await _plan_step_hid(
-                        current_screen, todo_list, step, user_task
+                        _remap_to_absolute_coords(current_screen), todo_list, step, user_task
                     )
                     hid_commands = hid_result.get("hid_commands", [])
                     reasoning = hid_result.get("reasoning", "")
@@ -728,7 +1453,19 @@ async def run_agentic_loop_v2(
                 )
 
                 # ── 3c. Execute HID commands ─────────────────────────────────
-                exec_result = await _execute_hid_commands(hid_commands)
+                candidate_result = await _execute_with_candidate_targets(
+                    current_screen, step, hid_commands, step_index, attempt
+                )
+                if candidate_result.get("abort"):
+                    return
+                if candidate_result.get("handled"):
+                    if candidate_result.get("step_success"):
+                        step_success = True
+                    if candidate_result.get("increment_attempt"):
+                        attempt += 1
+                    continue
+
+                exec_result = await _execute_hid_commands_v2(hid_commands)
                 if exec_result.get("status") == "failed":
                     await emit(
                         {
@@ -749,12 +1486,12 @@ async def run_agentic_loop_v2(
                     {"type": "log", "message": f"🔍 Validating step {step_index + 1}…"}
                 )
                 new_screen = await _capture_screen()
-                recorder.record_screen(new_screen)
+                new_screen = recorder.record_screen(new_screen)
 
                 # ── 3f. Evaluate result ──────────────────────────────────────
                 try:
                     evaluation = await _evaluate_step(
-                        new_screen, step, user_task, todo_list
+                        _remap_to_absolute_coords(new_screen), step, user_task, todo_list
                     )
                 except Exception as exc:
                     logger.error("Step evaluation error: %s", exc)
@@ -822,7 +1559,8 @@ async def run_agentic_loop_v2(
                     await emit(
                         {"type": "input_received", "step_index": step_index, "field": field}
                     )
-                    # Do NOT increment attempt — retry with the enriched context
+                    # Increment attempt so needs_input cannot loop indefinitely
+                    attempt += 1
 
                 elif status == "fatal_error":
                     step["status"] = "failed"
@@ -886,7 +1624,7 @@ async def run_agentic_loop_v2(
         # ── Phase 4: Final report ────────────────────────────────────────────
         await emit({"type": "log", "message": "📊 Generating final report…"})
         final_screen = await _capture_screen()
-        recorder.record_screen(final_screen)
+        final_screen = recorder.record_screen(final_screen)
         await emit({"type": "screen_captured", "phase": "final"})
 
         try:

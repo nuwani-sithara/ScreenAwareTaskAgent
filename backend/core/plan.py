@@ -5,6 +5,51 @@ import time
 
 LLM_BASE_URL = "http://localhost:8002"
 
+
+def _remap_coordinate_payload(payload):
+    if isinstance(payload, list):
+        return [_remap_coordinate_payload(item) for item in payload]
+    if not isinstance(payload, dict):
+        return payload
+
+    remapped = {}
+    for key, value in payload.items():
+        if key in ("elements", "current_elements", "resolved_elements") and isinstance(value, list):
+            remapped[key] = [_remap_element_coords(elem) for elem in value]
+        else:
+            remapped[key] = _remap_coordinate_payload(value)
+    return remapped
+
+
+def _remap_element_coords(elem):
+    if not isinstance(elem, dict):
+        return elem
+
+    new_elem = dict(elem)
+    frame_dx = new_elem.get("frame_dx")
+    frame_dy = new_elem.get("frame_dy")
+    if frame_dx is not None:
+        try:
+            new_elem["dx"] = int(round(float(frame_dx)))
+        except Exception:
+            pass
+    if frame_dy is not None:
+        try:
+            new_elem["dy"] = int(round(float(frame_dy)))
+        except Exception:
+            pass
+
+    bbox = new_elem.get("bbox")
+    if ("dx" not in new_elem or "dy" not in new_elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        try:
+            x1, y1, x2, y2 = (float(v) for v in bbox)
+            new_elem["dx"] = int(round((x1 + x2) * 0.5))
+            new_elem["dy"] = int(round((y1 + y2) * 0.5))
+        except Exception:
+            pass
+
+    return new_elem
+
 def plan(user_task: str, perception=None, model: str = "models/gemini-flash-latest"):
     """
     Generate HID action plan using LLM visual reasoning.
@@ -33,11 +78,22 @@ def plan(user_task: str, perception=None, model: str = "models/gemini-flash-late
 
     try:
         visual_data = perception.get("session_data", {})
+        knowledge_base = visual_data.get("knowledge_base") if isinstance(visual_data, dict) else None
+        latest_resolved_elements = []
+        if isinstance(knowledge_base, dict):
+            latest_resolved_elements = knowledge_base.get("resolved_elements") or []
+        if not latest_resolved_elements and isinstance(visual_data, dict):
+            screens = visual_data.get("screens", [])
+            if screens:
+                latest_screen = screens[-1] if isinstance(screens[-1], dict) else {}
+                latest_resolved_elements = latest_screen.get("elements", []) if isinstance(latest_screen, dict) else []
 
         payload = {
             "instruction": user_task,
             "visual_data": {
-                "session_data": visual_data
+                "session_data": _remap_coordinate_payload(visual_data),
+                "session_memory": knowledge_base,
+                "resolved_elements": _remap_coordinate_payload(latest_resolved_elements),
             },
             "use_gemini": True,
             "gemini_model": model,

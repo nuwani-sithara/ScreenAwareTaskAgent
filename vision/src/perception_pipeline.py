@@ -626,7 +626,3 @@ def main():
 
     print("ERROR: Provide either --image or --image-dir")
     sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()

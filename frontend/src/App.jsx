@@ -235,6 +235,16 @@ export default function App() {
         }));
         break;
 
+      case 'alternate_target':
+        setActiveRun(prev => ({
+          ...prev,
+          logs: [
+            ...(prev?.logs ?? []),
+            `🎯 Trying alternate target ${event.candidate_index}/${event.candidate_total}: ${event.label} at (${event.x}, ${event.y})`,
+          ],
+        }));
+        break;
+
       case 'step_done':
         setActiveRun(prev => ({
           ...prev,

@@ -56,6 +56,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
+from src.session_knowledge_base import SessionKnowledgeBase
+
 logger = logging.getLogger(__name__)
 
 
@@ -151,6 +153,7 @@ class SessionAggregator:
         self._screens:      List[ScreenRecord] = []
         self._seen_hashes:  set[str] = set()
         self._last_elements: List[Dict[str, Any]] = []
+        self._knowledge_base: Optional[SessionKnowledgeBase] = None
         self._active = False
 
     # ------------------------------------------------------------------
@@ -178,6 +181,7 @@ class SessionAggregator:
         self._screens.clear()
         self._seen_hashes.clear()
         self._last_elements = []
+        self._knowledge_base = SessionKnowledgeBase(session_id=self._session_id)
         self._active = True
         self.output_dir.mkdir(parents=True, exist_ok=True)
         logger.info("SessionAggregator started: session_id=%s", self._session_id)
@@ -223,7 +227,7 @@ class SessionAggregator:
         # pipeline_result["vision_data"] holds the enriched frame payload:
         #   {"image": "<preprocessed_path>", "element_count": N, "elements": [...]}
         vision_data: Dict[str, Any] = pipeline_result.get("vision_data", {})
-        elements: List[Dict[str, Any]] = vision_data.get("elements", [])
+        elements: List[Dict[str, Any]] = vision_data.get("current_elements") or vision_data.get("elements", [])
 
         # Prefer the preprocessed image path stored in vision_data so the
         # session summary points to the cleaner, normalised frame.
@@ -249,6 +253,14 @@ class SessionAggregator:
         )
         self._screens.append(record)
         self._last_elements = elements
+
+        if self._knowledge_base is not None and "session_knowledge_base" not in vision_data:
+            self._knowledge_base.update(
+                elements=elements,
+                frame_name=Path(image_path).name,
+                frame_index=record.screen_index,
+                image_size=vision_data.get("image_size"),
+            )
 
         logger.debug(
             "Frame appended: index=%d  elements=%d  hash=%s",
@@ -302,6 +314,11 @@ class SessionAggregator:
         return len(self._screens)
 
     @property
+    def knowledge_base(self) -> Optional[SessionKnowledgeBase]:
+        """Session-scoped memory of best-known elements."""
+        return self._knowledge_base
+
+    @property
     def is_active(self) -> bool:
         """``True`` if a session is in progress."""
         return self._active
@@ -318,6 +335,11 @@ class SessionAggregator:
             "finished_at":  self._finished_at,
             "screen_count": len(self._screens),
             "screens":      [s.to_dict() for s in self._screens],
+            "knowledge_base": (
+                self._knowledge_base.snapshot(current_elements=self._last_elements)
+                if self._knowledge_base
+                else None
+            ),
         }
 
     @staticmethod

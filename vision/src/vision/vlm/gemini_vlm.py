@@ -153,23 +153,23 @@ class GeminiVLM(BaseVLM):
             "Do not output markdown. Do not output explanations. "
             "Do not use double quotes inside label or description text. "
             "Keep descriptions short, factual, and free of line breaks. "
-            "The input image is already a crop of the visible screen. Detect every visible UI element inside that crop. "
-            "including buttons, inputs, links, tabs, menus, checkboxes, radios, dropdowns, toggles, "
-            "panes, taskbar items, toolbar controls, browser chrome, window chrome, sidebar entries, "
-            "headings, labels, icons, status bars, and meaningful text. "
+            "The input image is the CROPPED screen region -- its top-left pixel is coordinate (0, 0). "
+            "Detect every visible UI element inside this crop: buttons, inputs, links, tabs, menus, "
+            "checkboxes, radios, dropdowns, toggles, panes, taskbar items, toolbar controls, browser chrome, "
+            "window chrome, sidebar entries, headings, labels, icons, status bars, and meaningful text. "
             "Prefer high recall over minimalism. If the screen is complex, return many small elements. "
             "Do not collapse the whole screen into only a few detections. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
-            "All element coordinates must be relative to the crop/screen, not the full camera frame. "
-            "You may return bounding boxes either as absolute pixel coordinates (integers) or as normalized fractions in [0,1]. "
-            "If using normalized fractions, they are relative to the crop width/height. "
+            "CRITICAL: ALL dx, dy, bbox coordinates MUST be relative to the TOP-LEFT of THIS CROP (0, 0). "
+            "Do NOT use absolute camera-frame coordinates -- the crop already starts at (0, 0). "
+            "You may use absolute pixel integers OR normalized fractions in [0,1] relative to this crop. "
             "elements must be an array of objects with fields: "
             "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
-            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element, "
-            "using screen-local pixels, or a normalized [x_min, y_min, x_max, y_max] in [0,1]. "
+            "bbox must be [x_min, y_min, x_max, y_max] tightly around the element in crop-local coordinates. "
+            "Normalized fractions in [0,1] are relative to this crop width/height. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
@@ -1046,11 +1046,13 @@ class GeminiVLM(BaseVLM):
             origin_x=x1,
             origin_y=y1,
         )
+        # Refine bboxes against the region crop (local variable `crop`).
+        # Use x1/y1 as origin offsets into the full frame.
         normalized["elements"] = self._refine_elements_with_image(
             list(normalized.get("elements", [])),
-            screen_crop,
-            origin_x=screen_x1,
-            origin_y=screen_y1,
+            crop,
+            origin_x=x1,
+            origin_y=y1,
             frame_width=image_width,
             frame_height=image_height,
         )
