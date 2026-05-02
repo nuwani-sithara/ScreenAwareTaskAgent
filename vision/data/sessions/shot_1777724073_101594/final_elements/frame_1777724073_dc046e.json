@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777724073_101594\\processing\\proc_1777724073_3945f8\\preprocessed_frames\\frame_1777724073_dc046e.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    175,
+    203,
+    1798,
+    975
+  ],
+  "screen_size": {
+    "width": 1623,
+    "height": 772
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "screenpilot_logo",
+      "type": "icon",
+      "label": "ScreenPilot AI Logo",
+      "description": "Logo icon for ScreenPilot AI application",
+      "state": "visible",
+      "dx": 96,
+      "dy": 72,
+      "frame_dx": 271,
+      "frame_dy": 275,
+      "confidence": 1.0,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        243,
+        303,
+        307
+      ],
+      "session_memory_key": "icon:screenpilot ai logo",
+      "cached": false
+    },
+    {
+      "id": "screenpilot_title",
+      "type": "text",
+      "label": "ScreenPilot AI",
+      "description": "Application title text",
+      "state": "visible",
+      "dx": 216,
+      "dy": 84,
+      "frame_dx": 391,
+      "frame_dy": 287,
+      "confidence": 1.0,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        271,
+        259,
+        511,
+        315
+      ],
+      "session_memory_key": "text:screenpilot ai",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "screenpilot_logo",
+      "type": "icon",
+      "label": "ScreenPilot AI Logo",
+      "description": "Logo icon for ScreenPilot AI application",
+      "state": "visible",
+      "dx": 96,
+      "dy": 72,
+      "frame_dx": 271,
+      "frame_dy": 275,
+      "confidence": 1.0,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        243,
+        303,
+        307
+      ],
+      "session_memory_key": "icon:screenpilot ai logo",
+      "cached": false
+    },
+    {
+      "id": "screenpilot_title",
+      "type": "text",
+      "label": "ScreenPilot AI",
+      "description": "Application title text",
+      "state": "visible",
+      "dx": 216,
+      "dy": 84,
+      "frame_dx": 391,
+      "frame_dy": 287,
+      "confidence": 1.0,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        271,
+        259,
+        511,
+        315
+      ],
+      "session_memory_key": "text:screenpilot ai",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "screenpilot_logo",
+      "type": "icon",
+      "label": "ScreenPilot AI Logo",
+      "description": "Logo icon for ScreenPilot AI application",
+      "state": "visible",
+      "dx": 96,
+      "dy": 72,
+      "frame_dx": 271,
+      "frame_dy": 275,
+      "confidence": 1.0,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        243,
+        303,
+        307
+      ],
+      "session_memory_key": "icon:screenpilot ai logo",
+      "cached": false
+    },
+    {
+      "id": "screenpilot_title",
+      "type": "text",
+      "label": "ScreenPilot AI",
+      "description": "Application title text",
+      "state": "visible",
+      "dx": 216,
+      "dy": 84,
+      "frame_dx": 391,
+      "frame_dy": 287,
+      "confidence": 1.0,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        271,
+        259,
+        511,
+        315
+      ],
+      "session_memory_key": "text:screenpilot ai",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777724073_101594",
+    "started_at": "2026-05-02T12:14:33.606048+00:00",
+    "updated_at": "2026-05-02T12:15:11.198029+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777724073_dc046e.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "icon:screenpilot ai logo": {
+        "element_key": "icon:screenpilot ai logo",
+        "element_type": "icon",
+        "label": "ScreenPilot AI Logo",
+        "bbox": [
+          239.0,
+          243.0,
+          303.0,
+          307.0
+        ],
+        "confidence": 1.0,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724073_dc046e.jpg",
+        "last_seen_frame": "frame_1777724073_dc046e.jpg",
+        "first_seen_at": "2026-05-02T12:15:11.198029+00:00",
+        "last_seen_at": "2026-05-02T12:15:11.198029+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724073_dc046e.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:15:11.198029+00:00",
+            "confidence": 1.0
+          }
+        ]
+      },
+      "text:screenpilot ai": {
+        "element_key": "text:screenpilot ai",
+        "element_type": "text",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          271.0,
+          259.0,
+          511.0,
+          315.0
+        ],
+        "confidence": 1.0,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724073_dc046e.jpg",
+        "last_seen_frame": "frame_1777724073_dc046e.jpg",
+        "first_seen_at": "2026-05-02T12:15:11.198029+00:00",
+        "last_seen_at": "2026-05-02T12:15:11.198029+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724073_dc046e.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:15:11.198029+00:00",
+            "confidence": 1.0
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "screenpilot_logo",
+        "type": "icon",
+        "label": "ScreenPilot AI Logo",
+        "description": "Logo icon for ScreenPilot AI application",
+        "state": "visible",
+        "dx": 96,
+        "dy": 72,
+        "frame_dx": 271,
+        "frame_dy": 275,
+        "confidence": 1.0,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          239,
+          243,
+          303,
+          307
+        ],
+        "session_memory_key": "icon:screenpilot ai logo",
+        "cached": false
+      },
+      {
+        "id": "screenpilot_title",
+        "type": "text",
+        "label": "ScreenPilot AI",
+        "description": "Application title text",
+        "state": "visible",
+        "dx": 216,
+        "dy": 84,
+        "frame_dx": 391,
+        "frame_dy": 287,
+        "confidence": 1.0,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          271,
+          259,
+          511,
+          315
+        ],
+        "session_memory_key": "text:screenpilot ai",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "screenpilot_logo",
+        "type": "icon",
+        "label": "ScreenPilot AI Logo",
+        "description": "Logo icon for ScreenPilot AI application",
+        "state": "visible",
+        "dx": 96,
+        "dy": 72,
+        "frame_dx": 271,
+        "frame_dy": 275,
+        "confidence": 1.0,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          239,
+          243,
+          303,
+          307
+        ],
+        "session_memory_key": "icon:screenpilot ai logo",
+        "cached": false
+      },
+      {
+        "id": "screenpilot_title",
+        "type": "text",
+        "label": "ScreenPilot AI",
+        "description": "Application title text",
+        "state": "visible",
+        "dx": 216,
+        "dy": 84,
+        "frame_dx": 391,
+        "frame_dy": 287,
+        "confidence": 1.0,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          271,
+          259,
+          511,
+          315
+        ],
+        "session_memory_key": "text:screenpilot ai",
+        "cached": false
+      }
+    ]
+  }
+}

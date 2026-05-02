@@ -414,67 +414,6 @@ LLM_BASE_URL = "http://localhost:8002"
 HID_API_URL = "http://localhost:3015/hid/command"
 
 
-def _remap_to_absolute_coords(screen_data: dict) -> dict:
-    """
-    Remap each element's dx/dy to use absolute webcam-frame coordinates
-    (frame_dx / frame_dy) instead of screen-relative coordinates.
-
-    The vision pipeline produces both:
-      dx/dy       -- screen-relative (offset from cropped screen top-left)
-      frame_dx/dy -- absolute (offset from full webcam frame top-left)
-
-    The LLM uses dx/dy values to generate HID mouse_move commands, so we must
-    replace dx/dy with frame_dx/dy before sending vision data to the LLM so
-    that generated coordinates are correct for the physical HID device.
-    """
-    return _remap_coordinate_payload(screen_data)
-
-
-def _remap_coordinate_payload(payload: Any) -> Any:
-    if isinstance(payload, list):
-        return [_remap_coordinate_payload(item) for item in payload]
-    if not isinstance(payload, dict):
-        return payload
-
-    remapped: Dict[str, Any] = {}
-    for key, value in payload.items():
-        if key in ("elements", "current_elements", "resolved_elements") and isinstance(value, list):
-            remapped[key] = [_remap_element_coords(elem) for elem in value]
-        else:
-            remapped[key] = _remap_coordinate_payload(value)
-    return remapped
-
-
-def _remap_element_coords(elem: Any) -> Any:
-    if not isinstance(elem, dict):
-        return elem
-
-    new_elem = dict(elem)
-    frame_dx = new_elem.get("frame_dx")
-    frame_dy = new_elem.get("frame_dy")
-    if frame_dx is not None:
-        try:
-            new_elem["dx"] = int(round(float(frame_dx)))
-        except Exception:
-            pass
-    if frame_dy is not None:
-        try:
-            new_elem["dy"] = int(round(float(frame_dy)))
-        except Exception:
-            pass
-
-    bbox = new_elem.get("bbox")
-    if ("dx" not in new_elem or "dy" not in new_elem) and isinstance(bbox, (list, tuple)) and len(bbox) == 4:
-        try:
-            x1, y1, x2, y2 = (float(v) for v in bbox)
-            new_elem["dx"] = int(round((x1 + x2) * 0.5))
-            new_elem["dy"] = int(round((y1 + y2) * 0.5))
-        except Exception:
-            pass
-
-    return new_elem
-
-
 def _get_cursor_position() -> tuple[int, int]:
     """Best-effort current cursor position on Windows."""
     try:
@@ -594,17 +533,30 @@ async def _evaluate_step(
     todo_list: List[dict],
 ) -> dict:
     async with httpx.AsyncClient(timeout=120.0) as client:
-        resp = await client.post(
-            f"{LLM_BASE_URL}/llm/evaluate_step",
-            json={
-                "instruction": user_task,
-                "visual_data": new_screen,
-                "step": step,
-                "todo_list": todo_list,
-            },
-        )
-        resp.raise_for_status()
-        return resp.json()
+        last_eval = None
+        for attempt in range(3):
+            resp = await client.post(
+                f"{LLM_BASE_URL}/llm/evaluate_step",
+                json={
+                    "instruction": user_task,
+                    "visual_data": new_screen,
+                    "step": step,
+                    "todo_list": todo_list,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            last_eval = data
+            
+            # If evaluation succeeded without a fatal parsing error, return immediately
+            reason = str(data.get("reason", "")).lower()
+            if "no valid json found" not in reason and "evaluation error" not in reason:
+                return data
+                
+            # Otherwise, wait briefly and retry the evaluation call
+            await asyncio.sleep(2)
+            
+        return last_eval
 
 
 async def _generate_final_report(
@@ -768,25 +720,77 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
             except Exception as exc:
                 logger.error("HID command %d failed: %s", idx + 1, exc)
                 return {"status": "failed", "error": str(exc), "failed_at": idx}
+            prev_cmd_type = cmd_type
             await asyncio.sleep(0.2)
 
     return {"status": "success", "total": len(commands)}
 
 
-async def _execute_hid_commands_v2(commands: List[dict]) -> dict:
+async def _execute_hid_commands_v2(commands: List[dict], screen_data: Optional[dict] = None) -> dict:
     """
     Corrected HID executor that uses the real cursor position as the anchor
     and does not force the pointer to the top-left corner.
     """
+    offset_x, offset_y = 0, 0
+    if screen_data and "screen_bbox" in screen_data:
+        bbox = screen_data["screen_bbox"]
+        if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+            offset_x = int(bbox[0])
+            offset_y = int(bbox[1])
+
     async with httpx.AsyncClient(timeout=30.0) as client:
         cursor_x, cursor_y = _get_cursor_position()
+
+        # Pre-execution: window focus at the first movement target
+        first_move = next((c for c in commands if c.get("cmd") == "mouse_move"), None)
+        if first_move:
+            try:
+                import ctypes
+                from ctypes import wintypes
+                user32 = ctypes.windll.user32
+                class POINT(ctypes.Structure):
+                    _fields_ = [("x", ctypes.c_long), ("y", ctypes.c_long)]
+                user32.WindowFromPoint.argtypes = [POINT]
+                user32.WindowFromPoint.restype = wintypes.HWND
+                user32.GetAncestor.argtypes = [wintypes.HWND, ctypes.c_uint]
+                user32.GetAncestor.restype = wintypes.HWND
+                user32.SetForegroundWindow.argtypes = [wintypes.HWND]
+
+                pt = POINT(int(first_move.get("dx", 0)) + offset_x, int(first_move.get("dy", 0)) + offset_y)
+                hwnd = user32.WindowFromPoint(pt)
+                if hwnd:
+                    root_hwnd = user32.GetAncestor(hwnd, 2) # GA_ROOT
+                    if root_hwnd:
+                        user32.SetForegroundWindow(root_hwnd)
+            except Exception as e:
+                logger.warning("Focus window failed: %s", e)
+
+        has_clicked = False
+        prev_cmd_type = None
 
         for idx, cmd in enumerate(commands):
             cmd_type = cmd.get("cmd")
 
+            # Auto prepend a click before typing if not already clicked
+            if cmd_type == "type_text":
+                if not has_clicked:
+                    try:
+                        await client.post(HID_API_URL, json={"type": "mouse_click", "payload": {"button": "left"}})
+                        await asyncio.sleep(0.25)
+                    except Exception:
+                        pass
+                else:
+                    await asyncio.sleep(0.25)
+
+            # Settle delay before clicking if we just moved
+            if cmd_type in ("mouse_click", "mouse_double_click"):
+                has_clicked = True
+                if prev_cmd_type == "mouse_move":
+                    await asyncio.sleep(0.15)
+
             if cmd_type == "mouse_move":
-                target_x = int(cmd.get("dx", 0))
-                target_y = int(cmd.get("dy", 0))
+                target_x = int(cmd.get("dx", 0)) + offset_x
+                target_y = int(cmd.get("dy", 0)) + offset_y
 
                 max_step = 80
                 rel_dx = target_x - cursor_x
@@ -828,6 +832,7 @@ async def _execute_hid_commands_v2(commands: List[dict]) -> dict:
                     cursor_x += int(p["payload"].get("dx", 0))
                     cursor_y += int(p["payload"].get("dy", 0))
                     await asyncio.sleep(0.04)
+                prev_cmd_type = cmd_type
                 continue
 
             payload = {
@@ -846,6 +851,7 @@ async def _execute_hid_commands_v2(commands: List[dict]) -> dict:
             except Exception as exc:
                 logger.error("HID command %d failed: %s", idx + 1, exc)
                 return {"status": "failed", "error": str(exc), "failed_at": idx}
+            prev_cmd_type = cmd_type
             await asyncio.sleep(0.2)
 
     return {"status": "success", "total": len(commands)}
@@ -1051,7 +1057,7 @@ async def run_agentic_loop_v2(
 
     recorder = AgentRunRecorder(user_task, run_id)
 
-    async def _attempt_coordinate_fix_and_recheck(evaluation: dict, step: dict) -> dict:
+    async def _attempt_coordinate_fix_and_recheck(evaluation: dict, step: dict, screen_data: Optional[dict] = None) -> dict:
         """If evaluation suggests coordinate updates, parse and try a direct click once.
 
         Returns the new evaluation dict after performing the click and re-evaluating,
@@ -1085,7 +1091,7 @@ async def run_agentic_loop_v2(
                 ]
 
                 step["_coord_fix_tried"] = True
-                exec_result = await _execute_hid_commands_v2(click_cmds)
+                exec_result = await _execute_hid_commands_v2(click_cmds, screen_data)
                 if exec_result.get("status") == "failed":
                     logger.warning("Coordinate-fix click failed: %s", exec_result.get("error"))
                     return evaluation
@@ -1162,7 +1168,7 @@ async def run_agentic_loop_v2(
             candidate_hid_commands = _inject_click_target(
                 hid_commands, candidate["x"], candidate["y"]
             )
-            exec_result = await _execute_hid_commands_v2(candidate_hid_commands)
+            exec_result = await _execute_hid_commands_v2(candidate_hid_commands, current_screen)
             if exec_result.get("status") == "failed":
                 if candidate_index < len(candidate_targets) - 1:
                     logger.info(
@@ -1191,7 +1197,7 @@ async def run_agentic_loop_v2(
 
             try:
                 evaluation = await _evaluate_step(
-                    _remap_to_absolute_coords(new_screen), step, user_task, todo_list
+                    new_screen, step, user_task, todo_list
                 )
             except Exception as exc:
                 logger.error("Step evaluation error: %s", exc)
@@ -1247,8 +1253,12 @@ async def run_agentic_loop_v2(
                     return {"handled": True, "abort": True}
 
                 user_input = input_data_store.get("value", "")
+                if not user_input.strip():
+                    await emit({"type": "error", "message": "Input validation failed: received empty input."})
+                    return {"handled": True, "abort": True}
+
                 step["user_input"] = user_input
-                user_task = f"{user_task}\n[User provided '{field}']: {user_input}"
+                user_task = f"{user_task}\n[User provided '{field}']: <SECURE_INPUT_PROVIDED>"
                 step["status"] = "executing"
 
                 await emit({"type": "input_received", "step_index": step_index, "field": field})
@@ -1287,7 +1297,7 @@ async def run_agentic_loop_v2(
             )
 
             try:
-                new_eval = await _attempt_coordinate_fix_and_recheck(evaluation, step)
+                new_eval = await _attempt_coordinate_fix_and_recheck(evaluation, step, current_screen)
                 if new_eval is not None and new_eval.get("status") != evaluation.get("status"):
                     evaluation = new_eval
                     status = evaluation.get("status", "retry")
@@ -1328,7 +1338,7 @@ async def run_agentic_loop_v2(
         # ── Phase 2: Generate todo list ──────────────────────────────────────
         await emit({"type": "log", "message": "🧠 Planning steps for your task…"})
         try:
-            todo_result = await _plan_todo_list(_remap_to_absolute_coords(initial_screen), user_task)
+            todo_result = await _plan_todo_list(initial_screen, user_task)
         except Exception as exc:
             await emit({"type": "error", "message": f"Planning failed: {exc}"})
             return
@@ -1401,7 +1411,7 @@ async def run_agentic_loop_v2(
                 )
                 try:
                     hid_result = await _plan_step_hid(
-                        _remap_to_absolute_coords(current_screen), todo_list, step, user_task
+                        current_screen, todo_list, step, user_task
                     )
                     hid_commands = hid_result.get("hid_commands", [])
                     reasoning = hid_result.get("reasoning", "")
@@ -1417,6 +1427,12 @@ async def run_agentic_loop_v2(
                             reasoning += " | Converted action_steps -> hid_commands locally"
                         except Exception as exc:
                             logger.warning("Local conversion of action_steps failed: %s", exc)
+
+                    # Securely inject user input if this step required it
+                    if step.get("user_input") and hid_commands:
+                        for cmd in hid_commands:
+                            if cmd.get("cmd") == "type_text" and cmd.get("text") == "<SECURE_INPUT_PROVIDED>":
+                                cmd["text"] = step["user_input"]
 
                     recorder.record_step_plan(step, hid_commands, reasoning)
                 except Exception as exc:
@@ -1465,7 +1481,7 @@ async def run_agentic_loop_v2(
                         attempt += 1
                     continue
 
-                exec_result = await _execute_hid_commands_v2(hid_commands)
+                exec_result = await _execute_hid_commands_v2(hid_commands, current_screen)
                 if exec_result.get("status") == "failed":
                     await emit(
                         {
@@ -1491,7 +1507,7 @@ async def run_agentic_loop_v2(
                 # ── 3f. Evaluate result ──────────────────────────────────────
                 try:
                     evaluation = await _evaluate_step(
-                        _remap_to_absolute_coords(new_screen), step, user_task, todo_list
+                        new_screen, step, user_task, todo_list
                     )
                 except Exception as exc:
                     logger.error("Step evaluation error: %s", exc)
@@ -1551,9 +1567,13 @@ async def run_agentic_loop_v2(
                         return
 
                     user_input = input_data_store.get("value", "")
+                    if not user_input.strip():
+                        await emit({"type": "error", "message": "Input validation failed: received empty input."})
+                        return
+
                     step["user_input"] = user_input
-                    # Enrich the task context so subsequent LLM calls are aware
-                    user_task = f"{user_task}\n[User provided '{field}']: {user_input}"
+                    # Enrich the task context securely so subsequent LLM calls are aware
+                    user_task = f"{user_task}\n[User provided '{field}']: <SECURE_INPUT_PROVIDED>"
                     step["status"] = "executing"
 
                     await emit(

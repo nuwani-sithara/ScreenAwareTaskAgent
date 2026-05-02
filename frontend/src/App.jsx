@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './Chat.module.css';
 import {
   Send, Cpu, Terminal, Zap, MessageSquare,
-  CheckCircle, XCircle, Circle, AlertCircle, Loader, ChevronDown, ChevronUp
+  CheckCircle, XCircle, Circle, AlertCircle, Loader, ChevronDown, ChevronUp, X
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -188,8 +188,40 @@ export default function App() {
   const [input,     setInput]     = useState('');
   const [thinking,  setThinking]  = useState(false);
   const [activeRun, setActiveRun] = useState(null);  // live run state
+  const [toasts, setToasts] = useState([]);
 
   const chatAreaRef  = useRef(null);
+  const addToastRef = useRef();
+  const showSystemNotificationRef = useRef();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    addToastRef.current = (type, message) => {
+      const id = Date.now() + Math.random();
+      setToasts(prev => [...prev, { id, type, message }]);
+      if (type !== 'error' && type !== 'input_needed') {
+        setTimeout(() => {
+          setToasts(prev => prev.filter(t => t.id !== id));
+        }, 8000);
+      }
+    };
+    showSystemNotificationRef.current = (title, options = {}) => {
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, { ...options });
+      }
+    };
+  }, []);
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
 
   // Auto-scroll to bottom on any content change
   useEffect(() => {
@@ -298,6 +330,8 @@ export default function App() {
           },
           logs: [...(prev?.logs ?? []), `❓ Input needed: ${event.question}`],
         }));
+        if (addToastRef.current) addToastRef.current('input_needed', event.question);
+        if (showSystemNotificationRef.current) showSystemNotificationRef.current('ScreenPilot needs your input', { body: event.question });
         break;
 
       case 'input_received':
@@ -336,6 +370,15 @@ export default function App() {
           inputRequest: null,
           logs: [...(prev?.logs ?? []), '📊 Final report ready'],
         }));
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'agent',
+            text: event.report ?? 'Task complete.',
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          }
+        ]);
+        if (showSystemNotificationRef.current) showSystemNotificationRef.current('Task Complete', { body: event.summary || 'Task finished.' });
         break;
 
       case 'done':
@@ -352,6 +395,8 @@ export default function App() {
           logs: [...(prev?.logs ?? []), `❌ Error: ${event.message}`],
         }));
         setThinking(false);
+        if (addToastRef.current) addToastRef.current('error', event.message);
+        if (showSystemNotificationRef.current) showSystemNotificationRef.current('Task Error', { body: event.message });
         break;
 
       default:
@@ -466,7 +511,11 @@ export default function App() {
       <header className={styles.header}>
         <div className={styles.iconWrapper}>
           <Cpu className={styles.icon} size={28} />
-          <div className={styles.pulseRing} />
+          {activeRun?.inputRequest ? (
+            <div className={styles.notificationBadge} title="Input Needed" />
+          ) : (
+            <div className={styles.pulseRing} />
+          )}
         </div>
         <h1>ScreenPilot AI</h1>
         <span className={styles.subtext}>Autonomous Task Agent v2</span>
@@ -540,9 +589,23 @@ export default function App() {
             )}
 
             {/* Fatal / connection error */}
-            {activeRun.error && (
+            {activeRun.error && activeRun.todoSteps?.length > 0 && (
               <div className={styles.errorPanel}>
                 ❌ {activeRun.error}
+              </div>
+            )}
+            
+            {/* Clarification panel */}
+            {activeRun.error && (!activeRun.todoSteps || activeRun.todoSteps.length === 0) && (
+              <div className={styles.clarificationPanel}>
+                <div className={styles.clarificationHeader}>
+                  <AlertCircle size={20} />
+                  Needs Clarification
+                </div>
+                <p className={styles.clarificationText}>
+                  I couldn't understand how to plan this task or couldn't find the necessary elements on screen. 
+                  Could you please rephrase or clarify what you want me to do?
+                </p>
               </div>
             )}
           </div>
@@ -572,6 +635,21 @@ export default function App() {
         <button onClick={sendMessage} disabled={thinking || !input.trim()}>
           <Send size={20} color="#0a192f" />
         </button>
+      </div>
+
+      {/* ─── Toasts ─── */}
+      <div className={styles.toastContainer}>
+        {toasts.map(toast => (
+          <div key={toast.id} className={`${styles.toast} ${styles[toast.type === 'input_needed' ? 'inputNeeded' : toast.type] || ''}`}>
+            {toast.type === 'error' && <XCircle size={20} color="#ff5555" />}
+            {(toast.type === 'warning' || toast.type === 'input_needed') && <AlertCircle size={20} color="#ffbe40" />}
+            {toast.type === 'info' && <CheckCircle size={20} color="#64ffda" />}
+            <div className={styles.toastContent}>{toast.message}</div>
+            <button className={styles.toastClose} onClick={() => removeToast(toast.id)}>
+              <X size={16} />
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

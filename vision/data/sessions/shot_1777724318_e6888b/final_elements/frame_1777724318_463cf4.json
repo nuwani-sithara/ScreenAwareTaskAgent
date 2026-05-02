@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777724318_e6888b\\processing\\proc_1777724318_69fb0b\\preprocessed_frames\\frame_1777724318_463cf4.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    977,
+    128,
+    1806,
+    1020
+  ],
+  "screen_size": {
+    "width": 829,
+    "height": 892
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "0",
+      "type": "icon",
+      "label": "File Explorer",
+      "description": "File Explorer icon on the taskbar",
+      "state": "normal",
+      "dx": 32,
+      "dy": 856,
+      "frame_dx": 1009,
+      "frame_dy": 984,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        985,
+        960,
+        1033,
+        1008
+      ],
+      "session_memory_key": "icon:file explorer",
+      "cached": false
+    },
+    {
+      "id": "1",
+      "type": "icon",
+      "label": "App Icon",
+      "description": "White application icon on the taskbar",
+      "state": "normal",
+      "dx": 84,
+      "dy": 856,
+      "frame_dx": 1061,
+      "frame_dy": 984,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1033,
+        960,
+        1089,
+        1008
+      ],
+      "session_memory_key": "icon:app icon",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "0",
+      "type": "icon",
+      "label": "File Explorer",
+      "description": "File Explorer icon on the taskbar",
+      "state": "normal",
+      "dx": 32,
+      "dy": 856,
+      "frame_dx": 1009,
+      "frame_dy": 984,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        985,
+        960,
+        1033,
+        1008
+      ],
+      "session_memory_key": "icon:file explorer",
+      "cached": false
+    },
+    {
+      "id": "1",
+      "type": "icon",
+      "label": "App Icon",
+      "description": "White application icon on the taskbar",
+      "state": "normal",
+      "dx": 84,
+      "dy": 856,
+      "frame_dx": 1061,
+      "frame_dy": 984,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1033,
+        960,
+        1089,
+        1008
+      ],
+      "session_memory_key": "icon:app icon",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "0",
+      "type": "icon",
+      "label": "File Explorer",
+      "description": "File Explorer icon on the taskbar",
+      "state": "normal",
+      "dx": 32,
+      "dy": 856,
+      "frame_dx": 1009,
+      "frame_dy": 984,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        985,
+        960,
+        1033,
+        1008
+      ],
+      "session_memory_key": "icon:file explorer",
+      "cached": false
+    },
+    {
+      "id": "1",
+      "type": "icon",
+      "label": "App Icon",
+      "description": "White application icon on the taskbar",
+      "state": "normal",
+      "dx": 84,
+      "dy": 856,
+      "frame_dx": 1061,
+      "frame_dy": 984,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1033,
+        960,
+        1089,
+        1008
+      ],
+      "session_memory_key": "icon:app icon",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777724318_e6888b",
+    "started_at": "2026-05-02T12:18:38.883386+00:00",
+    "updated_at": "2026-05-02T12:19:11.418597+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777724318_463cf4.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "icon:file explorer": {
+        "element_key": "icon:file explorer",
+        "element_type": "icon",
+        "label": "File Explorer",
+        "bbox": [
+          985.0,
+          960.0,
+          1033.0,
+          1008.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724318_463cf4.jpg",
+        "last_seen_frame": "frame_1777724318_463cf4.jpg",
+        "first_seen_at": "2026-05-02T12:19:11.418597+00:00",
+        "last_seen_at": "2026-05-02T12:19:11.418597+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724318_463cf4.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:19:11.418597+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "icon:app icon": {
+        "element_key": "icon:app icon",
+        "element_type": "icon",
+        "label": "App Icon",
+        "bbox": [
+          1033.0,
+          960.0,
+          1089.0,
+          1008.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724318_463cf4.jpg",
+        "last_seen_frame": "frame_1777724318_463cf4.jpg",
+        "first_seen_at": "2026-05-02T12:19:11.418597+00:00",
+        "last_seen_at": "2026-05-02T12:19:11.418597+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724318_463cf4.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:19:11.418597+00:00",
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "0",
+        "type": "icon",
+        "label": "File Explorer",
+        "description": "File Explorer icon on the taskbar",
+        "state": "normal",
+        "dx": 32,
+        "dy": 856,
+        "frame_dx": 1009,
+        "frame_dy": 984,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          985,
+          960,
+          1033,
+          1008
+        ],
+        "session_memory_key": "icon:file explorer",
+        "cached": false
+      },
+      {
+        "id": "1",
+        "type": "icon",
+        "label": "App Icon",
+        "description": "White application icon on the taskbar",
+        "state": "normal",
+        "dx": 84,
+        "dy": 856,
+        "frame_dx": 1061,
+        "frame_dy": 984,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1033,
+          960,
+          1089,
+          1008
+        ],
+        "session_memory_key": "icon:app icon",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "0",
+        "type": "icon",
+        "label": "File Explorer",
+        "description": "File Explorer icon on the taskbar",
+        "state": "normal",
+        "dx": 32,
+        "dy": 856,
+        "frame_dx": 1009,
+        "frame_dy": 984,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          985,
+          960,
+          1033,
+          1008
+        ],
+        "session_memory_key": "icon:file explorer",
+        "cached": false
+      },
+      {
+        "id": "1",
+        "type": "icon",
+        "label": "App Icon",
+        "description": "White application icon on the taskbar",
+        "state": "normal",
+        "dx": 84,
+        "dy": 856,
+        "frame_dx": 1061,
+        "frame_dy": 984,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1033,
+          960,
+          1089,
+          1008
+        ],
+        "session_memory_key": "icon:app icon",
+        "cached": false
+      }
+    ]
+  }
+}

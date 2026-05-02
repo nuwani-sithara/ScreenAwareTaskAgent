@@ -16,7 +16,7 @@ venv/
 *.db
 *.zip
 *.tar.gz
-agent_outputs/
+
 
 # =====================================
 # 🐍 Python

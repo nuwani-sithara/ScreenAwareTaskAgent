@@ -1,0 +1,3038 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777723751_b6faad\\processing\\proc_1777723751_432077\\preprocessed_frames\\frame_1777723751_de2eff.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    174,
+    128,
+    1814,
+    1024
+  ],
+  "screen_size": {
+    "width": 1640,
+    "height": 896
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "tab_frontend",
+      "type": "tab",
+      "label": "frontend",
+      "description": "Browser tab labeled frontend",
+      "state": "inactive",
+      "dx": 148,
+      "dy": 32,
+      "frame_dx": 322,
+      "frame_dy": 160,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        198,
+        128,
+        446,
+        192
+      ],
+      "session_memory_key": "tab:frontend",
+      "cached": false
+    },
+    {
+      "id": "tab_courseweb",
+      "type": "tab",
+      "label": "Log in to the site | CourseWeb",
+      "description": "Active browser tab for CourseWeb login",
+      "state": "active",
+      "dx": 356,
+      "dy": 32,
+      "frame_dx": 530,
+      "frame_dy": 160,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        390,
+        128,
+        670,
+        192
+      ],
+      "session_memory_key": "tab:log in to the site | courseweb",
+      "cached": false
+    },
+    {
+      "id": "btn_back",
+      "type": "button",
+      "label": "Back",
+      "description": "Browser back button",
+      "state": "enabled",
+      "dx": 64,
+      "dy": 92,
+      "frame_dx": 238,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        214,
+        192,
+        262,
+        248
+      ],
+      "session_memory_key": "button:back",
+      "cached": false
+    },
+    {
+      "id": "btn_forward",
+      "type": "button",
+      "label": "Forward",
+      "description": "Browser forward button",
+      "state": "disabled",
+      "dx": 104,
+      "dy": 92,
+      "frame_dx": 278,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        254,
+        192,
+        302,
+        248
+      ],
+      "session_memory_key": "button:forward",
+      "cached": false
+    },
+    {
+      "id": "btn_refresh",
+      "type": "button",
+      "label": "Refresh",
+      "description": "Browser refresh button",
+      "state": "enabled",
+      "dx": 144,
+      "dy": 92,
+      "frame_dx": 318,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        294,
+        192,
+        342,
+        248
+      ],
+      "session_memory_key": "button:refresh",
+      "cached": false
+    },
+    {
+      "id": "address_bar",
+      "type": "input",
+      "label": "Address Bar",
+      "description": "Browser address bar showing localhost:5173",
+      "state": "enabled",
+      "dx": 588,
+      "dy": 92,
+      "frame_dx": 762,
+      "frame_dy": 220,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        214,
+        192,
+        1310,
+        248
+      ],
+      "session_memory_key": "input:address bar",
+      "cached": false
+    },
+    {
+      "id": "btn_ask_gemini",
+      "type": "button",
+      "label": "Ask Gemini",
+      "description": "Ask Gemini button in browser toolbar",
+      "state": "enabled",
+      "dx": 1072,
+      "dy": 60,
+      "frame_dx": 1246,
+      "frame_dy": 188,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1190,
+        176,
+        1302,
+        200
+      ],
+      "session_memory_key": "button:ask gemini",
+      "cached": false
+    },
+    {
+      "id": "app_title",
+      "type": "heading",
+      "label": "ScreenPilot AI",
+      "description": "Main application title",
+      "state": "visible",
+      "dx": 196,
+      "dy": 168,
+      "frame_dx": 370,
+      "frame_dy": 296,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        310,
+        280,
+        430,
+        312
+      ],
+      "session_memory_key": "heading:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "app_badge",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "Application version badge",
+      "state": "visible",
+      "dx": 328,
+      "dy": 188,
+      "frame_dx": 502,
+      "frame_dy": 316,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        430,
+        296,
+        574,
+        336
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    },
+    {
+      "id": "task_plan_heading",
+      "type": "heading",
+      "label": "Task Plan",
+      "description": "Heading for the task plan section",
+      "state": "visible",
+      "dx": 124,
+      "dy": 332,
+      "frame_dx": 298,
+      "frame_dy": 460,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        246,
+        440,
+        350,
+        480
+      ],
+      "session_memory_key": "heading:task plan",
+      "cached": false
+    },
+    {
+      "id": "task_plan_status",
+      "type": "label",
+      "label": "0/2 done",
+      "description": "Task completion status badge",
+      "state": "visible",
+      "dx": 628,
+      "dy": 336,
+      "frame_dx": 802,
+      "frame_dy": 464,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        774,
+        448,
+        830,
+        480
+      ],
+      "session_memory_key": "label:0/2 done",
+      "cached": false
+    },
+    {
+      "id": "step_1",
+      "type": "list_item",
+      "label": "Step 1",
+      "description": "First step of the task plan",
+      "state": "in_progress",
+      "dx": 372,
+      "dy": 416,
+      "frame_dx": 546,
+      "frame_dy": 544,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        520,
+        918,
+        568
+      ],
+      "session_memory_key": "list_item:step 1",
+      "cached": false
+    },
+    {
+      "id": "step_2",
+      "type": "list_item",
+      "label": "Step 2",
+      "description": "Second step of the task plan",
+      "state": "pending",
+      "dx": 372,
+      "dy": 464,
+      "frame_dx": 546,
+      "frame_dy": 592,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        552,
+        918,
+        632
+      ],
+      "session_memory_key": "list_item:step 2",
+      "cached": false
+    },
+    {
+      "id": "log_area",
+      "type": "pane",
+      "label": "Action Log",
+      "description": "Area displaying the agent's action history",
+      "state": "visible",
+      "dx": 372,
+      "dy": 596,
+      "frame_dx": 546,
+      "frame_dy": 724,
+      "confidence": 0.85,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        616,
+        918,
+        832
+      ],
+      "session_memory_key": "pane:action log",
+      "cached": false
+    },
+    {
+      "id": "input_agent",
+      "type": "input",
+      "label": "Agent is working...",
+      "description": "Text input field for the agent",
+      "state": "disabled",
+      "dx": 696,
+      "dy": 776,
+      "frame_dx": 870,
+      "frame_dy": 904,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        864,
+        1566,
+        944
+      ],
+      "session_memory_key": "input:agent is working...",
+      "cached": false
+    },
+    {
+      "id": "btn_send",
+      "type": "button",
+      "label": "Send",
+      "description": "Send button for agent input",
+      "state": "enabled",
+      "dx": 1196,
+      "dy": 780,
+      "frame_dx": 1370,
+      "frame_dy": 908,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1334,
+        872,
+        1406,
+        944
+      ],
+      "session_memory_key": "button:send",
+      "cached": false
+    },
+    {
+      "id": "taskbar",
+      "type": "toolbar",
+      "label": "Windows Taskbar",
+      "description": "The Windows taskbar at the bottom of the screen",
+      "state": "visible",
+      "dx": 820,
+      "dy": 860,
+      "frame_dx": 994,
+      "frame_dy": 988,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        952,
+        1814,
+        1024
+      ],
+      "session_memory_key": "toolbar:windows taskbar",
+      "cached": false
+    },
+    {
+      "id": "taskbar_start",
+      "type": "button",
+      "label": "Start",
+      "description": "Windows Start button",
+      "state": "enabled",
+      "dx": 364,
+      "dy": 864,
+      "frame_dx": 538,
+      "frame_dy": 992,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        510,
+        960,
+        566,
+        1024
+      ],
+      "session_memory_key": "button:start",
+      "cached": false
+    },
+    {
+      "id": "taskbar_search",
+      "type": "input",
+      "label": "Search",
+      "description": "Windows Search bar",
+      "state": "enabled",
+      "dx": 440,
+      "dy": 864,
+      "frame_dx": 614,
+      "frame_dy": 992,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        550,
+        960,
+        678,
+        1024
+      ],
+      "session_memory_key": "input:search",
+      "cached": false
+    },
+    {
+      "id": "taskbar_chrome",
+      "type": "button",
+      "label": "Chrome",
+      "description": "Google Chrome icon on taskbar",
+      "state": "active",
+      "dx": 792,
+      "dy": 860,
+      "frame_dx": 966,
+      "frame_dy": 988,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        942,
+        960,
+        990,
+        1016
+      ],
+      "session_memory_key": "button:chrome",
+      "cached": false
+    },
+    {
+      "id": "taskbar_vscode",
+      "type": "button",
+      "label": "VS Code",
+      "description": "Visual Studio Code icon on taskbar",
+      "state": "enabled",
+      "dx": 904,
+      "dy": 860,
+      "frame_dx": 1078,
+      "frame_dy": 988,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1054,
+        960,
+        1102,
+        1016
+      ],
+      "session_memory_key": "button:vs code",
+      "cached": false
+    },
+    {
+      "id": "taskbar_weather",
+      "type": "label",
+      "label": "Weather",
+      "description": "Weather widget on taskbar",
+      "state": "visible",
+      "dx": 76,
+      "dy": 864,
+      "frame_dx": 250,
+      "frame_dy": 992,
+      "confidence": 0.85,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        182,
+        960,
+        318,
+        1024
+      ],
+      "session_memory_key": "label:weather",
+      "cached": false
+    }
+  ],
+  "element_count": 22,
+  "current_elements": [
+    {
+      "id": "tab_frontend",
+      "type": "tab",
+      "label": "frontend",
+      "description": "Browser tab labeled frontend",
+      "state": "inactive",
+      "dx": 148,
+      "dy": 32,
+      "frame_dx": 322,
+      "frame_dy": 160,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        198,
+        128,
+        446,
+        192
+      ],
+      "session_memory_key": "tab:frontend",
+      "cached": false
+    },
+    {
+      "id": "tab_courseweb",
+      "type": "tab",
+      "label": "Log in to the site | CourseWeb",
+      "description": "Active browser tab for CourseWeb login",
+      "state": "active",
+      "dx": 356,
+      "dy": 32,
+      "frame_dx": 530,
+      "frame_dy": 160,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        390,
+        128,
+        670,
+        192
+      ],
+      "session_memory_key": "tab:log in to the site | courseweb",
+      "cached": false
+    },
+    {
+      "id": "btn_back",
+      "type": "button",
+      "label": "Back",
+      "description": "Browser back button",
+      "state": "enabled",
+      "dx": 64,
+      "dy": 92,
+      "frame_dx": 238,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        214,
+        192,
+        262,
+        248
+      ],
+      "session_memory_key": "button:back",
+      "cached": false
+    },
+    {
+      "id": "btn_forward",
+      "type": "button",
+      "label": "Forward",
+      "description": "Browser forward button",
+      "state": "disabled",
+      "dx": 104,
+      "dy": 92,
+      "frame_dx": 278,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        254,
+        192,
+        302,
+        248
+      ],
+      "session_memory_key": "button:forward",
+      "cached": false
+    },
+    {
+      "id": "btn_refresh",
+      "type": "button",
+      "label": "Refresh",
+      "description": "Browser refresh button",
+      "state": "enabled",
+      "dx": 144,
+      "dy": 92,
+      "frame_dx": 318,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        294,
+        192,
+        342,
+        248
+      ],
+      "session_memory_key": "button:refresh",
+      "cached": false
+    },
+    {
+      "id": "address_bar",
+      "type": "input",
+      "label": "Address Bar",
+      "description": "Browser address bar showing localhost:5173",
+      "state": "enabled",
+      "dx": 588,
+      "dy": 92,
+      "frame_dx": 762,
+      "frame_dy": 220,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        214,
+        192,
+        1310,
+        248
+      ],
+      "session_memory_key": "input:address bar",
+      "cached": false
+    },
+    {
+      "id": "btn_ask_gemini",
+      "type": "button",
+      "label": "Ask Gemini",
+      "description": "Ask Gemini button in browser toolbar",
+      "state": "enabled",
+      "dx": 1072,
+      "dy": 60,
+      "frame_dx": 1246,
+      "frame_dy": 188,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1190,
+        176,
+        1302,
+        200
+      ],
+      "session_memory_key": "button:ask gemini",
+      "cached": false
+    },
+    {
+      "id": "app_title",
+      "type": "heading",
+      "label": "ScreenPilot AI",
+      "description": "Main application title",
+      "state": "visible",
+      "dx": 196,
+      "dy": 168,
+      "frame_dx": 370,
+      "frame_dy": 296,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        310,
+        280,
+        430,
+        312
+      ],
+      "session_memory_key": "heading:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "app_badge",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "Application version badge",
+      "state": "visible",
+      "dx": 328,
+      "dy": 188,
+      "frame_dx": 502,
+      "frame_dy": 316,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        430,
+        296,
+        574,
+        336
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    },
+    {
+      "id": "task_plan_heading",
+      "type": "heading",
+      "label": "Task Plan",
+      "description": "Heading for the task plan section",
+      "state": "visible",
+      "dx": 124,
+      "dy": 332,
+      "frame_dx": 298,
+      "frame_dy": 460,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        246,
+        440,
+        350,
+        480
+      ],
+      "session_memory_key": "heading:task plan",
+      "cached": false
+    },
+    {
+      "id": "task_plan_status",
+      "type": "label",
+      "label": "0/2 done",
+      "description": "Task completion status badge",
+      "state": "visible",
+      "dx": 628,
+      "dy": 336,
+      "frame_dx": 802,
+      "frame_dy": 464,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        774,
+        448,
+        830,
+        480
+      ],
+      "session_memory_key": "label:0/2 done",
+      "cached": false
+    },
+    {
+      "id": "step_1",
+      "type": "list_item",
+      "label": "Step 1",
+      "description": "First step of the task plan",
+      "state": "in_progress",
+      "dx": 372,
+      "dy": 416,
+      "frame_dx": 546,
+      "frame_dy": 544,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        520,
+        918,
+        568
+      ],
+      "session_memory_key": "list_item:step 1",
+      "cached": false
+    },
+    {
+      "id": "step_2",
+      "type": "list_item",
+      "label": "Step 2",
+      "description": "Second step of the task plan",
+      "state": "pending",
+      "dx": 372,
+      "dy": 464,
+      "frame_dx": 546,
+      "frame_dy": 592,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        552,
+        918,
+        632
+      ],
+      "session_memory_key": "list_item:step 2",
+      "cached": false
+    },
+    {
+      "id": "log_area",
+      "type": "pane",
+      "label": "Action Log",
+      "description": "Area displaying the agent's action history",
+      "state": "visible",
+      "dx": 372,
+      "dy": 596,
+      "frame_dx": 546,
+      "frame_dy": 724,
+      "confidence": 0.85,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        616,
+        918,
+        832
+      ],
+      "session_memory_key": "pane:action log",
+      "cached": false
+    },
+    {
+      "id": "input_agent",
+      "type": "input",
+      "label": "Agent is working...",
+      "description": "Text input field for the agent",
+      "state": "disabled",
+      "dx": 696,
+      "dy": 776,
+      "frame_dx": 870,
+      "frame_dy": 904,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        864,
+        1566,
+        944
+      ],
+      "session_memory_key": "input:agent is working...",
+      "cached": false
+    },
+    {
+      "id": "btn_send",
+      "type": "button",
+      "label": "Send",
+      "description": "Send button for agent input",
+      "state": "enabled",
+      "dx": 1196,
+      "dy": 780,
+      "frame_dx": 1370,
+      "frame_dy": 908,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1334,
+        872,
+        1406,
+        944
+      ],
+      "session_memory_key": "button:send",
+      "cached": false
+    },
+    {
+      "id": "taskbar",
+      "type": "toolbar",
+      "label": "Windows Taskbar",
+      "description": "The Windows taskbar at the bottom of the screen",
+      "state": "visible",
+      "dx": 820,
+      "dy": 860,
+      "frame_dx": 994,
+      "frame_dy": 988,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        952,
+        1814,
+        1024
+      ],
+      "session_memory_key": "toolbar:windows taskbar",
+      "cached": false
+    },
+    {
+      "id": "taskbar_start",
+      "type": "button",
+      "label": "Start",
+      "description": "Windows Start button",
+      "state": "enabled",
+      "dx": 364,
+      "dy": 864,
+      "frame_dx": 538,
+      "frame_dy": 992,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        510,
+        960,
+        566,
+        1024
+      ],
+      "session_memory_key": "button:start",
+      "cached": false
+    },
+    {
+      "id": "taskbar_search",
+      "type": "input",
+      "label": "Search",
+      "description": "Windows Search bar",
+      "state": "enabled",
+      "dx": 440,
+      "dy": 864,
+      "frame_dx": 614,
+      "frame_dy": 992,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        550,
+        960,
+        678,
+        1024
+      ],
+      "session_memory_key": "input:search",
+      "cached": false
+    },
+    {
+      "id": "taskbar_chrome",
+      "type": "button",
+      "label": "Chrome",
+      "description": "Google Chrome icon on taskbar",
+      "state": "active",
+      "dx": 792,
+      "dy": 860,
+      "frame_dx": 966,
+      "frame_dy": 988,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        942,
+        960,
+        990,
+        1016
+      ],
+      "session_memory_key": "button:chrome",
+      "cached": false
+    },
+    {
+      "id": "taskbar_vscode",
+      "type": "button",
+      "label": "VS Code",
+      "description": "Visual Studio Code icon on taskbar",
+      "state": "enabled",
+      "dx": 904,
+      "dy": 860,
+      "frame_dx": 1078,
+      "frame_dy": 988,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1054,
+        960,
+        1102,
+        1016
+      ],
+      "session_memory_key": "button:vs code",
+      "cached": false
+    },
+    {
+      "id": "taskbar_weather",
+      "type": "label",
+      "label": "Weather",
+      "description": "Weather widget on taskbar",
+      "state": "visible",
+      "dx": 76,
+      "dy": 864,
+      "frame_dx": 250,
+      "frame_dy": 992,
+      "confidence": 0.85,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        182,
+        960,
+        318,
+        1024
+      ],
+      "session_memory_key": "label:weather",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "tab_frontend",
+      "type": "tab",
+      "label": "frontend",
+      "description": "Browser tab labeled frontend",
+      "state": "inactive",
+      "dx": 148,
+      "dy": 32,
+      "frame_dx": 322,
+      "frame_dy": 160,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        198,
+        128,
+        446,
+        192
+      ],
+      "session_memory_key": "tab:frontend",
+      "cached": false
+    },
+    {
+      "id": "tab_courseweb",
+      "type": "tab",
+      "label": "Log in to the site | CourseWeb",
+      "description": "Active browser tab for CourseWeb login",
+      "state": "active",
+      "dx": 356,
+      "dy": 32,
+      "frame_dx": 530,
+      "frame_dy": 160,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        390,
+        128,
+        670,
+        192
+      ],
+      "session_memory_key": "tab:log in to the site | courseweb",
+      "cached": false
+    },
+    {
+      "id": "btn_back",
+      "type": "button",
+      "label": "Back",
+      "description": "Browser back button",
+      "state": "enabled",
+      "dx": 64,
+      "dy": 92,
+      "frame_dx": 238,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        214,
+        192,
+        262,
+        248
+      ],
+      "session_memory_key": "button:back",
+      "cached": false
+    },
+    {
+      "id": "btn_forward",
+      "type": "button",
+      "label": "Forward",
+      "description": "Browser forward button",
+      "state": "disabled",
+      "dx": 104,
+      "dy": 92,
+      "frame_dx": 278,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        254,
+        192,
+        302,
+        248
+      ],
+      "session_memory_key": "button:forward",
+      "cached": false
+    },
+    {
+      "id": "btn_refresh",
+      "type": "button",
+      "label": "Refresh",
+      "description": "Browser refresh button",
+      "state": "enabled",
+      "dx": 144,
+      "dy": 92,
+      "frame_dx": 318,
+      "frame_dy": 220,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        294,
+        192,
+        342,
+        248
+      ],
+      "session_memory_key": "button:refresh",
+      "cached": false
+    },
+    {
+      "id": "address_bar",
+      "type": "input",
+      "label": "Address Bar",
+      "description": "Browser address bar showing localhost:5173",
+      "state": "enabled",
+      "dx": 588,
+      "dy": 92,
+      "frame_dx": 762,
+      "frame_dy": 220,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        214,
+        192,
+        1310,
+        248
+      ],
+      "session_memory_key": "input:address bar",
+      "cached": false
+    },
+    {
+      "id": "btn_ask_gemini",
+      "type": "button",
+      "label": "Ask Gemini",
+      "description": "Ask Gemini button in browser toolbar",
+      "state": "enabled",
+      "dx": 1072,
+      "dy": 60,
+      "frame_dx": 1246,
+      "frame_dy": 188,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1190,
+        176,
+        1302,
+        200
+      ],
+      "session_memory_key": "button:ask gemini",
+      "cached": false
+    },
+    {
+      "id": "app_title",
+      "type": "heading",
+      "label": "ScreenPilot AI",
+      "description": "Main application title",
+      "state": "visible",
+      "dx": 196,
+      "dy": 168,
+      "frame_dx": 370,
+      "frame_dy": 296,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        310,
+        280,
+        430,
+        312
+      ],
+      "session_memory_key": "heading:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "app_badge",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "Application version badge",
+      "state": "visible",
+      "dx": 328,
+      "dy": 188,
+      "frame_dx": 502,
+      "frame_dy": 316,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        430,
+        296,
+        574,
+        336
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    },
+    {
+      "id": "task_plan_heading",
+      "type": "heading",
+      "label": "Task Plan",
+      "description": "Heading for the task plan section",
+      "state": "visible",
+      "dx": 124,
+      "dy": 332,
+      "frame_dx": 298,
+      "frame_dy": 460,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        246,
+        440,
+        350,
+        480
+      ],
+      "session_memory_key": "heading:task plan",
+      "cached": false
+    },
+    {
+      "id": "task_plan_status",
+      "type": "label",
+      "label": "0/2 done",
+      "description": "Task completion status badge",
+      "state": "visible",
+      "dx": 628,
+      "dy": 336,
+      "frame_dx": 802,
+      "frame_dy": 464,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        774,
+        448,
+        830,
+        480
+      ],
+      "session_memory_key": "label:0/2 done",
+      "cached": false
+    },
+    {
+      "id": "step_1",
+      "type": "list_item",
+      "label": "Step 1",
+      "description": "First step of the task plan",
+      "state": "in_progress",
+      "dx": 372,
+      "dy": 416,
+      "frame_dx": 546,
+      "frame_dy": 544,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        520,
+        918,
+        568
+      ],
+      "session_memory_key": "list_item:step 1",
+      "cached": false
+    },
+    {
+      "id": "step_2",
+      "type": "list_item",
+      "label": "Step 2",
+      "description": "Second step of the task plan",
+      "state": "pending",
+      "dx": 372,
+      "dy": 464,
+      "frame_dx": 546,
+      "frame_dy": 592,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        552,
+        918,
+        632
+      ],
+      "session_memory_key": "list_item:step 2",
+      "cached": false
+    },
+    {
+      "id": "log_area",
+      "type": "pane",
+      "label": "Action Log",
+      "description": "Area displaying the agent's action history",
+      "state": "visible",
+      "dx": 372,
+      "dy": 596,
+      "frame_dx": 546,
+      "frame_dy": 724,
+      "confidence": 0.85,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        616,
+        918,
+        832
+      ],
+      "session_memory_key": "pane:action log",
+      "cached": false
+    },
+    {
+      "id": "input_agent",
+      "type": "input",
+      "label": "Agent is working...",
+      "description": "Text input field for the agent",
+      "state": "disabled",
+      "dx": 696,
+      "dy": 776,
+      "frame_dx": 870,
+      "frame_dy": 904,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        864,
+        1566,
+        944
+      ],
+      "session_memory_key": "input:agent is working...",
+      "cached": false
+    },
+    {
+      "id": "btn_send",
+      "type": "button",
+      "label": "Send",
+      "description": "Send button for agent input",
+      "state": "enabled",
+      "dx": 1196,
+      "dy": 780,
+      "frame_dx": 1370,
+      "frame_dy": 908,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1334,
+        872,
+        1406,
+        944
+      ],
+      "session_memory_key": "button:send",
+      "cached": false
+    },
+    {
+      "id": "taskbar",
+      "type": "toolbar",
+      "label": "Windows Taskbar",
+      "description": "The Windows taskbar at the bottom of the screen",
+      "state": "visible",
+      "dx": 820,
+      "dy": 860,
+      "frame_dx": 994,
+      "frame_dy": 988,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        174,
+        952,
+        1814,
+        1024
+      ],
+      "session_memory_key": "toolbar:windows taskbar",
+      "cached": false
+    },
+    {
+      "id": "taskbar_start",
+      "type": "button",
+      "label": "Start",
+      "description": "Windows Start button",
+      "state": "enabled",
+      "dx": 364,
+      "dy": 864,
+      "frame_dx": 538,
+      "frame_dy": 992,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        510,
+        960,
+        566,
+        1024
+      ],
+      "session_memory_key": "button:start",
+      "cached": false
+    },
+    {
+      "id": "taskbar_search",
+      "type": "input",
+      "label": "Search",
+      "description": "Windows Search bar",
+      "state": "enabled",
+      "dx": 440,
+      "dy": 864,
+      "frame_dx": 614,
+      "frame_dy": 992,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        550,
+        960,
+        678,
+        1024
+      ],
+      "session_memory_key": "input:search",
+      "cached": false
+    },
+    {
+      "id": "taskbar_chrome",
+      "type": "button",
+      "label": "Chrome",
+      "description": "Google Chrome icon on taskbar",
+      "state": "active",
+      "dx": 792,
+      "dy": 860,
+      "frame_dx": 966,
+      "frame_dy": 988,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        942,
+        960,
+        990,
+        1016
+      ],
+      "session_memory_key": "button:chrome",
+      "cached": false
+    },
+    {
+      "id": "taskbar_vscode",
+      "type": "button",
+      "label": "VS Code",
+      "description": "Visual Studio Code icon on taskbar",
+      "state": "enabled",
+      "dx": 904,
+      "dy": 860,
+      "frame_dx": 1078,
+      "frame_dy": 988,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1054,
+        960,
+        1102,
+        1016
+      ],
+      "session_memory_key": "button:vs code",
+      "cached": false
+    },
+    {
+      "id": "taskbar_weather",
+      "type": "label",
+      "label": "Weather",
+      "description": "Weather widget on taskbar",
+      "state": "visible",
+      "dx": 76,
+      "dy": 864,
+      "frame_dx": 250,
+      "frame_dy": 992,
+      "confidence": 0.85,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        182,
+        960,
+        318,
+        1024
+      ],
+      "session_memory_key": "label:weather",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777723751_b6faad",
+    "started_at": "2026-05-02T12:09:11.762506+00:00",
+    "updated_at": "2026-05-02T12:09:48.233672+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777723751_de2eff.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "tab:frontend": {
+        "element_key": "tab:frontend",
+        "element_type": "tab",
+        "label": "frontend",
+        "bbox": [
+          198.0,
+          128.0,
+          446.0,
+          192.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "tab:log in to the site | courseweb": {
+        "element_key": "tab:log in to the site | courseweb",
+        "element_type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "bbox": [
+          390.0,
+          128.0,
+          670.0,
+          192.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "button:back": {
+        "element_key": "button:back",
+        "element_type": "button",
+        "label": "Back",
+        "bbox": [
+          214.0,
+          192.0,
+          262.0,
+          248.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "button:forward": {
+        "element_key": "button:forward",
+        "element_type": "button",
+        "label": "Forward",
+        "bbox": [
+          254.0,
+          192.0,
+          302.0,
+          248.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "button:refresh": {
+        "element_key": "button:refresh",
+        "element_type": "button",
+        "label": "Refresh",
+        "bbox": [
+          294.0,
+          192.0,
+          342.0,
+          248.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "input:address bar": {
+        "element_key": "input:address bar",
+        "element_type": "input",
+        "label": "Address Bar",
+        "bbox": [
+          214.0,
+          192.0,
+          1310.0,
+          248.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "button:ask gemini": {
+        "element_key": "button:ask gemini",
+        "element_type": "button",
+        "label": "Ask Gemini",
+        "bbox": [
+          1190.0,
+          176.0,
+          1302.0,
+          200.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "heading:screenpilot ai": {
+        "element_key": "heading:screenpilot ai",
+        "element_type": "heading",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          310.0,
+          280.0,
+          430.0,
+          312.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "label:autonomous task agent v2": {
+        "element_key": "label:autonomous task agent v2",
+        "element_type": "label",
+        "label": "Autonomous Task Agent v2",
+        "bbox": [
+          430.0,
+          296.0,
+          574.0,
+          336.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "heading:task plan": {
+        "element_key": "heading:task plan",
+        "element_type": "heading",
+        "label": "Task Plan",
+        "bbox": [
+          246.0,
+          440.0,
+          350.0,
+          480.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "label:0/2 done": {
+        "element_key": "label:0/2 done",
+        "element_type": "label",
+        "label": "0/2 done",
+        "bbox": [
+          774.0,
+          448.0,
+          830.0,
+          480.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "list_item:step 1": {
+        "element_key": "list_item:step 1",
+        "element_type": "list_item",
+        "label": "Step 1",
+        "bbox": [
+          174.0,
+          520.0,
+          918.0,
+          568.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "list_item:step 2": {
+        "element_key": "list_item:step 2",
+        "element_type": "list_item",
+        "label": "Step 2",
+        "bbox": [
+          174.0,
+          552.0,
+          918.0,
+          632.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "pane:action log": {
+        "element_key": "pane:action log",
+        "element_type": "pane",
+        "label": "Action Log",
+        "bbox": [
+          174.0,
+          616.0,
+          918.0,
+          832.0
+        ],
+        "confidence": 0.85,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.85
+          }
+        ]
+      },
+      "input:agent is working...": {
+        "element_key": "input:agent is working...",
+        "element_type": "input",
+        "label": "Agent is working...",
+        "bbox": [
+          174.0,
+          864.0,
+          1566.0,
+          944.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "button:send": {
+        "element_key": "button:send",
+        "element_type": "button",
+        "label": "Send",
+        "bbox": [
+          1334.0,
+          872.0,
+          1406.0,
+          944.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "toolbar:windows taskbar": {
+        "element_key": "toolbar:windows taskbar",
+        "element_type": "toolbar",
+        "label": "Windows Taskbar",
+        "bbox": [
+          174.0,
+          952.0,
+          1814.0,
+          1024.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "button:start": {
+        "element_key": "button:start",
+        "element_type": "button",
+        "label": "Start",
+        "bbox": [
+          510.0,
+          960.0,
+          566.0,
+          1024.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "input:search": {
+        "element_key": "input:search",
+        "element_type": "input",
+        "label": "Search",
+        "bbox": [
+          550.0,
+          960.0,
+          678.0,
+          1024.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "button:chrome": {
+        "element_key": "button:chrome",
+        "element_type": "button",
+        "label": "Chrome",
+        "bbox": [
+          942.0,
+          960.0,
+          990.0,
+          1016.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "button:vs code": {
+        "element_key": "button:vs code",
+        "element_type": "button",
+        "label": "VS Code",
+        "bbox": [
+          1054.0,
+          960.0,
+          1102.0,
+          1016.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:weather": {
+        "element_key": "label:weather",
+        "element_type": "label",
+        "label": "Weather",
+        "bbox": [
+          182.0,
+          960.0,
+          318.0,
+          1024.0
+        ],
+        "confidence": 0.85,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723751_de2eff.jpg",
+        "last_seen_frame": "frame_1777723751_de2eff.jpg",
+        "first_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.233672+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723751_de2eff.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:09:48.233672+00:00",
+            "confidence": 0.85
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "tab_frontend",
+        "type": "tab",
+        "label": "frontend",
+        "description": "Browser tab labeled frontend",
+        "state": "inactive",
+        "dx": 148,
+        "dy": 32,
+        "frame_dx": 322,
+        "frame_dy": 160,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          198,
+          128,
+          446,
+          192
+        ],
+        "session_memory_key": "tab:frontend",
+        "cached": false
+      },
+      {
+        "id": "tab_courseweb",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Active browser tab for CourseWeb login",
+        "state": "active",
+        "dx": 356,
+        "dy": 32,
+        "frame_dx": 530,
+        "frame_dy": 160,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          390,
+          128,
+          670,
+          192
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      },
+      {
+        "id": "btn_back",
+        "type": "button",
+        "label": "Back",
+        "description": "Browser back button",
+        "state": "enabled",
+        "dx": 64,
+        "dy": 92,
+        "frame_dx": 238,
+        "frame_dy": 220,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          214,
+          192,
+          262,
+          248
+        ],
+        "session_memory_key": "button:back",
+        "cached": false
+      },
+      {
+        "id": "btn_forward",
+        "type": "button",
+        "label": "Forward",
+        "description": "Browser forward button",
+        "state": "disabled",
+        "dx": 104,
+        "dy": 92,
+        "frame_dx": 278,
+        "frame_dy": 220,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          254,
+          192,
+          302,
+          248
+        ],
+        "session_memory_key": "button:forward",
+        "cached": false
+      },
+      {
+        "id": "btn_refresh",
+        "type": "button",
+        "label": "Refresh",
+        "description": "Browser refresh button",
+        "state": "enabled",
+        "dx": 144,
+        "dy": 92,
+        "frame_dx": 318,
+        "frame_dy": 220,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          294,
+          192,
+          342,
+          248
+        ],
+        "session_memory_key": "button:refresh",
+        "cached": false
+      },
+      {
+        "id": "address_bar",
+        "type": "input",
+        "label": "Address Bar",
+        "description": "Browser address bar showing localhost:5173",
+        "state": "enabled",
+        "dx": 588,
+        "dy": 92,
+        "frame_dx": 762,
+        "frame_dy": 220,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          214,
+          192,
+          1310,
+          248
+        ],
+        "session_memory_key": "input:address bar",
+        "cached": false
+      },
+      {
+        "id": "btn_ask_gemini",
+        "type": "button",
+        "label": "Ask Gemini",
+        "description": "Ask Gemini button in browser toolbar",
+        "state": "enabled",
+        "dx": 1072,
+        "dy": 60,
+        "frame_dx": 1246,
+        "frame_dy": 188,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1190,
+          176,
+          1302,
+          200
+        ],
+        "session_memory_key": "button:ask gemini",
+        "cached": false
+      },
+      {
+        "id": "app_title",
+        "type": "heading",
+        "label": "ScreenPilot AI",
+        "description": "Main application title",
+        "state": "visible",
+        "dx": 196,
+        "dy": 168,
+        "frame_dx": 370,
+        "frame_dy": 296,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          310,
+          280,
+          430,
+          312
+        ],
+        "session_memory_key": "heading:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "app_badge",
+        "type": "label",
+        "label": "Autonomous Task Agent v2",
+        "description": "Application version badge",
+        "state": "visible",
+        "dx": 328,
+        "dy": 188,
+        "frame_dx": 502,
+        "frame_dy": 316,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          430,
+          296,
+          574,
+          336
+        ],
+        "session_memory_key": "label:autonomous task agent v2",
+        "cached": false
+      },
+      {
+        "id": "task_plan_heading",
+        "type": "heading",
+        "label": "Task Plan",
+        "description": "Heading for the task plan section",
+        "state": "visible",
+        "dx": 124,
+        "dy": 332,
+        "frame_dx": 298,
+        "frame_dy": 460,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          246,
+          440,
+          350,
+          480
+        ],
+        "session_memory_key": "heading:task plan",
+        "cached": false
+      },
+      {
+        "id": "task_plan_status",
+        "type": "label",
+        "label": "0/2 done",
+        "description": "Task completion status badge",
+        "state": "visible",
+        "dx": 628,
+        "dy": 336,
+        "frame_dx": 802,
+        "frame_dy": 464,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          774,
+          448,
+          830,
+          480
+        ],
+        "session_memory_key": "label:0/2 done",
+        "cached": false
+      },
+      {
+        "id": "step_1",
+        "type": "list_item",
+        "label": "Step 1",
+        "description": "First step of the task plan",
+        "state": "in_progress",
+        "dx": 372,
+        "dy": 416,
+        "frame_dx": 546,
+        "frame_dy": 544,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          520,
+          918,
+          568
+        ],
+        "session_memory_key": "list_item:step 1",
+        "cached": false
+      },
+      {
+        "id": "step_2",
+        "type": "list_item",
+        "label": "Step 2",
+        "description": "Second step of the task plan",
+        "state": "pending",
+        "dx": 372,
+        "dy": 464,
+        "frame_dx": 546,
+        "frame_dy": 592,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          552,
+          918,
+          632
+        ],
+        "session_memory_key": "list_item:step 2",
+        "cached": false
+      },
+      {
+        "id": "log_area",
+        "type": "pane",
+        "label": "Action Log",
+        "description": "Area displaying the agent's action history",
+        "state": "visible",
+        "dx": 372,
+        "dy": 596,
+        "frame_dx": 546,
+        "frame_dy": 724,
+        "confidence": 0.85,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          616,
+          918,
+          832
+        ],
+        "session_memory_key": "pane:action log",
+        "cached": false
+      },
+      {
+        "id": "input_agent",
+        "type": "input",
+        "label": "Agent is working...",
+        "description": "Text input field for the agent",
+        "state": "disabled",
+        "dx": 696,
+        "dy": 776,
+        "frame_dx": 870,
+        "frame_dy": 904,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          864,
+          1566,
+          944
+        ],
+        "session_memory_key": "input:agent is working...",
+        "cached": false
+      },
+      {
+        "id": "btn_send",
+        "type": "button",
+        "label": "Send",
+        "description": "Send button for agent input",
+        "state": "enabled",
+        "dx": 1196,
+        "dy": 780,
+        "frame_dx": 1370,
+        "frame_dy": 908,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1334,
+          872,
+          1406,
+          944
+        ],
+        "session_memory_key": "button:send",
+        "cached": false
+      },
+      {
+        "id": "taskbar",
+        "type": "toolbar",
+        "label": "Windows Taskbar",
+        "description": "The Windows taskbar at the bottom of the screen",
+        "state": "visible",
+        "dx": 820,
+        "dy": 860,
+        "frame_dx": 994,
+        "frame_dy": 988,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          952,
+          1814,
+          1024
+        ],
+        "session_memory_key": "toolbar:windows taskbar",
+        "cached": false
+      },
+      {
+        "id": "taskbar_start",
+        "type": "button",
+        "label": "Start",
+        "description": "Windows Start button",
+        "state": "enabled",
+        "dx": 364,
+        "dy": 864,
+        "frame_dx": 538,
+        "frame_dy": 992,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          510,
+          960,
+          566,
+          1024
+        ],
+        "session_memory_key": "button:start",
+        "cached": false
+      },
+      {
+        "id": "taskbar_search",
+        "type": "input",
+        "label": "Search",
+        "description": "Windows Search bar",
+        "state": "enabled",
+        "dx": 440,
+        "dy": 864,
+        "frame_dx": 614,
+        "frame_dy": 992,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          550,
+          960,
+          678,
+          1024
+        ],
+        "session_memory_key": "input:search",
+        "cached": false
+      },
+      {
+        "id": "taskbar_chrome",
+        "type": "button",
+        "label": "Chrome",
+        "description": "Google Chrome icon on taskbar",
+        "state": "active",
+        "dx": 792,
+        "dy": 860,
+        "frame_dx": 966,
+        "frame_dy": 988,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          942,
+          960,
+          990,
+          1016
+        ],
+        "session_memory_key": "button:chrome",
+        "cached": false
+      },
+      {
+        "id": "taskbar_vscode",
+        "type": "button",
+        "label": "VS Code",
+        "description": "Visual Studio Code icon on taskbar",
+        "state": "enabled",
+        "dx": 904,
+        "dy": 860,
+        "frame_dx": 1078,
+        "frame_dy": 988,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1054,
+          960,
+          1102,
+          1016
+        ],
+        "session_memory_key": "button:vs code",
+        "cached": false
+      },
+      {
+        "id": "taskbar_weather",
+        "type": "label",
+        "label": "Weather",
+        "description": "Weather widget on taskbar",
+        "state": "visible",
+        "dx": 76,
+        "dy": 864,
+        "frame_dx": 250,
+        "frame_dy": 992,
+        "confidence": 0.85,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          182,
+          960,
+          318,
+          1024
+        ],
+        "session_memory_key": "label:weather",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "tab_frontend",
+        "type": "tab",
+        "label": "frontend",
+        "description": "Browser tab labeled frontend",
+        "state": "inactive",
+        "dx": 148,
+        "dy": 32,
+        "frame_dx": 322,
+        "frame_dy": 160,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          198,
+          128,
+          446,
+          192
+        ],
+        "session_memory_key": "tab:frontend",
+        "cached": false
+      },
+      {
+        "id": "tab_courseweb",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Active browser tab for CourseWeb login",
+        "state": "active",
+        "dx": 356,
+        "dy": 32,
+        "frame_dx": 530,
+        "frame_dy": 160,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          390,
+          128,
+          670,
+          192
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      },
+      {
+        "id": "btn_back",
+        "type": "button",
+        "label": "Back",
+        "description": "Browser back button",
+        "state": "enabled",
+        "dx": 64,
+        "dy": 92,
+        "frame_dx": 238,
+        "frame_dy": 220,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          214,
+          192,
+          262,
+          248
+        ],
+        "session_memory_key": "button:back",
+        "cached": false
+      },
+      {
+        "id": "btn_forward",
+        "type": "button",
+        "label": "Forward",
+        "description": "Browser forward button",
+        "state": "disabled",
+        "dx": 104,
+        "dy": 92,
+        "frame_dx": 278,
+        "frame_dy": 220,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          254,
+          192,
+          302,
+          248
+        ],
+        "session_memory_key": "button:forward",
+        "cached": false
+      },
+      {
+        "id": "btn_refresh",
+        "type": "button",
+        "label": "Refresh",
+        "description": "Browser refresh button",
+        "state": "enabled",
+        "dx": 144,
+        "dy": 92,
+        "frame_dx": 318,
+        "frame_dy": 220,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          294,
+          192,
+          342,
+          248
+        ],
+        "session_memory_key": "button:refresh",
+        "cached": false
+      },
+      {
+        "id": "address_bar",
+        "type": "input",
+        "label": "Address Bar",
+        "description": "Browser address bar showing localhost:5173",
+        "state": "enabled",
+        "dx": 588,
+        "dy": 92,
+        "frame_dx": 762,
+        "frame_dy": 220,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          214,
+          192,
+          1310,
+          248
+        ],
+        "session_memory_key": "input:address bar",
+        "cached": false
+      },
+      {
+        "id": "btn_ask_gemini",
+        "type": "button",
+        "label": "Ask Gemini",
+        "description": "Ask Gemini button in browser toolbar",
+        "state": "enabled",
+        "dx": 1072,
+        "dy": 60,
+        "frame_dx": 1246,
+        "frame_dy": 188,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1190,
+          176,
+          1302,
+          200
+        ],
+        "session_memory_key": "button:ask gemini",
+        "cached": false
+      },
+      {
+        "id": "app_title",
+        "type": "heading",
+        "label": "ScreenPilot AI",
+        "description": "Main application title",
+        "state": "visible",
+        "dx": 196,
+        "dy": 168,
+        "frame_dx": 370,
+        "frame_dy": 296,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          310,
+          280,
+          430,
+          312
+        ],
+        "session_memory_key": "heading:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "app_badge",
+        "type": "label",
+        "label": "Autonomous Task Agent v2",
+        "description": "Application version badge",
+        "state": "visible",
+        "dx": 328,
+        "dy": 188,
+        "frame_dx": 502,
+        "frame_dy": 316,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          430,
+          296,
+          574,
+          336
+        ],
+        "session_memory_key": "label:autonomous task agent v2",
+        "cached": false
+      },
+      {
+        "id": "task_plan_heading",
+        "type": "heading",
+        "label": "Task Plan",
+        "description": "Heading for the task plan section",
+        "state": "visible",
+        "dx": 124,
+        "dy": 332,
+        "frame_dx": 298,
+        "frame_dy": 460,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          246,
+          440,
+          350,
+          480
+        ],
+        "session_memory_key": "heading:task plan",
+        "cached": false
+      },
+      {
+        "id": "task_plan_status",
+        "type": "label",
+        "label": "0/2 done",
+        "description": "Task completion status badge",
+        "state": "visible",
+        "dx": 628,
+        "dy": 336,
+        "frame_dx": 802,
+        "frame_dy": 464,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          774,
+          448,
+          830,
+          480
+        ],
+        "session_memory_key": "label:0/2 done",
+        "cached": false
+      },
+      {
+        "id": "step_1",
+        "type": "list_item",
+        "label": "Step 1",
+        "description": "First step of the task plan",
+        "state": "in_progress",
+        "dx": 372,
+        "dy": 416,
+        "frame_dx": 546,
+        "frame_dy": 544,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          520,
+          918,
+          568
+        ],
+        "session_memory_key": "list_item:step 1",
+        "cached": false
+      },
+      {
+        "id": "step_2",
+        "type": "list_item",
+        "label": "Step 2",
+        "description": "Second step of the task plan",
+        "state": "pending",
+        "dx": 372,
+        "dy": 464,
+        "frame_dx": 546,
+        "frame_dy": 592,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          552,
+          918,
+          632
+        ],
+        "session_memory_key": "list_item:step 2",
+        "cached": false
+      },
+      {
+        "id": "log_area",
+        "type": "pane",
+        "label": "Action Log",
+        "description": "Area displaying the agent's action history",
+        "state": "visible",
+        "dx": 372,
+        "dy": 596,
+        "frame_dx": 546,
+        "frame_dy": 724,
+        "confidence": 0.85,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          616,
+          918,
+          832
+        ],
+        "session_memory_key": "pane:action log",
+        "cached": false
+      },
+      {
+        "id": "input_agent",
+        "type": "input",
+        "label": "Agent is working...",
+        "description": "Text input field for the agent",
+        "state": "disabled",
+        "dx": 696,
+        "dy": 776,
+        "frame_dx": 870,
+        "frame_dy": 904,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          864,
+          1566,
+          944
+        ],
+        "session_memory_key": "input:agent is working...",
+        "cached": false
+      },
+      {
+        "id": "btn_send",
+        "type": "button",
+        "label": "Send",
+        "description": "Send button for agent input",
+        "state": "enabled",
+        "dx": 1196,
+        "dy": 780,
+        "frame_dx": 1370,
+        "frame_dy": 908,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1334,
+          872,
+          1406,
+          944
+        ],
+        "session_memory_key": "button:send",
+        "cached": false
+      },
+      {
+        "id": "taskbar",
+        "type": "toolbar",
+        "label": "Windows Taskbar",
+        "description": "The Windows taskbar at the bottom of the screen",
+        "state": "visible",
+        "dx": 820,
+        "dy": 860,
+        "frame_dx": 994,
+        "frame_dy": 988,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          174,
+          952,
+          1814,
+          1024
+        ],
+        "session_memory_key": "toolbar:windows taskbar",
+        "cached": false
+      },
+      {
+        "id": "taskbar_start",
+        "type": "button",
+        "label": "Start",
+        "description": "Windows Start button",
+        "state": "enabled",
+        "dx": 364,
+        "dy": 864,
+        "frame_dx": 538,
+        "frame_dy": 992,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          510,
+          960,
+          566,
+          1024
+        ],
+        "session_memory_key": "button:start",
+        "cached": false
+      },
+      {
+        "id": "taskbar_search",
+        "type": "input",
+        "label": "Search",
+        "description": "Windows Search bar",
+        "state": "enabled",
+        "dx": 440,
+        "dy": 864,
+        "frame_dx": 614,
+        "frame_dy": 992,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          550,
+          960,
+          678,
+          1024
+        ],
+        "session_memory_key": "input:search",
+        "cached": false
+      },
+      {
+        "id": "taskbar_chrome",
+        "type": "button",
+        "label": "Chrome",
+        "description": "Google Chrome icon on taskbar",
+        "state": "active",
+        "dx": 792,
+        "dy": 860,
+        "frame_dx": 966,
+        "frame_dy": 988,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          942,
+          960,
+          990,
+          1016
+        ],
+        "session_memory_key": "button:chrome",
+        "cached": false
+      },
+      {
+        "id": "taskbar_vscode",
+        "type": "button",
+        "label": "VS Code",
+        "description": "Visual Studio Code icon on taskbar",
+        "state": "enabled",
+        "dx": 904,
+        "dy": 860,
+        "frame_dx": 1078,
+        "frame_dy": 988,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1054,
+          960,
+          1102,
+          1016
+        ],
+        "session_memory_key": "button:vs code",
+        "cached": false
+      },
+      {
+        "id": "taskbar_weather",
+        "type": "label",
+        "label": "Weather",
+        "description": "Weather widget on taskbar",
+        "state": "visible",
+        "dx": 76,
+        "dy": 864,
+        "frame_dx": 250,
+        "frame_dy": 992,
+        "confidence": 0.85,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          182,
+          960,
+          318,
+          1024
+        ],
+        "session_memory_key": "label:weather",
+        "cached": false
+      }
+    ]
+  }
+}

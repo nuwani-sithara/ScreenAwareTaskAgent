@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777724141_711cc8\\processing\\proc_1777724141_a17751\\preprocessed_frames\\frame_1777724141_692fae.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    174,
+    129,
+    1814,
+    1020
+  ],
+  "screen_size": {
+    "width": 1640,
+    "height": 891
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "tab_frontend",
+      "type": "tab",
+      "label": "frontend",
+      "description": "Active browser tab labeled frontend",
+      "state": "active",
+      "dx": 188,
+      "dy": 36,
+      "frame_dx": 362,
+      "frame_dy": 165,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        206,
+        137,
+        518,
+        193
+      ],
+      "session_memory_key": "tab:frontend",
+      "cached": false
+    },
+    {
+      "id": "tab_courseweb",
+      "type": "tab",
+      "label": "Log in to the site | CourseWeb",
+      "description": "Inactive browser tab for CourseWeb login",
+      "state": "inactive",
+      "dx": 444,
+      "dy": 36,
+      "frame_dx": 618,
+      "frame_dy": 165,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        438,
+        137,
+        798,
+        193
+      ],
+      "session_memory_key": "tab:log in to the site | courseweb",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "tab_frontend",
+      "type": "tab",
+      "label": "frontend",
+      "description": "Active browser tab labeled frontend",
+      "state": "active",
+      "dx": 188,
+      "dy": 36,
+      "frame_dx": 362,
+      "frame_dy": 165,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        206,
+        137,
+        518,
+        193
+      ],
+      "session_memory_key": "tab:frontend",
+      "cached": false
+    },
+    {
+      "id": "tab_courseweb",
+      "type": "tab",
+      "label": "Log in to the site | CourseWeb",
+      "description": "Inactive browser tab for CourseWeb login",
+      "state": "inactive",
+      "dx": 444,
+      "dy": 36,
+      "frame_dx": 618,
+      "frame_dy": 165,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        438,
+        137,
+        798,
+        193
+      ],
+      "session_memory_key": "tab:log in to the site | courseweb",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "tab_frontend",
+      "type": "tab",
+      "label": "frontend",
+      "description": "Active browser tab labeled frontend",
+      "state": "active",
+      "dx": 188,
+      "dy": 36,
+      "frame_dx": 362,
+      "frame_dy": 165,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        206,
+        137,
+        518,
+        193
+      ],
+      "session_memory_key": "tab:frontend",
+      "cached": false
+    },
+    {
+      "id": "tab_courseweb",
+      "type": "tab",
+      "label": "Log in to the site | CourseWeb",
+      "description": "Inactive browser tab for CourseWeb login",
+      "state": "inactive",
+      "dx": 444,
+      "dy": 36,
+      "frame_dx": 618,
+      "frame_dy": 165,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        438,
+        137,
+        798,
+        193
+      ],
+      "session_memory_key": "tab:log in to the site | courseweb",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777724141_711cc8",
+    "started_at": "2026-05-02T12:15:41.110375+00:00",
+    "updated_at": "2026-05-02T12:16:12.644520+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777724141_692fae.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "tab:frontend": {
+        "element_key": "tab:frontend",
+        "element_type": "tab",
+        "label": "frontend",
+        "bbox": [
+          206.0,
+          137.0,
+          518.0,
+          193.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724141_692fae.jpg",
+        "last_seen_frame": "frame_1777724141_692fae.jpg",
+        "first_seen_at": "2026-05-02T12:16:12.644520+00:00",
+        "last_seen_at": "2026-05-02T12:16:12.644520+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724141_692fae.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:16:12.644520+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "tab:log in to the site | courseweb": {
+        "element_key": "tab:log in to the site | courseweb",
+        "element_type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "bbox": [
+          438.0,
+          137.0,
+          798.0,
+          193.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724141_692fae.jpg",
+        "last_seen_frame": "frame_1777724141_692fae.jpg",
+        "first_seen_at": "2026-05-02T12:16:12.644520+00:00",
+        "last_seen_at": "2026-05-02T12:16:12.644520+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724141_692fae.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:16:12.644520+00:00",
+            "confidence": 0.95
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "tab_frontend",
+        "type": "tab",
+        "label": "frontend",
+        "description": "Active browser tab labeled frontend",
+        "state": "active",
+        "dx": 188,
+        "dy": 36,
+        "frame_dx": 362,
+        "frame_dy": 165,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          206,
+          137,
+          518,
+          193
+        ],
+        "session_memory_key": "tab:frontend",
+        "cached": false
+      },
+      {
+        "id": "tab_courseweb",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Inactive browser tab for CourseWeb login",
+        "state": "inactive",
+        "dx": 444,
+        "dy": 36,
+        "frame_dx": 618,
+        "frame_dy": 165,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          438,
+          137,
+          798,
+          193
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "tab_frontend",
+        "type": "tab",
+        "label": "frontend",
+        "description": "Active browser tab labeled frontend",
+        "state": "active",
+        "dx": 188,
+        "dy": 36,
+        "frame_dx": 362,
+        "frame_dy": 165,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          206,
+          137,
+          518,
+          193
+        ],
+        "session_memory_key": "tab:frontend",
+        "cached": false
+      },
+      {
+        "id": "tab_courseweb",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Inactive browser tab for CourseWeb login",
+        "state": "inactive",
+        "dx": 444,
+        "dy": 36,
+        "frame_dx": 618,
+        "frame_dy": 165,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          438,
+          137,
+          798,
+          193
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      }
+    ]
+  }
+}

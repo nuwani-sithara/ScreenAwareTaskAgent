@@ -1,0 +1,182 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777724430_60591f\\processing\\proc_1777724430_c11c32\\preprocessed_frames\\frame_1777724430_fa7e0b.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    115,
+    65,
+    1805,
+    1015
+  ],
+  "screen_size": {
+    "width": 1690,
+    "height": 950
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "google_chrome_icon",
+      "type": "icon",
+      "label": "Google Chrome",
+      "description": "Desktop shortcut for Google Chrome browser",
+      "state": "visible",
+      "dx": 116,
+      "dy": 136,
+      "frame_dx": 231,
+      "frame_dy": 201,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        195,
+        137,
+        267,
+        265
+      ],
+      "session_memory_key": "icon:google chrome",
+      "cached": false
+    }
+  ],
+  "element_count": 1,
+  "current_elements": [
+    {
+      "id": "google_chrome_icon",
+      "type": "icon",
+      "label": "Google Chrome",
+      "description": "Desktop shortcut for Google Chrome browser",
+      "state": "visible",
+      "dx": 116,
+      "dy": 136,
+      "frame_dx": 231,
+      "frame_dy": 201,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        195,
+        137,
+        267,
+        265
+      ],
+      "session_memory_key": "icon:google chrome",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "google_chrome_icon",
+      "type": "icon",
+      "label": "Google Chrome",
+      "description": "Desktop shortcut for Google Chrome browser",
+      "state": "visible",
+      "dx": 116,
+      "dy": 136,
+      "frame_dx": 231,
+      "frame_dy": 201,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        195,
+        137,
+        267,
+        265
+      ],
+      "session_memory_key": "icon:google chrome",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777724430_60591f",
+    "started_at": "2026-05-02T12:20:30.443581+00:00",
+    "updated_at": "2026-05-02T12:21:04.928254+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777724430_fa7e0b.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "icon:google chrome": {
+        "element_key": "icon:google chrome",
+        "element_type": "icon",
+        "label": "Google Chrome",
+        "bbox": [
+          195.0,
+          137.0,
+          267.0,
+          265.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724430_fa7e0b.jpg",
+        "last_seen_frame": "frame_1777724430_fa7e0b.jpg",
+        "first_seen_at": "2026-05-02T12:21:04.928254+00:00",
+        "last_seen_at": "2026-05-02T12:21:04.928254+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724430_fa7e0b.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:21:04.928254+00:00",
+            "confidence": 0.95
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "google_chrome_icon",
+        "type": "icon",
+        "label": "Google Chrome",
+        "description": "Desktop shortcut for Google Chrome browser",
+        "state": "visible",
+        "dx": 116,
+        "dy": 136,
+        "frame_dx": 231,
+        "frame_dy": 201,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          195,
+          137,
+          267,
+          265
+        ],
+        "session_memory_key": "icon:google chrome",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "google_chrome_icon",
+        "type": "icon",
+        "label": "Google Chrome",
+        "description": "Desktop shortcut for Google Chrome browser",
+        "state": "visible",
+        "dx": 116,
+        "dy": 136,
+        "frame_dx": 231,
+        "frame_dy": 201,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          195,
+          137,
+          267,
+          265
+        ],
+        "session_memory_key": "icon:google chrome",
+        "cached": false
+      }
+    ]
+  }
+}

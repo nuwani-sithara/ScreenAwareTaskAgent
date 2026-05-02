@@ -45,6 +45,7 @@ export class Validator {
       case 'ack':
         return { valid: true };
       case 'mouse_click':
+      case 'mouse_double_click':
         return this.validateMouseClick(command);
       case 'mouse_scroll':
         return this.validateMouseScroll(command);

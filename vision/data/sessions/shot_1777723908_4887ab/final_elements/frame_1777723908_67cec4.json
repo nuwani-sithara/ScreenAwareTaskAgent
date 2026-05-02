@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777723908_4887ab\\processing\\proc_1777723908_e94550\\preprocessed_frames\\frame_1777723908_67cec4.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    175,
+    203,
+    1798,
+    975
+  ],
+  "screen_size": {
+    "width": 1623,
+    "height": 772
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "logo_screenpilot",
+      "type": "icon",
+      "label": "ScreenPilot AI",
+      "description": "Application logo and name",
+      "state": "visible",
+      "dx": 196,
+      "dy": 52,
+      "frame_dx": 371,
+      "frame_dy": 255,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        227,
+        511,
+        283
+      ],
+      "session_memory_key": "icon:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "badge_agent_v2",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "Version information badge",
+      "state": "visible",
+      "dx": 400,
+      "dy": 60,
+      "frame_dx": 575,
+      "frame_dy": 263,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        455,
+        251,
+        695,
+        275
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "logo_screenpilot",
+      "type": "icon",
+      "label": "ScreenPilot AI",
+      "description": "Application logo and name",
+      "state": "visible",
+      "dx": 196,
+      "dy": 52,
+      "frame_dx": 371,
+      "frame_dy": 255,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        227,
+        511,
+        283
+      ],
+      "session_memory_key": "icon:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "badge_agent_v2",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "Version information badge",
+      "state": "visible",
+      "dx": 400,
+      "dy": 60,
+      "frame_dx": 575,
+      "frame_dy": 263,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        455,
+        251,
+        695,
+        275
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "logo_screenpilot",
+      "type": "icon",
+      "label": "ScreenPilot AI",
+      "description": "Application logo and name",
+      "state": "visible",
+      "dx": 196,
+      "dy": 52,
+      "frame_dx": 371,
+      "frame_dy": 255,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        227,
+        511,
+        283
+      ],
+      "session_memory_key": "icon:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "badge_agent_v2",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "Version information badge",
+      "state": "visible",
+      "dx": 400,
+      "dy": 60,
+      "frame_dx": 575,
+      "frame_dy": 263,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        455,
+        251,
+        695,
+        275
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777723908_4887ab",
+    "started_at": "2026-05-02T12:11:48.462668+00:00",
+    "updated_at": "2026-05-02T12:12:27.611049+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777723908_67cec4.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "icon:screenpilot ai": {
+        "element_key": "icon:screenpilot ai",
+        "element_type": "icon",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          231.0,
+          227.0,
+          511.0,
+          283.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723908_67cec4.jpg",
+        "last_seen_frame": "frame_1777723908_67cec4.jpg",
+        "first_seen_at": "2026-05-02T12:12:27.611049+00:00",
+        "last_seen_at": "2026-05-02T12:12:27.611049+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723908_67cec4.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:12:27.611049+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "label:autonomous task agent v2": {
+        "element_key": "label:autonomous task agent v2",
+        "element_type": "label",
+        "label": "Autonomous Task Agent v2",
+        "bbox": [
+          455.0,
+          251.0,
+          695.0,
+          275.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723908_67cec4.jpg",
+        "last_seen_frame": "frame_1777723908_67cec4.jpg",
+        "first_seen_at": "2026-05-02T12:12:27.611049+00:00",
+        "last_seen_at": "2026-05-02T12:12:27.611049+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723908_67cec4.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:12:27.611049+00:00",
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "logo_screenpilot",
+        "type": "icon",
+        "label": "ScreenPilot AI",
+        "description": "Application logo and name",
+        "state": "visible",
+        "dx": 196,
+        "dy": 52,
+        "frame_dx": 371,
+        "frame_dy": 255,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          231,
+          227,
+          511,
+          283
+        ],
+        "session_memory_key": "icon:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "badge_agent_v2",
+        "type": "label",
+        "label": "Autonomous Task Agent v2",
+        "description": "Version information badge",
+        "state": "visible",
+        "dx": 400,
+        "dy": 60,
+        "frame_dx": 575,
+        "frame_dy": 263,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          455,
+          251,
+          695,
+          275
+        ],
+        "session_memory_key": "label:autonomous task agent v2",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "logo_screenpilot",
+        "type": "icon",
+        "label": "ScreenPilot AI",
+        "description": "Application logo and name",
+        "state": "visible",
+        "dx": 196,
+        "dy": 52,
+        "frame_dx": 371,
+        "frame_dy": 255,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          231,
+          227,
+          511,
+          283
+        ],
+        "session_memory_key": "icon:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "badge_agent_v2",
+        "type": "label",
+        "label": "Autonomous Task Agent v2",
+        "description": "Version information badge",
+        "state": "visible",
+        "dx": 400,
+        "dy": 60,
+        "frame_dx": 575,
+        "frame_dy": 263,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          455,
+          251,
+          695,
+          275
+        ],
+        "session_memory_key": "label:autonomous task agent v2",
+        "cached": false
+      }
+    ]
+  }
+}

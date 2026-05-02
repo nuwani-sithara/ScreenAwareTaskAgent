@@ -1,0 +1,3521 @@
+{
+  "run_id": "6026c9f0-c1fd-44d9-af4f-bd9b443c948f",
+  "user_task": "Click on the \"Log in to the site | CourseWeb\" tab and navigate the the CourseWeb Login screen and validate. after that asked user's credentials and login to the Courseweb using given credentials.",
+  "started_at": "2026-05-02T12:07:25.295730+00:00",
+  "finished_at": "2026-05-02T12:22:04.564602+00:00",
+  "vision_used": true,
+  "perception": {
+    "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777723656_191fab\\processing\\proc_1777723656_d8620f\\preprocessed_frames\\frame_1777723656_c40e56.jpg",
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "screen_bbox": [
+      373,
+      121,
+      1812,
+      1029
+    ],
+    "screen_size": {
+      "width": 1439,
+      "height": 908
+    },
+    "coordinate_system": "pixel",
+    "elements": [
+      {
+        "id": "browser_tab_1",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Active browser tab",
+        "state": "active",
+        "dx": 168,
+        "dy": 32,
+        "frame_dx": 541,
+        "frame_dy": 153,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          429,
+          129,
+          653,
+          177
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      },
+      {
+        "id": "browser_new_tab",
+        "type": "button",
+        "label": "New Tab",
+        "description": "Open a new browser tab",
+        "state": "visible",
+        "dx": 288,
+        "dy": 36,
+        "frame_dx": 661,
+        "frame_dy": 157,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          645,
+          145,
+          677,
+          169
+        ],
+        "session_memory_key": "button:new tab",
+        "cached": false
+      },
+      {
+        "id": "browser_url_bar",
+        "type": "input",
+        "label": "Address Bar",
+        "description": "Browser address and search bar",
+        "state": "visible",
+        "dx": 644,
+        "dy": 80,
+        "frame_dx": 1017,
+        "frame_dy": 201,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          373,
+          177,
+          1661,
+          225
+        ],
+        "session_memory_key": "input:address bar",
+        "cached": false
+      }
+    ],
+    "element_count": 3,
+    "current_elements": [
+      {
+        "id": "browser_tab_1",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Active browser tab",
+        "state": "active",
+        "dx": 168,
+        "dy": 32,
+        "frame_dx": 541,
+        "frame_dy": 153,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          429,
+          129,
+          653,
+          177
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      },
+      {
+        "id": "browser_new_tab",
+        "type": "button",
+        "label": "New Tab",
+        "description": "Open a new browser tab",
+        "state": "visible",
+        "dx": 288,
+        "dy": 36,
+        "frame_dx": 661,
+        "frame_dy": 157,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          645,
+          145,
+          677,
+          169
+        ],
+        "session_memory_key": "button:new tab",
+        "cached": false
+      },
+      {
+        "id": "browser_url_bar",
+        "type": "input",
+        "label": "Address Bar",
+        "description": "Browser address and search bar",
+        "state": "visible",
+        "dx": 644,
+        "dy": 80,
+        "frame_dx": 1017,
+        "frame_dy": 201,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          373,
+          177,
+          1661,
+          225
+        ],
+        "session_memory_key": "input:address bar",
+        "cached": false
+      }
+    ],
+    "resolved_elements": [
+      {
+        "id": "browser_tab_1",
+        "type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "description": "Active browser tab",
+        "state": "active",
+        "dx": 168,
+        "dy": 32,
+        "frame_dx": 541,
+        "frame_dy": 153,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          429,
+          129,
+          653,
+          177
+        ],
+        "session_memory_key": "tab:log in to the site | courseweb",
+        "cached": false
+      },
+      {
+        "id": "browser_new_tab",
+        "type": "button",
+        "label": "New Tab",
+        "description": "Open a new browser tab",
+        "state": "visible",
+        "dx": 288,
+        "dy": 36,
+        "frame_dx": 661,
+        "frame_dy": 157,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          645,
+          145,
+          677,
+          169
+        ],
+        "session_memory_key": "button:new tab",
+        "cached": false
+      },
+      {
+        "id": "browser_url_bar",
+        "type": "input",
+        "label": "Address Bar",
+        "description": "Browser address and search bar",
+        "state": "visible",
+        "dx": 644,
+        "dy": 80,
+        "frame_dx": 1017,
+        "frame_dy": 201,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          373,
+          177,
+          1661,
+          225
+        ],
+        "session_memory_key": "input:address bar",
+        "cached": false
+      }
+    ],
+    "session_knowledge_base": {
+      "session_id": "shot_1777723656_191fab",
+      "started_at": "2026-05-02T12:07:36.377309+00:00",
+      "updated_at": "2026-05-02T12:08:06.828394+00:00",
+      "stale_after_misses": 3,
+      "confidence_floor": 0.4,
+      "decay_per_miss": 0.9,
+      "frame_count": 1,
+      "frame_name": "frame_1777723656_c40e56.jpg",
+      "frame_index": 0,
+      "image_size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "known_elements": {
+        "tab:log in to the site | courseweb": {
+          "element_key": "tab:log in to the site | courseweb",
+          "element_type": "tab",
+          "label": "Log in to the site | CourseWeb",
+          "bbox": [
+            429.0,
+            129.0,
+            653.0,
+            177.0
+          ],
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "first_seen_frame": "frame_1777723656_c40e56.jpg",
+          "last_seen_frame": "frame_1777723656_c40e56.jpg",
+          "first_seen_at": "2026-05-02T12:08:06.828394+00:00",
+          "last_seen_at": "2026-05-02T12:08:06.828394+00:00",
+          "first_seen_index": 0,
+          "last_seen_index": 0,
+          "seen_count": 1,
+          "miss_count": 0,
+          "stale": false,
+          "cached": false,
+          "history": [
+            {
+              "frame_name": "frame_1777723656_c40e56.jpg",
+              "frame_index": 0,
+              "seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "confidence": 0.9
+            }
+          ]
+        },
+        "button:new tab": {
+          "element_key": "button:new tab",
+          "element_type": "button",
+          "label": "New Tab",
+          "bbox": [
+            645.0,
+            145.0,
+            677.0,
+            169.0
+          ],
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "first_seen_frame": "frame_1777723656_c40e56.jpg",
+          "last_seen_frame": "frame_1777723656_c40e56.jpg",
+          "first_seen_at": "2026-05-02T12:08:06.828394+00:00",
+          "last_seen_at": "2026-05-02T12:08:06.828394+00:00",
+          "first_seen_index": 0,
+          "last_seen_index": 0,
+          "seen_count": 1,
+          "miss_count": 0,
+          "stale": false,
+          "cached": false,
+          "history": [
+            {
+              "frame_name": "frame_1777723656_c40e56.jpg",
+              "frame_index": 0,
+              "seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "confidence": 0.9
+            }
+          ]
+        },
+        "input:address bar": {
+          "element_key": "input:address bar",
+          "element_type": "input",
+          "label": "Address Bar",
+          "bbox": [
+            373.0,
+            177.0,
+            1661.0,
+            225.0
+          ],
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "first_seen_frame": "frame_1777723656_c40e56.jpg",
+          "last_seen_frame": "frame_1777723656_c40e56.jpg",
+          "first_seen_at": "2026-05-02T12:08:06.828394+00:00",
+          "last_seen_at": "2026-05-02T12:08:06.828394+00:00",
+          "first_seen_index": 0,
+          "last_seen_index": 0,
+          "seen_count": 1,
+          "miss_count": 0,
+          "stale": false,
+          "cached": false,
+          "history": [
+            {
+              "frame_name": "frame_1777723656_c40e56.jpg",
+              "frame_index": 0,
+              "seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "confidence": 0.9
+            }
+          ]
+        }
+      },
+      "resolved_elements": [
+        {
+          "id": "browser_tab_1",
+          "type": "tab",
+          "label": "Log in to the site | CourseWeb",
+          "description": "Active browser tab",
+          "state": "active",
+          "dx": 168,
+          "dy": 32,
+          "frame_dx": 541,
+          "frame_dy": 153,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            429,
+            129,
+            653,
+            177
+          ],
+          "session_memory_key": "tab:log in to the site | courseweb",
+          "cached": false
+        },
+        {
+          "id": "browser_new_tab",
+          "type": "button",
+          "label": "New Tab",
+          "description": "Open a new browser tab",
+          "state": "visible",
+          "dx": 288,
+          "dy": 36,
+          "frame_dx": 661,
+          "frame_dy": 157,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            645,
+            145,
+            677,
+            169
+          ],
+          "session_memory_key": "button:new tab",
+          "cached": false
+        },
+        {
+          "id": "browser_url_bar",
+          "type": "input",
+          "label": "Address Bar",
+          "description": "Browser address and search bar",
+          "state": "visible",
+          "dx": 644,
+          "dy": 80,
+          "frame_dx": 1017,
+          "frame_dy": 201,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            373,
+            177,
+            1661,
+            225
+          ],
+          "session_memory_key": "input:address bar",
+          "cached": false
+        }
+      ],
+      "current_elements": [
+        {
+          "id": "browser_tab_1",
+          "type": "tab",
+          "label": "Log in to the site | CourseWeb",
+          "description": "Active browser tab",
+          "state": "active",
+          "dx": 168,
+          "dy": 32,
+          "frame_dx": 541,
+          "frame_dy": 153,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            429,
+            129,
+            653,
+            177
+          ],
+          "session_memory_key": "tab:log in to the site | courseweb",
+          "cached": false
+        },
+        {
+          "id": "browser_new_tab",
+          "type": "button",
+          "label": "New Tab",
+          "description": "Open a new browser tab",
+          "state": "visible",
+          "dx": 288,
+          "dy": 36,
+          "frame_dx": 661,
+          "frame_dy": 157,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            645,
+            145,
+            677,
+            169
+          ],
+          "session_memory_key": "button:new tab",
+          "cached": false
+        },
+        {
+          "id": "browser_url_bar",
+          "type": "input",
+          "label": "Address Bar",
+          "description": "Browser address and search bar",
+          "state": "visible",
+          "dx": 644,
+          "dy": 80,
+          "frame_dx": 1017,
+          "frame_dy": 201,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            373,
+            177,
+            1661,
+            225
+          ],
+          "session_memory_key": "input:address bar",
+          "cached": false
+        }
+      ]
+    },
+    "session_memory": {
+      "run_id": "6026c9f0-c1fd-44d9-af4f-bd9b443c948f",
+      "user_task": "Click on the \"Log in to the site | CourseWeb\" tab and navigate the the CourseWeb Login screen and validate. after that asked user's credentials and login to the Courseweb using given credentials.",
+      "started_at": "2026-05-02T12:07:25.295730+00:00",
+      "updated_at": "2026-05-02T12:08:06.849953+00:00",
+      "stale_after_misses": 2,
+      "confidence_floor": 0.4,
+      "decay_per_miss": 0.9,
+      "frame_index": 1,
+      "known_elements": {
+        "tab:log in to the site | courseweb": {
+          "element_key": "tab:log in to the site | courseweb",
+          "element_type": "tab",
+          "label": "Log in to the site | CourseWeb",
+          "bbox": [
+            438.0,
+            137.0,
+            798.0,
+            193.0
+          ],
+          "confidence": 0.5048,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 0,
+          "last_seen_index": 9,
+          "first_seen_at": "2026-05-02T12:08:06.849953+00:00",
+          "last_seen_at": "2026-05-02T12:16:12.657091+00:00",
+          "seen_count": 4,
+          "miss_count": 6,
+          "stale": true,
+          "cached": true
+        },
+        "button:new tab": {
+          "element_key": "button:new tab",
+          "element_type": "button",
+          "label": "New Tab",
+          "bbox": [
+            645.0,
+            145.0,
+            677.0,
+            169.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 0,
+          "last_seen_index": 0,
+          "first_seen_at": "2026-05-02T12:08:06.849953+00:00",
+          "last_seen_at": "2026-05-02T12:08:06.849953+00:00",
+          "seen_count": 1,
+          "miss_count": 15,
+          "stale": true,
+          "cached": true
+        },
+        "input:address bar": {
+          "element_key": "input:address bar",
+          "element_type": "input",
+          "label": "Address Bar",
+          "bbox": [
+            214.0,
+            192.0,
+            1310.0,
+            248.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 0,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:08:06.849953+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 2,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "text:screenpilot ai": {
+          "element_key": "text:screenpilot ai",
+          "element_type": "text",
+          "label": "ScreenPilot AI",
+          "bbox": [
+            271.0,
+            259.0,
+            511.0,
+            315.0
+          ],
+          "confidence": 0.4783,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 1,
+          "last_seen_index": 8,
+          "first_seen_at": "2026-05-02T12:08:59.764823+00:00",
+          "last_seen_at": "2026-05-02T12:15:11.223106+00:00",
+          "seen_count": 2,
+          "miss_count": 7,
+          "stale": true,
+          "cached": true
+        },
+        "text:autonomous task agent v2": {
+          "element_key": "text:autonomous task agent v2",
+          "element_type": "text",
+          "label": "Autonomous Task Agent v2",
+          "bbox": [
+            431.0,
+            283.0,
+            575.0,
+            331.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 1,
+          "last_seen_index": 1,
+          "first_seen_at": "2026-05-02T12:08:59.764823+00:00",
+          "last_seen_at": "2026-05-02T12:08:59.764823+00:00",
+          "seen_count": 1,
+          "miss_count": 14,
+          "stale": true,
+          "cached": true
+        },
+        "tab:frontend": {
+          "element_key": "tab:frontend",
+          "element_type": "tab",
+          "label": "frontend",
+          "bbox": [
+            206.0,
+            137.0,
+            518.0,
+            193.0
+          ],
+          "confidence": 0.5048,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 9,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:16:12.657091+00:00",
+          "seen_count": 3,
+          "miss_count": 6,
+          "stale": true,
+          "cached": true
+        },
+        "button:back": {
+          "element_key": "button:back",
+          "element_type": "button",
+          "label": "Back",
+          "bbox": [
+            214.0,
+            192.0,
+            262.0,
+            248.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:forward": {
+          "element_key": "button:forward",
+          "element_type": "button",
+          "label": "Forward",
+          "bbox": [
+            254.0,
+            192.0,
+            302.0,
+            248.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:refresh": {
+          "element_key": "button:refresh",
+          "element_type": "button",
+          "label": "Refresh",
+          "bbox": [
+            294.0,
+            192.0,
+            342.0,
+            248.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:ask gemini": {
+          "element_key": "button:ask gemini",
+          "element_type": "button",
+          "label": "Ask Gemini",
+          "bbox": [
+            1190.0,
+            176.0,
+            1302.0,
+            200.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "heading:screenpilot ai": {
+          "element_key": "heading:screenpilot ai",
+          "element_type": "heading",
+          "label": "ScreenPilot AI",
+          "bbox": [
+            310.0,
+            280.0,
+            430.0,
+            312.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 3,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:10:49.251995+00:00",
+          "seen_count": 2,
+          "miss_count": 12,
+          "stale": true,
+          "cached": true
+        },
+        "label:autonomous task agent v2": {
+          "element_key": "label:autonomous task agent v2",
+          "element_type": "label",
+          "label": "Autonomous Task Agent v2",
+          "bbox": [
+            399.0,
+            251.0,
+            583.0,
+            283.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 4,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "heading:task plan": {
+          "element_key": "heading:task plan",
+          "element_type": "heading",
+          "label": "Task Plan",
+          "bbox": [
+            246.0,
+            440.0,
+            350.0,
+            480.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "label:0/2 done": {
+          "element_key": "label:0/2 done",
+          "element_type": "label",
+          "label": "0/2 done",
+          "bbox": [
+            775.0,
+            459.0,
+            831.0,
+            483.0
+          ],
+          "confidence": 0.4004,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 2,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "list_item:step 1": {
+          "element_key": "list_item:step 1",
+          "element_type": "list_item",
+          "label": "Step 1",
+          "bbox": [
+            174.0,
+            520.0,
+            918.0,
+            568.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "list_item:step 2": {
+          "element_key": "list_item:step 2",
+          "element_type": "list_item",
+          "label": "Step 2",
+          "bbox": [
+            174.0,
+            552.0,
+            918.0,
+            632.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "pane:action log": {
+          "element_key": "pane:action log",
+          "element_type": "pane",
+          "label": "Action Log",
+          "bbox": [
+            174.0,
+            616.0,
+            918.0,
+            832.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "input:agent is working...": {
+          "element_key": "input:agent is working...",
+          "element_type": "input",
+          "label": "Agent is working...",
+          "bbox": [
+            174.0,
+            864.0,
+            1566.0,
+            944.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:send": {
+          "element_key": "button:send",
+          "element_type": "button",
+          "label": "Send",
+          "bbox": [
+            1343.0,
+            875.0,
+            1407.0,
+            955.0
+          ],
+          "confidence": 0.4175,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 2,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "toolbar:windows taskbar": {
+          "element_key": "toolbar:windows taskbar",
+          "element_type": "toolbar",
+          "label": "Windows Taskbar",
+          "bbox": [
+            174.0,
+            952.0,
+            1814.0,
+            1024.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:start": {
+          "element_key": "button:start",
+          "element_type": "button",
+          "label": "Start",
+          "bbox": [
+            1030.0,
+            952.0,
+            1078.0,
+            1000.0
+          ],
+          "confidence": 0.5315,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 10,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:17:16.861826+00:00",
+          "seen_count": 2,
+          "miss_count": 5,
+          "stale": true,
+          "cached": true
+        },
+        "input:search": {
+          "element_key": "input:search",
+          "element_type": "input",
+          "label": "Search",
+          "bbox": [
+            550.0,
+            960.0,
+            678.0,
+            1024.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:chrome": {
+          "element_key": "button:chrome",
+          "element_type": "button",
+          "label": "Chrome",
+          "bbox": [
+            942.0,
+            960.0,
+            990.0,
+            1016.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "button:vs code": {
+          "element_key": "button:vs code",
+          "element_type": "button",
+          "label": "VS Code",
+          "bbox": [
+            1054.0,
+            960.0,
+            1102.0,
+            1016.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "label:weather": {
+          "element_key": "label:weather",
+          "element_type": "label",
+          "label": "Weather",
+          "bbox": [
+            182.0,
+            960.0,
+            318.0,
+            1024.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 2,
+          "last_seen_index": 2,
+          "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+          "seen_count": 1,
+          "miss_count": 13,
+          "stale": true,
+          "cached": true
+        },
+        "icon:xbox logo": {
+          "element_key": "icon:xbox logo",
+          "element_type": "icon",
+          "label": "Xbox Logo",
+          "bbox": [
+            744.0,
+            531.0,
+            848.0,
+            627.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 4,
+          "last_seen_index": 4,
+          "first_seen_at": "2026-05-02T12:11:37.557870+00:00",
+          "last_seen_at": "2026-05-02T12:11:37.557870+00:00",
+          "seen_count": 1,
+          "miss_count": 11,
+          "stale": true,
+          "cached": true
+        },
+        "button:minimize": {
+          "element_key": "button:minimize",
+          "element_type": "button",
+          "label": "Minimize",
+          "bbox": [
+            1144.0,
+            147.0,
+            1176.0,
+            179.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 4,
+          "last_seen_index": 4,
+          "first_seen_at": "2026-05-02T12:11:37.557870+00:00",
+          "last_seen_at": "2026-05-02T12:11:37.557870+00:00",
+          "seen_count": 1,
+          "miss_count": 11,
+          "stale": true,
+          "cached": true
+        },
+        "icon:screenpilot ai": {
+          "element_key": "icon:screenpilot ai",
+          "element_type": "icon",
+          "label": "ScreenPilot AI",
+          "bbox": [
+            231.0,
+            227.0,
+            511.0,
+            283.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 5,
+          "last_seen_index": 5,
+          "first_seen_at": "2026-05-02T12:12:27.660743+00:00",
+          "last_seen_at": "2026-05-02T12:12:27.660743+00:00",
+          "seen_count": 1,
+          "miss_count": 10,
+          "stale": true,
+          "cached": true
+        },
+        "icon:screenpilot ai logo": {
+          "element_key": "icon:screenpilot ai logo",
+          "element_type": "icon",
+          "label": "ScreenPilot AI Logo",
+          "bbox": [
+            239.0,
+            243.0,
+            303.0,
+            307.0
+          ],
+          "confidence": 0.4783,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 8,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:15:11.223106+00:00",
+          "seen_count": 2,
+          "miss_count": 7,
+          "stale": true,
+          "cached": true
+        },
+        "label:screenpilot ai": {
+          "element_key": "label:screenpilot ai",
+          "element_type": "label",
+          "label": "ScreenPilot AI",
+          "bbox": [
+            247.0,
+            235.0,
+            439.0,
+            283.0
+          ],
+          "confidence": 0.4218,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "pane:message box": {
+          "element_key": "pane:message box",
+          "element_type": "pane",
+          "label": "Message Box",
+          "bbox": [
+            463.0,
+            299.0,
+            1495.0,
+            459.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "pane:task plan container": {
+          "element_key": "pane:task plan container",
+          "element_type": "pane",
+          "label": "Task Plan Container",
+          "bbox": [
+            175.0,
+            419.0,
+            935.0,
+            659.0
+          ],
+          "confidence": 0.4046,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:task plan": {
+          "element_key": "label:task plan",
+          "element_type": "label",
+          "label": "Task Plan",
+          "bbox": [
+            263.0,
+            451.0,
+            351.0,
+            475.0
+          ],
+          "confidence": 0.4132,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:task plan description": {
+          "element_key": "label:task plan description",
+          "element_type": "label",
+          "label": "Task Plan Description",
+          "bbox": [
+            175.0,
+            475.0,
+            911.0,
+            523.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:step 1: click the log in to the site tab": {
+          "element_key": "label:step 1: click the log in to the site tab",
+          "element_type": "label",
+          "label": "Step 1: Click the Log in to the site tab",
+          "bbox": [
+            175.0,
+            515.0,
+            911.0,
+            571.0
+          ],
+          "confidence": 0.4089,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:step 2: click the username field and type the username": {
+          "element_key": "label:step 2: click the username field and type the username",
+          "element_type": "label",
+          "label": "Step 2: Click the username field and type the username",
+          "bbox": [
+            175.0,
+            555.0,
+            911.0,
+            627.0
+          ],
+          "confidence": 0.4089,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "pane:log container": {
+          "element_key": "pane:log container",
+          "element_type": "pane",
+          "label": "Log Container",
+          "bbox": [
+            175.0,
+            611.0,
+            935.0,
+            819.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:sending 2 hid commands...": {
+          "element_key": "label:sending 2 hid commands...",
+          "element_type": "label",
+          "label": "Sending 2 HID commands...",
+          "bbox": [
+            239.0,
+            643.0,
+            423.0,
+            675.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:validating step 1...": {
+          "element_key": "label:validating step 1...",
+          "element_type": "label",
+          "label": "Validating step 1...",
+          "bbox": [
+            239.0,
+            659.0,
+            391.0,
+            691.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:evaluation error: no valid json found": {
+          "element_key": "label:evaluation error: no valid json found",
+          "element_type": "label",
+          "label": "Evaluation error: No valid JSON found",
+          "bbox": [
+            175.0,
+            675.0,
+            863.0,
+            715.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:step 1 failed after 3 attempts": {
+          "element_key": "label:step 1 failed after 3 attempts",
+          "element_type": "label",
+          "label": "Step 1 failed after 3 attempts",
+          "bbox": [
+            191.0,
+            707.0,
+            719.0,
+            731.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:step 2: click the username field...": {
+          "element_key": "label:step 2: click the username field...",
+          "element_type": "label",
+          "label": "Step 2: Click the username field...",
+          "bbox": [
+            175.0,
+            723.0,
+            879.0,
+            771.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "label:screen snapshot for step 2...": {
+          "element_key": "label:screen snapshot for step 2...",
+          "element_type": "label",
+          "label": "Screen snapshot for step 2...",
+          "bbox": [
+            231.0,
+            763.0,
+            455.0,
+            795.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "input:agent status bar": {
+          "element_key": "input:agent status bar",
+          "element_type": "input",
+          "label": "Agent Status Bar",
+          "bbox": [
+            175.0,
+            875.0,
+            1583.0,
+            963.0
+          ],
+          "confidence": 0.4132,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "pane:windows taskbar": {
+          "element_key": "pane:windows taskbar",
+          "element_type": "pane",
+          "label": "Windows Taskbar",
+          "bbox": [
+            175.0,
+            955.0,
+            1799.0,
+            975.0
+          ],
+          "confidence": 0.4,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 7,
+          "last_seen_index": 7,
+          "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+          "seen_count": 1,
+          "miss_count": 8,
+          "stale": true,
+          "cached": true
+        },
+        "pane:taskbar": {
+          "element_key": "pane:taskbar",
+          "element_type": "pane",
+          "label": "Taskbar",
+          "bbox": [
+            1014.0,
+            936.0,
+            1805.0,
+            1020.0
+          ],
+          "confidence": 0.5609,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 10,
+          "last_seen_index": 10,
+          "first_seen_at": "2026-05-02T12:17:16.861826+00:00",
+          "last_seen_at": "2026-05-02T12:17:16.861826+00:00",
+          "seen_count": 1,
+          "miss_count": 5,
+          "stale": true,
+          "cached": true
+        },
+        "icon:google chrome": {
+          "element_key": "icon:google chrome",
+          "element_type": "icon",
+          "label": "Google Chrome",
+          "bbox": [
+            195.0,
+            145.0,
+            267.0,
+            257.0
+          ],
+          "confidence": 0.95,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 11,
+          "last_seen_index": 15,
+          "first_seen_at": "2026-05-02T12:18:14.647337+00:00",
+          "last_seen_at": "2026-05-02T12:21:59.396073+00:00",
+          "seen_count": 4,
+          "miss_count": 0,
+          "stale": false,
+          "cached": false
+        },
+        "icon:huiontablet": {
+          "element_key": "icon:huiontablet",
+          "element_type": "icon",
+          "label": "HuionTablet",
+          "bbox": [
+            259.0,
+            145.0,
+            339.0,
+            257.0
+          ],
+          "confidence": 0.95,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 11,
+          "last_seen_index": 15,
+          "first_seen_at": "2026-05-02T12:18:14.647337+00:00",
+          "last_seen_at": "2026-05-02T12:21:59.396073+00:00",
+          "seen_count": 2,
+          "miss_count": 0,
+          "stale": false,
+          "cached": false
+        },
+        "icon:file explorer": {
+          "element_key": "icon:file explorer",
+          "element_type": "icon",
+          "label": "File Explorer",
+          "bbox": [
+            985.0,
+            960.0,
+            1033.0,
+            1008.0
+          ],
+          "confidence": 0.6561,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 12,
+          "last_seen_index": 12,
+          "first_seen_at": "2026-05-02T12:19:11.434731+00:00",
+          "last_seen_at": "2026-05-02T12:19:11.434731+00:00",
+          "seen_count": 1,
+          "miss_count": 3,
+          "stale": true,
+          "cached": true
+        },
+        "icon:app icon": {
+          "element_key": "icon:app icon",
+          "element_type": "icon",
+          "label": "App Icon",
+          "bbox": [
+            1033.0,
+            960.0,
+            1089.0,
+            1008.0
+          ],
+          "confidence": 0.6561,
+          "source": "gemini_vlm",
+          "first_seen_frame": null,
+          "last_seen_frame": null,
+          "first_seen_index": 12,
+          "last_seen_index": 12,
+          "first_seen_at": "2026-05-02T12:19:11.434731+00:00",
+          "last_seen_at": "2026-05-02T12:19:11.434731+00:00",
+          "seen_count": 1,
+          "miss_count": 3,
+          "stale": true,
+          "cached": true
+        }
+      },
+      "current_elements": [
+        {
+          "id": "browser_tab_1",
+          "type": "tab",
+          "label": "Log in to the site | CourseWeb",
+          "description": "Active browser tab",
+          "state": "active",
+          "dx": 168,
+          "dy": 32,
+          "frame_dx": 541,
+          "frame_dy": 153,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            429,
+            129,
+            653,
+            177
+          ],
+          "session_memory_key": "tab:log in to the site | courseweb",
+          "cached": false
+        },
+        {
+          "id": "browser_new_tab",
+          "type": "button",
+          "label": "New Tab",
+          "description": "Open a new browser tab",
+          "state": "visible",
+          "dx": 288,
+          "dy": 36,
+          "frame_dx": 661,
+          "frame_dy": 157,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            645,
+            145,
+            677,
+            169
+          ],
+          "session_memory_key": "button:new tab",
+          "cached": false
+        },
+        {
+          "id": "browser_url_bar",
+          "type": "input",
+          "label": "Address Bar",
+          "description": "Browser address and search bar",
+          "state": "visible",
+          "dx": 644,
+          "dy": 80,
+          "frame_dx": 1017,
+          "frame_dy": 201,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            373,
+            177,
+            1661,
+            225
+          ],
+          "session_memory_key": "input:address bar",
+          "cached": false
+        }
+      ],
+      "resolved_elements": [
+        {
+          "id": "browser_tab_1",
+          "type": "tab",
+          "label": "Log in to the site | CourseWeb",
+          "description": "Active browser tab",
+          "state": "active",
+          "dx": 168,
+          "dy": 32,
+          "frame_dx": 541,
+          "frame_dy": 153,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            429,
+            129,
+            653,
+            177
+          ],
+          "session_memory_key": "tab:log in to the site | courseweb",
+          "cached": false
+        },
+        {
+          "id": "browser_new_tab",
+          "type": "button",
+          "label": "New Tab",
+          "description": "Open a new browser tab",
+          "state": "visible",
+          "dx": 288,
+          "dy": 36,
+          "frame_dx": 661,
+          "frame_dy": 157,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            645,
+            145,
+            677,
+            169
+          ],
+          "session_memory_key": "button:new tab",
+          "cached": false
+        },
+        {
+          "id": "browser_url_bar",
+          "type": "input",
+          "label": "Address Bar",
+          "description": "Browser address and search bar",
+          "state": "visible",
+          "dx": 644,
+          "dy": 80,
+          "frame_dx": 1017,
+          "frame_dy": 201,
+          "confidence": 0.9,
+          "source": "gemini_vlm",
+          "frame_bbox": [
+            373,
+            177,
+            1661,
+            225
+          ],
+          "session_memory_key": "input:address bar",
+          "cached": false
+        }
+      ],
+      "screen_data": {
+        "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777723656_191fab\\processing\\proc_1777723656_d8620f\\preprocessed_frames\\frame_1777723656_c40e56.jpg",
+        "image_size": {
+          "width": 1920,
+          "height": 1080
+        },
+        "screen_bbox": [
+          373,
+          121,
+          1812,
+          1029
+        ],
+        "screen_size": {
+          "width": 1439,
+          "height": 908
+        },
+        "coordinate_system": "pixel",
+        "elements": [
+          {
+            "id": "browser_tab_1",
+            "type": "tab",
+            "label": "Log in to the site | CourseWeb",
+            "description": "Active browser tab",
+            "state": "active",
+            "dx": 168,
+            "dy": 32,
+            "frame_dx": 541,
+            "frame_dy": 153,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              429,
+              129,
+              653,
+              177
+            ],
+            "session_memory_key": "tab:log in to the site | courseweb",
+            "cached": false
+          },
+          {
+            "id": "browser_new_tab",
+            "type": "button",
+            "label": "New Tab",
+            "description": "Open a new browser tab",
+            "state": "visible",
+            "dx": 288,
+            "dy": 36,
+            "frame_dx": 661,
+            "frame_dy": 157,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              645,
+              145,
+              677,
+              169
+            ],
+            "session_memory_key": "button:new tab",
+            "cached": false
+          },
+          {
+            "id": "browser_url_bar",
+            "type": "input",
+            "label": "Address Bar",
+            "description": "Browser address and search bar",
+            "state": "visible",
+            "dx": 644,
+            "dy": 80,
+            "frame_dx": 1017,
+            "frame_dy": 201,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              373,
+              177,
+              1661,
+              225
+            ],
+            "session_memory_key": "input:address bar",
+            "cached": false
+          }
+        ],
+        "element_count": 3,
+        "current_elements": [
+          {
+            "id": "browser_tab_1",
+            "type": "tab",
+            "label": "Log in to the site | CourseWeb",
+            "description": "Active browser tab",
+            "state": "active",
+            "dx": 168,
+            "dy": 32,
+            "frame_dx": 541,
+            "frame_dy": 153,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              429,
+              129,
+              653,
+              177
+            ],
+            "session_memory_key": "tab:log in to the site | courseweb",
+            "cached": false
+          },
+          {
+            "id": "browser_new_tab",
+            "type": "button",
+            "label": "New Tab",
+            "description": "Open a new browser tab",
+            "state": "visible",
+            "dx": 288,
+            "dy": 36,
+            "frame_dx": 661,
+            "frame_dy": 157,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              645,
+              145,
+              677,
+              169
+            ],
+            "session_memory_key": "button:new tab",
+            "cached": false
+          },
+          {
+            "id": "browser_url_bar",
+            "type": "input",
+            "label": "Address Bar",
+            "description": "Browser address and search bar",
+            "state": "visible",
+            "dx": 644,
+            "dy": 80,
+            "frame_dx": 1017,
+            "frame_dy": 201,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              373,
+              177,
+              1661,
+              225
+            ],
+            "session_memory_key": "input:address bar",
+            "cached": false
+          }
+        ],
+        "resolved_elements": [
+          {
+            "id": "browser_tab_1",
+            "type": "tab",
+            "label": "Log in to the site | CourseWeb",
+            "description": "Active browser tab",
+            "state": "active",
+            "dx": 168,
+            "dy": 32,
+            "frame_dx": 541,
+            "frame_dy": 153,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              429,
+              129,
+              653,
+              177
+            ],
+            "session_memory_key": "tab:log in to the site | courseweb",
+            "cached": false
+          },
+          {
+            "id": "browser_new_tab",
+            "type": "button",
+            "label": "New Tab",
+            "description": "Open a new browser tab",
+            "state": "visible",
+            "dx": 288,
+            "dy": 36,
+            "frame_dx": 661,
+            "frame_dy": 157,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              645,
+              145,
+              677,
+              169
+            ],
+            "session_memory_key": "button:new tab",
+            "cached": false
+          },
+          {
+            "id": "browser_url_bar",
+            "type": "input",
+            "label": "Address Bar",
+            "description": "Browser address and search bar",
+            "state": "visible",
+            "dx": 644,
+            "dy": 80,
+            "frame_dx": 1017,
+            "frame_dy": 201,
+            "confidence": 0.9,
+            "source": "gemini_vlm",
+            "frame_bbox": [
+              373,
+              177,
+              1661,
+              225
+            ],
+            "session_memory_key": "input:address bar",
+            "cached": false
+          }
+        ],
+        "session_knowledge_base": {
+          "session_id": "shot_1777723656_191fab",
+          "started_at": "2026-05-02T12:07:36.377309+00:00",
+          "updated_at": "2026-05-02T12:08:06.828394+00:00",
+          "stale_after_misses": 3,
+          "confidence_floor": 0.4,
+          "decay_per_miss": 0.9,
+          "frame_count": 1,
+          "frame_name": "frame_1777723656_c40e56.jpg",
+          "frame_index": 0,
+          "image_size": {
+            "width": 1920,
+            "height": 1080
+          },
+          "known_elements": {
+            "tab:log in to the site | courseweb": {
+              "element_key": "tab:log in to the site | courseweb",
+              "element_type": "tab",
+              "label": "Log in to the site | CourseWeb",
+              "bbox": [
+                429.0,
+                129.0,
+                653.0,
+                177.0
+              ],
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "first_seen_frame": "frame_1777723656_c40e56.jpg",
+              "last_seen_frame": "frame_1777723656_c40e56.jpg",
+              "first_seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "last_seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "first_seen_index": 0,
+              "last_seen_index": 0,
+              "seen_count": 1,
+              "miss_count": 0,
+              "stale": false,
+              "cached": false,
+              "history": [
+                {
+                  "frame_name": "frame_1777723656_c40e56.jpg",
+                  "frame_index": 0,
+                  "seen_at": "2026-05-02T12:08:06.828394+00:00",
+                  "confidence": 0.9
+                }
+              ]
+            },
+            "button:new tab": {
+              "element_key": "button:new tab",
+              "element_type": "button",
+              "label": "New Tab",
+              "bbox": [
+                645.0,
+                145.0,
+                677.0,
+                169.0
+              ],
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "first_seen_frame": "frame_1777723656_c40e56.jpg",
+              "last_seen_frame": "frame_1777723656_c40e56.jpg",
+              "first_seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "last_seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "first_seen_index": 0,
+              "last_seen_index": 0,
+              "seen_count": 1,
+              "miss_count": 0,
+              "stale": false,
+              "cached": false,
+              "history": [
+                {
+                  "frame_name": "frame_1777723656_c40e56.jpg",
+                  "frame_index": 0,
+                  "seen_at": "2026-05-02T12:08:06.828394+00:00",
+                  "confidence": 0.9
+                }
+              ]
+            },
+            "input:address bar": {
+              "element_key": "input:address bar",
+              "element_type": "input",
+              "label": "Address Bar",
+              "bbox": [
+                373.0,
+                177.0,
+                1661.0,
+                225.0
+              ],
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "first_seen_frame": "frame_1777723656_c40e56.jpg",
+              "last_seen_frame": "frame_1777723656_c40e56.jpg",
+              "first_seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "last_seen_at": "2026-05-02T12:08:06.828394+00:00",
+              "first_seen_index": 0,
+              "last_seen_index": 0,
+              "seen_count": 1,
+              "miss_count": 0,
+              "stale": false,
+              "cached": false,
+              "history": [
+                {
+                  "frame_name": "frame_1777723656_c40e56.jpg",
+                  "frame_index": 0,
+                  "seen_at": "2026-05-02T12:08:06.828394+00:00",
+                  "confidence": 0.9
+                }
+              ]
+            }
+          },
+          "resolved_elements": [
+            {
+              "id": "browser_tab_1",
+              "type": "tab",
+              "label": "Log in to the site | CourseWeb",
+              "description": "Active browser tab",
+              "state": "active",
+              "dx": 168,
+              "dy": 32,
+              "frame_dx": 541,
+              "frame_dy": 153,
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "frame_bbox": [
+                429,
+                129,
+                653,
+                177
+              ],
+              "session_memory_key": "tab:log in to the site | courseweb",
+              "cached": false
+            },
+            {
+              "id": "browser_new_tab",
+              "type": "button",
+              "label": "New Tab",
+              "description": "Open a new browser tab",
+              "state": "visible",
+              "dx": 288,
+              "dy": 36,
+              "frame_dx": 661,
+              "frame_dy": 157,
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "frame_bbox": [
+                645,
+                145,
+                677,
+                169
+              ],
+              "session_memory_key": "button:new tab",
+              "cached": false
+            },
+            {
+              "id": "browser_url_bar",
+              "type": "input",
+              "label": "Address Bar",
+              "description": "Browser address and search bar",
+              "state": "visible",
+              "dx": 644,
+              "dy": 80,
+              "frame_dx": 1017,
+              "frame_dy": 201,
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "frame_bbox": [
+                373,
+                177,
+                1661,
+                225
+              ],
+              "session_memory_key": "input:address bar",
+              "cached": false
+            }
+          ],
+          "current_elements": [
+            {
+              "id": "browser_tab_1",
+              "type": "tab",
+              "label": "Log in to the site | CourseWeb",
+              "description": "Active browser tab",
+              "state": "active",
+              "dx": 168,
+              "dy": 32,
+              "frame_dx": 541,
+              "frame_dy": 153,
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "frame_bbox": [
+                429,
+                129,
+                653,
+                177
+              ],
+              "session_memory_key": "tab:log in to the site | courseweb",
+              "cached": false
+            },
+            {
+              "id": "browser_new_tab",
+              "type": "button",
+              "label": "New Tab",
+              "description": "Open a new browser tab",
+              "state": "visible",
+              "dx": 288,
+              "dy": 36,
+              "frame_dx": 661,
+              "frame_dy": 157,
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "frame_bbox": [
+                645,
+                145,
+                677,
+                169
+              ],
+              "session_memory_key": "button:new tab",
+              "cached": false
+            },
+            {
+              "id": "browser_url_bar",
+              "type": "input",
+              "label": "Address Bar",
+              "description": "Browser address and search bar",
+              "state": "visible",
+              "dx": 644,
+              "dy": 80,
+              "frame_dx": 1017,
+              "frame_dy": 201,
+              "confidence": 0.9,
+              "source": "gemini_vlm",
+              "frame_bbox": [
+                373,
+                177,
+                1661,
+                225
+              ],
+              "session_memory_key": "input:address bar",
+              "cached": false
+            }
+          ]
+        }
+      }
+    }
+  },
+  "todo": {
+    "steps": [
+      {
+        "id": 1,
+        "action": "Click the 'Log in to the site | CourseWeb' tab to ensure the login page is active and visible.",
+        "target": "Tab at (168, 32)",
+        "expected_result": "The CourseWeb login form (username and password fields) is displayed on the screen.",
+        "needs_user_data": false,
+        "user_data_field": null,
+        "status": "failed"
+      },
+      {
+        "id": 2,
+        "action": "Click the username field and type the username, click the password field and type the password, then click the login button.",
+        "target": "Login form fields",
+        "expected_result": "The user is successfully authenticated and the CourseWeb dashboard or home page loads.",
+        "needs_user_data": true,
+        "user_data_field": "login_credentials",
+        "status": "failed"
+      }
+    ],
+    "notes": "The browser is currently showing the CourseWeb login tab. The first step ensures the tab is active, and the second step handles the credential entry which requires user input.",
+    "estimated_complexity": "simple"
+  },
+  "step_plans": [
+    {
+      "step_id": 1,
+      "action": "Click the 'Log in to the site | CourseWeb' tab to ensure the login page is active and visible.",
+      "target": "Tab at (168, 32)",
+      "expected_result": "The CourseWeb login form (username and password fields) is displayed on the screen.",
+      "hid_commands": [
+        {
+          "cmd": "mouse_move",
+          "dx": 196,
+          "dy": 52
+        },
+        {
+          "cmd": "mouse_click",
+          "button": "left"
+        }
+      ],
+      "reasoning": "Moving the cursor to the 'Log in to the site | CourseWeb' tab at the specified coordinates (168, 32) and clicking to ensure the login page is active and visible."
+    },
+    {
+      "step_id": 2,
+      "action": "Click the username field and type the username, click the password field and type the password, then click the login button.",
+      "target": "Login form fields",
+      "expected_result": "The user is successfully authenticated and the CourseWeb dashboard or home page loads.",
+      "hid_commands": [
+        {
+          "cmd": "mouse_move",
+          "meta": {
+            "commandId": "50b01772-94bf-4c07-906e-6ca871d184bb"
+          },
+          "dx": 120,
+          "dy": 136,
+          "smooth": true
+        },
+        {
+          "cmd": "mouse_click",
+          "meta": {
+            "commandId": "5a99f84d-6bcf-453d-8c38-0736f2510104"
+          },
+          "button": "left"
+        }
+      ],
+      "reasoning": "Fallback generated 2 commands from detected elements"
+    }
+  ],
+  "step_results": [
+    {
+      "step_id": 1,
+      "action": "Click the 'Log in to the site | CourseWeb' tab to ensure the login page is active and visible.",
+      "attempt": 3,
+      "exec_status": "success",
+      "eval_status": "retry",
+      "confidence": 0.0,
+      "reason": "Evaluation error: No valid JSON found in LLM response: '{\\n  \"status\": \"retry\",'",
+      "final_status": "executing",
+      "timestamp": "2026-05-02T12:13:38.734420+00:00"
+    },
+    {
+      "step_id": 2,
+      "action": "Click the username field and type the username, click the password field and type the password, then click the login button.",
+      "attempt": 3,
+      "exec_status": "success",
+      "eval_status": "retry",
+      "confidence": 1.0,
+      "reason": "The screen shows the desktop with a Google Chrome icon instead of the expected CourseWeb dashboard. The login action did not result in the expected page load.",
+      "final_status": "executing",
+      "timestamp": "2026-05-02T12:21:22.052075+00:00"
+    }
+  ],
+  "final_report": {
+    "success": false,
+    "summary": "The task failed because the required browser tab could not be located on the screen.",
+    "message": "The attempt to log in to CourseWeb was unsuccessful. The agent could not identify the browser tab or the login fields as they were not visible in the current screen state.\n\nStep results:\n- Step 1: Click the 'Log in to the site | CourseWeb' tab \u2014 FAILED (Tab not found)\n- Step 2: Enter credentials and login \u2014 FAILED (Login page not accessible)",
+    "steps_completed": 0,
+    "steps_failed": 2,
+    "issues": [
+      "The 'Log in to the site | CourseWeb' tab was not detected in the UI elements.",
+      "The screen currently shows the desktop with shortcuts rather than an active browser window."
+    ],
+    "recommendations": [
+      "Please ensure that Google Chrome is open and the CourseWeb login page is the active tab.",
+      "Verify that the browser window is not minimized or obscured by other applications."
+    ]
+  },
+  "session_memory": {
+    "run_id": "6026c9f0-c1fd-44d9-af4f-bd9b443c948f",
+    "user_task": "Click on the \"Log in to the site | CourseWeb\" tab and navigate the the CourseWeb Login screen and validate. after that asked user's credentials and login to the Courseweb using given credentials.",
+    "started_at": "2026-05-02T12:07:25.295730+00:00",
+    "updated_at": "2026-05-02T12:21:59.396073+00:00",
+    "stale_after_misses": 2,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_index": 16,
+    "known_elements": {
+      "tab:log in to the site | courseweb": {
+        "element_key": "tab:log in to the site | courseweb",
+        "element_type": "tab",
+        "label": "Log in to the site | CourseWeb",
+        "bbox": [
+          438.0,
+          137.0,
+          798.0,
+          193.0
+        ],
+        "confidence": 0.5048,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 0,
+        "last_seen_index": 9,
+        "first_seen_at": "2026-05-02T12:08:06.849953+00:00",
+        "last_seen_at": "2026-05-02T12:16:12.657091+00:00",
+        "seen_count": 4,
+        "miss_count": 6,
+        "stale": true,
+        "cached": true
+      },
+      "button:new tab": {
+        "element_key": "button:new tab",
+        "element_type": "button",
+        "label": "New Tab",
+        "bbox": [
+          645.0,
+          145.0,
+          677.0,
+          169.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "first_seen_at": "2026-05-02T12:08:06.849953+00:00",
+        "last_seen_at": "2026-05-02T12:08:06.849953+00:00",
+        "seen_count": 1,
+        "miss_count": 15,
+        "stale": true,
+        "cached": true
+      },
+      "input:address bar": {
+        "element_key": "input:address bar",
+        "element_type": "input",
+        "label": "Address Bar",
+        "bbox": [
+          214.0,
+          192.0,
+          1310.0,
+          248.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 0,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:08:06.849953+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 2,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "text:screenpilot ai": {
+        "element_key": "text:screenpilot ai",
+        "element_type": "text",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          271.0,
+          259.0,
+          511.0,
+          315.0
+        ],
+        "confidence": 0.4783,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 1,
+        "last_seen_index": 8,
+        "first_seen_at": "2026-05-02T12:08:59.764823+00:00",
+        "last_seen_at": "2026-05-02T12:15:11.223106+00:00",
+        "seen_count": 2,
+        "miss_count": 7,
+        "stale": true,
+        "cached": true
+      },
+      "text:autonomous task agent v2": {
+        "element_key": "text:autonomous task agent v2",
+        "element_type": "text",
+        "label": "Autonomous Task Agent v2",
+        "bbox": [
+          431.0,
+          283.0,
+          575.0,
+          331.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 1,
+        "last_seen_index": 1,
+        "first_seen_at": "2026-05-02T12:08:59.764823+00:00",
+        "last_seen_at": "2026-05-02T12:08:59.764823+00:00",
+        "seen_count": 1,
+        "miss_count": 14,
+        "stale": true,
+        "cached": true
+      },
+      "tab:frontend": {
+        "element_key": "tab:frontend",
+        "element_type": "tab",
+        "label": "frontend",
+        "bbox": [
+          206.0,
+          137.0,
+          518.0,
+          193.0
+        ],
+        "confidence": 0.5048,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 9,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:16:12.657091+00:00",
+        "seen_count": 3,
+        "miss_count": 6,
+        "stale": true,
+        "cached": true
+      },
+      "button:back": {
+        "element_key": "button:back",
+        "element_type": "button",
+        "label": "Back",
+        "bbox": [
+          214.0,
+          192.0,
+          262.0,
+          248.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:forward": {
+        "element_key": "button:forward",
+        "element_type": "button",
+        "label": "Forward",
+        "bbox": [
+          254.0,
+          192.0,
+          302.0,
+          248.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:refresh": {
+        "element_key": "button:refresh",
+        "element_type": "button",
+        "label": "Refresh",
+        "bbox": [
+          294.0,
+          192.0,
+          342.0,
+          248.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:ask gemini": {
+        "element_key": "button:ask gemini",
+        "element_type": "button",
+        "label": "Ask Gemini",
+        "bbox": [
+          1190.0,
+          176.0,
+          1302.0,
+          200.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "heading:screenpilot ai": {
+        "element_key": "heading:screenpilot ai",
+        "element_type": "heading",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          310.0,
+          280.0,
+          430.0,
+          312.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 3,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:10:49.251995+00:00",
+        "seen_count": 2,
+        "miss_count": 12,
+        "stale": true,
+        "cached": true
+      },
+      "label:autonomous task agent v2": {
+        "element_key": "label:autonomous task agent v2",
+        "element_type": "label",
+        "label": "Autonomous Task Agent v2",
+        "bbox": [
+          399.0,
+          251.0,
+          583.0,
+          283.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 4,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "heading:task plan": {
+        "element_key": "heading:task plan",
+        "element_type": "heading",
+        "label": "Task Plan",
+        "bbox": [
+          246.0,
+          440.0,
+          350.0,
+          480.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "label:0/2 done": {
+        "element_key": "label:0/2 done",
+        "element_type": "label",
+        "label": "0/2 done",
+        "bbox": [
+          775.0,
+          459.0,
+          831.0,
+          483.0
+        ],
+        "confidence": 0.4004,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 2,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "list_item:step 1": {
+        "element_key": "list_item:step 1",
+        "element_type": "list_item",
+        "label": "Step 1",
+        "bbox": [
+          174.0,
+          520.0,
+          918.0,
+          568.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "list_item:step 2": {
+        "element_key": "list_item:step 2",
+        "element_type": "list_item",
+        "label": "Step 2",
+        "bbox": [
+          174.0,
+          552.0,
+          918.0,
+          632.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "pane:action log": {
+        "element_key": "pane:action log",
+        "element_type": "pane",
+        "label": "Action Log",
+        "bbox": [
+          174.0,
+          616.0,
+          918.0,
+          832.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "input:agent is working...": {
+        "element_key": "input:agent is working...",
+        "element_type": "input",
+        "label": "Agent is working...",
+        "bbox": [
+          174.0,
+          864.0,
+          1566.0,
+          944.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:send": {
+        "element_key": "button:send",
+        "element_type": "button",
+        "label": "Send",
+        "bbox": [
+          1343.0,
+          875.0,
+          1407.0,
+          955.0
+        ],
+        "confidence": 0.4175,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 2,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "toolbar:windows taskbar": {
+        "element_key": "toolbar:windows taskbar",
+        "element_type": "toolbar",
+        "label": "Windows Taskbar",
+        "bbox": [
+          174.0,
+          952.0,
+          1814.0,
+          1024.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:start": {
+        "element_key": "button:start",
+        "element_type": "button",
+        "label": "Start",
+        "bbox": [
+          1030.0,
+          952.0,
+          1078.0,
+          1000.0
+        ],
+        "confidence": 0.5315,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 10,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:17:16.861826+00:00",
+        "seen_count": 2,
+        "miss_count": 5,
+        "stale": true,
+        "cached": true
+      },
+      "input:search": {
+        "element_key": "input:search",
+        "element_type": "input",
+        "label": "Search",
+        "bbox": [
+          550.0,
+          960.0,
+          678.0,
+          1024.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:chrome": {
+        "element_key": "button:chrome",
+        "element_type": "button",
+        "label": "Chrome",
+        "bbox": [
+          942.0,
+          960.0,
+          990.0,
+          1016.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "button:vs code": {
+        "element_key": "button:vs code",
+        "element_type": "button",
+        "label": "VS Code",
+        "bbox": [
+          1054.0,
+          960.0,
+          1102.0,
+          1016.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "label:weather": {
+        "element_key": "label:weather",
+        "element_type": "label",
+        "label": "Weather",
+        "bbox": [
+          182.0,
+          960.0,
+          318.0,
+          1024.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "first_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "last_seen_at": "2026-05-02T12:09:48.291448+00:00",
+        "seen_count": 1,
+        "miss_count": 13,
+        "stale": true,
+        "cached": true
+      },
+      "icon:xbox logo": {
+        "element_key": "icon:xbox logo",
+        "element_type": "icon",
+        "label": "Xbox Logo",
+        "bbox": [
+          744.0,
+          531.0,
+          848.0,
+          627.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 4,
+        "last_seen_index": 4,
+        "first_seen_at": "2026-05-02T12:11:37.557870+00:00",
+        "last_seen_at": "2026-05-02T12:11:37.557870+00:00",
+        "seen_count": 1,
+        "miss_count": 11,
+        "stale": true,
+        "cached": true
+      },
+      "button:minimize": {
+        "element_key": "button:minimize",
+        "element_type": "button",
+        "label": "Minimize",
+        "bbox": [
+          1144.0,
+          147.0,
+          1176.0,
+          179.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 4,
+        "last_seen_index": 4,
+        "first_seen_at": "2026-05-02T12:11:37.557870+00:00",
+        "last_seen_at": "2026-05-02T12:11:37.557870+00:00",
+        "seen_count": 1,
+        "miss_count": 11,
+        "stale": true,
+        "cached": true
+      },
+      "icon:screenpilot ai": {
+        "element_key": "icon:screenpilot ai",
+        "element_type": "icon",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          231.0,
+          227.0,
+          511.0,
+          283.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 5,
+        "last_seen_index": 5,
+        "first_seen_at": "2026-05-02T12:12:27.660743+00:00",
+        "last_seen_at": "2026-05-02T12:12:27.660743+00:00",
+        "seen_count": 1,
+        "miss_count": 10,
+        "stale": true,
+        "cached": true
+      },
+      "icon:screenpilot ai logo": {
+        "element_key": "icon:screenpilot ai logo",
+        "element_type": "icon",
+        "label": "ScreenPilot AI Logo",
+        "bbox": [
+          239.0,
+          243.0,
+          303.0,
+          307.0
+        ],
+        "confidence": 0.4783,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 8,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:15:11.223106+00:00",
+        "seen_count": 2,
+        "miss_count": 7,
+        "stale": true,
+        "cached": true
+      },
+      "label:screenpilot ai": {
+        "element_key": "label:screenpilot ai",
+        "element_type": "label",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          247.0,
+          235.0,
+          439.0,
+          283.0
+        ],
+        "confidence": 0.4218,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "pane:message box": {
+        "element_key": "pane:message box",
+        "element_type": "pane",
+        "label": "Message Box",
+        "bbox": [
+          463.0,
+          299.0,
+          1495.0,
+          459.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "pane:task plan container": {
+        "element_key": "pane:task plan container",
+        "element_type": "pane",
+        "label": "Task Plan Container",
+        "bbox": [
+          175.0,
+          419.0,
+          935.0,
+          659.0
+        ],
+        "confidence": 0.4046,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:task plan": {
+        "element_key": "label:task plan",
+        "element_type": "label",
+        "label": "Task Plan",
+        "bbox": [
+          263.0,
+          451.0,
+          351.0,
+          475.0
+        ],
+        "confidence": 0.4132,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:task plan description": {
+        "element_key": "label:task plan description",
+        "element_type": "label",
+        "label": "Task Plan Description",
+        "bbox": [
+          175.0,
+          475.0,
+          911.0,
+          523.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:step 1: click the log in to the site tab": {
+        "element_key": "label:step 1: click the log in to the site tab",
+        "element_type": "label",
+        "label": "Step 1: Click the Log in to the site tab",
+        "bbox": [
+          175.0,
+          515.0,
+          911.0,
+          571.0
+        ],
+        "confidence": 0.4089,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:step 2: click the username field and type the username": {
+        "element_key": "label:step 2: click the username field and type the username",
+        "element_type": "label",
+        "label": "Step 2: Click the username field and type the username",
+        "bbox": [
+          175.0,
+          555.0,
+          911.0,
+          627.0
+        ],
+        "confidence": 0.4089,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "pane:log container": {
+        "element_key": "pane:log container",
+        "element_type": "pane",
+        "label": "Log Container",
+        "bbox": [
+          175.0,
+          611.0,
+          935.0,
+          819.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:sending 2 hid commands...": {
+        "element_key": "label:sending 2 hid commands...",
+        "element_type": "label",
+        "label": "Sending 2 HID commands...",
+        "bbox": [
+          239.0,
+          643.0,
+          423.0,
+          675.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:validating step 1...": {
+        "element_key": "label:validating step 1...",
+        "element_type": "label",
+        "label": "Validating step 1...",
+        "bbox": [
+          239.0,
+          659.0,
+          391.0,
+          691.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:evaluation error: no valid json found": {
+        "element_key": "label:evaluation error: no valid json found",
+        "element_type": "label",
+        "label": "Evaluation error: No valid JSON found",
+        "bbox": [
+          175.0,
+          675.0,
+          863.0,
+          715.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:step 1 failed after 3 attempts": {
+        "element_key": "label:step 1 failed after 3 attempts",
+        "element_type": "label",
+        "label": "Step 1 failed after 3 attempts",
+        "bbox": [
+          191.0,
+          707.0,
+          719.0,
+          731.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:step 2: click the username field...": {
+        "element_key": "label:step 2: click the username field...",
+        "element_type": "label",
+        "label": "Step 2: Click the username field...",
+        "bbox": [
+          175.0,
+          723.0,
+          879.0,
+          771.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "label:screen snapshot for step 2...": {
+        "element_key": "label:screen snapshot for step 2...",
+        "element_type": "label",
+        "label": "Screen snapshot for step 2...",
+        "bbox": [
+          231.0,
+          763.0,
+          455.0,
+          795.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "input:agent status bar": {
+        "element_key": "input:agent status bar",
+        "element_type": "input",
+        "label": "Agent Status Bar",
+        "bbox": [
+          175.0,
+          875.0,
+          1583.0,
+          963.0
+        ],
+        "confidence": 0.4132,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "pane:windows taskbar": {
+        "element_key": "pane:windows taskbar",
+        "element_type": "pane",
+        "label": "Windows Taskbar",
+        "bbox": [
+          175.0,
+          955.0,
+          1799.0,
+          975.0
+        ],
+        "confidence": 0.4,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 7,
+        "last_seen_index": 7,
+        "first_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.765767+00:00",
+        "seen_count": 1,
+        "miss_count": 8,
+        "stale": true,
+        "cached": true
+      },
+      "pane:taskbar": {
+        "element_key": "pane:taskbar",
+        "element_type": "pane",
+        "label": "Taskbar",
+        "bbox": [
+          1014.0,
+          936.0,
+          1805.0,
+          1020.0
+        ],
+        "confidence": 0.5609,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 10,
+        "last_seen_index": 10,
+        "first_seen_at": "2026-05-02T12:17:16.861826+00:00",
+        "last_seen_at": "2026-05-02T12:17:16.861826+00:00",
+        "seen_count": 1,
+        "miss_count": 5,
+        "stale": true,
+        "cached": true
+      },
+      "icon:google chrome": {
+        "element_key": "icon:google chrome",
+        "element_type": "icon",
+        "label": "Google Chrome",
+        "bbox": [
+          195.0,
+          145.0,
+          267.0,
+          257.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 11,
+        "last_seen_index": 15,
+        "first_seen_at": "2026-05-02T12:18:14.647337+00:00",
+        "last_seen_at": "2026-05-02T12:21:59.396073+00:00",
+        "seen_count": 4,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false
+      },
+      "icon:huiontablet": {
+        "element_key": "icon:huiontablet",
+        "element_type": "icon",
+        "label": "HuionTablet",
+        "bbox": [
+          259.0,
+          145.0,
+          339.0,
+          257.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 11,
+        "last_seen_index": 15,
+        "first_seen_at": "2026-05-02T12:18:14.647337+00:00",
+        "last_seen_at": "2026-05-02T12:21:59.396073+00:00",
+        "seen_count": 2,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false
+      },
+      "icon:file explorer": {
+        "element_key": "icon:file explorer",
+        "element_type": "icon",
+        "label": "File Explorer",
+        "bbox": [
+          985.0,
+          960.0,
+          1033.0,
+          1008.0
+        ],
+        "confidence": 0.6561,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 12,
+        "last_seen_index": 12,
+        "first_seen_at": "2026-05-02T12:19:11.434731+00:00",
+        "last_seen_at": "2026-05-02T12:19:11.434731+00:00",
+        "seen_count": 1,
+        "miss_count": 3,
+        "stale": true,
+        "cached": true
+      },
+      "icon:app icon": {
+        "element_key": "icon:app icon",
+        "element_type": "icon",
+        "label": "App Icon",
+        "bbox": [
+          1033.0,
+          960.0,
+          1089.0,
+          1008.0
+        ],
+        "confidence": 0.6561,
+        "source": "gemini_vlm",
+        "first_seen_frame": null,
+        "last_seen_frame": null,
+        "first_seen_index": 12,
+        "last_seen_index": 12,
+        "first_seen_at": "2026-05-02T12:19:11.434731+00:00",
+        "last_seen_at": "2026-05-02T12:19:11.434731+00:00",
+        "seen_count": 1,
+        "miss_count": 3,
+        "stale": true,
+        "cached": true
+      }
+    },
+    "current_elements": [],
+    "resolved_elements": [
+      {
+        "id": "memory_icon:google chrome",
+        "type": "icon",
+        "label": "Google Chrome",
+        "description": "Cached from an earlier frame in the same run",
+        "state": "cached",
+        "bbox": [
+          195.0,
+          145.0,
+          267.0,
+          257.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "last_seen_frame": null,
+        "last_seen_index": 15,
+        "stale": true,
+        "cached": true,
+        "session_memory_key": "icon:google chrome"
+      },
+      {
+        "id": "memory_icon:huiontablet",
+        "type": "icon",
+        "label": "HuionTablet",
+        "description": "Cached from an earlier frame in the same run",
+        "state": "cached",
+        "bbox": [
+          259.0,
+          145.0,
+          339.0,
+          257.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "last_seen_frame": null,
+        "last_seen_index": 15,
+        "stale": true,
+        "cached": true,
+        "session_memory_key": "icon:huiontablet"
+      }
+    ],
+    "screen_data": {}
+  }
+}

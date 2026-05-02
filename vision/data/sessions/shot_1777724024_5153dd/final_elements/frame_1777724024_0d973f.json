@@ -1,0 +1,2766 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777724024_5153dd\\processing\\proc_1777724024_bc91b3\\preprocessed_frames\\frame_1777724024_0d973f.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    175,
+    203,
+    1799,
+    975
+  ],
+  "screen_size": {
+    "width": 1624,
+    "height": 772
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "logo_icon",
+      "type": "icon",
+      "label": "ScreenPilot AI logo",
+      "description": "The logo icon for ScreenPilot AI in the top left corner.",
+      "state": "visible",
+      "dx": 80,
+      "dy": 52,
+      "frame_dx": 255,
+      "frame_dy": 255,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        227,
+        279,
+        283
+      ],
+      "session_memory_key": "icon:screenpilot ai logo",
+      "cached": false
+    },
+    {
+      "id": "title_label",
+      "type": "label",
+      "label": "ScreenPilot AI",
+      "description": "The main application title text.",
+      "state": "visible",
+      "dx": 168,
+      "dy": 56,
+      "frame_dx": 343,
+      "frame_dy": 259,
+      "confidence": 0.98,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        247,
+        235,
+        439,
+        283
+      ],
+      "session_memory_key": "label:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "version_badge",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "A badge indicating the version of the task agent.",
+      "state": "visible",
+      "dx": 316,
+      "dy": 64,
+      "frame_dx": 491,
+      "frame_dy": 267,
+      "confidence": 0.92,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        399,
+        251,
+        583,
+        283
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    },
+    {
+      "id": "message_pane",
+      "type": "pane",
+      "label": "Message Box",
+      "description": "A large white message box in the upper center of the screen.",
+      "state": "visible",
+      "dx": 804,
+      "dy": 176,
+      "frame_dx": 979,
+      "frame_dy": 379,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        463,
+        299,
+        1495,
+        459
+      ],
+      "session_memory_key": "pane:message box",
+      "cached": false
+    },
+    {
+      "id": "task_plan_pane",
+      "type": "pane",
+      "label": "Task Plan Container",
+      "description": "The container holding the task plan steps and status.",
+      "state": "visible",
+      "dx": 380,
+      "dy": 336,
+      "frame_dx": 555,
+      "frame_dy": 539,
+      "confidence": 0.94,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        419,
+        935,
+        659
+      ],
+      "session_memory_key": "pane:task plan container",
+      "cached": false
+    },
+    {
+      "id": "task_plan_heading",
+      "type": "label",
+      "label": "Task Plan",
+      "description": "The heading for the task plan section.",
+      "state": "visible",
+      "dx": 132,
+      "dy": 260,
+      "frame_dx": 307,
+      "frame_dy": 463,
+      "confidence": 0.96,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        263,
+        451,
+        351,
+        475
+      ],
+      "session_memory_key": "label:task plan",
+      "cached": false
+    },
+    {
+      "id": "task_status_label",
+      "type": "label",
+      "label": "0/2 done",
+      "description": "Status indicator showing the number of completed tasks.",
+      "state": "visible",
+      "dx": 628,
+      "dy": 268,
+      "frame_dx": 803,
+      "frame_dy": 471,
+      "confidence": 0.93,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        775,
+        459,
+        831,
+        483
+      ],
+      "session_memory_key": "label:0/2 done",
+      "cached": false
+    },
+    {
+      "id": "task_plan_desc",
+      "type": "label",
+      "label": "Task Plan Description",
+      "description": "Text describing the current state of the browser and the next steps.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 296,
+      "frame_dx": 543,
+      "frame_dy": 499,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        475,
+        911,
+        523
+      ],
+      "session_memory_key": "label:task plan description",
+      "cached": false
+    },
+    {
+      "id": "step_1_item",
+      "type": "label",
+      "label": "Step 1: Click the Log in to the site tab",
+      "description": "The first step in the task plan, marked with an error icon.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 340,
+      "frame_dx": 543,
+      "frame_dy": 543,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        515,
+        911,
+        571
+      ],
+      "session_memory_key": "label:step 1: click the log in to the site tab",
+      "cached": false
+    },
+    {
+      "id": "step_2_item",
+      "type": "label",
+      "label": "Step 2: Click the username field and type the username",
+      "description": "The second step in the task plan, currently active.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 388,
+      "frame_dx": 543,
+      "frame_dy": 591,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        555,
+        911,
+        627
+      ],
+      "session_memory_key": "label:step 2: click the username field and type the username",
+      "cached": false
+    },
+    {
+      "id": "log_pane",
+      "type": "pane",
+      "label": "Log Container",
+      "description": "The container holding the execution logs and error messages.",
+      "state": "visible",
+      "dx": 380,
+      "dy": 512,
+      "frame_dx": 555,
+      "frame_dy": 715,
+      "confidence": 0.92,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        611,
+        935,
+        819
+      ],
+      "session_memory_key": "pane:log container",
+      "cached": false
+    },
+    {
+      "id": "log_line_1",
+      "type": "label",
+      "label": "Sending 2 HID commands...",
+      "description": "Log message indicating HID commands are being sent.",
+      "state": "visible",
+      "dx": 156,
+      "dy": 456,
+      "frame_dx": 331,
+      "frame_dy": 659,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        643,
+        423,
+        675
+      ],
+      "session_memory_key": "label:sending 2 hid commands...",
+      "cached": false
+    },
+    {
+      "id": "log_line_2",
+      "type": "label",
+      "label": "Validating step 1...",
+      "description": "Log message indicating step 1 validation is in progress.",
+      "state": "visible",
+      "dx": 140,
+      "dy": 472,
+      "frame_dx": 315,
+      "frame_dy": 675,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        659,
+        391,
+        691
+      ],
+      "session_memory_key": "label:validating step 1...",
+      "cached": false
+    },
+    {
+      "id": "log_line_3",
+      "type": "label",
+      "label": "Evaluation error: No valid JSON found",
+      "description": "Error message from the LLM response evaluation.",
+      "state": "visible",
+      "dx": 344,
+      "dy": 492,
+      "frame_dx": 519,
+      "frame_dy": 695,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        675,
+        863,
+        715
+      ],
+      "session_memory_key": "label:evaluation error: no valid json found",
+      "cached": false
+    },
+    {
+      "id": "log_line_4",
+      "type": "label",
+      "label": "Step 1 failed after 3 attempts",
+      "description": "Log message indicating step 1 failure and continuation.",
+      "state": "visible",
+      "dx": 280,
+      "dy": 516,
+      "frame_dx": 455,
+      "frame_dy": 719,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        191,
+        707,
+        719,
+        731
+      ],
+      "session_memory_key": "label:step 1 failed after 3 attempts",
+      "cached": false
+    },
+    {
+      "id": "log_line_5",
+      "type": "label",
+      "label": "Step 2: Click the username field...",
+      "description": "Log message detailing the current action for step 2.",
+      "state": "visible",
+      "dx": 352,
+      "dy": 544,
+      "frame_dx": 527,
+      "frame_dy": 747,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        723,
+        879,
+        771
+      ],
+      "session_memory_key": "label:step 2: click the username field...",
+      "cached": false
+    },
+    {
+      "id": "log_line_6",
+      "type": "label",
+      "label": "Screen snapshot for step 2...",
+      "description": "Log message indicating a screen snapshot is being taken.",
+      "state": "visible",
+      "dx": 168,
+      "dy": 576,
+      "frame_dx": 343,
+      "frame_dy": 779,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        763,
+        455,
+        795
+      ],
+      "session_memory_key": "label:screen snapshot for step 2...",
+      "cached": false
+    },
+    {
+      "id": "input_bar",
+      "type": "input",
+      "label": "Agent Status Bar",
+      "description": "The input bar at the bottom showing agent status and a send button.",
+      "state": "visible",
+      "dx": 704,
+      "dy": 716,
+      "frame_dx": 879,
+      "frame_dy": 919,
+      "confidence": 0.96,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        875,
+        1583,
+        963
+      ],
+      "session_memory_key": "input:agent status bar",
+      "cached": false
+    },
+    {
+      "id": "send_button",
+      "type": "button",
+      "label": "Send",
+      "description": "The send button icon on the right side of the input bar.",
+      "state": "visible",
+      "dx": 1200,
+      "dy": 712,
+      "frame_dx": 1375,
+      "frame_dy": 915,
+      "confidence": 0.97,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1343,
+        875,
+        1407,
+        955
+      ],
+      "session_memory_key": "button:send",
+      "cached": false
+    },
+    {
+      "id": "taskbar",
+      "type": "pane",
+      "label": "Windows Taskbar",
+      "description": "The operating system taskbar at the very bottom of the screen.",
+      "state": "visible",
+      "dx": 812,
+      "dy": 762,
+      "frame_dx": 987,
+      "frame_dy": 965,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        955,
+        1799,
+        975
+      ],
+      "session_memory_key": "pane:windows taskbar",
+      "cached": false
+    }
+  ],
+  "element_count": 20,
+  "current_elements": [
+    {
+      "id": "logo_icon",
+      "type": "icon",
+      "label": "ScreenPilot AI logo",
+      "description": "The logo icon for ScreenPilot AI in the top left corner.",
+      "state": "visible",
+      "dx": 80,
+      "dy": 52,
+      "frame_dx": 255,
+      "frame_dy": 255,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        227,
+        279,
+        283
+      ],
+      "session_memory_key": "icon:screenpilot ai logo",
+      "cached": false
+    },
+    {
+      "id": "title_label",
+      "type": "label",
+      "label": "ScreenPilot AI",
+      "description": "The main application title text.",
+      "state": "visible",
+      "dx": 168,
+      "dy": 56,
+      "frame_dx": 343,
+      "frame_dy": 259,
+      "confidence": 0.98,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        247,
+        235,
+        439,
+        283
+      ],
+      "session_memory_key": "label:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "version_badge",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "A badge indicating the version of the task agent.",
+      "state": "visible",
+      "dx": 316,
+      "dy": 64,
+      "frame_dx": 491,
+      "frame_dy": 267,
+      "confidence": 0.92,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        399,
+        251,
+        583,
+        283
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    },
+    {
+      "id": "message_pane",
+      "type": "pane",
+      "label": "Message Box",
+      "description": "A large white message box in the upper center of the screen.",
+      "state": "visible",
+      "dx": 804,
+      "dy": 176,
+      "frame_dx": 979,
+      "frame_dy": 379,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        463,
+        299,
+        1495,
+        459
+      ],
+      "session_memory_key": "pane:message box",
+      "cached": false
+    },
+    {
+      "id": "task_plan_pane",
+      "type": "pane",
+      "label": "Task Plan Container",
+      "description": "The container holding the task plan steps and status.",
+      "state": "visible",
+      "dx": 380,
+      "dy": 336,
+      "frame_dx": 555,
+      "frame_dy": 539,
+      "confidence": 0.94,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        419,
+        935,
+        659
+      ],
+      "session_memory_key": "pane:task plan container",
+      "cached": false
+    },
+    {
+      "id": "task_plan_heading",
+      "type": "label",
+      "label": "Task Plan",
+      "description": "The heading for the task plan section.",
+      "state": "visible",
+      "dx": 132,
+      "dy": 260,
+      "frame_dx": 307,
+      "frame_dy": 463,
+      "confidence": 0.96,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        263,
+        451,
+        351,
+        475
+      ],
+      "session_memory_key": "label:task plan",
+      "cached": false
+    },
+    {
+      "id": "task_status_label",
+      "type": "label",
+      "label": "0/2 done",
+      "description": "Status indicator showing the number of completed tasks.",
+      "state": "visible",
+      "dx": 628,
+      "dy": 268,
+      "frame_dx": 803,
+      "frame_dy": 471,
+      "confidence": 0.93,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        775,
+        459,
+        831,
+        483
+      ],
+      "session_memory_key": "label:0/2 done",
+      "cached": false
+    },
+    {
+      "id": "task_plan_desc",
+      "type": "label",
+      "label": "Task Plan Description",
+      "description": "Text describing the current state of the browser and the next steps.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 296,
+      "frame_dx": 543,
+      "frame_dy": 499,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        475,
+        911,
+        523
+      ],
+      "session_memory_key": "label:task plan description",
+      "cached": false
+    },
+    {
+      "id": "step_1_item",
+      "type": "label",
+      "label": "Step 1: Click the Log in to the site tab",
+      "description": "The first step in the task plan, marked with an error icon.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 340,
+      "frame_dx": 543,
+      "frame_dy": 543,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        515,
+        911,
+        571
+      ],
+      "session_memory_key": "label:step 1: click the log in to the site tab",
+      "cached": false
+    },
+    {
+      "id": "step_2_item",
+      "type": "label",
+      "label": "Step 2: Click the username field and type the username",
+      "description": "The second step in the task plan, currently active.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 388,
+      "frame_dx": 543,
+      "frame_dy": 591,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        555,
+        911,
+        627
+      ],
+      "session_memory_key": "label:step 2: click the username field and type the username",
+      "cached": false
+    },
+    {
+      "id": "log_pane",
+      "type": "pane",
+      "label": "Log Container",
+      "description": "The container holding the execution logs and error messages.",
+      "state": "visible",
+      "dx": 380,
+      "dy": 512,
+      "frame_dx": 555,
+      "frame_dy": 715,
+      "confidence": 0.92,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        611,
+        935,
+        819
+      ],
+      "session_memory_key": "pane:log container",
+      "cached": false
+    },
+    {
+      "id": "log_line_1",
+      "type": "label",
+      "label": "Sending 2 HID commands...",
+      "description": "Log message indicating HID commands are being sent.",
+      "state": "visible",
+      "dx": 156,
+      "dy": 456,
+      "frame_dx": 331,
+      "frame_dy": 659,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        643,
+        423,
+        675
+      ],
+      "session_memory_key": "label:sending 2 hid commands...",
+      "cached": false
+    },
+    {
+      "id": "log_line_2",
+      "type": "label",
+      "label": "Validating step 1...",
+      "description": "Log message indicating step 1 validation is in progress.",
+      "state": "visible",
+      "dx": 140,
+      "dy": 472,
+      "frame_dx": 315,
+      "frame_dy": 675,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        659,
+        391,
+        691
+      ],
+      "session_memory_key": "label:validating step 1...",
+      "cached": false
+    },
+    {
+      "id": "log_line_3",
+      "type": "label",
+      "label": "Evaluation error: No valid JSON found",
+      "description": "Error message from the LLM response evaluation.",
+      "state": "visible",
+      "dx": 344,
+      "dy": 492,
+      "frame_dx": 519,
+      "frame_dy": 695,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        675,
+        863,
+        715
+      ],
+      "session_memory_key": "label:evaluation error: no valid json found",
+      "cached": false
+    },
+    {
+      "id": "log_line_4",
+      "type": "label",
+      "label": "Step 1 failed after 3 attempts",
+      "description": "Log message indicating step 1 failure and continuation.",
+      "state": "visible",
+      "dx": 280,
+      "dy": 516,
+      "frame_dx": 455,
+      "frame_dy": 719,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        191,
+        707,
+        719,
+        731
+      ],
+      "session_memory_key": "label:step 1 failed after 3 attempts",
+      "cached": false
+    },
+    {
+      "id": "log_line_5",
+      "type": "label",
+      "label": "Step 2: Click the username field...",
+      "description": "Log message detailing the current action for step 2.",
+      "state": "visible",
+      "dx": 352,
+      "dy": 544,
+      "frame_dx": 527,
+      "frame_dy": 747,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        723,
+        879,
+        771
+      ],
+      "session_memory_key": "label:step 2: click the username field...",
+      "cached": false
+    },
+    {
+      "id": "log_line_6",
+      "type": "label",
+      "label": "Screen snapshot for step 2...",
+      "description": "Log message indicating a screen snapshot is being taken.",
+      "state": "visible",
+      "dx": 168,
+      "dy": 576,
+      "frame_dx": 343,
+      "frame_dy": 779,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        763,
+        455,
+        795
+      ],
+      "session_memory_key": "label:screen snapshot for step 2...",
+      "cached": false
+    },
+    {
+      "id": "input_bar",
+      "type": "input",
+      "label": "Agent Status Bar",
+      "description": "The input bar at the bottom showing agent status and a send button.",
+      "state": "visible",
+      "dx": 704,
+      "dy": 716,
+      "frame_dx": 879,
+      "frame_dy": 919,
+      "confidence": 0.96,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        875,
+        1583,
+        963
+      ],
+      "session_memory_key": "input:agent status bar",
+      "cached": false
+    },
+    {
+      "id": "send_button",
+      "type": "button",
+      "label": "Send",
+      "description": "The send button icon on the right side of the input bar.",
+      "state": "visible",
+      "dx": 1200,
+      "dy": 712,
+      "frame_dx": 1375,
+      "frame_dy": 915,
+      "confidence": 0.97,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1343,
+        875,
+        1407,
+        955
+      ],
+      "session_memory_key": "button:send",
+      "cached": false
+    },
+    {
+      "id": "taskbar",
+      "type": "pane",
+      "label": "Windows Taskbar",
+      "description": "The operating system taskbar at the very bottom of the screen.",
+      "state": "visible",
+      "dx": 812,
+      "dy": 762,
+      "frame_dx": 987,
+      "frame_dy": 965,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        955,
+        1799,
+        975
+      ],
+      "session_memory_key": "pane:windows taskbar",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "logo_icon",
+      "type": "icon",
+      "label": "ScreenPilot AI logo",
+      "description": "The logo icon for ScreenPilot AI in the top left corner.",
+      "state": "visible",
+      "dx": 80,
+      "dy": 52,
+      "frame_dx": 255,
+      "frame_dy": 255,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        227,
+        279,
+        283
+      ],
+      "session_memory_key": "icon:screenpilot ai logo",
+      "cached": false
+    },
+    {
+      "id": "title_label",
+      "type": "label",
+      "label": "ScreenPilot AI",
+      "description": "The main application title text.",
+      "state": "visible",
+      "dx": 168,
+      "dy": 56,
+      "frame_dx": 343,
+      "frame_dy": 259,
+      "confidence": 0.98,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        247,
+        235,
+        439,
+        283
+      ],
+      "session_memory_key": "label:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "version_badge",
+      "type": "label",
+      "label": "Autonomous Task Agent v2",
+      "description": "A badge indicating the version of the task agent.",
+      "state": "visible",
+      "dx": 316,
+      "dy": 64,
+      "frame_dx": 491,
+      "frame_dy": 267,
+      "confidence": 0.92,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        399,
+        251,
+        583,
+        283
+      ],
+      "session_memory_key": "label:autonomous task agent v2",
+      "cached": false
+    },
+    {
+      "id": "message_pane",
+      "type": "pane",
+      "label": "Message Box",
+      "description": "A large white message box in the upper center of the screen.",
+      "state": "visible",
+      "dx": 804,
+      "dy": 176,
+      "frame_dx": 979,
+      "frame_dy": 379,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        463,
+        299,
+        1495,
+        459
+      ],
+      "session_memory_key": "pane:message box",
+      "cached": false
+    },
+    {
+      "id": "task_plan_pane",
+      "type": "pane",
+      "label": "Task Plan Container",
+      "description": "The container holding the task plan steps and status.",
+      "state": "visible",
+      "dx": 380,
+      "dy": 336,
+      "frame_dx": 555,
+      "frame_dy": 539,
+      "confidence": 0.94,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        419,
+        935,
+        659
+      ],
+      "session_memory_key": "pane:task plan container",
+      "cached": false
+    },
+    {
+      "id": "task_plan_heading",
+      "type": "label",
+      "label": "Task Plan",
+      "description": "The heading for the task plan section.",
+      "state": "visible",
+      "dx": 132,
+      "dy": 260,
+      "frame_dx": 307,
+      "frame_dy": 463,
+      "confidence": 0.96,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        263,
+        451,
+        351,
+        475
+      ],
+      "session_memory_key": "label:task plan",
+      "cached": false
+    },
+    {
+      "id": "task_status_label",
+      "type": "label",
+      "label": "0/2 done",
+      "description": "Status indicator showing the number of completed tasks.",
+      "state": "visible",
+      "dx": 628,
+      "dy": 268,
+      "frame_dx": 803,
+      "frame_dy": 471,
+      "confidence": 0.93,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        775,
+        459,
+        831,
+        483
+      ],
+      "session_memory_key": "label:0/2 done",
+      "cached": false
+    },
+    {
+      "id": "task_plan_desc",
+      "type": "label",
+      "label": "Task Plan Description",
+      "description": "Text describing the current state of the browser and the next steps.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 296,
+      "frame_dx": 543,
+      "frame_dy": 499,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        475,
+        911,
+        523
+      ],
+      "session_memory_key": "label:task plan description",
+      "cached": false
+    },
+    {
+      "id": "step_1_item",
+      "type": "label",
+      "label": "Step 1: Click the Log in to the site tab",
+      "description": "The first step in the task plan, marked with an error icon.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 340,
+      "frame_dx": 543,
+      "frame_dy": 543,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        515,
+        911,
+        571
+      ],
+      "session_memory_key": "label:step 1: click the log in to the site tab",
+      "cached": false
+    },
+    {
+      "id": "step_2_item",
+      "type": "label",
+      "label": "Step 2: Click the username field and type the username",
+      "description": "The second step in the task plan, currently active.",
+      "state": "visible",
+      "dx": 368,
+      "dy": 388,
+      "frame_dx": 543,
+      "frame_dy": 591,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        555,
+        911,
+        627
+      ],
+      "session_memory_key": "label:step 2: click the username field and type the username",
+      "cached": false
+    },
+    {
+      "id": "log_pane",
+      "type": "pane",
+      "label": "Log Container",
+      "description": "The container holding the execution logs and error messages.",
+      "state": "visible",
+      "dx": 380,
+      "dy": 512,
+      "frame_dx": 555,
+      "frame_dy": 715,
+      "confidence": 0.92,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        611,
+        935,
+        819
+      ],
+      "session_memory_key": "pane:log container",
+      "cached": false
+    },
+    {
+      "id": "log_line_1",
+      "type": "label",
+      "label": "Sending 2 HID commands...",
+      "description": "Log message indicating HID commands are being sent.",
+      "state": "visible",
+      "dx": 156,
+      "dy": 456,
+      "frame_dx": 331,
+      "frame_dy": 659,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        643,
+        423,
+        675
+      ],
+      "session_memory_key": "label:sending 2 hid commands...",
+      "cached": false
+    },
+    {
+      "id": "log_line_2",
+      "type": "label",
+      "label": "Validating step 1...",
+      "description": "Log message indicating step 1 validation is in progress.",
+      "state": "visible",
+      "dx": 140,
+      "dy": 472,
+      "frame_dx": 315,
+      "frame_dy": 675,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        239,
+        659,
+        391,
+        691
+      ],
+      "session_memory_key": "label:validating step 1...",
+      "cached": false
+    },
+    {
+      "id": "log_line_3",
+      "type": "label",
+      "label": "Evaluation error: No valid JSON found",
+      "description": "Error message from the LLM response evaluation.",
+      "state": "visible",
+      "dx": 344,
+      "dy": 492,
+      "frame_dx": 519,
+      "frame_dy": 695,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        675,
+        863,
+        715
+      ],
+      "session_memory_key": "label:evaluation error: no valid json found",
+      "cached": false
+    },
+    {
+      "id": "log_line_4",
+      "type": "label",
+      "label": "Step 1 failed after 3 attempts",
+      "description": "Log message indicating step 1 failure and continuation.",
+      "state": "visible",
+      "dx": 280,
+      "dy": 516,
+      "frame_dx": 455,
+      "frame_dy": 719,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        191,
+        707,
+        719,
+        731
+      ],
+      "session_memory_key": "label:step 1 failed after 3 attempts",
+      "cached": false
+    },
+    {
+      "id": "log_line_5",
+      "type": "label",
+      "label": "Step 2: Click the username field...",
+      "description": "Log message detailing the current action for step 2.",
+      "state": "visible",
+      "dx": 352,
+      "dy": 544,
+      "frame_dx": 527,
+      "frame_dy": 747,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        723,
+        879,
+        771
+      ],
+      "session_memory_key": "label:step 2: click the username field...",
+      "cached": false
+    },
+    {
+      "id": "log_line_6",
+      "type": "label",
+      "label": "Screen snapshot for step 2...",
+      "description": "Log message indicating a screen snapshot is being taken.",
+      "state": "visible",
+      "dx": 168,
+      "dy": 576,
+      "frame_dx": 343,
+      "frame_dy": 779,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        231,
+        763,
+        455,
+        795
+      ],
+      "session_memory_key": "label:screen snapshot for step 2...",
+      "cached": false
+    },
+    {
+      "id": "input_bar",
+      "type": "input",
+      "label": "Agent Status Bar",
+      "description": "The input bar at the bottom showing agent status and a send button.",
+      "state": "visible",
+      "dx": 704,
+      "dy": 716,
+      "frame_dx": 879,
+      "frame_dy": 919,
+      "confidence": 0.96,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        875,
+        1583,
+        963
+      ],
+      "session_memory_key": "input:agent status bar",
+      "cached": false
+    },
+    {
+      "id": "send_button",
+      "type": "button",
+      "label": "Send",
+      "description": "The send button icon on the right side of the input bar.",
+      "state": "visible",
+      "dx": 1200,
+      "dy": 712,
+      "frame_dx": 1375,
+      "frame_dy": 915,
+      "confidence": 0.97,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1343,
+        875,
+        1407,
+        955
+      ],
+      "session_memory_key": "button:send",
+      "cached": false
+    },
+    {
+      "id": "taskbar",
+      "type": "pane",
+      "label": "Windows Taskbar",
+      "description": "The operating system taskbar at the very bottom of the screen.",
+      "state": "visible",
+      "dx": 812,
+      "dy": 762,
+      "frame_dx": 987,
+      "frame_dy": 965,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        175,
+        955,
+        1799,
+        975
+      ],
+      "session_memory_key": "pane:windows taskbar",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777724024_5153dd",
+    "started_at": "2026-05-02T12:13:44.567405+00:00",
+    "updated_at": "2026-05-02T12:14:12.722205+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777724024_0d973f.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "icon:screenpilot ai logo": {
+        "element_key": "icon:screenpilot ai logo",
+        "element_type": "icon",
+        "label": "ScreenPilot AI logo",
+        "bbox": [
+          231.0,
+          227.0,
+          279.0,
+          283.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "label:screenpilot ai": {
+        "element_key": "label:screenpilot ai",
+        "element_type": "label",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          247.0,
+          235.0,
+          439.0,
+          283.0
+        ],
+        "confidence": 0.98,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.98
+          }
+        ]
+      },
+      "label:autonomous task agent v2": {
+        "element_key": "label:autonomous task agent v2",
+        "element_type": "label",
+        "label": "Autonomous Task Agent v2",
+        "bbox": [
+          399.0,
+          251.0,
+          583.0,
+          283.0
+        ],
+        "confidence": 0.92,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.92
+          }
+        ]
+      },
+      "pane:message box": {
+        "element_key": "pane:message box",
+        "element_type": "pane",
+        "label": "Message Box",
+        "bbox": [
+          463.0,
+          299.0,
+          1495.0,
+          459.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "pane:task plan container": {
+        "element_key": "pane:task plan container",
+        "element_type": "pane",
+        "label": "Task Plan Container",
+        "bbox": [
+          175.0,
+          419.0,
+          935.0,
+          659.0
+        ],
+        "confidence": 0.94,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.94
+          }
+        ]
+      },
+      "label:task plan": {
+        "element_key": "label:task plan",
+        "element_type": "label",
+        "label": "Task Plan",
+        "bbox": [
+          263.0,
+          451.0,
+          351.0,
+          475.0
+        ],
+        "confidence": 0.96,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.96
+          }
+        ]
+      },
+      "label:0/2 done": {
+        "element_key": "label:0/2 done",
+        "element_type": "label",
+        "label": "0/2 done",
+        "bbox": [
+          775.0,
+          459.0,
+          831.0,
+          483.0
+        ],
+        "confidence": 0.93,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.93
+          }
+        ]
+      },
+      "label:task plan description": {
+        "element_key": "label:task plan description",
+        "element_type": "label",
+        "label": "Task Plan Description",
+        "bbox": [
+          175.0,
+          475.0,
+          911.0,
+          523.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:step 1: click the log in to the site tab": {
+        "element_key": "label:step 1: click the log in to the site tab",
+        "element_type": "label",
+        "label": "Step 1: Click the Log in to the site tab",
+        "bbox": [
+          175.0,
+          515.0,
+          911.0,
+          571.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "label:step 2: click the username field and type the username": {
+        "element_key": "label:step 2: click the username field and type the username",
+        "element_type": "label",
+        "label": "Step 2: Click the username field and type the username",
+        "bbox": [
+          175.0,
+          555.0,
+          911.0,
+          627.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "pane:log container": {
+        "element_key": "pane:log container",
+        "element_type": "pane",
+        "label": "Log Container",
+        "bbox": [
+          175.0,
+          611.0,
+          935.0,
+          819.0
+        ],
+        "confidence": 0.92,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.92
+          }
+        ]
+      },
+      "label:sending 2 hid commands...": {
+        "element_key": "label:sending 2 hid commands...",
+        "element_type": "label",
+        "label": "Sending 2 HID commands...",
+        "bbox": [
+          239.0,
+          643.0,
+          423.0,
+          675.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:validating step 1...": {
+        "element_key": "label:validating step 1...",
+        "element_type": "label",
+        "label": "Validating step 1...",
+        "bbox": [
+          239.0,
+          659.0,
+          391.0,
+          691.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:evaluation error: no valid json found": {
+        "element_key": "label:evaluation error: no valid json found",
+        "element_type": "label",
+        "label": "Evaluation error: No valid JSON found",
+        "bbox": [
+          175.0,
+          675.0,
+          863.0,
+          715.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:step 1 failed after 3 attempts": {
+        "element_key": "label:step 1 failed after 3 attempts",
+        "element_type": "label",
+        "label": "Step 1 failed after 3 attempts",
+        "bbox": [
+          191.0,
+          707.0,
+          719.0,
+          731.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:step 2: click the username field...": {
+        "element_key": "label:step 2: click the username field...",
+        "element_type": "label",
+        "label": "Step 2: Click the username field...",
+        "bbox": [
+          175.0,
+          723.0,
+          879.0,
+          771.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "label:screen snapshot for step 2...": {
+        "element_key": "label:screen snapshot for step 2...",
+        "element_type": "label",
+        "label": "Screen snapshot for step 2...",
+        "bbox": [
+          231.0,
+          763.0,
+          455.0,
+          795.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "input:agent status bar": {
+        "element_key": "input:agent status bar",
+        "element_type": "input",
+        "label": "Agent Status Bar",
+        "bbox": [
+          175.0,
+          875.0,
+          1583.0,
+          963.0
+        ],
+        "confidence": 0.96,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.96
+          }
+        ]
+      },
+      "button:send": {
+        "element_key": "button:send",
+        "element_type": "button",
+        "label": "Send",
+        "bbox": [
+          1343.0,
+          875.0,
+          1407.0,
+          955.0
+        ],
+        "confidence": 0.97,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.97
+          }
+        ]
+      },
+      "pane:windows taskbar": {
+        "element_key": "pane:windows taskbar",
+        "element_type": "pane",
+        "label": "Windows Taskbar",
+        "bbox": [
+          175.0,
+          955.0,
+          1799.0,
+          975.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724024_0d973f.jpg",
+        "last_seen_frame": "frame_1777724024_0d973f.jpg",
+        "first_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "last_seen_at": "2026-05-02T12:14:12.722205+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724024_0d973f.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:14:12.722205+00:00",
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "logo_icon",
+        "type": "icon",
+        "label": "ScreenPilot AI logo",
+        "description": "The logo icon for ScreenPilot AI in the top left corner.",
+        "state": "visible",
+        "dx": 80,
+        "dy": 52,
+        "frame_dx": 255,
+        "frame_dy": 255,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          231,
+          227,
+          279,
+          283
+        ],
+        "session_memory_key": "icon:screenpilot ai logo",
+        "cached": false
+      },
+      {
+        "id": "title_label",
+        "type": "label",
+        "label": "ScreenPilot AI",
+        "description": "The main application title text.",
+        "state": "visible",
+        "dx": 168,
+        "dy": 56,
+        "frame_dx": 343,
+        "frame_dy": 259,
+        "confidence": 0.98,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          247,
+          235,
+          439,
+          283
+        ],
+        "session_memory_key": "label:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "version_badge",
+        "type": "label",
+        "label": "Autonomous Task Agent v2",
+        "description": "A badge indicating the version of the task agent.",
+        "state": "visible",
+        "dx": 316,
+        "dy": 64,
+        "frame_dx": 491,
+        "frame_dy": 267,
+        "confidence": 0.92,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          399,
+          251,
+          583,
+          283
+        ],
+        "session_memory_key": "label:autonomous task agent v2",
+        "cached": false
+      },
+      {
+        "id": "message_pane",
+        "type": "pane",
+        "label": "Message Box",
+        "description": "A large white message box in the upper center of the screen.",
+        "state": "visible",
+        "dx": 804,
+        "dy": 176,
+        "frame_dx": 979,
+        "frame_dy": 379,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          463,
+          299,
+          1495,
+          459
+        ],
+        "session_memory_key": "pane:message box",
+        "cached": false
+      },
+      {
+        "id": "task_plan_pane",
+        "type": "pane",
+        "label": "Task Plan Container",
+        "description": "The container holding the task plan steps and status.",
+        "state": "visible",
+        "dx": 380,
+        "dy": 336,
+        "frame_dx": 555,
+        "frame_dy": 539,
+        "confidence": 0.94,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          419,
+          935,
+          659
+        ],
+        "session_memory_key": "pane:task plan container",
+        "cached": false
+      },
+      {
+        "id": "task_plan_heading",
+        "type": "label",
+        "label": "Task Plan",
+        "description": "The heading for the task plan section.",
+        "state": "visible",
+        "dx": 132,
+        "dy": 260,
+        "frame_dx": 307,
+        "frame_dy": 463,
+        "confidence": 0.96,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          263,
+          451,
+          351,
+          475
+        ],
+        "session_memory_key": "label:task plan",
+        "cached": false
+      },
+      {
+        "id": "task_status_label",
+        "type": "label",
+        "label": "0/2 done",
+        "description": "Status indicator showing the number of completed tasks.",
+        "state": "visible",
+        "dx": 628,
+        "dy": 268,
+        "frame_dx": 803,
+        "frame_dy": 471,
+        "confidence": 0.93,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          775,
+          459,
+          831,
+          483
+        ],
+        "session_memory_key": "label:0/2 done",
+        "cached": false
+      },
+      {
+        "id": "task_plan_desc",
+        "type": "label",
+        "label": "Task Plan Description",
+        "description": "Text describing the current state of the browser and the next steps.",
+        "state": "visible",
+        "dx": 368,
+        "dy": 296,
+        "frame_dx": 543,
+        "frame_dy": 499,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          475,
+          911,
+          523
+        ],
+        "session_memory_key": "label:task plan description",
+        "cached": false
+      },
+      {
+        "id": "step_1_item",
+        "type": "label",
+        "label": "Step 1: Click the Log in to the site tab",
+        "description": "The first step in the task plan, marked with an error icon.",
+        "state": "visible",
+        "dx": 368,
+        "dy": 340,
+        "frame_dx": 543,
+        "frame_dy": 543,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          515,
+          911,
+          571
+        ],
+        "session_memory_key": "label:step 1: click the log in to the site tab",
+        "cached": false
+      },
+      {
+        "id": "step_2_item",
+        "type": "label",
+        "label": "Step 2: Click the username field and type the username",
+        "description": "The second step in the task plan, currently active.",
+        "state": "visible",
+        "dx": 368,
+        "dy": 388,
+        "frame_dx": 543,
+        "frame_dy": 591,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          555,
+          911,
+          627
+        ],
+        "session_memory_key": "label:step 2: click the username field and type the username",
+        "cached": false
+      },
+      {
+        "id": "log_pane",
+        "type": "pane",
+        "label": "Log Container",
+        "description": "The container holding the execution logs and error messages.",
+        "state": "visible",
+        "dx": 380,
+        "dy": 512,
+        "frame_dx": 555,
+        "frame_dy": 715,
+        "confidence": 0.92,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          611,
+          935,
+          819
+        ],
+        "session_memory_key": "pane:log container",
+        "cached": false
+      },
+      {
+        "id": "log_line_1",
+        "type": "label",
+        "label": "Sending 2 HID commands...",
+        "description": "Log message indicating HID commands are being sent.",
+        "state": "visible",
+        "dx": 156,
+        "dy": 456,
+        "frame_dx": 331,
+        "frame_dy": 659,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          239,
+          643,
+          423,
+          675
+        ],
+        "session_memory_key": "label:sending 2 hid commands...",
+        "cached": false
+      },
+      {
+        "id": "log_line_2",
+        "type": "label",
+        "label": "Validating step 1...",
+        "description": "Log message indicating step 1 validation is in progress.",
+        "state": "visible",
+        "dx": 140,
+        "dy": 472,
+        "frame_dx": 315,
+        "frame_dy": 675,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          239,
+          659,
+          391,
+          691
+        ],
+        "session_memory_key": "label:validating step 1...",
+        "cached": false
+      },
+      {
+        "id": "log_line_3",
+        "type": "label",
+        "label": "Evaluation error: No valid JSON found",
+        "description": "Error message from the LLM response evaluation.",
+        "state": "visible",
+        "dx": 344,
+        "dy": 492,
+        "frame_dx": 519,
+        "frame_dy": 695,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          675,
+          863,
+          715
+        ],
+        "session_memory_key": "label:evaluation error: no valid json found",
+        "cached": false
+      },
+      {
+        "id": "log_line_4",
+        "type": "label",
+        "label": "Step 1 failed after 3 attempts",
+        "description": "Log message indicating step 1 failure and continuation.",
+        "state": "visible",
+        "dx": 280,
+        "dy": 516,
+        "frame_dx": 455,
+        "frame_dy": 719,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          191,
+          707,
+          719,
+          731
+        ],
+        "session_memory_key": "label:step 1 failed after 3 attempts",
+        "cached": false
+      },
+      {
+        "id": "log_line_5",
+        "type": "label",
+        "label": "Step 2: Click the username field...",
+        "description": "Log message detailing the current action for step 2.",
+        "state": "visible",
+        "dx": 352,
+        "dy": 544,
+        "frame_dx": 527,
+        "frame_dy": 747,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          723,
+          879,
+          771
+        ],
+        "session_memory_key": "label:step 2: click the username field...",
+        "cached": false
+      },
+      {
+        "id": "log_line_6",
+        "type": "label",
+        "label": "Screen snapshot for step 2...",
+        "description": "Log message indicating a screen snapshot is being taken.",
+        "state": "visible",
+        "dx": 168,
+        "dy": 576,
+        "frame_dx": 343,
+        "frame_dy": 779,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          231,
+          763,
+          455,
+          795
+        ],
+        "session_memory_key": "label:screen snapshot for step 2...",
+        "cached": false
+      },
+      {
+        "id": "input_bar",
+        "type": "input",
+        "label": "Agent Status Bar",
+        "description": "The input bar at the bottom showing agent status and a send button.",
+        "state": "visible",
+        "dx": 704,
+        "dy": 716,
+        "frame_dx": 879,
+        "frame_dy": 919,
+        "confidence": 0.96,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          875,
+          1583,
+          963
+        ],
+        "session_memory_key": "input:agent status bar",
+        "cached": false
+      },
+      {
+        "id": "send_button",
+        "type": "button",
+        "label": "Send",
+        "description": "The send button icon on the right side of the input bar.",
+        "state": "visible",
+        "dx": 1200,
+        "dy": 712,
+        "frame_dx": 1375,
+        "frame_dy": 915,
+        "confidence": 0.97,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1343,
+          875,
+          1407,
+          955
+        ],
+        "session_memory_key": "button:send",
+        "cached": false
+      },
+      {
+        "id": "taskbar",
+        "type": "pane",
+        "label": "Windows Taskbar",
+        "description": "The operating system taskbar at the very bottom of the screen.",
+        "state": "visible",
+        "dx": 812,
+        "dy": 762,
+        "frame_dx": 987,
+        "frame_dy": 965,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          955,
+          1799,
+          975
+        ],
+        "session_memory_key": "pane:windows taskbar",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "logo_icon",
+        "type": "icon",
+        "label": "ScreenPilot AI logo",
+        "description": "The logo icon for ScreenPilot AI in the top left corner.",
+        "state": "visible",
+        "dx": 80,
+        "dy": 52,
+        "frame_dx": 255,
+        "frame_dy": 255,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          231,
+          227,
+          279,
+          283
+        ],
+        "session_memory_key": "icon:screenpilot ai logo",
+        "cached": false
+      },
+      {
+        "id": "title_label",
+        "type": "label",
+        "label": "ScreenPilot AI",
+        "description": "The main application title text.",
+        "state": "visible",
+        "dx": 168,
+        "dy": 56,
+        "frame_dx": 343,
+        "frame_dy": 259,
+        "confidence": 0.98,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          247,
+          235,
+          439,
+          283
+        ],
+        "session_memory_key": "label:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "version_badge",
+        "type": "label",
+        "label": "Autonomous Task Agent v2",
+        "description": "A badge indicating the version of the task agent.",
+        "state": "visible",
+        "dx": 316,
+        "dy": 64,
+        "frame_dx": 491,
+        "frame_dy": 267,
+        "confidence": 0.92,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          399,
+          251,
+          583,
+          283
+        ],
+        "session_memory_key": "label:autonomous task agent v2",
+        "cached": false
+      },
+      {
+        "id": "message_pane",
+        "type": "pane",
+        "label": "Message Box",
+        "description": "A large white message box in the upper center of the screen.",
+        "state": "visible",
+        "dx": 804,
+        "dy": 176,
+        "frame_dx": 979,
+        "frame_dy": 379,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          463,
+          299,
+          1495,
+          459
+        ],
+        "session_memory_key": "pane:message box",
+        "cached": false
+      },
+      {
+        "id": "task_plan_pane",
+        "type": "pane",
+        "label": "Task Plan Container",
+        "description": "The container holding the task plan steps and status.",
+        "state": "visible",
+        "dx": 380,
+        "dy": 336,
+        "frame_dx": 555,
+        "frame_dy": 539,
+        "confidence": 0.94,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          419,
+          935,
+          659
+        ],
+        "session_memory_key": "pane:task plan container",
+        "cached": false
+      },
+      {
+        "id": "task_plan_heading",
+        "type": "label",
+        "label": "Task Plan",
+        "description": "The heading for the task plan section.",
+        "state": "visible",
+        "dx": 132,
+        "dy": 260,
+        "frame_dx": 307,
+        "frame_dy": 463,
+        "confidence": 0.96,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          263,
+          451,
+          351,
+          475
+        ],
+        "session_memory_key": "label:task plan",
+        "cached": false
+      },
+      {
+        "id": "task_status_label",
+        "type": "label",
+        "label": "0/2 done",
+        "description": "Status indicator showing the number of completed tasks.",
+        "state": "visible",
+        "dx": 628,
+        "dy": 268,
+        "frame_dx": 803,
+        "frame_dy": 471,
+        "confidence": 0.93,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          775,
+          459,
+          831,
+          483
+        ],
+        "session_memory_key": "label:0/2 done",
+        "cached": false
+      },
+      {
+        "id": "task_plan_desc",
+        "type": "label",
+        "label": "Task Plan Description",
+        "description": "Text describing the current state of the browser and the next steps.",
+        "state": "visible",
+        "dx": 368,
+        "dy": 296,
+        "frame_dx": 543,
+        "frame_dy": 499,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          475,
+          911,
+          523
+        ],
+        "session_memory_key": "label:task plan description",
+        "cached": false
+      },
+      {
+        "id": "step_1_item",
+        "type": "label",
+        "label": "Step 1: Click the Log in to the site tab",
+        "description": "The first step in the task plan, marked with an error icon.",
+        "state": "visible",
+        "dx": 368,
+        "dy": 340,
+        "frame_dx": 543,
+        "frame_dy": 543,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          515,
+          911,
+          571
+        ],
+        "session_memory_key": "label:step 1: click the log in to the site tab",
+        "cached": false
+      },
+      {
+        "id": "step_2_item",
+        "type": "label",
+        "label": "Step 2: Click the username field and type the username",
+        "description": "The second step in the task plan, currently active.",
+        "state": "visible",
+        "dx": 368,
+        "dy": 388,
+        "frame_dx": 543,
+        "frame_dy": 591,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          555,
+          911,
+          627
+        ],
+        "session_memory_key": "label:step 2: click the username field and type the username",
+        "cached": false
+      },
+      {
+        "id": "log_pane",
+        "type": "pane",
+        "label": "Log Container",
+        "description": "The container holding the execution logs and error messages.",
+        "state": "visible",
+        "dx": 380,
+        "dy": 512,
+        "frame_dx": 555,
+        "frame_dy": 715,
+        "confidence": 0.92,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          611,
+          935,
+          819
+        ],
+        "session_memory_key": "pane:log container",
+        "cached": false
+      },
+      {
+        "id": "log_line_1",
+        "type": "label",
+        "label": "Sending 2 HID commands...",
+        "description": "Log message indicating HID commands are being sent.",
+        "state": "visible",
+        "dx": 156,
+        "dy": 456,
+        "frame_dx": 331,
+        "frame_dy": 659,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          239,
+          643,
+          423,
+          675
+        ],
+        "session_memory_key": "label:sending 2 hid commands...",
+        "cached": false
+      },
+      {
+        "id": "log_line_2",
+        "type": "label",
+        "label": "Validating step 1...",
+        "description": "Log message indicating step 1 validation is in progress.",
+        "state": "visible",
+        "dx": 140,
+        "dy": 472,
+        "frame_dx": 315,
+        "frame_dy": 675,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          239,
+          659,
+          391,
+          691
+        ],
+        "session_memory_key": "label:validating step 1...",
+        "cached": false
+      },
+      {
+        "id": "log_line_3",
+        "type": "label",
+        "label": "Evaluation error: No valid JSON found",
+        "description": "Error message from the LLM response evaluation.",
+        "state": "visible",
+        "dx": 344,
+        "dy": 492,
+        "frame_dx": 519,
+        "frame_dy": 695,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          675,
+          863,
+          715
+        ],
+        "session_memory_key": "label:evaluation error: no valid json found",
+        "cached": false
+      },
+      {
+        "id": "log_line_4",
+        "type": "label",
+        "label": "Step 1 failed after 3 attempts",
+        "description": "Log message indicating step 1 failure and continuation.",
+        "state": "visible",
+        "dx": 280,
+        "dy": 516,
+        "frame_dx": 455,
+        "frame_dy": 719,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          191,
+          707,
+          719,
+          731
+        ],
+        "session_memory_key": "label:step 1 failed after 3 attempts",
+        "cached": false
+      },
+      {
+        "id": "log_line_5",
+        "type": "label",
+        "label": "Step 2: Click the username field...",
+        "description": "Log message detailing the current action for step 2.",
+        "state": "visible",
+        "dx": 352,
+        "dy": 544,
+        "frame_dx": 527,
+        "frame_dy": 747,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          723,
+          879,
+          771
+        ],
+        "session_memory_key": "label:step 2: click the username field...",
+        "cached": false
+      },
+      {
+        "id": "log_line_6",
+        "type": "label",
+        "label": "Screen snapshot for step 2...",
+        "description": "Log message indicating a screen snapshot is being taken.",
+        "state": "visible",
+        "dx": 168,
+        "dy": 576,
+        "frame_dx": 343,
+        "frame_dy": 779,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          231,
+          763,
+          455,
+          795
+        ],
+        "session_memory_key": "label:screen snapshot for step 2...",
+        "cached": false
+      },
+      {
+        "id": "input_bar",
+        "type": "input",
+        "label": "Agent Status Bar",
+        "description": "The input bar at the bottom showing agent status and a send button.",
+        "state": "visible",
+        "dx": 704,
+        "dy": 716,
+        "frame_dx": 879,
+        "frame_dy": 919,
+        "confidence": 0.96,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          875,
+          1583,
+          963
+        ],
+        "session_memory_key": "input:agent status bar",
+        "cached": false
+      },
+      {
+        "id": "send_button",
+        "type": "button",
+        "label": "Send",
+        "description": "The send button icon on the right side of the input bar.",
+        "state": "visible",
+        "dx": 1200,
+        "dy": 712,
+        "frame_dx": 1375,
+        "frame_dy": 915,
+        "confidence": 0.97,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1343,
+          875,
+          1407,
+          955
+        ],
+        "session_memory_key": "button:send",
+        "cached": false
+      },
+      {
+        "id": "taskbar",
+        "type": "pane",
+        "label": "Windows Taskbar",
+        "description": "The operating system taskbar at the very bottom of the screen.",
+        "state": "visible",
+        "dx": 812,
+        "dy": 762,
+        "frame_dx": 987,
+        "frame_dy": 965,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          175,
+          955,
+          1799,
+          975
+        ],
+        "session_memory_key": "pane:windows taskbar",
+        "cached": false
+      }
+    ]
+  }
+}

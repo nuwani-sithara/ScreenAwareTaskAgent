@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777723860_fd80d2\\processing\\proc_1777723860_ea6c5b\\preprocessed_frames\\frame_1777723860_690014.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    744,
+    123,
+    1807,
+    1020
+  ],
+  "screen_size": {
+    "width": 1063,
+    "height": 897
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "xbox_logo",
+      "type": "icon",
+      "label": "Xbox Logo",
+      "description": "Large white Xbox logo on a black background",
+      "state": "visible",
+      "dx": 52,
+      "dy": 456,
+      "frame_dx": 796,
+      "frame_dy": 579,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        744,
+        531,
+        848,
+        627
+      ],
+      "session_memory_key": "icon:xbox logo",
+      "cached": false
+    },
+    {
+      "id": "xbox_minimize",
+      "type": "button",
+      "label": "Minimize",
+      "description": "Minimize button for the Xbox window",
+      "state": "visible",
+      "dx": 416,
+      "dy": 40,
+      "frame_dx": 1160,
+      "frame_dy": 163,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1144,
+        147,
+        1176,
+        179
+      ],
+      "session_memory_key": "button:minimize",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "xbox_logo",
+      "type": "icon",
+      "label": "Xbox Logo",
+      "description": "Large white Xbox logo on a black background",
+      "state": "visible",
+      "dx": 52,
+      "dy": 456,
+      "frame_dx": 796,
+      "frame_dy": 579,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        744,
+        531,
+        848,
+        627
+      ],
+      "session_memory_key": "icon:xbox logo",
+      "cached": false
+    },
+    {
+      "id": "xbox_minimize",
+      "type": "button",
+      "label": "Minimize",
+      "description": "Minimize button for the Xbox window",
+      "state": "visible",
+      "dx": 416,
+      "dy": 40,
+      "frame_dx": 1160,
+      "frame_dy": 163,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1144,
+        147,
+        1176,
+        179
+      ],
+      "session_memory_key": "button:minimize",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "xbox_logo",
+      "type": "icon",
+      "label": "Xbox Logo",
+      "description": "Large white Xbox logo on a black background",
+      "state": "visible",
+      "dx": 52,
+      "dy": 456,
+      "frame_dx": 796,
+      "frame_dy": 579,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        744,
+        531,
+        848,
+        627
+      ],
+      "session_memory_key": "icon:xbox logo",
+      "cached": false
+    },
+    {
+      "id": "xbox_minimize",
+      "type": "button",
+      "label": "Minimize",
+      "description": "Minimize button for the Xbox window",
+      "state": "visible",
+      "dx": 416,
+      "dy": 40,
+      "frame_dx": 1160,
+      "frame_dy": 163,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1144,
+        147,
+        1176,
+        179
+      ],
+      "session_memory_key": "button:minimize",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777723860_fd80d2",
+    "started_at": "2026-05-02T12:11:00.537616+00:00",
+    "updated_at": "2026-05-02T12:11:37.527842+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777723860_690014.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "icon:xbox logo": {
+        "element_key": "icon:xbox logo",
+        "element_type": "icon",
+        "label": "Xbox Logo",
+        "bbox": [
+          744.0,
+          531.0,
+          848.0,
+          627.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723860_690014.jpg",
+        "last_seen_frame": "frame_1777723860_690014.jpg",
+        "first_seen_at": "2026-05-02T12:11:37.527842+00:00",
+        "last_seen_at": "2026-05-02T12:11:37.527842+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723860_690014.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:11:37.527842+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "button:minimize": {
+        "element_key": "button:minimize",
+        "element_type": "button",
+        "label": "Minimize",
+        "bbox": [
+          1144.0,
+          147.0,
+          1176.0,
+          179.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723860_690014.jpg",
+        "last_seen_frame": "frame_1777723860_690014.jpg",
+        "first_seen_at": "2026-05-02T12:11:37.527842+00:00",
+        "last_seen_at": "2026-05-02T12:11:37.527842+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723860_690014.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:11:37.527842+00:00",
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "xbox_logo",
+        "type": "icon",
+        "label": "Xbox Logo",
+        "description": "Large white Xbox logo on a black background",
+        "state": "visible",
+        "dx": 52,
+        "dy": 456,
+        "frame_dx": 796,
+        "frame_dy": 579,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          744,
+          531,
+          848,
+          627
+        ],
+        "session_memory_key": "icon:xbox logo",
+        "cached": false
+      },
+      {
+        "id": "xbox_minimize",
+        "type": "button",
+        "label": "Minimize",
+        "description": "Minimize button for the Xbox window",
+        "state": "visible",
+        "dx": 416,
+        "dy": 40,
+        "frame_dx": 1160,
+        "frame_dy": 163,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1144,
+          147,
+          1176,
+          179
+        ],
+        "session_memory_key": "button:minimize",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "xbox_logo",
+        "type": "icon",
+        "label": "Xbox Logo",
+        "description": "Large white Xbox logo on a black background",
+        "state": "visible",
+        "dx": 52,
+        "dy": 456,
+        "frame_dx": 796,
+        "frame_dy": 579,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          744,
+          531,
+          848,
+          627
+        ],
+        "session_memory_key": "icon:xbox logo",
+        "cached": false
+      },
+      {
+        "id": "xbox_minimize",
+        "type": "button",
+        "label": "Minimize",
+        "description": "Minimize button for the Xbox window",
+        "state": "visible",
+        "dx": 416,
+        "dy": 40,
+        "frame_dx": 1160,
+        "frame_dy": 163,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1144,
+          147,
+          1176,
+          179
+        ],
+        "session_memory_key": "button:minimize",
+        "cached": false
+      }
+    ]
+  }
+}

@@ -1,18 +1,9 @@
 /venv
 /datasets
 /runs
-/data
+
 
 # Ignore all session data and frames
-data/
-data/sessions/
-data/sessions/*/raw_frames/*.jpg
-data/sessions/*/preprocessed_frames/*.jpg
-data/sessions/*/detected_images/*.jpg
 
 # Ignore all session data and frames
-/data/sessions/
-/data/sessions/*/raw_frames/*.jpg
-/data/sessions/*/preprocessed_frames/*.jpg
-/data/sessions/*/detected_images/*.jpg
-/data/
+

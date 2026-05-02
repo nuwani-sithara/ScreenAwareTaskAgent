@@ -477,7 +477,7 @@ def plan_step_hid(
 
     user_data_note = ""
     if current_step.get("user_input"):
-        user_data_note = f"\nUser-provided data for this step: {current_step['user_input']}"
+        user_data_note = f"\nUser has securely provided the input for this step locally. You MUST output a type_text command with text exactly equal to \"<SECURE_INPUT_PROVIDED>\"."
 
     # Build a strict element reference table so the LLM sees exact coords as JSON
     if detected_elements:
@@ -592,6 +592,9 @@ Respond with ONLY this JSON (no markdown):
                     else:
                         cx, cy = 0, 0
                 action_steps.append({"step": 1, "action": "click", "target": e.get("label", e.get("type", "element")), "x": cx, "y": cy})
+
+            if action_steps and current_step.get("user_input"):
+                action_steps.append({"step": 2, "action": "type", "text": "<SECURE_INPUT_PROVIDED>"})
 
             if action_steps:
                 gen = HIDStepGenerator()

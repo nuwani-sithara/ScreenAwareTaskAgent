@@ -113,7 +113,13 @@ export class DeviceShadow {
 
     // Execute the original command without implicit cursor anchoring.
     // Absolute-position orchestration (if needed) must be handled by caller.
-    await processOneCommand(command);
+    if (command.cmd === 'mouse_double_click') {
+      await processOneCommand({ ...command, cmd: 'mouse_click' });
+      await this.delay(80);
+      await processOneCommand({ ...command, cmd: 'mouse_click' });
+    } else {
+      await processOneCommand(command);
+    }
   }
   
   /**

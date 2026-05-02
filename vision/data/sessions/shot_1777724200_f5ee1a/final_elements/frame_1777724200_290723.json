@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777724200_f5ee1a\\processing\\proc_1777724200_91d530\\preprocessed_frames\\frame_1777724200_290723.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    1014,
+    128,
+    1805,
+    1020
+  ],
+  "screen_size": {
+    "width": 791,
+    "height": 892
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "taskbar",
+      "type": "pane",
+      "label": "Taskbar",
+      "description": "The Windows taskbar at the bottom of the screen.",
+      "state": "visible",
+      "dx": 396,
+      "dy": 850,
+      "frame_dx": 1410,
+      "frame_dy": 978,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1014,
+        936,
+        1805,
+        1020
+      ],
+      "session_memory_key": "pane:taskbar",
+      "cached": false
+    },
+    {
+      "id": "start_button",
+      "type": "button",
+      "label": "Start",
+      "description": "Windows Start button icon.",
+      "state": "visible",
+      "dx": 40,
+      "dy": 848,
+      "frame_dx": 1054,
+      "frame_dy": 976,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1030,
+        952,
+        1078,
+        1000
+      ],
+      "session_memory_key": "button:start",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "taskbar",
+      "type": "pane",
+      "label": "Taskbar",
+      "description": "The Windows taskbar at the bottom of the screen.",
+      "state": "visible",
+      "dx": 396,
+      "dy": 850,
+      "frame_dx": 1410,
+      "frame_dy": 978,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1014,
+        936,
+        1805,
+        1020
+      ],
+      "session_memory_key": "pane:taskbar",
+      "cached": false
+    },
+    {
+      "id": "start_button",
+      "type": "button",
+      "label": "Start",
+      "description": "Windows Start button icon.",
+      "state": "visible",
+      "dx": 40,
+      "dy": 848,
+      "frame_dx": 1054,
+      "frame_dy": 976,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1030,
+        952,
+        1078,
+        1000
+      ],
+      "session_memory_key": "button:start",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "taskbar",
+      "type": "pane",
+      "label": "Taskbar",
+      "description": "The Windows taskbar at the bottom of the screen.",
+      "state": "visible",
+      "dx": 396,
+      "dy": 850,
+      "frame_dx": 1410,
+      "frame_dy": 978,
+      "confidence": 0.95,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1014,
+        936,
+        1805,
+        1020
+      ],
+      "session_memory_key": "pane:taskbar",
+      "cached": false
+    },
+    {
+      "id": "start_button",
+      "type": "button",
+      "label": "Start",
+      "description": "Windows Start button icon.",
+      "state": "visible",
+      "dx": 40,
+      "dy": 848,
+      "frame_dx": 1054,
+      "frame_dy": 976,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        1030,
+        952,
+        1078,
+        1000
+      ],
+      "session_memory_key": "button:start",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777724200_f5ee1a",
+    "started_at": "2026-05-02T12:16:40.833058+00:00",
+    "updated_at": "2026-05-02T12:17:16.851824+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777724200_290723.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "pane:taskbar": {
+        "element_key": "pane:taskbar",
+        "element_type": "pane",
+        "label": "Taskbar",
+        "bbox": [
+          1014.0,
+          936.0,
+          1805.0,
+          1020.0
+        ],
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724200_290723.jpg",
+        "last_seen_frame": "frame_1777724200_290723.jpg",
+        "first_seen_at": "2026-05-02T12:17:16.851824+00:00",
+        "last_seen_at": "2026-05-02T12:17:16.851824+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724200_290723.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:17:16.851824+00:00",
+            "confidence": 0.95
+          }
+        ]
+      },
+      "button:start": {
+        "element_key": "button:start",
+        "element_type": "button",
+        "label": "Start",
+        "bbox": [
+          1030.0,
+          952.0,
+          1078.0,
+          1000.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777724200_290723.jpg",
+        "last_seen_frame": "frame_1777724200_290723.jpg",
+        "first_seen_at": "2026-05-02T12:17:16.851824+00:00",
+        "last_seen_at": "2026-05-02T12:17:16.851824+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777724200_290723.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:17:16.851824+00:00",
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "taskbar",
+        "type": "pane",
+        "label": "Taskbar",
+        "description": "The Windows taskbar at the bottom of the screen.",
+        "state": "visible",
+        "dx": 396,
+        "dy": 850,
+        "frame_dx": 1410,
+        "frame_dy": 978,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1014,
+          936,
+          1805,
+          1020
+        ],
+        "session_memory_key": "pane:taskbar",
+        "cached": false
+      },
+      {
+        "id": "start_button",
+        "type": "button",
+        "label": "Start",
+        "description": "Windows Start button icon.",
+        "state": "visible",
+        "dx": 40,
+        "dy": 848,
+        "frame_dx": 1054,
+        "frame_dy": 976,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1030,
+          952,
+          1078,
+          1000
+        ],
+        "session_memory_key": "button:start",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "taskbar",
+        "type": "pane",
+        "label": "Taskbar",
+        "description": "The Windows taskbar at the bottom of the screen.",
+        "state": "visible",
+        "dx": 396,
+        "dy": 850,
+        "frame_dx": 1410,
+        "frame_dy": 978,
+        "confidence": 0.95,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1014,
+          936,
+          1805,
+          1020
+        ],
+        "session_memory_key": "pane:taskbar",
+        "cached": false
+      },
+      {
+        "id": "start_button",
+        "type": "button",
+        "label": "Start",
+        "description": "Windows Start button icon.",
+        "state": "visible",
+        "dx": 40,
+        "dy": 848,
+        "frame_dx": 1054,
+        "frame_dy": 976,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          1030,
+          952,
+          1078,
+          1000
+        ],
+        "session_memory_key": "button:start",
+        "cached": false
+      }
+    ]
+  }
+}

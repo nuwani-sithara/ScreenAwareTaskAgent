@@ -1,0 +1,53 @@
+{
+  "timestamp": 1777535455,
+  "frame": "e:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777534598_9598fa\\final_elements\\frame_1777534598_6a8fe5.json",
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777534598_9598fa\\processing\\proc_1777534598_67a588\\preprocessed_frames\\frame_1777534598_6a8fe5.jpg",
+  "measured": [
+    {
+      "label": "Google Chrome",
+      "target": [
+        292,
+        124
+      ],
+      "cursor_before": [
+        3080,
+        724
+      ],
+      "cursor_after": [
+        3080,
+        724
+      ]
+    },
+    {
+      "label": "HuionTablet",
+      "target": [
+        352,
+        124
+      ],
+      "cursor_before": [
+        3080,
+        724
+      ],
+      "cursor_after": [
+        3080,
+        724
+      ]
+    }
+  ],
+  "transform": {
+    "A": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "b": [
+      2758.0,
+      600.0
+    ]
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "image": "E:\\sliit-project\\ScreenAwareTaskAgent\\vision\\data\\sessions\\shot_1777723704_d2086a\\processing\\proc_1777723704_64da8f\\preprocessed_frames\\frame_1777723704_97d4f9.jpg",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screen_bbox": [
+    175,
+    203,
+    1799,
+    974
+  ],
+  "screen_size": {
+    "width": 1624,
+    "height": 771
+  },
+  "coordinate_system": "pixel",
+  "elements": [
+    {
+      "id": "0",
+      "type": "text",
+      "label": "ScreenPilot AI",
+      "description": "Application title ScreenPilot AI",
+      "state": "visible",
+      "dx": 156,
+      "dy": 84,
+      "frame_dx": 331,
+      "frame_dy": 287,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        223,
+        243,
+        439,
+        331
+      ],
+      "session_memory_key": "text:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "1",
+      "type": "text",
+      "label": "Autonomous Task Agent v2",
+      "description": "Badge indicating the version of the task agent",
+      "state": "visible",
+      "dx": 328,
+      "dy": 104,
+      "frame_dx": 503,
+      "frame_dy": 307,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        431,
+        283,
+        575,
+        331
+      ],
+      "session_memory_key": "text:autonomous task agent v2",
+      "cached": false
+    }
+  ],
+  "element_count": 2,
+  "current_elements": [
+    {
+      "id": "0",
+      "type": "text",
+      "label": "ScreenPilot AI",
+      "description": "Application title ScreenPilot AI",
+      "state": "visible",
+      "dx": 156,
+      "dy": 84,
+      "frame_dx": 331,
+      "frame_dy": 287,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        223,
+        243,
+        439,
+        331
+      ],
+      "session_memory_key": "text:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "1",
+      "type": "text",
+      "label": "Autonomous Task Agent v2",
+      "description": "Badge indicating the version of the task agent",
+      "state": "visible",
+      "dx": 328,
+      "dy": 104,
+      "frame_dx": 503,
+      "frame_dy": 307,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        431,
+        283,
+        575,
+        331
+      ],
+      "session_memory_key": "text:autonomous task agent v2",
+      "cached": false
+    }
+  ],
+  "resolved_elements": [
+    {
+      "id": "0",
+      "type": "text",
+      "label": "ScreenPilot AI",
+      "description": "Application title ScreenPilot AI",
+      "state": "visible",
+      "dx": 156,
+      "dy": 84,
+      "frame_dx": 331,
+      "frame_dy": 287,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        223,
+        243,
+        439,
+        331
+      ],
+      "session_memory_key": "text:screenpilot ai",
+      "cached": false
+    },
+    {
+      "id": "1",
+      "type": "text",
+      "label": "Autonomous Task Agent v2",
+      "description": "Badge indicating the version of the task agent",
+      "state": "visible",
+      "dx": 328,
+      "dy": 104,
+      "frame_dx": 503,
+      "frame_dy": 307,
+      "confidence": 0.9,
+      "source": "gemini_vlm",
+      "frame_bbox": [
+        431,
+        283,
+        575,
+        331
+      ],
+      "session_memory_key": "text:autonomous task agent v2",
+      "cached": false
+    }
+  ],
+  "session_knowledge_base": {
+    "session_id": "shot_1777723704_d2086a",
+    "started_at": "2026-05-02T12:08:24.395715+00:00",
+    "updated_at": "2026-05-02T12:08:59.754605+00:00",
+    "stale_after_misses": 3,
+    "confidence_floor": 0.4,
+    "decay_per_miss": 0.9,
+    "frame_count": 1,
+    "frame_name": "frame_1777723704_97d4f9.jpg",
+    "frame_index": 0,
+    "image_size": {
+      "width": 1920,
+      "height": 1080
+    },
+    "known_elements": {
+      "text:screenpilot ai": {
+        "element_key": "text:screenpilot ai",
+        "element_type": "text",
+        "label": "ScreenPilot AI",
+        "bbox": [
+          223.0,
+          243.0,
+          439.0,
+          331.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723704_97d4f9.jpg",
+        "last_seen_frame": "frame_1777723704_97d4f9.jpg",
+        "first_seen_at": "2026-05-02T12:08:59.754605+00:00",
+        "last_seen_at": "2026-05-02T12:08:59.754605+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723704_97d4f9.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:08:59.754605+00:00",
+            "confidence": 0.9
+          }
+        ]
+      },
+      "text:autonomous task agent v2": {
+        "element_key": "text:autonomous task agent v2",
+        "element_type": "text",
+        "label": "Autonomous Task Agent v2",
+        "bbox": [
+          431.0,
+          283.0,
+          575.0,
+          331.0
+        ],
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "first_seen_frame": "frame_1777723704_97d4f9.jpg",
+        "last_seen_frame": "frame_1777723704_97d4f9.jpg",
+        "first_seen_at": "2026-05-02T12:08:59.754605+00:00",
+        "last_seen_at": "2026-05-02T12:08:59.754605+00:00",
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "seen_count": 1,
+        "miss_count": 0,
+        "stale": false,
+        "cached": false,
+        "history": [
+          {
+            "frame_name": "frame_1777723704_97d4f9.jpg",
+            "frame_index": 0,
+            "seen_at": "2026-05-02T12:08:59.754605+00:00",
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    "resolved_elements": [
+      {
+        "id": "0",
+        "type": "text",
+        "label": "ScreenPilot AI",
+        "description": "Application title ScreenPilot AI",
+        "state": "visible",
+        "dx": 156,
+        "dy": 84,
+        "frame_dx": 331,
+        "frame_dy": 287,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          223,
+          243,
+          439,
+          331
+        ],
+        "session_memory_key": "text:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "1",
+        "type": "text",
+        "label": "Autonomous Task Agent v2",
+        "description": "Badge indicating the version of the task agent",
+        "state": "visible",
+        "dx": 328,
+        "dy": 104,
+        "frame_dx": 503,
+        "frame_dy": 307,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          431,
+          283,
+          575,
+          331
+        ],
+        "session_memory_key": "text:autonomous task agent v2",
+        "cached": false
+      }
+    ],
+    "current_elements": [
+      {
+        "id": "0",
+        "type": "text",
+        "label": "ScreenPilot AI",
+        "description": "Application title ScreenPilot AI",
+        "state": "visible",
+        "dx": 156,
+        "dy": 84,
+        "frame_dx": 331,
+        "frame_dy": 287,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          223,
+          243,
+          439,
+          331
+        ],
+        "session_memory_key": "text:screenpilot ai",
+        "cached": false
+      },
+      {
+        "id": "1",
+        "type": "text",
+        "label": "Autonomous Task Agent v2",
+        "description": "Badge indicating the version of the task agent",
+        "state": "visible",
+        "dx": 328,
+        "dy": 104,
+        "frame_dx": 503,
+        "frame_dy": 307,
+        "confidence": 0.9,
+        "source": "gemini_vlm",
+        "frame_bbox": [
+          431,
+          283,
+          575,
+          331
+        ],
+        "session_memory_key": "text:autonomous task agent v2",
+        "cached": false
+      }
+    ]
+  }
+}
