@@ -720,18 +720,25 @@ def _finalize_elements_with_dxdy(
                 y1 = float(bbox[1])
                 x2 = float(bbox[2])
                 y2 = float(bbox[3])
-                cx = int(round(max(0.0, (x1 + x2) * 0.5)))
-                cy = int(round(max(0.0, (y1 + y2) * 0.5)))
+                cx = int(round((x1 + x2) * 0.5))
+                cy = int(round((y1 + y2) * 0.5))
                 elem["dx"] = max(0, min(screen_width, cx))
                 elem["dy"] = max(0, min(screen_height, cy))
-                elem["frame_bbox"] = [
-                    max(0, min(image_width - 1, int(round(sx1 + x1)))),
-                    max(0, min(image_height - 1, int(round(sy1 + y1)))),
-                    max(0, min(image_width, int(round(sx1 + x2)))),
-                    max(0, min(image_height, int(round(sy1 + y2)))),
-                ]
-                elem["frame_dx"] = max(0, min(image_width - 1, int(round(sx1 + cx))))
-                elem["frame_dy"] = max(0, min(image_height - 1, int(round(sy1 + cy))))
+                # Only derive frame coordinates when not already set by the
+                # upstream VLM normalisation pass (_normalize_payload), which
+                # correctly applies the screen origin offset including any
+                # BBoxRefiner adjustments.
+                if not elem.get("frame_bbox"):
+                    elem["frame_bbox"] = [
+                        max(0, min(image_width - 1, int(round(sx1 + x1)))),
+                        max(0, min(image_height - 1, int(round(sy1 + y1)))),
+                        max(0, min(image_width, int(round(sx1 + x2)))),
+                        max(0, min(image_height, int(round(sy1 + y2)))),
+                    ]
+                if not elem.get("frame_dx"):
+                    elem["frame_dx"] = max(0, min(image_width - 1, int(round(sx1 + cx))))
+                if not elem.get("frame_dy"):
+                    elem["frame_dy"] = max(0, min(image_height - 1, int(round(sy1 + cy))))
             except Exception:
                 pass
         try:

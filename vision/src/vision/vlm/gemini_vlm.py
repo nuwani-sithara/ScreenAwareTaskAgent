@@ -1203,6 +1203,36 @@ class GeminiVLM(BaseVLM):
             screen_height=screen_crop.shape[0],
         )
 
+        # Refine Gemini bboxes against actual image evidence (edge-snapping).
+        # This corrects the coordinate drift that Gemini frequently exhibits
+        # when localising elements in the resized request image.
+        # We pass the screen_crop (not the full frame) as the reference image
+        # and use screen_x1/screen_y1 as the origin so that frame_bbox and
+        # frame_dx/frame_dy are kept in sync after refinement.
+        try:
+            raw_elements = list(normalized.get("elements", []))
+            if raw_elements:
+                refined_elements = self._refine_elements_with_image(
+                    raw_elements,
+                    screen_crop,
+                    origin_x=screen_x1,
+                    origin_y=screen_y1,
+                    frame_width=image_width,
+                    frame_height=image_height,
+                )
+                normalized["elements"] = refined_elements
+                normalized["element_count"] = len(refined_elements)
+                logger.info(
+                    "BBoxRefiner applied to %d elements image=%s",
+                    len(refined_elements),
+                    image_path,
+                )
+        except Exception:
+            logger.exception(
+                "BBoxRefiner pass failed for image=%s; keeping unrefined detections",
+                image_path,
+            )
+
         logger.info(
             "Gemini analyze completed image=%s elements=%d error_type=%s",
             image_path,
