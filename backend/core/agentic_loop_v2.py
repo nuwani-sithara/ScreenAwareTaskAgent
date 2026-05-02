@@ -50,6 +50,7 @@ class AgentRunRecorder:
             perception.json        – raw initial screen / vision data
             latest_perception.json – most-recent screen data (updated each step)
             action_plan.json       – todo list + HID commands per step
+            plan_attempts.json     – every screen snapshot + HID plan attempt
             action_result.json     – execution outcomes per step
             full_cycle.json        – complete merged record of the whole run
     """
@@ -71,6 +72,7 @@ class AgentRunRecorder:
         # per-step records: keyed by step id
         self.step_plans: Dict[int, dict] = {}      # hid commands + reasoning
         self.step_results: Dict[int, dict] = {}    # evaluation outcomes
+        self.plan_attempts: List[dict] = []
         self.final_report: dict = {}
 
     def _normalize_perception(self, screen_data: dict) -> dict:
@@ -133,6 +135,37 @@ class AgentRunRecorder:
         # Write an early action_plan.json with the planned steps
         self._flush_action_plan()
 
+    def record_step_plan_attempt(
+        self,
+        step_index: int,
+        step: dict,
+        attempt: int,
+        screen_data: dict,
+        hid_result: dict | None,
+        hid_commands: list,
+        reasoning: str,
+        error: str | None = None,
+    ) -> None:
+        attempt_record = {
+            "step_index": step_index,
+            "step_id": step.get("id", step_index + 1),
+            "step": {
+                "action": step.get("action"),
+                "target": step.get("target"),
+                "expected_result": step.get("expected_result"),
+                "status": step.get("status"),
+            },
+            "attempt": attempt,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "screen_data": screen_data,
+            "hid_plan": hid_result or {},
+            "hid_commands": hid_commands,
+            "reasoning": reasoning,
+            "error": error,
+        }
+        self.plan_attempts.append(attempt_record)
+        self._flush_plan_attempts()
+
     def record_step_plan(self, step: dict, hid_commands: list, reasoning: str) -> None:
         sid = step.get("id", 0)
         self.step_plans[sid] = {
@@ -180,6 +213,16 @@ class AgentRunRecorder:
             "step_plans": list(self.step_plans.values()),
         }
         self._write("action_plan.json", data)
+
+    def _flush_plan_attempts(self) -> None:
+        data = {
+            "run_id": self.run_id,
+            "user_task": self.user_task,
+            "started_at": self.started_at,
+            "attempt_count": len(self.plan_attempts),
+            "attempts": self.plan_attempts,
+        }
+        self._write("plan_attempts.json", data)
 
     def _flush_action_result(self) -> None:
         done = sum(1 for r in self.step_results.values() if r.get("final_status") == "done")
@@ -1433,9 +1476,18 @@ async def run_agentic_loop_v2(
                         for cmd in hid_commands:
                             if cmd.get("cmd") == "type_text" and cmd.get("text") == "<SECURE_INPUT_PROVIDED>":
                                 cmd["text"] = step["user_input"]
-
                     recorder.record_step_plan(step, hid_commands, reasoning)
                 except Exception as exc:
+                    recorder.record_step_plan_attempt(
+                        step_index=step_index,
+                        step=step,
+                        attempt=attempt + 1,
+                        screen_data=current_screen,
+                        hid_result=None,
+                        hid_commands=[],
+                        reasoning="",
+                        error=str(exc),
+                    )
                     await emit(
                         {
                             "type": "step_error",
@@ -1448,6 +1500,16 @@ async def run_agentic_loop_v2(
                     continue
 
                 if not hid_commands:
+                    recorder.record_step_plan_attempt(
+                        step_index=step_index,
+                        step=step,
+                        attempt=attempt + 1,
+                        screen_data=current_screen,
+                        hid_result=hid_result,
+                        hid_commands=[],
+                        reasoning=reasoning,
+                        error="LLM returned no HID commands for this step",
+                    )
                     await emit(
                         {
                             "type": "step_error",
@@ -1458,6 +1520,16 @@ async def run_agentic_loop_v2(
                     )
                     attempt += 1
                     continue
+
+                recorder.record_step_plan_attempt(
+                    step_index=step_index,
+                    step=step,
+                    attempt=attempt + 1,
+                    screen_data=current_screen,
+                    hid_result=hid_result,
+                    hid_commands=hid_commands,
+                    reasoning=reasoning,
+                )
 
                 await emit(
                     {
