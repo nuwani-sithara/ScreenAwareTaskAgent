@@ -547,15 +547,39 @@ Respond with ONLY this JSON (no markdown):
             logger.info("Attempting local fallback for plan_step_hid")
             from llm.hid_step_generator import HIDStepGenerator
 
-            # Try to match current_step target to a detected element
-            target = current_step.get("target", "").lower()
+            def _match_score(target_text: str, elem: dict) -> float:
+                label = str(elem.get("label") or "").strip().lower()
+                desc = str(elem.get("description") or "").strip().lower()
+                haystack = f"{label} {desc}".strip()
+                if not target_text or not haystack:
+                    return 0.0
+
+                score = 0.0
+                if label and label in target_text:
+                    score += 3.0
+                if desc and desc in target_text:
+                    score += 2.0
+
+                target_tokens = {t for t in re.findall(r"[a-z0-9]+", target_text) if len(t) > 2}
+                haystack_tokens = {t for t in re.findall(r"[a-z0-9]+", haystack) if len(t) > 2}
+                overlap = target_tokens & haystack_tokens
+                score += float(len(overlap))
+
+                return score
+
+            # Try to match current_step target to a detected element.
+            target = str(current_step.get("target", "")).lower()
             chosen = None
+            best_score = 0.0
             for elem in detected_elements:
-                label = (elem.get("label") or "").lower()
-                desc = (elem.get("description") or "").lower()
-                if label and label in target or desc and desc in target:
+                score = _match_score(target, elem)
+                if score > best_score:
+                    best_score = score
                     chosen = elem
-                    break
+
+            # Require an actual match; never click the first detected element blindly.
+            if best_score <= 0.0:
+                chosen = None
 
             # If no label match, but current_step contains explicit coords, use them
             x = current_step.get("x") or current_step.get("dx")
@@ -577,21 +601,6 @@ Respond with ONLY this JSON (no markdown):
                 action_steps.append({"step": 1, "action": "click", "target": chosen.get("label", "element"), "x": cx, "y": cy})
             elif x and y:
                 action_steps.append({"step": 1, "action": "click", "target": current_step.get("target", "element"), "x": x, "y": y})
-            elif detected_elements:
-                # Last resort: click the first detected element
-                e = detected_elements[0]
-                if "dx" in e and "dy" in e:
-                    cx, cy = e["dx"], e["dy"]
-                elif "x" in e and "y" in e:
-                    cx, cy = e["x"], e["y"]
-                else:
-                    bbox = e.get("bbox", [])
-                    if bbox and len(bbox) >= 4:
-                        cx = int((bbox[0] + bbox[2]) / 2 * 1920)
-                        cy = int((bbox[1] + bbox[3]) / 2 * 1080)
-                    else:
-                        cx, cy = 0, 0
-                action_steps.append({"step": 1, "action": "click", "target": e.get("label", e.get("type", "element")), "x": cx, "y": cy})
 
             if action_steps and current_step.get("user_input"):
                 action_steps.append({"step": 2, "action": "type", "text": "<SECURE_INPUT_PROVIDED>"})
@@ -600,6 +609,10 @@ Respond with ONLY this JSON (no markdown):
                 gen = HIDStepGenerator()
                 hid_cmds = gen.convert_actions_to_hid(action_steps)
                 return {"hid_commands": hid_cmds, "reasoning": f"Fallback generated {len(hid_cmds)} commands from detected elements"}
+            logger.warning(
+                "Fallback could not find a real target match for step %s; returning no HID commands instead of guessing",
+                current_step.get("id", "unknown"),
+            )
         except Exception as fallback_exc:
             logger.error("Fallback generation failed: %s", fallback_exc)
 

@@ -168,14 +168,17 @@ class AgentRunRecorder:
 
     def record_step_plan(self, step: dict, hid_commands: list, reasoning: str) -> None:
         sid = step.get("id", 0)
-        self.step_plans[sid] = {
-            "step_id": sid,
-            "action": step.get("action"),
-            "target": step.get("target"),
-            "expected_result": step.get("expected_result"),
-            "hid_commands": hid_commands,
-            "reasoning": reasoning,
-        }
+        if sid not in self.step_plans:
+            self.step_plans[sid] = {
+                "step_id": sid,
+                "action": step.get("action"),
+                "target": step.get("target"),
+                "expected_result": step.get("expected_result"),
+                "hid_commands": hid_commands,
+                "reasoning": reasoning,
+            }
+        else:
+            logger.info("Preserving original step plan for step %s; retry plan will not overwrite action_plan.json", sid)
         self._flush_action_plan()
 
     def record_step_result(
