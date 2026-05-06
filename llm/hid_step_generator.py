@@ -100,22 +100,137 @@ class HIDStepGenerator:
             "f5": 0x3E, "f6": 0x3F, "f7": 0x40, "f8": 0x41,
             "f9": 0x42, "f10": 0x43, "f11": 0x44, "f12": 0x45,
         }
-    
-    def _build_visual_context(self, visual_data: Dict[str, Any]) -> str:
-        """Build a concise text description of the screen state for LLM"""
-        
-        if not visual_data or "session_data" not in visual_data:
+
+    def _get_current_screen(self, visual_data: Dict[str, Any]) -> Dict[str, Any]:
+        if not isinstance(visual_data, dict):
+            return {}
+        if "screen" in visual_data and isinstance(visual_data["screen"], dict):
+            return visual_data["screen"]
+        if "current_screen" in visual_data and isinstance(visual_data["current_screen"], dict):
+            return visual_data["current_screen"]
+        if "session_data" in visual_data:
+            screens = visual_data["session_data"].get("screens", [])
+            if screens:
+                latest = screens[-1]
+                if isinstance(latest, dict):
+                    return latest.get("screen", latest)
+        if "elements" in visual_data:
+            return visual_data
+        return {}
+
+    def _get_history_screens(self, visual_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        if not isinstance(visual_data, dict):
+            return []
+        kb = visual_data.get("knowledge_base")
+        if kb is None and "session_data" in visual_data:
+            kb = visual_data["session_data"].get("knowledge_base")
+        if isinstance(kb, dict):
+            history = kb.get("screens") or kb.get("captures") or []
+        elif isinstance(kb, list):
+            history = kb
+        else:
+            history = []
+
+        if not history and "session_data" in visual_data:
+            session_screens = visual_data["session_data"].get("screens", [])
+            if len(session_screens) > 1:
+                history = session_screens[:-1]
+
+        screens: List[Dict[str, Any]] = []
+        for entry in history:
+            if isinstance(entry, dict):
+                if isinstance(entry.get("screen"), dict):
+                    screens.append(entry["screen"])
+                elif isinstance(entry.get("screen_data"), dict):
+                    screens.append(entry["screen_data"])
+                else:
+                    screens.append(entry)
+        return screens
+
+    def _normalize_text(self, value: Any) -> str:
+        import re
+        return re.sub(r"[^a-z0-9]+", " ", str(value).lower()).strip()
+
+    def _element_matches_target(self, elem: Dict[str, Any], target_text: str) -> bool:
+        if not target_text:
+            return True
+        target = self._normalize_text(target_text)
+        element_text = self._normalize_text(
+            " ".join([
+                elem.get("type", ""),
+                elem.get("label", ""),
+                elem.get("description", ""),
+            ])
+        )
+        if not target:
+            return False
+        if target in element_text or element_text in target:
+            return True
+
+        tokens = set(target.split())
+        if {"search", "find", "query"} & tokens:
+            if elem.get("type") in {"input", "input_field", "textfield", "text_field", "text", "textarea"}:
+                return True
+        if {"input", "field", "textbox", "text"} & tokens:
+            if elem.get("type") in {"input", "input_field", "text", "textarea"}:
+                return True
+        if {"button", "click", "submit", "send"} & tokens:
+            if elem.get("type") == "button":
+                return True
+        return bool(tokens & set(element_text.split()))
+
+    def _extract_screen_elements(self, screen: Dict[str, Any]) -> List[Dict[str, Any]]:
+        elements: List[Dict[str, Any]] = []
+        if not isinstance(screen, dict):
+            return elements
+        if "elements" in screen:
+            elements = screen.get("elements", [])
+        elif "vision_data" in screen:
+            elements = screen["vision_data"].get("elements", [])
+        elif "session_data" in screen:
+            screens = screen["session_data"].get("screens", [])
+            if screens:
+                elements = screens[-1].get("elements", [])
+        elif "screens" in screen:
+            screens = screen.get("screens", [])
+            if screens:
+                elements = screens[-1].get("elements", [])
+        return elements
+
+    def _collect_target_history_elements(
+        self,
+        visual_data: Dict[str, Any],
+        target_text: str,
+    ) -> List[Dict[str, Any]]:
+        history_matches: List[Dict[str, Any]] = []
+        seen = set()
+        for history_screen in reversed(self._get_history_screens(visual_data)):
+            for elem in self._extract_screen_elements(history_screen):
+                if not self._element_matches_target(elem, target_text):
+                    continue
+                sig = (
+                    elem.get("type"),
+                    elem.get("label"),
+                    elem.get("description"),
+                    elem.get("dx"),
+                    elem.get("dy"),
+                )
+                if sig in seen:
+                    continue
+                seen.add(sig)
+                history_matches.append(elem)
+        return history_matches
+
+    def _build_visual_context(self, visual_data: Dict[str, Any], target_text: str = "") -> str:
+        """Build a concise text description of the screen state for LLM."""
+
+        current_screen = self._get_current_screen(visual_data)
+        if not current_screen:
             return "No visual data available."
-        
-        session = visual_data["session_data"]
-        screens = session.get("screens", [])
-        
-        if not screens:
+
+        elements = self._extract_screen_elements(current_screen)
+        if not elements:
             return "No screens detected."
-        
-        # Get the latest screen
-        latest_screen = screens[-1]
-        elements = latest_screen.get("elements", [])
         
         context = f"Screen Elements Detected: {len(elements)}\n\n"
         
@@ -208,6 +323,27 @@ class HIDStepGenerator:
                 natural_desc = f"{elem_type}: '{label}' ({elem_id})"
             
             context += f"{i}. {natural_desc} at position ({center_x}, {center_y})\n"
+
+        history_matches = self._collect_target_history_elements(visual_data, target_text)
+        if history_matches:
+            context += "\nTarget-matching historical elements:\n"
+            for i, elem in enumerate(history_matches[:10], 1):
+                label = elem.get("label", "").strip()
+                desc = elem.get("description", "").strip()
+                elem_type = elem.get("type", "unknown")
+                if "dx" in elem and "dy" in elem:
+                    x, y = elem.get("dx", 0), elem.get("dy", 0)
+                elif "x" in elem and "y" in elem:
+                    x, y = elem.get("x", 0), elem.get("y", 0)
+                else:
+                    bbox = elem.get("bbox", [])
+                    if bbox and len(bbox) >= 4:
+                        x = int((bbox[0] + bbox[2]) / 2 * 1920)
+                        y = int((bbox[1] + bbox[3]) / 2 * 1080)
+                    else:
+                        x, y = 0, 0
+                label_text = label or desc or f"unlabeled {elem_type}"
+                context += f"{i}. [{elem_type}] '{label_text}' at position ({x}, {y})\n"
         
         return context
     
@@ -236,7 +372,7 @@ class HIDStepGenerator:
             }
         """
         
-        visual_context = self._build_visual_context(visual_data)
+        visual_context = self._build_visual_context(visual_data, instruction)
         
         # Build validation prompt
         validation_prompt = f"""You are a UI validation assistant. Analyze if the user's instruction can be completed with the current screen elements.
@@ -570,7 +706,7 @@ JSON Response:
             ]
         """
         
-        visual_context = self._build_visual_context(visual_data)
+        visual_context = self._build_visual_context(visual_data, instruction)
         
         prompt = f"""You are a UI automation task planner. Given a screen analysis and user instruction, generate a structured action plan in JSON format.
 
@@ -872,7 +1008,7 @@ Output JSON array:"""
         """
         
         try:
-            visual_context = self._build_visual_context(visual_data)
+            visual_context = self._build_visual_context(visual_data, instruction)
             
             # Stage 0: Validate instruction matches visual context
             validation_result = None
@@ -900,11 +1036,9 @@ Output JSON array:"""
             if not action_steps:
                 logger.warning("Stage 1 returned no actions - generating fallback action")
                 # Generate fallback action: click the first available element
-                elements = []
-                if visual_data and "session_data" in visual_data:
-                    screens = visual_data["session_data"].get("screens", [])
-                    if screens:
-                        elements = screens[-1].get("elements", [])
+                elements = self._extract_screen_elements(self._get_current_screen(visual_data))
+                if not elements:
+                    elements = self._collect_target_history_elements(visual_data, instruction)
                 
                 if elements:
                     # Use first element as fallback

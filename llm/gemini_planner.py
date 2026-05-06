@@ -115,7 +115,120 @@ def _extract_json(text: str) -> Any:
 # Screen data → exact element list (preserves original coordinates)
 # ---------------------------------------------------------------------------
 
-def _extract_elements(screen_data: dict) -> List[dict]:
+def _get_current_screen(screen_data: dict) -> dict:
+    """Return the latest screen payload from any supported wrapper."""
+    if not isinstance(screen_data, dict):
+        return {}
+    if "screen" in screen_data and isinstance(screen_data["screen"], dict):
+        return screen_data["screen"]
+    if "screen_data" in screen_data and isinstance(screen_data["screen_data"], dict):
+        return screen_data["screen_data"]
+    if "current_screen" in screen_data and isinstance(screen_data["current_screen"], dict):
+        return screen_data["current_screen"]
+    if "elements" in screen_data or "visual_summary" in screen_data or "scene_description" in screen_data:
+        return screen_data
+    if "vision_data" in screen_data and isinstance(screen_data["vision_data"], dict):
+        return screen_data["vision_data"]
+    if "vision_output" in screen_data and isinstance(screen_data["vision_output"], dict):
+        return screen_data["vision_output"]
+    if "session_data" in screen_data:
+        screens = screen_data["session_data"].get("screens", [])
+        if screens:
+            latest = screens[-1]
+            if isinstance(latest, dict):
+                return latest.get("screen", latest)
+    if "screens" in screen_data:
+        screens = screen_data.get("screens", [])
+        if screens:
+            latest = screens[-1]
+            if isinstance(latest, dict):
+                return latest.get("screen", latest)
+    return screen_data
+
+
+def _get_history_screens(screen_data: dict) -> List[dict]:
+    """Return all historical screen snapshots attached to the payload."""
+    if not isinstance(screen_data, dict):
+        return []
+
+    history_source = screen_data.get("knowledge_base")
+    if history_source is None and "session_data" in screen_data:
+        history_source = screen_data["session_data"].get("knowledge_base")
+
+    if isinstance(history_source, dict):
+        history = history_source.get("screens") or history_source.get("captures") or []
+    elif isinstance(history_source, list):
+        history = history_source
+    else:
+        history = []
+
+    screens: List[dict] = []
+    for entry in history:
+        if not isinstance(entry, dict):
+            continue
+        if isinstance(entry.get("screen"), dict):
+            screens.append(entry["screen"])
+        elif isinstance(entry.get("screen_data"), dict):
+            screens.append(entry["screen_data"])
+        else:
+            screens.append(entry)
+    return screens
+
+
+def _element_signature(el: dict) -> str:
+    return "|".join(
+        str(el.get(key, ""))
+        for key in ("type", "label", "description", "dx", "dy")
+    )
+
+
+def _normalize_text(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", str(value).lower()).strip()
+
+
+def _element_matches_target(el: dict, target: str, action: str = "") -> bool:
+    if not target and not action:
+        return True
+
+    target_text = _normalize_text(f"{target} {action}")
+    element_text = _normalize_text(
+        " ".join(
+            [
+                el.get("type", ""),
+                el.get("label", ""),
+                el.get("description", ""),
+            ]
+        )
+    )
+
+    if not target_text:
+        return False
+
+    if target_text in element_text or element_text in target_text:
+        return True
+
+    tokens = set(target_text.split())
+    if not tokens:
+        return False
+
+    if {"search", "find", "query"} & tokens:
+        if el.get("type") in {"input", "input_field", "textfield", "text_field", "text", "textarea"}:
+            return True
+        if {"search", "find", "query"} & set(element_text.split()):
+            return True
+
+    if {"input", "field", "textbox", "text"} & tokens:
+        if el.get("type") in {"input", "input_field", "text", "textarea"}:
+            return True
+
+    if {"button", "click", "submit", "send"} & tokens:
+        if el.get("type") == "button":
+            return True
+
+    return bool(tokens & set(element_text.split()))
+
+
+def _single_screen_elements(screen_data: dict) -> List[dict]:
     """
     Extract detected UI elements with exact pixel coordinates from raw vision data.
     Returns a list of dicts: {type, label, dx, dy}.
@@ -126,17 +239,18 @@ def _extract_elements(screen_data: dict) -> List[dict]:
                                 fractional (0-1) on older captures; treated as pixel
                                 only when value > 1.
     """
+    screen = _get_current_screen(screen_data)
     raw_elements: List[dict] = []
-    if "elements" in screen_data:
-        raw_elements = screen_data.get("elements", [])
-    elif "vision_data" in screen_data:
-        raw_elements = screen_data["vision_data"].get("elements", [])
-    elif "session_data" in screen_data:
-        screens = screen_data["session_data"].get("screens", [])
+    if "elements" in screen:
+        raw_elements = screen.get("elements", [])
+    elif "vision_data" in screen:
+        raw_elements = screen["vision_data"].get("elements", [])
+    elif "session_data" in screen:
+        screens = screen["session_data"].get("screens", [])
         if screens:
             raw_elements = screens[-1].get("elements", [])
-    elif "screens" in screen_data:
-        screens = screen_data.get("screens", [])
+    elif "screens" in screen:
+        screens = screen.get("screens", [])
         if screens:
             raw_elements = screens[-1].get("elements", [])
 
@@ -187,6 +301,35 @@ def _extract_elements(screen_data: dict) -> List[dict]:
             "dy": iy,
         })
     return result
+
+
+def _extract_elements(
+    screen_data: dict,
+    include_history: bool = False,
+    target: str = "",
+    action: str = "",
+) -> List[dict]:
+    """Extract current elements and, optionally, target-matching historical ones."""
+    current_elements = _single_screen_elements(screen_data)
+    for el in current_elements:
+        el["source"] = "current"
+
+    if not include_history:
+        return current_elements
+
+    history_matches: List[dict] = []
+    seen = {_element_signature(el) for el in current_elements}
+    for history_screen in reversed(_get_history_screens(screen_data)):
+        for el in _single_screen_elements(history_screen):
+            if not _element_matches_target(el, target, action):
+                continue
+            sig = _element_signature(el)
+            if sig in seen:
+                continue
+            seen.add(sig)
+            history_matches.append({**el, "source": "history"})
+
+    return current_elements + history_matches
 
 
 
@@ -450,7 +593,32 @@ def plan_step_hid(
         }
     """
     screen_text = _screen_to_text(screen_data)
-    detected_elements = _extract_elements(screen_data)
+    target_text = current_step.get("target", "")
+    action_text = current_step.get("action", "")
+    normalized_target = _normalize_text(target_text)
+    has_meaningful_target = normalized_target not in {
+        "",
+        "see screen",
+        "screen",
+        "unknown",
+        "current screen",
+        "see the screen",
+    }
+    detected_elements = _extract_elements(
+        screen_data,
+        include_history=True,
+        target=target_text,
+        action=action_text,
+    )
+    if has_meaningful_target or action_text.strip():
+        current_elements = [
+            el
+            for el in detected_elements
+            if el.get("source") == "current" and _element_matches_target(el, target_text, action_text)
+        ]
+    else:
+        current_elements = [el for el in detected_elements if el.get("source") == "current"]
+    history_elements = [el for el in detected_elements if el.get("source") == "history"]
 
     # Build a compact progress overview for the LLM
     steps_overview = "\n".join(
@@ -464,14 +632,22 @@ def plan_step_hid(
         user_data_note = f"\nUser-provided data for this step: {current_step['user_input']}"
 
     # Build a strict element reference table so the LLM sees exact coords as JSON
-    if detected_elements:
-        element_table = json.dumps(detected_elements, indent=2)
+    if current_elements:
+        element_table = json.dumps(current_elements, indent=2)
         element_section = f"""
-=== DETECTED ELEMENTS — EXACT COORDINATES (copy dx/dy VERBATIM, do NOT change) ===
+=== DETECTED ELEMENTS ON CURRENT SCREEN — EXACT COORDINATES (copy dx/dy VERBATIM, do NOT change) ===
 {element_table}
 """
     else:
-        element_section = "\n=== DETECTED ELEMENTS ===\nNone detected.\n"
+        element_section = "\n=== DETECTED ELEMENTS ON CURRENT SCREEN ===\nNone detected.\n"
+
+    history_section = ""
+    if history_elements:
+        history_table = json.dumps(history_elements, indent=2)
+        history_section = f"""
+=== TARGET-MATCHING HISTORICAL ELEMENTS (most recent first) ===
+{history_table}
+"""
 
     prompt = f"""{SYSTEM_PROMPT}
 
@@ -491,10 +667,14 @@ TASK: Generate HID commands to execute ONE specific step.
 === CURRENT SCREEN (text summary) ===
 {screen_text}
 {element_section}
+{history_section}
 === RULES ===
 - Generate commands for the CURRENT STEP only.
 - For mouse_move: use the EXACT dx and dy values from the DETECTED ELEMENTS table above.
   Do NOT round, approximate, or guess coordinates — copy the numbers exactly.
+- If the current screen does not contain the target element, use the target-matching
+  historical elements above. Do NOT use unrelated history elements.
+- If there are multiple matching historical elements, try the most recent match first.
 - For text entry: first mouse_move + mouse_click to focus the field, then type_text.
 - For form submission: end with key_press enter if appropriate.
 
@@ -538,15 +718,12 @@ Respond with ONLY this JSON (no markdown):
         logger.info("Attempting local fallback for plan_step_hid")
         from llm.hid_step_generator import HIDStepGenerator
 
-        # Try to match current_step target to a detected element
-        target = current_step.get("target", "").lower()
-        chosen = None
-        for elem in detected_elements:
-            label = (elem.get("label") or "").lower()
-            desc = (elem.get("description") or "").lower()
-            if label and label in target or desc and desc in target:
-                chosen = elem
-                break
+        target = current_step.get("target", "")
+        target_candidates = [
+            elem for elem in detected_elements
+            if _element_matches_target(elem, target, current_step.get("action", ""))
+        ]
+        chosen = target_candidates[0] if target_candidates else None
 
         # If no label match, but current_step contains explicit coords, use them
         x = current_step.get("x") or current_step.get("dx")
@@ -568,8 +745,8 @@ Respond with ONLY this JSON (no markdown):
             action_steps.append({"step": 1, "action": "click", "target": chosen.get("label", "element"), "x": cx, "y": cy})
         elif x and y:
             action_steps.append({"step": 1, "action": "click", "target": current_step.get("target", "element"), "x": x, "y": y})
-        elif detected_elements:
-            # Last resort: click the first detected element
+        elif not target and detected_elements:
+            # Last resort only when no target was provided.
             e = detected_elements[0]
             if "dx" in e and "dy" in e:
                 cx, cy = e["dx"], e["dy"]

@@ -65,6 +65,7 @@ class AgentRunRecorder:
         self.initial_screen: dict = {}
         self.latest_screen: dict = {}
         self.todo_result: dict = {}
+        self.screen_history: List[dict] = []
         # per-step records: keyed by step id
         self.step_plans: Dict[int, dict] = {}      # hid commands + reasoning
         self.step_results: Dict[int, dict] = {}    # evaluation outcomes
@@ -102,6 +103,34 @@ class AgentRunRecorder:
         # NOTE: the logger.info below was dead code (unreachable after return).
         # Removed in fix pass.
 
+    def _capture_entry(self, screen_data: dict, phase: str, metadata: Optional[dict] = None) -> dict:
+        norm = self._normalize_perception(screen_data)
+        elements = []
+        if isinstance(norm, dict):
+            elements = norm.get("elements") or norm.get("vision_data", {}).get("elements", [])
+        entry = {
+            "capture_index": len(self.screen_history) + 1,
+            "phase": phase,
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
+            "fingerprint": _screen_fingerprint(norm) if isinstance(norm, dict) else "",
+            "element_count": len(elements) if isinstance(elements, list) else 0,
+            "screen": norm,
+        }
+        if metadata:
+            entry["metadata"] = metadata
+        return entry
+
+    def _flush_knowledge_base(self) -> None:
+        data = {
+            "run_id": self.run_id,
+            "user_task": self.user_task,
+            "started_at": self.started_at,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+            "total_captures": len(self.screen_history),
+            "screens": self.screen_history,
+        }
+        self._write("knowledge_base.json", data)
+
     # ------------------------------------------------------------------
     def _write(self, filename: str, data: Any) -> None:
         path = self.run_dir / filename
@@ -116,13 +145,37 @@ class AgentRunRecorder:
         norm = self._normalize_perception(screen_data)
         self.initial_screen = norm
         self.latest_screen = norm
+        self.screen_history.append(self._capture_entry(norm, "initial"))
         self._write("perception.json", norm)
         self._write("latest_perception.json", norm)
+        self._flush_knowledge_base()
 
-    def record_screen(self, screen_data: dict) -> None:
+    def record_screen(self, screen_data: dict, phase: str = "capture", metadata: Optional[dict] = None) -> None:
         norm = self._normalize_perception(screen_data)
         self.latest_screen = norm
+        self.screen_history.append(self._capture_entry(norm, phase, metadata))
         self._write("latest_perception.json", norm)
+        self._flush_knowledge_base()
+
+    def build_visual_payload(self, current_screen: dict) -> dict:
+        """Build a visual payload that preserves the current screen while
+        attaching the full per-run capture history as a knowledge base.
+        """
+        current_norm = self._normalize_perception(current_screen)
+        history_screens = [entry.get("screen", {}) for entry in self.screen_history]
+        return {
+            "session_data": {
+                "screens": [current_norm],
+                "knowledge_base": {
+                    "screens": history_screens,
+                    "captures": self.screen_history,
+                },
+            },
+            "knowledge_base": {
+                "screens": history_screens,
+                "captures": self.screen_history,
+            },
+        }
 
     def record_todo(self, todo_result: dict) -> None:
         self.todo_result = todo_result
@@ -199,6 +252,10 @@ class AgentRunRecorder:
             "finished_at": datetime.now(timezone.utc).isoformat(),
             "vision_used": True,
             "perception": self.initial_screen,
+            "knowledge_base": {
+                "total_captures": len(self.screen_history),
+                "screens": self.screen_history,
+            },
             "todo": self.todo_result,
             "step_plans": list(self.step_plans.values()),
             "step_results": list(self.step_results.values()),
@@ -716,10 +773,15 @@ async def run_agentic_loop_v2(
                 # Wait briefly for UI reaction, capture and re-evaluate
                 await asyncio.sleep(UI_SETTLE_DELAY)
                 new_screen = await _capture_screen()
-                recorder.record_screen(new_screen)
+                recorder.record_screen(
+                    new_screen,
+                    phase="coord_fix",
+                    metadata={"step_index": step_index, "attempt": attempt + 1},
+                )
+                new_visual_data = recorder.build_visual_payload(new_screen)
 
                 try:
-                    new_eval = await _evaluate_step(new_screen, step, user_task, todo_list)
+                    new_eval = await _evaluate_step(new_visual_data, step, user_task, todo_list)
                     logger.info("Re-evaluation after coord-fix: %s", new_eval.get("status"))
                     return new_eval
                 except Exception as exc:
@@ -740,11 +802,12 @@ async def run_agentic_loop_v2(
         initial_screen = await _capture_screen()
         recorder.record_initial_screen(initial_screen)
         await emit({"type": "screen_captured", "phase": "initial"})
+        initial_visual_data = recorder.build_visual_payload(initial_screen)
 
         # ── Phase 2: Generate todo list ──────────────────────────────────────
         await emit({"type": "log", "message": "🧠 Planning steps for your task…"})
         try:
-            todo_result = await _plan_todo_list(initial_screen, user_task)
+            todo_result = await _plan_todo_list(initial_visual_data, user_task)
         except Exception as exc:
             await emit({"type": "error", "message": f"Planning failed: {exc}"})
             return
@@ -806,7 +869,12 @@ async def run_agentic_loop_v2(
                     {"type": "log", "message": f"📸 Screen snapshot for step {step_index + 1}…"}
                 )
                 current_screen = await _capture_screen()
-                recorder.record_screen(current_screen)
+                recorder.record_screen(
+                    current_screen,
+                    phase="pre_step",
+                    metadata={"step_index": step_index, "attempt": attempt + 1},
+                )
+                current_visual_data = recorder.build_visual_payload(current_screen)
 
                 # ── 3b. Generate HID commands ────────────────────────────────
                 await emit(
@@ -817,7 +885,7 @@ async def run_agentic_loop_v2(
                 )
                 try:
                     hid_result = await _plan_step_hid(
-                        current_screen, todo_list, step, user_task
+                        current_visual_data, todo_list, step, user_task
                     )
                     hid_commands = hid_result.get("hid_commands", [])
                     reasoning = hid_result.get("reasoning", "")
@@ -898,12 +966,17 @@ async def run_agentic_loop_v2(
                     {"type": "log", "message": f"🔍 Validating step {step_index + 1}…"}
                 )
                 new_screen = await _capture_screen()
-                recorder.record_screen(new_screen)
+                recorder.record_screen(
+                    new_screen,
+                    phase="post_step",
+                    metadata={"step_index": step_index, "attempt": attempt + 1},
+                )
+                new_visual_data = recorder.build_visual_payload(new_screen)
 
                 # ── 3f. Evaluate result ──────────────────────────────────────
                 try:
                     evaluation = await _evaluate_step(
-                        new_screen, step, user_task, todo_list
+                        new_visual_data, step, user_task, todo_list
                     )
                 except Exception as exc:
                     logger.error("Step evaluation error: %s", exc)
@@ -1035,11 +1108,12 @@ async def run_agentic_loop_v2(
         # ── Phase 4: Final report ────────────────────────────────────────────
         await emit({"type": "log", "message": "📊 Generating final report…"})
         final_screen = await _capture_screen()
-        recorder.record_screen(final_screen)
+        recorder.record_screen(final_screen, phase="final")
+        final_visual_data = recorder.build_visual_payload(final_screen)
         await emit({"type": "screen_captured", "phase": "final"})
 
         try:
-            report = await _generate_final_report(final_screen, user_task, todo_list)
+            report = await _generate_final_report(final_visual_data, user_task, todo_list)
         except Exception as exc:
             logger.error("Final report generation failed: %s", exc)
             done_count = sum(1 for s in todo_list if s.get("status") == "done")

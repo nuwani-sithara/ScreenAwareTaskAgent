@@ -190,7 +190,7 @@ Example 2: "Login to the application"
     # Add visual context if available
     if visual_data:
         generator = HIDStepGenerator()
-        visual_context = generator._build_visual_context(visual_data)
+        visual_context = generator._build_visual_context(visual_data, instruction)
         
         visual_section = f"""
 CURRENT SCREEN ELEMENTS WITH COORDINATES:
@@ -258,7 +258,7 @@ def run_interactive(
         else:
             # Fallback to original simple prompt
             generator = HIDStepGenerator()
-            visual_context = generator._build_visual_context(visual_data)
+            visual_context = generator._build_visual_context(visual_data, instruction)
             prompt = f"""You are given the following screen elements:\n{visual_context}\n\nInstruction: \"{instruction}\"\n\nWrite clear, step-by-step instructions for the user to accomplish the task using only the elements visible on the screen.\n"""
 
         logger.info(f"⏳ Generating visual-aware steps from LLM for: {instruction[:60]}...")
@@ -353,7 +353,7 @@ def run_interactive(
             "instruction": instruction,
             "rewritten_steps": rewritten_steps,
             "raw_text": raw_text,
-            "visual_summary": generator._build_visual_context(visual_data)[:500] if 'generator' in locals() else "",
+            "visual_summary": generator._build_visual_context(visual_data, instruction)[:500] if 'generator' in locals() else "",
             "timestamp": time.time(),
         }
     
