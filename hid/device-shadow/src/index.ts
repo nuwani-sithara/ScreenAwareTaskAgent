@@ -11,7 +11,8 @@
  * This is the primary interface for external agents.
  */
 
-import { SerialHID } from './hid/serialHID';
+import { HIDActuator } from './actuation/hidActuator';
+import { LocalActuator } from './actuation/localActuator';
 import { Validator } from './transport/validator';
 import { Sanitizer } from './transport/sanitizer';
 import { Normalizer } from './transport/normalizer';
@@ -20,15 +21,17 @@ import { CommandQueue } from './queue/commandQueue';
 import { ShadowState } from './state/shadowState';
 
 export class DeviceShadow {
-  private hid: SerialHID;
+  private hidActuator: HIDActuator;
+  private localActuator: LocalActuator;
   private queue: CommandQueue;
   private state: ShadowState;
   private autoReconnect: boolean = true;
   
   constructor() {
-    this.hid = new SerialHID();
-    this.queue = new CommandQueue();
     this.state = new ShadowState();
+    this.hidActuator = new HIDActuator(undefined, () => this.state.updateHeartbeat());
+    this.localActuator = new LocalActuator();
+    this.queue = new CommandQueue();
   }
   
   /**
@@ -38,11 +41,12 @@ export class DeviceShadow {
     console.log('[DeviceShadow] Connecting to HID device...');
     
     try {
-      await this.hid.connect();
-      const firmwareVersion = this.hid.getFirmwareVersion();
-      const portPath = this.hid.getPortPath();
+      await this.hidActuator.connect();
+      const firmwareVersion = this.hidActuator.getFirmwareVersion();
+      const portPath = this.hidActuator.getPortPath();
       this.state.setConnected(true, portPath || undefined, firmwareVersion || undefined);
       console.log('[DeviceShadow] Connected successfully');
+      console.log('[DeviceShadow] HID ready for work');
     } catch (error: any) {
       console.error('[DeviceShadow] Connection failed:', error.message);
       throw error;
@@ -100,8 +104,9 @@ export class DeviceShadow {
         executionSteps = primitives;
       }
 
-      // Step 5: Enqueue commands
-      for (const step of executionSteps) {
+      // Step 5: Enqueue commands with fallback mapping
+      const actuationSteps = this.buildActuationSteps(cmd, executionSteps);
+      for (const step of actuationSteps) {
         this.queue.enqueue(step);
       }
 
@@ -120,36 +125,75 @@ export class DeviceShadow {
    * Execute a single primitive command
    */
   private async executePrimitive(command: any): Promise<void> {
+    const primaryCommand = command.primary || command;
+    const fallbackCommand = command.fallback || command;
+
     // Handle delay if specified
-    if (command._delay) {
-      await this.delay(command._delay);
-      delete command._delay;
+    const delayMs = primaryCommand._delay ?? fallbackCommand._delay;
+    if (delayMs) {
+      await this.delay(delayMs);
     }
-    
+
     // Debug log for scroll commands
-    if (command.cmd === 'mouse_scroll') {
-      console.log(`[DeviceShadow] Executing scroll command:`, JSON.stringify(command));
+    if (primaryCommand.cmd === 'mouse_scroll') {
+      console.log(`[DeviceShadow] Executing scroll command:`, JSON.stringify(primaryCommand));
     }
-    
+
+    const executeHid = async (): Promise<void> => {
+      if (primaryCommand._anchorBefore) {
+        const anchorSteps = Normalizer.normalize(this.getAnchorCommand());
+        for (const anchorStep of anchorSteps) {
+          await this.hidActuator.execute(anchorStep);
+        }
+      }
+      await this.hidActuator.execute(this.stripInternalFields(primaryCommand));
+    };
+
+    let hidError: Error | null = null;
+    const hidAvailable = this.hidActuator.isAvailable();
+
+    if (hidAvailable) {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          await executeHid();
+          this.state.recordHidAttempt('ok');
+          this.state.recordExecution(primaryCommand, 'ok');
+          return;
+        } catch (error: any) {
+          hidError = error;
+          this.state.recordHidAttempt('error');
+          if (attempt === 0) {
+            console.warn('[DeviceShadow] HID execution failed, retrying once:', error.message);
+          }
+        }
+      }
+    } else {
+      hidError = new Error('HID unavailable');
+      this.state.recordHidAttempt('error');
+    }
+
+    // Attempt reconnection if connection lost
+    if (!this.hidActuator.isAvailable() && this.autoReconnect) {
+      try {
+        await this.reconnect();
+      } catch (error: any) {
+        console.warn('[DeviceShadow] Reconnect attempt failed, continuing with fallback');
+      }
+    }
+
     try {
-      const response = await this.hid.sendCommand(command);
-      
-      if (response.status === 'ok') {
-        this.state.recordExecution(command, 'ok');
-      } else {
-        // Handle both AckMessage and HIDResponse types
-        const errorMsg = ('message' in response ? response.message : (response as any).msg) || 'Command failed';
-        this.state.recordExecution(command, 'error', errorMsg);
-        throw new Error(`Device returned error: ${errorMsg}`);
+      if (hidError) {
+        console.warn('[DeviceShadow] HID unavailable or failed, engaging fallback actuator');
+      }
+      await this.localActuator.execute(this.stripInternalFields(fallbackCommand));
+      this.state.recordFallbackAttempt('ok');
+      this.state.recordExecution(fallbackCommand, 'ok');
+      if (hidError) {
+        console.warn('[DeviceShadow] Fallback executed successfully after HID failure');
       }
     } catch (error: any) {
-      this.state.recordExecution(command, 'error', error.message);
-      
-      // Attempt reconnection if connection lost
-      if (!this.hid.isConnected() && this.autoReconnect) {
-        await this.reconnect();
-      }
-      
+      this.state.recordFallbackAttempt('error');
+      this.state.recordExecution(fallbackCommand, 'error', error.message);
       throw error;
     }
   }
@@ -163,14 +207,14 @@ export class DeviceShadow {
     this.state.incrementReconnectAttempts();
     
     try {
-      await this.hid.reconnect();
-      const firmwareVersion = this.hid.getFirmwareVersion();
-      const portPath = this.hid.getPortPath();
+      await this.hidActuator.reconnect();
+      const firmwareVersion = this.hidActuator.getFirmwareVersion();
+      const portPath = this.hidActuator.getPortPath();
       this.state.setConnected(true, portPath || undefined, firmwareVersion || undefined);
       console.log('[DeviceShadow] Reconnected successfully');
+      console.log('[DeviceShadow] HID ready for work');
     } catch (error: any) {
       console.error('[DeviceShadow] Reconnection failed:', error.message);
-      throw error;
     }
   }
   
@@ -192,7 +236,7 @@ export class DeviceShadow {
    * Check if device is connected
    */
   isConnected(): boolean {
-    return this.state.isConnected() && this.hid.isConnected();
+    return this.state.isConnected() && this.hidActuator.isAvailable();
   }
   
   /**
@@ -201,7 +245,7 @@ export class DeviceShadow {
   async disconnect(): Promise<void> {
     console.log('[DeviceShadow] Disconnecting...');
     this.queue.clear();
-    await this.hid.disconnect();
+    await this.hidActuator.disconnect();
     this.state.setConnected(false);
   }
   
@@ -210,6 +254,56 @@ export class DeviceShadow {
    */
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private buildActuationSteps(command: any, executionSteps: any[]): any[] {
+    const steps: any[] = [];
+
+    if (command.cmd === 'mouse_move') {
+      let cursorX = 0;
+      let cursorY = 0;
+
+      executionSteps.forEach((step, index) => {
+        const primaryStep = { ...step };
+        if (index === 0) {
+          primaryStep._anchorBefore = true;
+        }
+
+        if (step.cmd === 'mouse_move') {
+          cursorX += step.dx;
+          cursorY += step.dy;
+          steps.push({
+            primary: primaryStep,
+            fallback: { ...step, dx: cursorX, dy: cursorY }
+          });
+        } else {
+          steps.push({ primary: primaryStep, fallback: { ...step } });
+        }
+      });
+
+      return steps;
+    }
+
+    for (const step of executionSteps) {
+      steps.push({ primary: { ...step }, fallback: { ...step } });
+    }
+
+    return steps;
+  }
+
+  private getAnchorCommand(): any {
+    return {
+      cmd: 'mouse_move',
+      dx: -32767,
+      dy: -32767
+    };
+  }
+
+  private stripInternalFields(command: any): any {
+    const cleaned = { ...command };
+    delete cleaned._delay;
+    delete cleaned._anchorBefore;
+    return cleaned;
   }
 }
 

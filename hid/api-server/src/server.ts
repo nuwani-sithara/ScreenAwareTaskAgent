@@ -38,8 +38,7 @@ async function initializeDevice(): Promise<void> {
     await shadow.connect();
     console.log('[API] HID device connected successfully');
   } catch (error: any) {
-    console.error('[API] Failed to connect to HID device:', error.message);
-    shadow = null;
+    console.error('[API] HID device connection failed, fallback ready:', error.message);
   } finally {
     isConnecting = false;
   }
@@ -48,16 +47,13 @@ async function initializeDevice(): Promise<void> {
 /**
  * Ensure device is connected
  */
-async function ensureConnected(): Promise<void> {
+async function ensureConnected(): Promise<boolean> {
   if (shadow && shadow.isConnected()) {
-    return;
+    return true;
   }
-  
+
   await initializeDevice();
-  
-  if (!shadow || !shadow.isConnected()) {
-    throw new Error('Device not available');
-  }
+  return !!shadow && shadow.isConnected();
 }
 
 /**
@@ -105,16 +101,8 @@ app.post('/hid/command', async (req: Request, res: Response) => {
       });
     }
     
-    // Ensure device is connected
-    try {
-      await ensureConnected();
-    } catch (error: any) {
-      return res.status(503).json({
-        success: false,
-        error: 'Device offline',
-        message: error.message
-      });
-    }
+    // Best-effort connection; fallback execution is handled by the device shadow
+    await ensureConnected();
     
     // Construct command
     const command = {

@@ -503,8 +503,8 @@ HID_STATUS_URL = "http://localhost:3015/hid/status"
 
 async def _check_hid_health() -> dict:
     """
-    Returns {"ok": True} if the HID server AND device are reachable,
-    or {"ok": False, "reason": "<msg>"} if not.
+    Returns {"ok": True} if the HID server is reachable.
+    Includes a warning when the device is offline but fallback is available.
     """
     async with httpx.AsyncClient(timeout=5.0) as client:
         try:
@@ -512,14 +512,13 @@ async def _check_hid_health() -> dict:
             data = resp.json()
             if not data.get("connected"):
                 return {
-                    "ok": False,
-                    "reason": (
+                    "ok": True,
+                    "warning": (
                         "HID device not connected. "
-                        "Please plug in your ESP32-S3 HID device via USB and ensure "
-                        "the correct COM port is available."
+                        "Fallback actuation is active while the HID reconnects."
                     ),
                 }
-            return {"ok": True}
+            return {"ok": True, "warning": ""}
         except Exception as exc:
             return {
                 "ok": False,
@@ -552,83 +551,16 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
     Returns {"status": "success"} or {"status": "failed", ...}.
     """
     async with httpx.AsyncClient(timeout=30.0) as client:
-        # Push cursor to screen top-left so our virtual tracker starts at (0, 0).
-        RESET_MOVE = {"type": "mouse_move", "payload": {"dx": _CURSOR_RESET_MAGNITUDE, "dy": _CURSOR_RESET_MAGNITUDE}}
-        try:
-            reset_resp = await client.post(HID_API_URL, json=RESET_MOVE)
-            if reset_resp.status_code == 503:
-                body = reset_resp.json()
-                msg = body.get("message") or body.get("error") or "Device offline"
-                logger.error("HID cursor-reset: device offline — %s", msg)
-                return {"status": "failed", "error": f"HID device offline: {msg}", "failed_at": -1}
-            await asyncio.sleep(0.08)
-        except Exception as exc:
-            logger.error("HID cursor-reset failed: %s", exc)
-            return {"status": "failed", "error": str(exc), "failed_at": -1}
-
-        cursor_x: int = 0
-        cursor_y: int = 0
-
         for idx, cmd in enumerate(commands):
             cmd_type = cmd.get("cmd")
 
-            if cmd_type == "mouse_move":
-                # LLM provides absolute screen coords — convert to relative delta.
-                target_x = int(cmd.get("dx", 0))
-                target_y = int(cmd.get("dy", 0))
-
-                # Break large moves into smaller steps to improve accuracy on HID devices.
-                max_step = 80  # pixels per HID move chunk
-                rel_dx = target_x - cursor_x
-                rel_dy = target_y - cursor_y
-
-                # If move is small, send single command
-                if abs(rel_dx) <= max_step and abs(rel_dy) <= max_step:
-                    payloads = [
-                        {"type": "mouse_move", "payload": {"dx": rel_dx, "dy": rel_dy, "smooth": bool(cmd.get("smooth", False))}}
-                    ]
-                else:
-                    # Chunk the movement
-                    steps = max(1, int(max(abs(rel_dx), abs(rel_dy)) / float(max_step)))
-                    payloads = []
-                    for s in range(1, steps + 1):
-                        step_dx = int(round(rel_dx * (s / steps))) - int(round(rel_dx * ((s - 1) / steps)))
-                        step_dy = int(round(rel_dy * (s / steps))) - int(round(rel_dy * ((s - 1) / steps)))
-                        payloads.append({"type": "mouse_move", "payload": {"dx": step_dx, "dy": step_dy, "smooth": bool(cmd.get("smooth", False))}})
-
-                # Send each payload sequentially and update virtual cursor
-                for p in payloads:
-                    try:
-                        resp = await client.post(HID_API_URL, json=p)
-                        if resp.status_code == 503:
-                            body = resp.json()
-                            msg = body.get("message") or body.get("error") or "Device offline"
-                            logger.error("HID command device offline: %s", msg)
-                            return {"status": "failed", "error": f"HID device offline: {msg}", "failed_at": idx}
-                        resp.raise_for_status()
-                        logger.info("HID [%d/%d] mouse_move chunk → %d", idx + 1, len(commands), resp.status_code)
-                    except Exception as exc:
-                        logger.error("HID mouse_move chunk failed: %s", exc)
-                        return {"status": "failed", "error": str(exc), "failed_at": idx}
-                    # Update virtual cursor by the chunk
-                    cursor_x += int(p["payload"].get("dx", 0))
-                    cursor_y += int(p["payload"].get("dy", 0))
-                    await asyncio.sleep(0.04)
-                # Done handling mouse_move, skip default send below
-                continue
-            else:
-                payload = {
-                    "type": cmd_type,
-                    "payload": {k: v for k, v in cmd.items() if k not in ("cmd", "meta")},
-                }
+            payload = {
+                "type": cmd_type,
+                "payload": {k: v for k, v in cmd.items() if k not in ("cmd", "meta")},
+            }
 
             try:
                 resp = await client.post(HID_API_URL, json=payload)
-                if resp.status_code == 503:
-                    body = resp.json()
-                    msg = body.get("message") or body.get("error") or "Device offline"
-                    logger.error("HID command %d device offline: %s", idx + 1, msg)
-                    return {"status": "failed", "error": f"HID device offline: {msg}", "failed_at": idx}
                 resp.raise_for_status()
                 logger.info(
                     "HID [%d/%d] %s → %d", idx + 1, len(commands), cmd_type, resp.status_code
@@ -734,6 +666,8 @@ async def run_agentic_loop_v2(
         if not hid_health["ok"]:
             await emit({"type": "fatal_error", "message": hid_health["reason"]})
             return
+        if hid_health.get("warning"):
+            await emit({"type": "log", "message": f"⚠ {hid_health['warning']}"})
 
         # ── Phase 1: Capture initial screen ─────────────────────────────────
         await emit({"type": "log", "message": "📸 Capturing initial screen…"})

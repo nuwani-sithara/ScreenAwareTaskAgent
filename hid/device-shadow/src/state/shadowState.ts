@@ -22,6 +22,11 @@ export interface ExecutionState {
   lastError: string | null;
   commandsExecuted: number;
   commandsFailed: number;
+  hidSuccess: number;
+  hidFailure: number;
+  fallbackSuccess: number;
+  fallbackFailure: number;
+  fallbackUsed: number;
 }
 
 export interface ConnectionState {
@@ -46,7 +51,12 @@ export class ShadowState {
     lastCommandStatus: null,
     lastError: null,
     commandsExecuted: 0,
-    commandsFailed: 0
+    commandsFailed: 0,
+    hidSuccess: 0,
+    hidFailure: 0,
+    fallbackSuccess: 0,
+    fallbackFailure: 0,
+    fallbackUsed: 0
   };
   
   private connection: ConnectionState = {
@@ -104,6 +114,45 @@ export class ShadowState {
     } else {
       this.execution.commandsFailed++;
     }
+  }
+
+  /**
+   * Record HID execution attempt
+   */
+  recordHidAttempt(status: 'ok' | 'error'): void {
+    if (status === 'ok') {
+      this.execution.hidSuccess++;
+    } else {
+      this.execution.hidFailure++;
+    }
+  }
+
+  /**
+   * Record fallback execution attempt
+   */
+  recordFallbackAttempt(status: 'ok' | 'error'): void {
+    this.execution.fallbackUsed++;
+    if (status === 'ok') {
+      this.execution.fallbackSuccess++;
+    } else {
+      this.execution.fallbackFailure++;
+    }
+  }
+
+  /**
+   * Get fallback usage count
+   */
+  getFallbackUsage(): number {
+    return this.execution.fallbackUsed;
+  }
+
+  /**
+   * Get HID success rate
+   */
+  getHidSuccessRate(): number {
+    const total = this.execution.hidSuccess + this.execution.hidFailure;
+    if (total === 0) return 0;
+    return Math.round((this.execution.hidSuccess / total) * 10000) / 100;
   }
   
   /**
@@ -171,5 +220,10 @@ export class ShadowState {
   resetStats(): void {
     this.execution.commandsExecuted = 0;
     this.execution.commandsFailed = 0;
+    this.execution.hidSuccess = 0;
+    this.execution.hidFailure = 0;
+    this.execution.fallbackSuccess = 0;
+    this.execution.fallbackFailure = 0;
+    this.execution.fallbackUsed = 0;
   }
 }

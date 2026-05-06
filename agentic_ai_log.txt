@@ -88577,3 +88577,83 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-05-02 19:19:13,585 | INFO | === Agentic AI System Started ===
 2026-05-02 19:19:13,603 | INFO | === Agentic AI System Started ===
 2026-05-02 19:19:13,640 | INFO | HID API server already running on port 3015.
+2026-05-07 03:20:44,849 | INFO | === Agentic AI System Started ===
+2026-05-07 03:21:25,178 | INFO | === Agentic AI System Started ===
+2026-05-07 03:21:25,388 | INFO | HID API server already running on port 3015.
+2026-05-07 03:23:04,256 | INFO | \U0001f680 V2 run started: 2194f0ae-8a73-4dbe-9519-67c020409dcb  task=log in to the system using username = admin and password = 1234
+2026-05-07 03:23:04,933 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 03:29:45,426 | INFO | === Agentic AI System Started ===
+2026-05-07 03:29:53,491 | INFO | === Agentic AI System Started ===
+2026-05-07 03:29:53,729 | INFO | HID API server already running on port 3015.
+2026-05-07 03:32:28,695 | INFO | === Agentic AI System Started ===
+2026-05-07 03:32:35,526 | INFO | === Agentic AI System Started ===
+2026-05-07 03:32:35,583 | INFO | HID API server already running on port 3015.
+2026-05-07 03:32:53,364 | INFO | === Agentic AI System Started ===
+2026-05-07 03:32:58,718 | INFO | === Agentic AI System Started ===
+2026-05-07 03:32:58,750 | INFO | HID API server already running on port 3015.
+2026-05-07 03:33:20,628 | INFO | \U0001f680 V2 run started: 172eb3de-e15e-4580-a37f-666d8fd1473c  task=log in to the system using username = admin and password = 1234
+2026-05-07 03:33:21,371 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 03:33:57,264 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:34:05,278 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 03:34:35,018 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:34:38,998 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 03:34:48,097 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:34:48,097 | INFO | HID [1/8] mouse_move \u2192 200
+2026-05-07 03:34:49,375 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:34:49,376 | INFO | HID [2/8] mouse_click \u2192 200
+2026-05-07 03:34:51,724 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:34:51,724 | INFO | HID [3/8] type_text \u2192 200
+2026-05-07 03:35:00,256 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:35:00,257 | INFO | HID [4/8] mouse_move \u2192 200
+2026-05-07 03:35:01,519 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:35:01,520 | INFO | HID [5/8] mouse_click \u2192 200
+2026-05-07 03:35:03,584 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:35:03,585 | INFO | HID [6/8] type_text \u2192 200
+2026-05-07 03:35:12,158 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:35:12,159 | INFO | HID [7/8] mouse_move \u2192 200
+2026-05-07 03:35:13,421 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:35:13,422 | INFO | HID [8/8] mouse_click \u2192 200
+2026-05-07 03:35:59,085 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:36:19,126 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 03:36:50,556 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:36:57,063 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 03:37:06,047 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:06,047 | INFO | HID [1/8] mouse_move \u2192 200
+2026-05-07 03:37:07,317 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:07,317 | INFO | HID [2/8] mouse_click \u2192 200
+2026-05-07 03:37:09,620 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:09,621 | INFO | HID [3/8] type_text \u2192 200
+2026-05-07 03:37:18,169 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:18,170 | INFO | HID [4/8] mouse_move \u2192 200
+2026-05-07 03:37:19,418 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:19,419 | INFO | HID [5/8] mouse_click \u2192 200
+2026-05-07 03:37:21,524 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:21,525 | INFO | HID [6/8] type_text \u2192 200
+2026-05-07 03:37:30,029 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:30,030 | INFO | HID [7/8] mouse_move \u2192 200
+2026-05-07 03:37:31,325 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:37:31,325 | INFO | HID [8/8] mouse_click \u2192 200
+2026-05-07 03:37:51,714 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:38:10,839 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 03:38:36,560 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:38:40,742 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 03:38:49,650 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:38:49,670 | INFO | HID [1/8] mouse_move \u2192 200
+2026-05-07 03:38:50,905 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:38:50,906 | INFO | HID [2/8] mouse_click \u2192 200
+2026-05-07 03:38:53,125 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:38:53,126 | INFO | HID [3/8] type_text \u2192 200
+2026-05-07 03:39:01,671 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:39:01,672 | INFO | HID [4/8] mouse_move \u2192 200
+2026-05-07 03:39:02,930 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:39:02,931 | INFO | HID [5/8] mouse_click \u2192 200
+2026-05-07 03:39:05,007 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:39:05,008 | INFO | HID [6/8] type_text \u2192 200
+2026-05-07 03:39:13,545 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:39:13,546 | INFO | HID [7/8] mouse_move \u2192 200
+2026-05-07 03:39:14,792 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 03:39:14,792 | INFO | HID [8/8] mouse_click \u2192 200
+2026-05-07 03:39:57,951 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:40:17,128 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 03:40:53,274 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 03:41:01,634 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"

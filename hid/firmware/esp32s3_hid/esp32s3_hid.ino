@@ -35,6 +35,8 @@ StaticJsonDocument<512> jsonDoc;
 // Track last heartbeat for periodic status
 unsigned long lastHeartbeat = 0;
 const unsigned long HEARTBEAT_INTERVAL = 5000; // Send heartbeat every 5 seconds
+// During boot, send hello more frequently to avoid handshake timing gaps
+unsigned long bootHelloUntil = 0;
 // Store current command ID for ACK
 String currentCommandId = "";
 
@@ -74,6 +76,9 @@ void setup() {
   Keyboard.begin();
   HID.begin();
   USB.begin();
+
+  // Send hello immediately after USB starts to improve auto-detection
+  sendHello();
   
   // Wait for USB enumeration (give host some time)
   unsigned long start = millis();
@@ -89,6 +94,9 @@ void setup() {
   // Send hello message automatically on boot
   // This enables autonomous startup without manual reset
   sendHello();
+
+  // Aggressive hello during early boot to avoid missing the window
+  bootHelloUntil = millis() + 15000;
   
   // Initialize heartbeat timer
   lastHeartbeat = millis();
@@ -100,7 +108,8 @@ void setup() {
 
 void loop() {
   // Send periodic heartbeat to maintain connection health
-  if (millis() - lastHeartbeat > HEARTBEAT_INTERVAL) {
+  unsigned long interval = (millis() < bootHelloUntil) ? 1000 : HEARTBEAT_INTERVAL;
+  if (millis() - lastHeartbeat > interval) {
     sendHello(); // Re-send hello as heartbeat
     lastHeartbeat = millis();
   }

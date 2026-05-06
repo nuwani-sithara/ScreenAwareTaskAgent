@@ -76,13 +76,9 @@ export class MouseEngine {
       const dx = Math.round(targetX - currentX);
       const dy = Math.round(targetY - currentY);
       
-      // Add small random jitter for naturalness (±1 pixel)
-      const jitterX = Math.random() > 0.5 ? (Math.random() > 0.7 ? 1 : 0) : (Math.random() > 0.7 ? -1 : 0);
-      const jitterY = Math.random() > 0.5 ? (Math.random() > 0.7 ? 1 : 0) : (Math.random() > 0.7 ? -1 : 0);
-      
       steps.push({
-        dx: dx + jitterX,
-        dy: dy + jitterY,
+        dx: dx,
+        dy: dy,
         delay: Math.round(stepDelay)
       });
       

@@ -39,6 +39,7 @@ app = FastAPI(title="ScreenPilot Backend", version="0.1")
 # ------------------------------------
 HID_SERVER_DIR = Path(__file__).resolve().parent.parent / "hid" / "api-server"
 HID_HEALTH_URL = "http://localhost:3015/health"
+HID_STATUS_URL = "http://localhost:3015/hid/status"
 
 def _ensure_hid_server() -> None:
     """Start the HID API server if it is not already reachable."""
@@ -108,6 +109,32 @@ _pending_runs: Dict[str, Dict[str, Any]] = {}
 @app.get("/")
 def read_root():
     return {"message": "ScreenPilot backend is running 🚀"}
+
+
+@app.get("/agent/status")
+async def agent_status():
+    """
+    Report HID API availability and whether fallback is active.
+    """
+    status = {
+        "hid_api_reachable": False,
+        "hid_connected": False,
+        "actuation_ready": False,
+        "fallback_active": False,
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=3.0) as client:
+            resp = await client.get(HID_STATUS_URL)
+            data = resp.json()
+            status["hid_api_reachable"] = True
+            status["hid_connected"] = bool(data.get("connected"))
+            status["actuation_ready"] = True
+            status["fallback_active"] = not status["hid_connected"]
+    except Exception as exc:
+        status["error"] = str(exc)
+
+    return status
 
 
 # 🔥 Main Agentic Loop Endpoint

@@ -123,6 +123,25 @@ export const KEYCODES: Record<string, number> = {
   'volumedown': 0xEA
 };
 
+const KEYCODE_TO_KEY: Record<number, string> = Object.entries(KEYCODES)
+  .reduce((acc, [key, code]) => {
+    if (acc[code] === undefined) {
+      acc[code] = key;
+    }
+    return acc;
+  }, {} as Record<number, string>);
+
+const MODIFIER_KEYCODE_TO_KEY: Record<number, string> = {
+  [MODIFIER_KEYCODES.LEFT_CTRL]: 'control',
+  [MODIFIER_KEYCODES.LEFT_SHIFT]: 'shift',
+  [MODIFIER_KEYCODES.LEFT_ALT]: 'alt',
+  [MODIFIER_KEYCODES.LEFT_GUI]: 'command',
+  [MODIFIER_KEYCODES.RIGHT_CTRL]: 'control',
+  [MODIFIER_KEYCODES.RIGHT_SHIFT]: 'shift',
+  [MODIFIER_KEYCODES.RIGHT_ALT]: 'alt',
+  [MODIFIER_KEYCODES.RIGHT_GUI]: 'command'
+};
+
 /**
  * Map modifier name to HID keycode
  */
@@ -173,6 +192,21 @@ export function keyToKeycode(key: string): number {
   }
   
   throw new Error(`Unknown key: ${key}`);
+}
+
+/**
+ * Map HID keycode to key string
+ */
+export function keycodeToKey(keycode: number): string | null {
+  if (MODIFIER_KEYCODE_TO_KEY[keycode] !== undefined) {
+    return MODIFIER_KEYCODE_TO_KEY[keycode];
+  }
+
+  if (KEYCODE_TO_KEY[keycode] !== undefined) {
+    return KEYCODE_TO_KEY[keycode];
+  }
+
+  return null;
 }
 
 /**

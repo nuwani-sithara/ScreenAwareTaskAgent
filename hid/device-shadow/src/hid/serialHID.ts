@@ -82,6 +82,9 @@ export class SerialHID {
   private maxRetries: number = 1;
   private useAckSystem: boolean = true;
   private deviceReady: boolean = true; // Track if device is ready for next command
+  private heartbeatTimer: NodeJS.Timeout | null = null;
+  private pongTimeoutTimer: NodeJS.Timeout | null = null;
+  private heartbeatCallback: (() => void) | null = null;
   
   // Device identification
   private readonly VENDOR_ID = '303a'; // Espressif
@@ -89,6 +92,13 @@ export class SerialHID {
   private readonly LAST_PORT_FILE = path.join(__dirname, '..', '..', '.last_port');
   
   constructor() {}
+
+  /**
+   * Set heartbeat callback for external state tracking
+   */
+  setHeartbeatCallback(callback: () => void): void {
+    this.heartbeatCallback = callback;
+  }
   
   /**
    * Discover and connect to ESP32-S3 HID device
@@ -99,27 +109,32 @@ export class SerialHID {
     const ports = await SerialPort.list();
     console.log('[SerialHID] Available serial ports:');
     ports.forEach((p: any) => console.log(`  - ${p.path} | vid=${p.vendorId || 'n/a'} pid=${p.productId || 'n/a'} manufacturer=${p.manufacturer || 'n/a'}`));
-    // Build prioritized candidate list: saved port -> VID/PID match -> ports with product/manufacturer -> all ports
+    // Build prioritized candidate list: VID/PID match -> saved port (if still present) -> ports with product/manufacturer -> all ports
     const candidates: string[] = [];
+    const availablePaths = new Set(ports.map((p: any) => p.path).filter(Boolean));
 
-    // 1) previously used port (if exists)
-    try {
-      if (fs.existsSync(this.LAST_PORT_FILE)) {
-        const saved = fs.readFileSync(this.LAST_PORT_FILE, 'utf8').trim();
-        if (saved) {
-          candidates.push(saved);
-          console.log('[SerialHID] Found previously used port:', saved);
-        }
-      }
-    } catch (e) {
-      // ignore read errors
-    }
-
-    // 2) VID/PID exact matches
+    // 1) VID/PID exact matches
     for (const p of ports) {
       if (p.vendorId?.toLowerCase() === this.VENDOR_ID && p.productId?.toLowerCase() === this.PRODUCT_ID && p.path) {
         if (!candidates.includes(p.path)) candidates.push(p.path);
       }
+    }
+
+    // 2) previously used port (only if it is currently available)
+    try {
+      if (fs.existsSync(this.LAST_PORT_FILE)) {
+        const saved = fs.readFileSync(this.LAST_PORT_FILE, 'utf8').trim();
+        if (saved) {
+          if (availablePaths.has(saved)) {
+            if (!candidates.includes(saved)) candidates.push(saved);
+            console.log('[SerialHID] Found previously used port:', saved);
+          } else {
+            console.log('[SerialHID] Previously used port not present:', saved);
+          }
+        }
+      }
+    } catch (e) {
+      // ignore read errors
     }
 
     // 3) Prefer ports with manufacturer/product metadata
@@ -290,60 +305,54 @@ export class SerialHID {
         if (openResult.ok) {
           console.log('[SerialHID] Port opened successfully');
 
-          // Wait for hello message from device (new protocol)
-          const HELLO_TIMEOUT_MS = 3000; // Wait up to 3 seconds for hello
+          // Wait for hello/pong from device with retries
+          const HANDSHAKE_TOTAL_MS = 20000;
+          const PING_INTERVAL_MS = 1000;
           let helloReceived = false;
-          
-          const helloTimeout = setTimeout(async () => {
-            // Hello not received - try sending ping
-            if (!helloReceived) {
-              console.log('[SerialHID] Hello not received, sending ping...');
-              try {
-                await this.sendPing();
-                // Wait for pong
-                await new Promise<void>((resolvePong, rejectPong) => {
-                  const pongTimeout = setTimeout(() => {
-                    if (this.parser) this.parser.removeListener('data', checkPong);
-                    rejectPong(new Error('Pong not received after ping'));
-                  }, 2000);
-                  
-                  const checkPong = (line: string) => {
-                    try {
-                      const msg = JSON.parse(line) as any;
-                      if (msg.type === 'pong') {
-                        clearTimeout(pongTimeout);
-                        if (this.parser) this.parser.removeListener('data', checkPong);
-                        console.log('[SerialHID] Pong received, device is responsive');
-                        this.isReady = true;
-                        this.reconnectAttempts = 0; // Reset on successful connection
-                        resolvePong();
-                      }
-                    } catch (e) {
-                      // Ignore parse errors
-                    }
-                  };
-                  
-                  if (this.parser) this.parser.on('data', checkPong);
-                });
-              } catch (e: any) {
-                console.error('[SerialHID] Ping/pong failed:', e.message);
-                return reject(new Error('Device not responding to ping'));
-              }
+          const handshakeStart = Date.now();
+
+          const handshakeTimer = setInterval(async () => {
+            if (helloReceived || this.isReady) {
+              clearInterval(handshakeTimer);
+              return;
             }
-          }, HELLO_TIMEOUT_MS);
+
+            if (Date.now() - handshakeStart > HANDSHAKE_TOTAL_MS) {
+              clearInterval(handshakeTimer);
+              return reject(new Error('Device not responding to hello/ping within timeout'));
+            }
+
+            try {
+              await this.sendPing();
+            } catch (e) {
+              // Ignore and retry
+            }
+          }, PING_INTERVAL_MS);
 
           // Check for hello message
-          const checkHello = (line: string) => {
+          const checkHelloOrPong = (line: string) => {
             try {
               const msg = JSON.parse(line) as any;
               if (msg.type === 'hello' && msg.status === 'ready') {
-                clearTimeout(helloTimeout);
-                if (this.parser) this.parser.removeListener('data', checkHello);
+                clearInterval(handshakeTimer);
+                if (this.parser) this.parser.removeListener('data', checkHelloOrPong);
                 helloReceived = true;
                 this.isReady = true;
                 this.firmwareVersion = msg.firmwareVersion || 'unknown';
                 this.reconnectAttempts = 0; // Reset on successful connection
                 console.log(`[SerialHID] Device ready - Firmware v${this.firmwareVersion}`);
+                this.startHeartbeat();
+                this.markHeartbeat();
+                resolve();
+              }
+              if (msg.type === 'pong') {
+                clearInterval(handshakeTimer);
+                if (this.parser) this.parser.removeListener('data', checkHelloOrPong);
+                this.isReady = true;
+                this.reconnectAttempts = 0; // Reset on successful connection
+                console.log('[SerialHID] Pong received, device is responsive');
+                this.startHeartbeat();
+                this.markHeartbeat();
                 resolve();
               }
             } catch (e) {
@@ -352,13 +361,13 @@ export class SerialHID {
           };
 
           if (this.parser) {
-            this.parser.on('data', checkHello);
-            // Also keep the hello listener active after timeout for late hellos
+            this.parser.on('data', checkHelloOrPong);
+            // Also keep the listener active briefly after timeout for late hellos
             setTimeout(() => {
               if (this.parser && helloReceived) {
-                this.parser.removeListener('data', checkHello);
+                this.parser.removeListener('data', checkHelloOrPong);
               }
-            }, HELLO_TIMEOUT_MS + 2500);
+            }, HANDSHAKE_TOTAL_MS + 2500);
           }
 
           // success — break out of attempts loop via resolve above
@@ -430,6 +439,58 @@ export class SerialHID {
       }
     }, delay);
   }
+
+  /**
+   * Start heartbeat pings to keep connection healthy
+   */
+  private startHeartbeat(): void {
+    if (this.heartbeatTimer) return;
+
+    this.heartbeatTimer = setInterval(async () => {
+      if (!this.port || !this.isReady) return;
+
+      try {
+        await this.sendPing();
+        this.schedulePongTimeout();
+      } catch (e) {
+        this.isReady = false;
+        this.scheduleReconnect();
+      }
+    }, 5000);
+  }
+
+  private stopHeartbeat(): void {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = null;
+    }
+    if (this.pongTimeoutTimer) {
+      clearTimeout(this.pongTimeoutTimer);
+      this.pongTimeoutTimer = null;
+    }
+  }
+
+  private schedulePongTimeout(): void {
+    if (this.pongTimeoutTimer) {
+      clearTimeout(this.pongTimeoutTimer);
+    }
+
+    this.pongTimeoutTimer = setTimeout(() => {
+      this.pongTimeoutTimer = null;
+      this.isReady = false;
+      this.scheduleReconnect();
+    }, 2000);
+  }
+
+  private markHeartbeat(): void {
+    if (this.pongTimeoutTimer) {
+      clearTimeout(this.pongTimeoutTimer);
+      this.pongTimeoutTimer = null;
+    }
+    if (this.heartbeatCallback) {
+      this.heartbeatCallback();
+    }
+  }
   
   /**
    * Send ping to device
@@ -454,6 +515,12 @@ export class SerialHID {
   private handleResponse(line: string): void {
     try {
       const response = JSON.parse(line) as any;
+
+      if (response.type === 'pong' || (response.type === 'hello' && response.status === 'ready')) {
+        this.isReady = true;
+        this.markHeartbeat();
+        return;
+      }
       
       // Handle control messages (type field)
       if (response.type === 'ack') {
@@ -665,6 +732,8 @@ export class SerialHID {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
+
+    this.stopHeartbeat();
     
     // Remove all event listeners from parser
     if (this.parser) {
