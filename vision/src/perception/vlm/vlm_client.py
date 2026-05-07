@@ -85,7 +85,7 @@ def _bbox_iou(
 
 def _merge_overlapping_elements(
     elements: List[UIElement],
-    iou_threshold: float = 0.7,
+    iou_threshold: float = 0.58,
 ) -> List[UIElement]:
     if not elements:
         return []

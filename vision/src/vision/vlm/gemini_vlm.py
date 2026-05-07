@@ -169,6 +169,9 @@ class GeminiVLM(BaseVLM):
             "headings, labels, icons, status bars, and meaningful text. "
             "Prefer high recall over minimalism. If the screen is complex, return many small elements. "
             "Do not collapse the whole screen into only a few detections. "
+            "Do not return duplicate boxes for the same visible control. "
+            "If two boxes describe the same control, keep the tightest one and drop the rest. "
+            "Avoid boxes that heavily overlap unless they clearly represent distinct nested UI parts. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
@@ -197,6 +200,8 @@ class GeminiVLM(BaseVLM):
             "buttons, inputs, taskbar items, terminal controls, status bars, labels, icons, browser chrome, "
             "window chrome, sidebars, headings, and text. "
             "Prefer exhaustive reporting. Return many elements if the screen is dense. "
+            "Avoid duplicate or heavily overlapping boxes for the same control. "
+            "When two boxes describe one visible control, keep the tightest box only. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
@@ -716,6 +721,48 @@ class GeminiVLM(BaseVLM):
         raw = str(getattr(response, "text", "") or "")
         return self._parse_json_payload(raw, image_path, image_width, image_height)
 
+    def _recover_with_region_scan(
+        self,
+        full_image: Any,
+        image_path: str,
+        image_width: int,
+        image_height: int,
+        request_options: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        recovered: List[Dict[str, Any]] = []
+        for region_name, x1, y1, x2, y2 in self._region_specs(image_width, image_height):
+            recovered.extend(
+                self._analyze_region(
+                    full_image,
+                    image_path,
+                    image_width,
+                    image_height,
+                    region_name,
+                    x1,
+                    y1,
+                    x2,
+                    y2,
+                    request_options,
+                )
+            )
+        if not recovered:
+            return []
+
+        for element in recovered:
+            frame_bbox = element.get("frame_bbox")
+            if isinstance(frame_bbox, (list, tuple)) and len(frame_bbox) == 4:
+                try:
+                    x1 = int(round(float(frame_bbox[0])))
+                    y1 = int(round(float(frame_bbox[1])))
+                    x2 = int(round(float(frame_bbox[2])))
+                    y2 = int(round(float(frame_bbox[3])))
+                    element["bbox"] = [x1, y1, x2, y2]
+                    element["dx"] = max(0, min(image_width, int(round((x1 + x2) / 2.0))))
+                    element["dy"] = max(0, min(image_height, int(round((y1 + y2) / 2.0))))
+                except Exception:
+                    continue
+        return self._dedupe_elements(recovered)
+
     @staticmethod
     def _normalize_payload(
         payload: Dict[str, Any],
@@ -1027,8 +1074,7 @@ class GeminiVLM(BaseVLM):
         region_prompt = (
             self._system_prompt(request_width, request_height)
             + "\n\n"
-            "This fallback path is only for legacy non-screenshot mode. "
-            f"You are analyzing the {region_name} crop of a larger screen.\n"
+            f"You are analyzing the {region_name} crop of a larger screenshot.\n"
             f"The crop corresponds to full-image coordinates x={x1}..{x2} and y={y1}..{y2}.\n"
             "Report dx and dy in crop-local pixels.\n"
             "Return every visible UI element in this crop, including text, labels, icons, controls, tabs, "
@@ -1220,6 +1266,20 @@ class GeminiVLM(BaseVLM):
                     parsed = broader_payload
                     parsed_error = broader_error
 
+        if int(parsed.get("element_count", 0) or 0) <= 0:
+            logger.warning("Gemini returned zero elements; retrying with a broader prompt")
+            broader_payload = self._request_broader_retry(
+                image_bytes,
+                image_path,
+                request_width,
+                request_height,
+                request_options,
+            )
+            broader_error = str(broader_payload.get("_vlm_error_type", "")).strip().lower()
+            if int(broader_payload.get("element_count", 0) or 0) > 0 and broader_error != "parse_error":
+                parsed = broader_payload
+                parsed_error = broader_error
+
         normalized = self._normalize_payload(
             parsed,
             image_path,
@@ -1232,6 +1292,8 @@ class GeminiVLM(BaseVLM):
             screen_width=screen_crop.shape[1],
             screen_height=screen_crop.shape[0],
         )
+        normalized["elements"] = self._dedupe_elements(list(normalized.get("elements", [])))
+        normalized["element_count"] = len(normalized["elements"])
 
         if not self._is_screenshot_mode() and normalized.get("element_count", 0) < 12:
             region_elements: List[Dict[str, Any]] = []
@@ -1255,6 +1317,18 @@ class GeminiVLM(BaseVLM):
                 merged = list(normalized.get("elements", [])) + region_elements
                 normalized["elements"] = self._dedupe_elements(merged)
                 normalized["element_count"] = len(normalized["elements"])
+        elif normalized.get("element_count", 0) <= 0 and self._is_screenshot_mode():
+            logger.warning("Screenshot mode fallback: scanning regions after zero-element output")
+            recovered = self._recover_with_region_scan(
+                full_image,
+                image_path,
+                image_width,
+                image_height,
+                request_options,
+            )
+            if recovered:
+                normalized["elements"] = recovered
+                normalized["element_count"] = len(recovered)
 
         logger.info(
             "Gemini analyze completed image=%s elements=%d error_type=%s",

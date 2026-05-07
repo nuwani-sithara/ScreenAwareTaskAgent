@@ -43,6 +43,47 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
         )
 
     elements = payload.get("elements", []) if isinstance(payload, dict) else []
+    occupied_labels = []
+
+    def _intersects(a, b) -> bool:
+        return not (a[2] <= b[0] or a[0] >= b[2] or a[3] <= b[1] or a[1] >= b[3])
+
+    def _draw_label(text: str, anchor_x: int, anchor_y: int, color) -> None:
+        if not text:
+            return
+        (tw, th), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.45, 1)
+        pad_x = 4
+        pad_y = 3
+        label_w = tw + pad_x * 2
+        label_h = th + baseline + pad_y * 2
+        x = max(0, min(image.shape[1] - label_w - 1, anchor_x))
+        y = max(label_h, min(image.shape[0] - 1, anchor_y))
+        rect = [x, y - label_h, x + label_w, y]
+
+        # If the preferred position collides with existing labels, step downward
+        # a few times to keep dense clusters readable.
+        attempts = 0
+        while attempts < 8 and any(_intersects(rect, existing) for existing in occupied_labels):
+            y = min(image.shape[0] - 1, y + label_h + 2)
+            if y >= image.shape[0] - 1:
+                y = label_h
+            rect = [x, y - label_h, x + label_w, y]
+            attempts += 1
+
+        occupied_labels.append(rect)
+        cv2.rectangle(image, (rect[0], rect[1]), (rect[2], rect[3]), (10, 18, 28), thickness=-1)
+        cv2.rectangle(image, (rect[0], rect[1]), (rect[2], rect[3]), color, thickness=1)
+        cv2.putText(
+            image,
+            text,
+            (rect[0] + pad_x, rect[3] - pad_y - baseline),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.45,
+            color,
+            1,
+            cv2.LINE_AA,
+        )
+
     for element in elements:
         dx = int(element.get("dx", 0))
         dy = int(element.get("dy", 0))
@@ -66,16 +107,7 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
                     dy += screen_bbox[1]
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
-                cv2.putText(
-                    image,
-                    text,
-                    (max(0, x1), max(15, y1 - 8)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.45,
-                    (0, 255, 0),
-                    1,
-                    cv2.LINE_AA,
-                )
+                _draw_label(text, max(0, x1), max(15, y1 - 6), (0, 255, 0))
                 continue
             except Exception:
                 pass
@@ -84,16 +116,7 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
             dx += screen_bbox[0]
             dy += screen_bbox[1]
         cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
-        cv2.putText(
-            image,
-            text,
-            (max(0, dx - 4), max(15, dy - 8)),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.45,
-            (0, 255, 0),
-            1,
-            cv2.LINE_AA,
-        )
+        _draw_label(text, max(0, dx - 4), max(15, dy - 6), (0, 255, 0))
 
     out = Path(output_path)
     if out.parent != Path("."):

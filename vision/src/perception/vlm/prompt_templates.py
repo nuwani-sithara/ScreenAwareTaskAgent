@@ -34,6 +34,15 @@ Required rules (read carefully):
 9) If an element is partially off-screen, clip the bbox to the visible area.
 10) Do NOT invent interactions not visible in the screenshot (no hover hints,
     no tooltips unless visible).
+11) Do not return duplicate or heavily overlapping boxes for the same visible
+    control. If two candidate boxes describe the same element, keep the tightest
+    one and drop the rest.
+12) In dense regions, prefer a clear one-box-per-control result over stacking
+    multiple boxes over the same area. Split only when you can clearly see
+    separate controls.
+13) When browser chrome, taskbars, status bars, or sidebars are visible, include
+    the interactive items, but do not wrap the entire bar and its children as
+    separate duplicates.
 
 Output schema (exact):
 {
@@ -74,6 +83,9 @@ For each element:
 2. Adjust bounding box to tightly fit the element
 3. Resolve any overlaps or conflicts
 4. Add missing visual features
+5. Prefer one tight box per visible control instead of multiple overlapping boxes
+   around the same control
+6. Keep adjacent distinct controls separate even if they are visually compact
 
 Return corrected elements in the same JSON format.
 """
