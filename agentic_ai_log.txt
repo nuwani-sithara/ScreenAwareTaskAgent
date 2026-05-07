@@ -88772,3 +88772,148 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-05-07 16:15:00,173 | INFO | === Agentic AI System Started ===
 2026-05-07 16:15:08,916 | INFO | === Agentic AI System Started ===
 2026-05-07 16:15:09,343 | INFO | HID API server already running on port 3015.
+2026-05-07 17:06:54,349 | INFO | === Agentic AI System Started ===
+2026-05-07 17:06:54,375 | INFO | === Agentic AI System Started ===
+2026-05-07 17:19:16,462 | INFO | === Agentic AI System Started ===
+2026-05-07 17:19:16,479 | INFO | === Agentic AI System Started ===
+2026-05-07 17:20:37,279 | INFO | === Agentic AI System Started ===
+2026-05-07 17:20:37,294 | INFO | === Agentic AI System Started ===
+2026-05-07 17:21:10,769 | INFO | === Agentic AI System Started ===
+2026-05-07 17:21:10,784 | INFO | === Agentic AI System Started ===
+2026-05-07 17:21:44,319 | INFO | === Agentic AI System Started ===
+2026-05-07 17:21:44,328 | INFO | === Agentic AI System Started ===
+2026-05-07 17:22:09,675 | INFO | \U0001f680 V2 run started: 69977eef-7ef3-4b75-abc1-1b614262727b  task=Fill out a demo web form with Amith, amith@example.com, Browser agent demo submi
+2026-05-07 17:22:16,938 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:22:22,306 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:22:25,168 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:22:28,433 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:22:31,705 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:22:56,389 | INFO | === Agentic AI System Started ===
+2026-05-07 17:22:56,398 | INFO | === Agentic AI System Started ===
+2026-05-07 17:23:11,927 | INFO | \U0001f680 V2 run started: af3ef9f5-42d2-4f64-a0f2-f99eea2e2f03  task=Fill out a demo web form with Amith, amith@example.com, Browser agent demo submi
+2026-05-07 17:23:16,478 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:23:21,871 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:23:24,746 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:23:33,083 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:26:03,042 | INFO | \U0001f680 V2 run started: 715266d9-ee93-403e-b476-1ceee3b39fc6  task=login to the system using username = admin and password = 1234
+2026-05-07 17:26:08,371 | INFO | LLM todo planning unavailable, using local browser planner: All connection attempts failed
+2026-05-07 17:26:11,342 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:26:18,949 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:34:18,707 | INFO | === Agentic AI System Started ===
+2026-05-07 17:34:18,723 | INFO | === Agentic AI System Started ===
+2026-05-07 17:34:31,971 | INFO | === Agentic AI System Started ===
+2026-05-07 17:34:31,987 | INFO | === Agentic AI System Started ===
+2026-05-07 17:34:35,871 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:34:42,580 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:34:49,580 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:35:51,531 | INFO | \U0001f680 V2 run started: 574592c2-c843-4f7c-a6ec-e0ee198f921b  task=login to the system using username = admin and password = 1234
+2026-05-07 17:36:08,117 | ERROR | Browser agent crashed
+Traceback (most recent call last):
+  File "C:\Users\Amith\Desktop\ScreenAwareTaskAgent\backend\core\browser_agent.py", line 710, in run_agentic_loop_v2
+    initial_screen = await engine.capture("initial")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Amith\Desktop\ScreenAwareTaskAgent\backend\core\browser_agent.py", line 239, in capture
+    await self.page.screenshot(path=str(path), full_page=False)
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\async_api\_generated.py", line 10114, in screenshot
+    await self._impl_obj.screenshot(
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_page.py", line 814, in screenshot
+    encoded_binary = await self._channel.send(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.screenshot: Timeout 15000ms exceeded.
+Call log:
+  - taking page screenshot
+  - waiting for fonts to load...
+  - fonts loaded
+
+2026-05-07 17:41:38,356 | INFO | === Agentic AI System Started ===
+2026-05-07 17:41:38,372 | INFO | === Agentic AI System Started ===
+2026-05-07 17:41:41,919 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:41:49,145 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:42:27,116 | INFO | === Agentic AI System Started ===
+2026-05-07 17:42:27,116 | INFO | === Agentic AI System Started ===
+2026-05-07 17:42:30,835 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:42:31,256 | INFO | HTTP Request: GET http://localhost:8003/vision/status "HTTP/1.1 200 OK"
+2026-05-07 17:42:39,524 | INFO | HTTP Request: GET http://127.0.0.1:9222/json/version "HTTP/1.1 200 OK"
+2026-05-07 17:42:39,957 | INFO | HTTP Request: GET http://localhost:8003/vision/status "HTTP/1.1 200 OK"
+2026-05-07 17:43:04,399 | INFO | \U0001f680 V2 run started: 0f1b557b-8df4-48b3-942e-5fe3842281bd  task=login to the system using username = admin and password = 1234
+2026-05-07 17:43:06,023 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:08,743 | INFO | LLM todo planning unavailable, using local browser planner: All connection attempts failed
+2026-05-07 17:43:09,708 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:12,356 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:43:14,101 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:15,337 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:18,026 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:43:19,082 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:19,953 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:22,556 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:43:23,600 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:43:24,717 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:51:34,220 | INFO | === Agentic AI System Started ===
+2026-05-07 17:51:34,231 | INFO | === Agentic AI System Started ===
+2026-05-07 17:51:44,468 | INFO | === Agentic AI System Started ===
+2026-05-07 17:52:02,758 | INFO | === Agentic AI System Started ===
+2026-05-07 17:53:17,775 | INFO | \U0001f680 V2 run started: b9892f56-deca-4231-8020-962b87d9d722  task=login to the system using username = admin and password = 1234
+2026-05-07 17:53:23,969 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:26,669 | INFO | LLM todo planning unavailable, using local browser planner: All connection attempts failed
+2026-05-07 17:53:28,632 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:31,303 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:53:32,663 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:34,066 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:36,726 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:53:37,927 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:39,026 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:41,665 | INFO | LLM step evaluation unavailable, using browser heuristic: All connection attempts failed
+2026-05-07 17:53:42,744 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 17:53:43,989 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?monitor_index=1&use_current_session=false&no_vlm=true "HTTP/1.1 200 OK"
+2026-05-07 18:01:46,268 | INFO | === Agentic AI System Started ===
+2026-05-07 18:01:46,275 | INFO | === Agentic AI System Started ===
+2026-05-07 18:06:08,781 | INFO | \U0001f680 V2 run started: ef2afad0-0568-41e3-8265-f2ac57405f25  task=log in to the system using username = admin and password = 1234
+2026-05-07 18:06:09,307 | ERROR | Task exception was never retrieved
+future: <Task finished name='Task-10' coro=<Connection.run() done, defined at C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_connection.py:305> exception=NotImplementedError()>
+Traceback (most recent call last):
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_connection.py", line 312, in run
+    await self._transport.connect()
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_transport.py", line 133, in connect
+    raise exc
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_transport.py", line 120, in connect
+    self._proc = await asyncio.create_subprocess_exec(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1744, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\base_events.py", line 524, in _make_subprocess_transport
+    raise NotImplementedError
+NotImplementedError
+2026-05-07 18:06:09,460 | ERROR | Browser agent crashed
+Traceback (most recent call last):
+  File "C:\Users\Amith\Desktop\ScreenAwareTaskAgent\backend\core\browser_agent.py", line 871, in run_agentic_loop_v2
+    await engine.start(user_task)
+  File "C:\Users\Amith\Desktop\ScreenAwareTaskAgent\backend\core\browser_agent.py", line 207, in start
+    self.playwright = await async_playwright().start()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\async_api\_context_manager.py", line 51, in start
+    return await self.__aenter__()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\async_api\_context_manager.py", line 46, in __aenter__
+    playwright = AsyncPlaywright(next(iter(done)).result())
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Amith\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_transport.py", line 120, in connect
+    self._proc = await asyncio.create_subprocess_exec(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\subprocess.py", line 224, in create_subprocess_exec
+    transport, protocol = await loop.subprocess_exec(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\base_events.py", line 1744, in subprocess_exec
+    transport = await self._make_subprocess_transport(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\asyncio\base_events.py", line 524, in _make_subprocess_transport
+    raise NotImplementedError
+NotImplementedError

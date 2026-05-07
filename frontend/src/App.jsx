@@ -82,6 +82,39 @@ function LogsPanel({ logs }) {
   );
 }
 
+function ScreenshotPanel({ currentScreenshot, screenshots }) {
+  if (!currentScreenshot && !screenshots?.length) return null;
+  const latest = currentScreenshot || screenshots?.[screenshots.length - 1]?.url;
+
+  return (
+    <div className={styles.screenshotPanel}>
+      <div className={styles.screenshotHeader}>
+        <span>Browser State</span>
+        <span>{screenshots?.length ?? 0} captures</span>
+      </div>
+      {latest && (
+        <img
+          className={styles.currentScreenshot}
+          src={`http://127.0.0.1:8000${latest}`}
+          alt="Current browser screenshot"
+        />
+      )}
+      {screenshots?.length > 1 && (
+        <div className={styles.screenshotTimeline}>
+          {screenshots.slice(-8).map((shot, i) => (
+            <img
+              key={`${shot.url}-${i}`}
+              className={`${styles.screenshotThumb} ${shot.url === latest ? styles.screenshotThumbActive : ''}`}
+              src={`http://127.0.0.1:8000${shot.url}`}
+              alt={shot.phase || 'Browser screenshot'}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /** Inline form the user fills when the agent needs data */
 function InputRequestPanel({ runId, stepIndex, question, field, onProvide }) {
   const [value,  setValue]  = useState('');
@@ -230,7 +263,7 @@ export default function App() {
           ...prev,
           logs: [
             ...(prev?.logs ?? []),
-            `⚡ Sending ${event.hid_count} HID command${event.hid_count !== 1 ? 's' : ''}…`,
+            `⚡ Executing interaction sequence (${event.interaction_count ?? event.action_count ?? event.hid_count} step${(event.interaction_count ?? event.action_count ?? event.hid_count) !== 1 ? 's' : ''})…`,
           ],
         }));
         break;
@@ -311,6 +344,8 @@ export default function App() {
       case 'screen_captured':
         setActiveRun(prev => ({
           ...prev,
+          currentScreenshot: event.url ?? prev?.currentScreenshot,
+          screenshots: event.history ?? prev?.screenshots ?? [],
           logs: [
             ...(prev?.logs ?? []),
             `📸 Screen captured (${event.phase})`,
@@ -323,6 +358,7 @@ export default function App() {
           ...prev,
           todoSteps: event.todo ?? prev?.todoSteps,
           finalReport: event,
+          screenshots: event.screenshots ?? prev?.screenshots ?? [],
           inputRequest: null,
           logs: [...(prev?.logs ?? []), '📊 Final report ready'],
         }));
@@ -385,6 +421,8 @@ export default function App() {
       todoSteps:    [],
       notes:        '',
       logs:         ['⏳ Connecting to agent…'],
+      screenshots:  [],
+      currentScreenshot: null,
       inputRequest: null,
       finalReport:  null,
       done:         false,
@@ -441,10 +479,10 @@ export default function App() {
 
   // ── Quick-action seeds ─────────────────────────────────────────────────────
   const quickActions = [
-    'Open Chrome and search for Python tutorials',
-    'Click the login button and enter credentials',
-    'Open Notepad and type Hello World',
-    'Check what is currently visible on screen',
+    'Open YouTube and search for autonomous browser agents',
+    'Open Google Docs and type generated viva demo notes',
+    'Fill out a demo web form',
+    'Open YouTube and search for a topic',
   ];
 
   const showWelcome = messages.length === 0 && !activeRun;
@@ -471,8 +509,8 @@ export default function App() {
             <div className={styles.welcomeIcon}><Terminal size={48} /></div>
             <h2>Welcome to ScreenPilot AI</h2>
             <p>
-              Describe any task — I'll plan every step, see the screen, execute
-              actions, validate each result, and ask if I need anything from you.
+              Describe a browser task. I will plan the workflow, automate the browser,
+              capture screenshots, evaluate progress, and ask if I need anything from you.
             </p>
             <div className={styles.quickActions}>
               {quickActions.map((action, i) => (
@@ -512,6 +550,11 @@ export default function App() {
             {!activeRun.finalReport && (
               <LogsPanel logs={activeRun.logs} />
             )}
+
+            <ScreenshotPanel
+              currentScreenshot={activeRun.currentScreenshot}
+              screenshots={activeRun.screenshots}
+            />
 
             {/* User-input request */}
             {activeRun.inputRequest && activeRun.runId && (

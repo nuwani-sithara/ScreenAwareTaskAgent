@@ -502,6 +502,55 @@ gap: 8px;
   font-family: 'Courier New', monospace;
 }
 
+.screenshotPanel {
+  background: rgba(10, 25, 47, 0.65);
+  border: 1px solid rgba(100, 255, 218, 0.12);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.screenshotHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #64ffda;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.currentScreenshot {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  background: #020c1b;
+  border: 1px solid rgba(136, 146, 176, 0.22);
+  border-radius: 8px;
+}
+
+.screenshotTimeline {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-top: 10px;
+}
+
+.screenshotThumb {
+  width: 88px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(136, 146, 176, 0.18);
+  opacity: 0.72;
+  flex: 0 0 auto;
+}
+
+.screenshotThumbActive {
+  opacity: 1;
+  border-color: #64ffda;
+}
+
 /* ── Input-request panel ── */
 .inputRequestPanel {
   background: rgba(255, 190, 64, 0.06);
