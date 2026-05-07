@@ -39,6 +39,9 @@ app = FastAPI(title="ScreenPilot Backend", version="0.1")
 # ------------------------------------
 HID_SERVER_DIR = Path(__file__).resolve().parent.parent / "hid" / "api-server"
 HID_HEALTH_URL = "http://localhost:3015/health"
+HID_SOURCE_ENTRY = HID_SERVER_DIR / "src" / "server.ts"
+HID_TS_NODE = HID_SERVER_DIR / "node_modules" / "ts-node" / "dist" / "bin.js"
+HID_DIST_ENTRY = HID_SERVER_DIR / "dist" / "server.js"
 
 def _ensure_hid_server() -> None:
     """Start the HID API server if it is not already reachable."""
@@ -50,16 +53,19 @@ def _ensure_hid_server() -> None:
     except Exception:
         pass  # not running — start it
 
-    server_js = HID_SERVER_DIR / "dist" / "server.js"
-    if not server_js.exists():
-        logger.warning("HID server dist not found at %s — skipping auto-start.", server_js)
+    if HID_SOURCE_ENTRY.exists() and HID_TS_NODE.exists():
+        launch_cmd = ["node", str(HID_TS_NODE), str(HID_SOURCE_ENTRY)]
+    elif HID_DIST_ENTRY.exists():
+        launch_cmd = ["node", str(HID_DIST_ENTRY)]
+    else:
+        logger.warning("HID server entrypoint not found — skipping auto-start.")
         return
 
     try:
         if sys.platform == "win32":
             # Detached from parent so it survives backend restarts
             subprocess.Popen(
-                ["node", "dist/server.js"],
+                launch_cmd,
                 cwd=str(HID_SERVER_DIR),
                 creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP,
                 stdout=subprocess.DEVNULL,
@@ -67,13 +73,13 @@ def _ensure_hid_server() -> None:
             )
         else:
             subprocess.Popen(
-                ["node", "dist/server.js"],
+                launch_cmd,
                 cwd=str(HID_SERVER_DIR),
                 start_new_session=True,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
-        logger.info("HID API server launched (port 3015).")
+        logger.info("HID API server launched (port 3015) using %s.", launch_cmd[1] if len(launch_cmd) > 1 else launch_cmd[0])
     except Exception as exc:
         logger.warning("Could not auto-start HID server: %s", exc)
 

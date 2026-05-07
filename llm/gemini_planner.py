@@ -254,6 +254,17 @@ def _single_screen_elements(screen_data: dict) -> List[dict]:
         if screens:
             raw_elements = screens[-1].get("elements", [])
 
+    # Compute screen crop offset if present so we can convert frame coords
+    offset_x = 0
+    offset_y = 0
+    if isinstance(screen.get("screen_bbox"), (list, tuple)) and len(screen.get("screen_bbox")) >= 2:
+        try:
+            offset_x = int(screen["screen_bbox"][0])
+            offset_y = int(screen["screen_bbox"][1])
+        except Exception:
+            offset_x = 0
+            offset_y = 0
+
     result: List[dict] = []
     for i, el in enumerate(raw_elements):
         # --- Prefer frame_dx/frame_dy (guaranteed pixel-space) ---
@@ -263,6 +274,10 @@ def _single_screen_elements(screen_data: dict) -> List[dict]:
             try:
                 x = int(round(float(fdx)))
                 y = int(round(float(fdy)))
+                # If screen was cropped, frame_dx/frame_dy are relative to the crop.
+                if offset_x or offset_y:
+                    x += offset_x
+                    y += offset_y
                 if x > 1 or y > 1:   # accept only genuinely positioned elements
                     result.append({
                         "id": i + 1,
@@ -289,6 +304,17 @@ def _single_screen_elements(screen_data: dict) -> List[dict]:
         if x is None or y is None:
             continue
         ix, iy = int(round(float(x))), int(round(float(y)))
+        # If these coordinates appear to be relative to a cropped screen,
+        # try to detect and offset them using screen_bbox. We assume that
+        # small coordinates (>1) that are less than the crop size are
+        # relative; a conservative approach is to offset whenever
+        # screen_bbox exists and the element contained frame markers.
+        if (offset_x or offset_y) and ix >= 0 and iy >= 0:
+            # Heuristic: if element also contains frame_bbox/frame_dx markers,
+            # treat ix/iy as frame-relative and add offset.
+            if el.get("frame_dx") is not None or el.get("frame_bbox") is not None:
+                ix += offset_x
+                iy += offset_y
         if ix <= 1 and iy <= 1:
             # Likely still a fractional value that rounded to 0 or 1 — skip
             continue

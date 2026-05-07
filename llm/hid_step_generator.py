@@ -195,7 +195,89 @@ class HIDStepGenerator:
             screens = screen.get("screens", [])
             if screens:
                 elements = screens[-1].get("elements", [])
-        return elements
+        # Normalize element coordinates to absolute screen pixels.
+        # Many vision providers return coordinates relative to a cropped
+        # screen frame (frame_dx/frame_bbox) or normalized bbox coords
+        # (0..1). The HID executor and downstream generators expect
+        # absolute display coordinates (pixels, origin at full image top-left).
+
+        # Determine screen crop origin and size if present
+        offset_x = 0
+        offset_y = 0
+        screen_w = None
+        screen_h = None
+        if isinstance(screen.get("screen_bbox"), (list, tuple)) and len(screen.get("screen_bbox")) >= 2:
+            try:
+                offset_x = int(screen["screen_bbox"][0])
+                offset_y = int(screen["screen_bbox"][1])
+            except Exception:
+                offset_x = 0
+                offset_y = 0
+
+        # Prefer explicit screen_size then fall back to image_size then defaults
+        ss = screen.get("screen_size") or screen.get("image_size") or {}
+        try:
+            screen_w = int(ss.get("width")) if ss.get("width") else None
+            screen_h = int(ss.get("height")) if ss.get("height") else None
+        except Exception:
+            screen_w = None
+            screen_h = None
+
+        normalized: List[Dict[str, Any]] = []
+        for elem in elements:
+            if not isinstance(elem, dict):
+                continue
+            e = dict(elem)  # shallow copy
+
+            # If element already provides absolute dx/dy (and no frame markers), leave as-is
+            if "dx" in e and "dy" in e:
+                # If the element also provides a frame-based marker (frame_dx/frame_bbox)
+                # then dx/dy are likely relative to the cropped screen and must be offset.
+                if ("frame_dx" in e or "frame_bbox" in e) and (offset_x or offset_y):
+                    try:
+                        e["dx"] = int(e.get("dx", 0)) + offset_x
+                        e["dy"] = int(e.get("dy", 0)) + offset_y
+                    except Exception:
+                        pass
+                # Otherwise assume dx/dy are already absolute.
+                normalized.append(e)
+                continue
+
+            # Legacy x/y fields
+            if "x" in e and "y" in e:
+                if ("frame_x" in e or "frame_bbox" in e) and (offset_x or offset_y):
+                    try:
+                        e["x"] = int(e.get("x", 0)) + offset_x
+                        e["y"] = int(e.get("y", 0)) + offset_y
+                    except Exception:
+                        pass
+                normalized.append(e)
+                continue
+
+            # Normalized bbox (0..1) -> convert using screen size (or image size)
+            bbox = e.get("bbox") or e.get("frame_bbox")
+            if bbox and isinstance(bbox, (list, tuple)) and len(bbox) >= 4:
+                try:
+                    # bbox coordinates may be normalized (0..1). Use screen_size when available.
+                    w = screen_w or screen.get("image_size", {}).get("width") or 1920
+                    h = screen_h or screen.get("image_size", {}).get("height") or 1080
+                    center_x = int((bbox[0] + bbox[2]) / 2 * float(w))
+                    center_y = int((bbox[1] + bbox[3]) / 2 * float(h))
+                    # Add crop offset if present
+                    center_x = center_x + offset_x
+                    center_y = center_y + offset_y
+                    e["dx"] = center_x
+                    e["dy"] = center_y
+                except Exception:
+                    e["dx"] = int((bbox[0] + bbox[2]) / 2 * 1920)
+                    e["dy"] = int((bbox[1] + bbox[3]) / 2 * 1080)
+                normalized.append(e)
+                continue
+
+            # If nothing else, leave element unchanged
+            normalized.append(e)
+
+        return normalized
 
     def _collect_target_history_elements(
         self,
