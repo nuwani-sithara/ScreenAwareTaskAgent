@@ -25,3 +25,14 @@ Evaluate: Verify task success using visual feedback and logs.
     Mock PPA loop: [http://127.0.0.1:8000/mock-loop](http://127.0.0.1:8000/mock-loop)
 
     > The `/mock-loop` endpoint executes the mock Perceive → Plan → Act cycle and returns a test result.
+
+## Vision 2.0 (Desktop Screenshot Service)
+
+    Run the Vision 2.0 service (desktop screenshots + Gemini VLM) from the vision/ folder:
+
+    uvicorn src.vision2_api:app --host 0.0.0.0 --port 8003
+
+    To switch the agent to Vision 2.0, set:
+
+    set VISION_MODE=vision2
+    set VISION2_BASE_URL=http://localhost:8003

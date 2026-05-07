@@ -2,8 +2,13 @@ import requests
 import logging
 import time
 import json
+import os
 
-VISION_BASE_URL = "http://localhost:8001"  # Vision FastAPI service
+VISION_MODE = os.getenv("VISION_MODE", "vision").strip().lower()
+VISION_BASE_URL = os.getenv("VISION_BASE_URL", "http://localhost:8001")
+VISION2_BASE_URL = os.getenv("VISION2_BASE_URL", "http://localhost:8003")
+if VISION_MODE in {"vision2", "vision_2", "v2"}:
+    VISION_BASE_URL = VISION2_BASE_URL
 
 def start_capture(timeout=5):
     try:

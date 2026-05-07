@@ -212,7 +212,11 @@ class AgentRunRecorder:
 # ---------------------------------------------------------------------------
 # Service endpoints (match existing microservice ports)
 # ---------------------------------------------------------------------------
-VISION_BASE_URL = "http://localhost:8001"
+VISION_MODE = os.getenv("VISION_MODE", "vision").strip().lower()
+VISION_BASE_URL = os.getenv("VISION_BASE_URL", "http://localhost:8001")
+VISION2_BASE_URL = os.getenv("VISION2_BASE_URL", "http://localhost:8003")
+if VISION_MODE in {"vision2", "vision_2", "v2"}:
+    VISION_BASE_URL = VISION2_BASE_URL
 LLM_BASE_URL = "http://localhost:8002"
 HID_API_URL = "http://localhost:3015/hid/command"
 
@@ -222,6 +226,7 @@ HID_API_URL = "http://localhost:3015/hid/command"
 MAX_STEP_RETRIES = 3        # maximum execution attempts per step
 UI_SETTLE_DELAY = 1.5       # seconds to wait for UI to react after HID commands
 INPUT_TIMEOUT = 300.0       # seconds to wait for user-provided data
+START_DELAY_SECONDS = float(os.getenv("AGENT_START_DELAY_SECONDS", "10"))
 
 # Cursor reset: push cursor to top-left by sending a large negative relative move.
 # -5000 px is more than enough for any screen up to 4K (3840×2160).
@@ -661,6 +666,15 @@ async def run_agentic_loop_v2(
         return evaluation
 
     try:
+        if START_DELAY_SECONDS > 0:
+            await emit(
+                {
+                    "type": "log",
+                    "message": f"⏳ Waiting {START_DELAY_SECONDS:.0f}s before starting the agent run…",
+                }
+            )
+            await asyncio.sleep(START_DELAY_SECONDS)
+
         # ── Phase 0: Pre-flight HID health check ────────────────────────────
         hid_health = await _check_hid_health()
         if not hid_health["ok"]:

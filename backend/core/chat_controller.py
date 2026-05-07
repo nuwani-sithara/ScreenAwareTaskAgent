@@ -1,4 +1,5 @@
 import logging
+import time
 
 from backend.core.session_manager import session_manager
 from backend.utils.input_parser import parse_user_input
@@ -46,6 +47,8 @@ def handle_chat(session_id, user_message):
         logger.info(f"📌 New session created: {session_id}")
 
         logger.info("🚀 Running agent cycle for initial task")
+        logger.info("⏳ Waiting 10 seconds before starting the agent run...")
+        time.sleep(10)
 
         result = run_cycle(user_message)
 
@@ -120,6 +123,8 @@ def handle_chat(session_id, user_message):
     """
 
     logger.info("🧠 Sending updated prompt to agent cycle")
+    logger.info("⏳ Waiting 10 seconds before starting the agent run...")
+    time.sleep(10)
 
     result = run_cycle(full_prompt)
 

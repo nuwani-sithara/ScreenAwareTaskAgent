@@ -88657,3 +88657,118 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-05-07 03:40:17,128 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
 2026-05-07 03:40:53,274 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
 2026-05-07 03:41:01,634 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 04:26:39,530 | INFO | === Agentic AI System Started ===
+2026-05-07 04:26:49,479 | INFO | === Agentic AI System Started ===
+2026-05-07 04:26:49,479 | INFO | === Agentic AI System Started ===
+2026-05-07 04:26:49,885 | INFO | HID API server already running on port 3015.
+2026-05-07 04:26:49,902 | INFO | HID API server already running on port 3015.
+2026-05-07 14:21:57,329 | INFO | === Agentic AI System Started ===
+2026-05-07 14:22:55,224 | INFO | === Agentic AI System Started ===
+2026-05-07 14:22:55,545 | INFO | HID API server already running on port 3015.
+2026-05-07 14:23:13,965 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 14:33:50,755 | INFO | \U0001f680 V2 run started: 1d300c80-f488-4bc3-a8eb-56cad75b3ac3  task=login to the system using username = admin and password = 1234
+2026-05-07 14:33:52,662 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 14:34:47,088 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 14:36:39,862 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 14:37:19,980 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 14:37:31,904 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 14:37:43,571 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 14:37:43,575 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 14:37:44,818 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 14:37:44,819 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 14:38:20,238 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 14:38:41,099 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 14:39:18,765 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 14:40:07,508 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 14:40:44,661 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 14:41:30,119 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 14:42:00,818 | ERROR | HID command 1 failed: 
+2026-05-07 14:42:42,759 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 14:42:48,859 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 14:54:42,143 | INFO | === Agentic AI System Started ===
+2026-05-07 14:54:54,047 | INFO | === Agentic AI System Started ===
+2026-05-07 14:54:54,388 | INFO | HID API server already running on port 3015.
+2026-05-07 14:55:00,317 | INFO | === Agentic AI System Started ===
+2026-05-07 14:55:05,879 | INFO | === Agentic AI System Started ===
+2026-05-07 14:55:05,933 | INFO | HID API server already running on port 3015.
+2026-05-07 14:55:20,182 | INFO | === Agentic AI System Started ===
+2026-05-07 14:55:28,310 | INFO | === Agentic AI System Started ===
+2026-05-07 14:55:28,366 | INFO | HID API server already running on port 3015.
+2026-05-07 14:55:40,449 | INFO | === Agentic AI System Started ===
+2026-05-07 14:56:02,784 | INFO | === Agentic AI System Started ===
+2026-05-07 14:56:03,227 | INFO | HID API server already running on port 3015.
+2026-05-07 14:56:13,413 | INFO | === Agentic AI System Started ===
+2026-05-07 14:56:27,426 | INFO | === Agentic AI System Started ===
+2026-05-07 14:56:27,494 | INFO | HID API server already running on port 3015.
+2026-05-07 14:56:41,276 | INFO | === Agentic AI System Started ===
+2026-05-07 14:56:46,143 | INFO | === Agentic AI System Started ===
+2026-05-07 14:56:46,173 | INFO | HID API server already running on port 3015.
+2026-05-07 15:04:32,070 | INFO | \U0001f680 V2 run started: 08039a98-62fd-4fb3-bb91-7fc0719dca49  task=login to the system using username = admin and password = 1234
+2026-05-07 15:04:33,766 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 15:05:01,195 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:05:13,809 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 15:05:46,050 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:05:54,472 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:06:01,084 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:06:09,593 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:06:43,436 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:06:51,504 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:07:01,017 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:07:09,138 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 15:13:56,051 | INFO | \U0001f680 V2 run started: 76aafdb8-458b-4aa3-90e3-efcd3daccd74  task=login to the system using username = admin and password = 1234
+2026-05-07 15:13:57,067 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 15:14:38,365 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:14:46,684 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 15:15:01,083 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:15:09,201 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:15:42,720 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:15:50,821 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:16:01,201 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:16:09,289 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:16:41,557 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:16:49,718 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 15:19:45,671 | INFO | \U0001f680 V2 run started: 3f19e923-655e-48ef-839b-79b3611db06d  task=login to the system using username = admin and password = 1234
+2026-05-07 15:19:46,137 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 15:20:01,101 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:20:09,477 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 15:20:41,428 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:20:49,502 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:21:01,018 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:21:09,297 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:21:42,949 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:21:51,122 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:22:01,065 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:22:09,118 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 15:25:52,691 | INFO | === Agentic AI System Started ===
+2026-05-07 15:25:57,121 | INFO | === Agentic AI System Started ===
+2026-05-07 15:25:57,217 | INFO | HID API server already running on port 3015.
+2026-05-07 15:26:50,751 | INFO | \U0001f680 V2 run started: dedc414b-d644-4635-ab31-05ce144fa36f  task=login to the system using username = admin and password = 1234
+2026-05-07 15:26:51,096 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 15:27:00,983 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:27:09,783 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 15:27:41,591 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:27:49,681 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:28:00,970 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:28:09,121 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:28:42,576 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:28:50,530 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:29:00,920 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:29:08,874 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 15:45:05,061 | INFO | \U0001f680 V2 run started: c82686ea-34f6-4947-8473-2a7d5afd6583  task=login to the system using username = admin and password = 1234
+2026-05-07 15:45:05,472 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 15:45:39,675 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:45:48,476 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 15:46:00,950 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:46:09,277 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:46:42,693 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:46:50,641 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:47:00,987 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:47:09,087 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 15:47:41,027 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 15:47:49,068 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 16:06:48,915 | INFO | === Agentic AI System Started ===
+2026-05-07 16:07:07,346 | INFO | === Agentic AI System Started ===
+2026-05-07 16:07:07,480 | INFO | HID API server already running on port 3015.
+2026-05-07 16:15:00,173 | INFO | === Agentic AI System Started ===
+2026-05-07 16:15:08,916 | INFO | === Agentic AI System Started ===
+2026-05-07 16:15:09,343 | INFO | HID API server already running on port 3015.

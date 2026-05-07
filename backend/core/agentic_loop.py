@@ -1,6 +1,7 @@
 import requests
 import logging
 import time
+import os
 
 from backend.core.perceive import perceive, stream_vision
 from backend.core.plan import plan
@@ -22,10 +23,14 @@ logger.info("=== Agentic AI System Started ===")
 
 logging.basicConfig(level=logging.INFO)
 
-VISION_BASE_URL = "http://localhost:8001"
+VISION_MODE = os.getenv("VISION_MODE", "vision").strip().lower()
+VISION_BASE_URL = os.getenv("VISION_BASE_URL", "http://localhost:8001")
+VISION2_BASE_URL = os.getenv("VISION2_BASE_URL", "http://localhost:8003")
+if VISION_MODE in {"vision2", "vision_2", "v2"}:
+    VISION_BASE_URL = VISION2_BASE_URL
 LLM_BASE_URL = "http://localhost:8002"  # LLM FastAPI service
 VISION_AUTO_STOP_DELAY = 120 
-STOP_VISION_URL = "http://localhost:8001/vision/stop"
+STOP_VISION_URL = f"{VISION_BASE_URL}/vision/stop"
 
 
 def show_popup(title, message):

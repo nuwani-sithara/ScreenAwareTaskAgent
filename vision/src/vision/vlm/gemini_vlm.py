@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import time
 import warnings
@@ -21,6 +22,14 @@ warnings.simplefilter("ignore", FutureWarning)
 
 class GeminiVLM(BaseVLM):
     """Semantic VLM adapter using Gemini."""
+
+    @staticmethod
+    def _is_screenshot_mode() -> bool:
+        mode = os.getenv("VISION_MODE", "").strip().lower()
+        if mode in {"vision2", "vision_2", "v2"}:
+            return True
+        flag = os.getenv("VISION_SCREENSHOT_MODE", "0").strip().lower()
+        return flag in {"1", "true", "yes", "on"}
 
     def __init__(self, model_name: str = MODEL_NAME, timeout_seconds: float = 45.0) -> None:
         self.model_name = model_name
@@ -1048,9 +1057,9 @@ class GeminiVLM(BaseVLM):
         )
         normalized["elements"] = self._refine_elements_with_image(
             list(normalized.get("elements", [])),
-            screen_crop,
-            origin_x=screen_x1,
-            origin_y=screen_y1,
+            crop,
+            origin_x=x1,
+            origin_y=y1,
             frame_width=image_width,
             frame_height=image_height,
         )
@@ -1073,7 +1082,10 @@ class GeminiVLM(BaseVLM):
             return self._safe_empty_response(image_path, image_width, image_height, vlm_error_type="api_error")
 
         request_options = {"timeout": int(max(1.0, self.timeout_seconds))}
-        screen_x1, screen_y1, screen_x2, screen_y2 = self._detect_screen_region(full_image, request_options)
+        if self._is_screenshot_mode():
+            screen_x1, screen_y1, screen_x2, screen_y2 = 0, 0, full_image.shape[1], full_image.shape[0]
+        else:
+            screen_x1, screen_y1, screen_x2, screen_y2 = self._detect_screen_region(full_image, request_options)
         screen_crop = full_image[screen_y1:screen_y2, screen_x1:screen_x2]
         if screen_crop is None or screen_crop.size == 0:
             logger.warning("Screen crop was empty; falling back to full frame")
@@ -1086,6 +1098,11 @@ class GeminiVLM(BaseVLM):
             self._system_prompt(request_width, request_height)
             + "\n\nAnalyze this screenshot and return only the JSON object."
         )
+        if self._is_screenshot_mode():
+            full_prompt += (
+                " This is a direct desktop screenshot. Do not detect a separate screen boundary."
+                " Treat the full image as the screen and keep screen_bbox equal to the image bounds."
+            )
 
         payload = [
             {"mime_type": "image/jpeg", "data": image_bytes},
@@ -1200,6 +1217,29 @@ class GeminiVLM(BaseVLM):
             screen_width=screen_crop.shape[1],
             screen_height=screen_crop.shape[0],
         )
+
+        if self._is_screenshot_mode() and normalized.get("element_count", 0) < 12:
+            region_elements: List[Dict[str, Any]] = []
+            for region_name, x1, y1, x2, y2 in self._region_specs(image_width, image_height):
+                region_elements.extend(
+                    self._analyze_region(
+                        full_image,
+                        image_path,
+                        image_width,
+                        image_height,
+                        region_name,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        request_options,
+                    )
+                )
+
+            if region_elements:
+                merged = list(normalized.get("elements", [])) + region_elements
+                normalized["elements"] = self._dedupe_elements(merged)
+                normalized["element_count"] = len(normalized["elements"])
 
         logger.info(
             "Gemini analyze completed image=%s elements=%d error_type=%s",

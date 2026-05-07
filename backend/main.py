@@ -9,6 +9,7 @@ import sys
 import uuid
 from pathlib import Path
 from typing import Any, Dict
+import time
 
 import httpx
 from fastapi import FastAPI, Request
@@ -33,6 +34,9 @@ logger = logging.getLogger(__name__)
 # FastAPI App
 # ------------------------------------
 app = FastAPI(title="ScreenPilot Backend", version="0.1")
+
+# Delay before starting an agent run after receiving a task.
+AGENT_START_DELAY_SECONDS = 10
 
 # ------------------------------------
 # Auto-start HID server if not running
@@ -141,6 +145,13 @@ async def agent_status():
 @app.post("/run-cycle")
 def run_agentic_cycle(request: TaskRequest):
     logging.info(f"📝 Received Task From Frontend: {request.task}")
+
+    if AGENT_START_DELAY_SECONDS > 0:
+        logging.info(
+            "⏳ Waiting %s seconds before starting the agent run...",
+            AGENT_START_DELAY_SECONDS,
+        )
+        time.sleep(AGENT_START_DELAY_SECONDS)
 
     result = run_cycle(user_task=request.task)
 
