@@ -3,12 +3,65 @@ import logging
 import time
 import json
 import os
+from pathlib import Path
+
+from backend.core.runtime_env import load_runtime_env
+
+load_runtime_env()
 
 VISION_MODE = os.getenv("VISION_MODE", "vision").strip().lower()
 VISION_BASE_URL = os.getenv("VISION_BASE_URL", "http://localhost:8001")
 VISION2_BASE_URL = os.getenv("VISION2_BASE_URL", "http://localhost:8003")
 if VISION_MODE in {"vision2", "vision_2", "v2"}:
     VISION_BASE_URL = VISION2_BASE_URL
+VISION_SCREENSHOT_MODE = VISION_MODE in {"vision2", "vision_2", "v2"}
+
+
+def _wrap_single_snapshot(snapshot):
+    if not isinstance(snapshot, dict):
+        return {"status": "error", "session_data": {"screens": []}, "raw": snapshot}
+
+    if isinstance(snapshot.get("session_data"), dict) and isinstance(
+        snapshot.get("session_data", {}).get("screens"), list
+    ):
+        return snapshot
+
+    screen = snapshot
+    for key in ("vision_data", "vision_output", "vision", "final"):
+        value = snapshot.get(key)
+        if isinstance(value, dict):
+            screen = value
+            break
+
+    wrapped = dict(snapshot)
+    wrapped["session_data"] = {"screens": [screen]}
+    return wrapped
+
+
+def _load_final_json_from_response(resp):
+    """Prefer the exact `final_json_path` written by Vision 2 when available."""
+    if not isinstance(resp, dict):
+        return resp
+
+    final_json_path = resp.get("final_json_path")
+    if isinstance(final_json_path, str) and final_json_path:
+        try:
+            path = Path(final_json_path)
+            if path.exists():
+                with path.open("r", encoding="utf-8") as f:
+                    return json.load(f)
+        except Exception as exc:
+            logging.warning("Could not load final_json_path %s: %s", final_json_path, exc)
+
+    vision_data = resp.get("vision_data")
+    if isinstance(vision_data, dict) and vision_data:
+        return vision_data
+
+    vision_output = resp.get("vision_output")
+    if isinstance(vision_output, dict) and vision_output:
+        return vision_output
+
+    return resp
 
 def start_capture(timeout=5):
     try:
@@ -31,7 +84,7 @@ def stop_and_get_vision(session_id=None, timeout=120):
         r.raise_for_status()
         data = r.json()
         if data.get("status") == "completed":
-            return data.get("vision_data")
+            return _load_final_json_from_response(data)
         else:
             logging.error("Vision stop returned non-completed status: %s", data.get("status"))
             return {"error": "not_completed", "detail": data}
@@ -41,7 +94,8 @@ def stop_and_get_vision(session_id=None, timeout=120):
 
 def capture_snapshot(timeout=180, run_pipeline=True):
     """
-    Request a single saved frame and run full pipeline on it. Returns the parsed vision JSON on success.
+    Request a single screenshot and run the full pipeline on it.
+    Returns the parsed vision JSON on success.
 
     By default this runs the full pipeline (run_pipeline=True) and uses a generous timeout.
     """
@@ -52,8 +106,8 @@ def capture_snapshot(timeout=180, run_pipeline=True):
         resp = r.json()
 
         # If pipeline completed, return the vision data
-        if isinstance(resp, dict) and resp.get("status") == "completed" and "vision_data" in resp:
-            return resp.get("vision_data")
+        if isinstance(resp, dict) and resp.get("status") == "completed":
+            return _load_final_json_from_response(resp)
 
         # If it's only a saved frame metadata, return it
         if isinstance(resp, dict) and "saved_frame" in resp:
@@ -145,6 +199,15 @@ def perceive(wait_seconds=3):
     then stop and fetch the final JSON.
     """
     logging.info("Requesting vision perception (start -> wait -> stop)...")
+
+    if VISION_SCREENSHOT_MODE:
+        time.sleep(wait_seconds)
+        vision_data = _wrap_single_snapshot(capture_snapshot(timeout=180))
+        if isinstance(vision_data, dict) and vision_data.get("error"):
+            logging.error("Perception error: %s", vision_data)
+        else:
+            logging.info("Perception data received")
+        return vision_data
 
     start_resp = start_capture()
     session_id = None

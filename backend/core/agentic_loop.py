@@ -3,12 +3,15 @@ import logging
 import time
 import os
 
-from backend.core.perceive import perceive, stream_vision
+from backend.core.runtime_env import load_runtime_env
+from backend.core.perceive import capture_snapshot, perceive, stream_vision
 from backend.core.plan import plan
 from backend.core.act import act_with_retry
 import json
 from backend.utils.file_utils import create_run_folder, save_json
 from plyer import notification
+
+load_runtime_env()
 
 # --- Logging Setup ---
 logging.basicConfig(
@@ -31,6 +34,7 @@ if VISION_MODE in {"vision2", "vision_2", "v2"}:
 LLM_BASE_URL = "http://localhost:8002"  # LLM FastAPI service
 VISION_AUTO_STOP_DELAY = 120 
 STOP_VISION_URL = f"{VISION_BASE_URL}/vision/stop"
+VISION_SCREENSHOT_MODE = VISION_MODE in {"vision2", "vision_2", "v2"}
 
 
 def show_popup(title, message):
@@ -113,9 +117,24 @@ def compare_screens(baseline, latest):
     if not baseline or not latest:
         return "No screen data available to compare."
 
-    # Only compare the first baseline vs first latest screen for simplicity
-    base_elements = baseline.get("elements", [])
-    latest_elements = latest[0].get("elements", [])
+    def _screen_elements(screen):
+        if not isinstance(screen, dict):
+            return []
+
+        if isinstance(screen.get("elements"), list):
+            return screen.get("elements", [])
+
+        for wrapper_key in ("vision_data", "vision_output", "vision", "final"):
+            wrapper = screen.get(wrapper_key)
+            if isinstance(wrapper, dict) and isinstance(wrapper.get("elements"), list):
+                return wrapper.get("elements", [])
+
+        return []
+
+    # Only compare the first baseline vs first latest screen for simplicity.
+    base_elements = _screen_elements(baseline)
+    latest_screen = latest[0] if isinstance(latest, list) and latest else latest
+    latest_elements = _screen_elements(latest_screen)
 
     # Use (type, label) as the identity of an element
     base_ids = set((el.get("type"), el.get("label")) for el in base_elements)
@@ -139,6 +158,32 @@ def compare_screens(baseline, latest):
 
     return "\n".join(messages)
 
+
+def _normalize_screenshot_perception(snapshot):
+    """Wrap a single screenshot response into the legacy session_data shape.
+
+    Vision 2 returns screenshot-centric payloads, while the older backend
+    flow expects ``session_data.screens``. This keeps both paths working.
+    """
+    if not isinstance(snapshot, dict):
+        return {"status": "error", "session_data": {"screens": []}, "raw": snapshot}
+
+    if isinstance(snapshot.get("session_data"), dict) and isinstance(
+        snapshot.get("session_data", {}).get("screens"), list
+    ):
+        return snapshot
+
+    screen = snapshot
+    for key in ("vision_data", "vision_output", "vision", "final"):
+        value = snapshot.get(key)
+        if isinstance(value, dict):
+            screen = value
+            break
+
+    wrapped = dict(snapshot)
+    wrapped["session_data"] = {"screens": [screen]}
+    return wrapped
+
 def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True):
     run_folder = create_run_folder()
     logging.info(f"📁 Created run folder: {run_folder}")
@@ -161,17 +206,22 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
             logging.info(f"⏳ Waiting {start_delay} seconds before starting vision...")
             time.sleep(start_delay)
 
-        logging.info("📡 Vision required. Starting vision service...")
-        start_vision()
+        if VISION_SCREENSHOT_MODE:
+            logging.info("📸 Vision 2 screenshot mode enabled. Capturing single-screen perception...")
+            perception = _normalize_screenshot_perception(capture_snapshot(timeout=180))
+        else:
+            logging.info("📡 Vision required. Starting vision service...")
+            start_vision()
 
-        logging.info("⏳ Vision will auto-stop after 6 minutes (360 seconds).")
+            logging.info("⏳ Vision will auto-stop after 6 minutes (360 seconds).")
 
-        # # Auto stop after 6 minutes
-        # logging.info("⏳ Waiting 6 minutes before stopping vision...")
-        # time.sleep(VISION_AUTO_STOP_DELAY)
+            # # Auto stop after 6 minutes
+            # logging.info("⏳ Waiting 6 minutes before stopping vision...")
+            # time.sleep(VISION_AUTO_STOP_DELAY)
 
-        logging.info("⏹️ Auto-stopping vision after 6 minutes.")
-        perception = stop_vision()
+            logging.info("⏹️ Auto-stopping vision after 6 minutes.")
+            perception = stop_vision()
+
         save_json(perception, "perception", run_folder)
         logging.info(f"📦 Session ID: {perception.get('session_id')}")
         screens = perception.get("session_data", {}).get("screens", [])
@@ -220,8 +270,11 @@ def run_cycle(user_task: str, start_delay: float = 2.0, stop_at_end: bool = True
 
     if use_vision:
         logging.info("📡 Capturing latest screen visuals after action...")
-        start_vision()
-        latest_perception = stop_vision()  # stop vision to get final frame
+        if VISION_SCREENSHOT_MODE:
+            latest_perception = _normalize_screenshot_perception(capture_snapshot(timeout=180))
+        else:
+            start_vision()
+            latest_perception = stop_vision()  # stop vision to get final frame
         save_json(latest_perception, "latest_perception", run_folder)
 
         latest_screens = latest_perception.get("session_data", {}).get("screens", [])

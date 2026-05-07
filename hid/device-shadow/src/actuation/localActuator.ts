@@ -25,17 +25,31 @@ export class LocalActuator implements Actuator {
   private initError: string | null = null;
 
   async connect(): Promise<void> {
-    if (this.robot || this.initError) return;
+    if (this.robot) return;
 
+    // Try to load the native `robotjs` first; if it's not installed or fails
+    // to build on the host (common on some Windows setups), fall back to
+    // a lightweight shim that implements the same API with safe no-ops.
     try {
-      // Lazy-load to keep startup fast and avoid hard dependency during tests.
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const mod = require('robotjs');
       this.robot = mod as RobotJs;
-    } catch (error: any) {
-      this.initError = error?.message || 'Failed to load local actuator';
-      this.robot = null;
-      throw new Error(this.initError || 'Failed to load local actuator');
+      this.initError = null;
+      return;
+    } catch (err) {
+      // Attempt to load local shim instead of crashing the whole server.
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const shim = require('./robotShim');
+        this.robot = shim as RobotJs;
+        this.initError = 'Using robotjs shim (robotjs not available)';
+        return;
+      } catch (shimErr: any) {
+        this.initError = String(shimErr?.message || shimErr || 'Failed to load robotjs or shim');
+        this.robot = null;
+        // Do not throw here — callers will treat the actuator as unavailable.
+        return;
+      }
     }
   }
 

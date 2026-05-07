@@ -32,13 +32,11 @@ def plan(user_task: str, perception=None, model: str = "models/gemini-flash-late
         }
 
     try:
-        visual_data = perception.get("session_data", {})
+        visual_data = perception if isinstance(perception, dict) else {}
 
         payload = {
             "instruction": user_task,
-            "visual_data": {
-                "session_data": visual_data
-            },
+            "visual_data": visual_data,
             "use_gemini": True,
             "gemini_model": model,
             "skip_validation": False

@@ -924,6 +924,8 @@ def _run_pipeline_for_frame(
         semantic_pipeline is not None,
     )
 
+    screenshot_mode = os.getenv("VISION_SCREENSHOT_MODE", "0").strip().lower() in {"1", "true", "yes", "on"}
+
     proc_root = os.path.join(session["proc_dir"], f"proc_{int(time.time())}_{uuid.uuid4().hex[:6]}")
     proc_raw = os.path.join(proc_root, "raw_frames")
     proc_pre = os.path.join(proc_root, "preprocessed_frames")
@@ -943,9 +945,13 @@ def _run_pipeline_for_frame(
     shutil.copyfile(preprocessed_image, session_preprocessed)
     logger.debug("Persisted preprocessed frame to %s", session_preprocessed)
 
-    image = cv2.imread(preprocessed_image)
+    image = cv2.imread(frame_path if screenshot_mode else preprocessed_image)
     if image is None:
-        raise RuntimeError(f"Failed to read preprocessed frame: {preprocessed_image}")
+        raise RuntimeError(f"Failed to read pipeline frame: {frame_path if screenshot_mode else preprocessed_image}")
+
+    pipeline_image_path = frame_path if screenshot_mode else preprocessed_image
+    if screenshot_mode:
+        logger.info("Screenshot mode enabled; Gemini will analyze the raw frame %s", pipeline_image_path)
 
     # Gemini semantic path:
     # - semantic VLM returns dx/dy points (no bbox)
@@ -968,7 +974,7 @@ def _run_pipeline_for_frame(
             time.sleep(min(30.0, next_allowed - now_ts))
 
         logger.info("Calling semantic pipeline for %s", frame_name)
-        semantic_result = semantic_pipeline.run(preprocessed_image)
+        semantic_result = semantic_pipeline.run(pipeline_image_path)
         logger.debug("Semantic pipeline result keys: %s", sorted(semantic_result.keys()))
         payload = semantic_result.get("vision_output", {})
         payload = _finalize_elements_with_dxdy(payload, img_w, img_h)
@@ -988,7 +994,7 @@ def _run_pipeline_for_frame(
             session["semantic_next_allowed_at"] = time.time() + wait_s
             logger.warning("Gemini quota/rate limit. Retrying this frame in %.1fs", wait_s)
             time.sleep(wait_s)
-            semantic_result = semantic_pipeline.run(preprocessed_image)
+            semantic_result = semantic_pipeline.run(pipeline_image_path)
             payload = semantic_result.get("vision_output", {})
             payload = _finalize_elements_with_dxdy(payload, img_w, img_h)
             semantic_error = str(semantic_result.get("vlm_error_type", "")).strip().lower()

@@ -4,10 +4,7 @@
 import asyncio
 import json
 import os
-import subprocess
-import sys
 import uuid
-from pathlib import Path
 from typing import Any, Dict
 import time
 
@@ -37,52 +34,7 @@ app = FastAPI(title="ScreenPilot Backend", version="0.1")
 
 # Delay before starting an agent run after receiving a task.
 AGENT_START_DELAY_SECONDS = 10
-
-# ------------------------------------
-# Auto-start HID server if not running
-# ------------------------------------
-HID_SERVER_DIR = Path(__file__).resolve().parent.parent / "hid" / "api-server"
-HID_HEALTH_URL = "http://localhost:3015/health"
 HID_STATUS_URL = "http://localhost:3015/hid/status"
-
-def _ensure_hid_server() -> None:
-    """Start the HID API server if it is not already reachable."""
-    import urllib.request
-    try:
-        urllib.request.urlopen(HID_HEALTH_URL, timeout=2)
-        logger.info("HID API server already running on port 3015.")
-        return
-    except Exception:
-        pass  # not running — start it
-
-    server_js = HID_SERVER_DIR / "dist" / "server.js"
-    if not server_js.exists():
-        logger.warning("HID server dist not found at %s — skipping auto-start.", server_js)
-        return
-
-    try:
-        if sys.platform == "win32":
-            # Detached from parent so it survives backend restarts
-            subprocess.Popen(
-                ["node", "dist/server.js"],
-                cwd=str(HID_SERVER_DIR),
-                creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        else:
-            subprocess.Popen(
-                ["node", "dist/server.js"],
-                cwd=str(HID_SERVER_DIR),
-                start_new_session=True,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        logger.info("HID API server launched (port 3015).")
-    except Exception as exc:
-        logger.warning("Could not auto-start HID server: %s", exc)
-
-_ensure_hid_server()
 
 # ------------------------------------
 # CORS Middleware
@@ -118,7 +70,7 @@ def read_root():
 @app.get("/agent/status")
 async def agent_status():
     """
-    Report HID API availability and whether fallback is active.
+    Report HID API availability.
     """
     status = {
         "hid_api_reachable": False,

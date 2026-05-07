@@ -162,7 +162,8 @@ class GeminiVLM(BaseVLM):
             "Do not output markdown. Do not output explanations. "
             "Do not use double quotes inside label or description text. "
             "Keep descriptions short, factual, and free of line breaks. "
-            "The input image is already a crop of the visible screen. Detect every visible UI element inside that crop. "
+            "The input image is the exact full desktop screenshot. Do not assume a crop. "
+            "Detect every visible UI element in the full screenshot. "
             "including buttons, inputs, links, tabs, menus, checkboxes, radios, dropdowns, toggles, "
             "panes, taskbar items, toolbar controls, browser chrome, window chrome, sidebar entries, "
             "headings, labels, icons, status bars, and meaningful text. "
@@ -171,14 +172,12 @@ class GeminiVLM(BaseVLM):
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
-            "All element coordinates must be relative to the crop/screen, not the full camera frame. "
-            "You may return bounding boxes either as absolute pixel coordinates (integers) or as normalized fractions in [0,1]. "
-            "If using normalized fractions, they are relative to the crop width/height. "
+            "All element coordinates must be absolute pixel coordinates relative to the full screenshot. "
+            "Do not return normalized fractions. "
             "elements must be an array of objects with fields: "
             "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
-            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element, "
-            "using screen-local pixels, or a normalized [x_min, y_min, x_max, y_max] in [0,1]. "
+            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element using screenshot pixels. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
@@ -194,19 +193,19 @@ class GeminiVLM(BaseVLM):
             "You are a screen understanding model for desktop automation. Output ONLY valid JSON. "
             "Do not use double quotes inside label or description text. "
             "Keep descriptions short, factual, and free of line breaks. "
-            "The input image is already a crop of the visible screen. Detect any visible UI structure inside that crop, including tabs, panes, menus, "
+            "The input image is the exact full desktop screenshot. Do not assume a crop. Detect any visible UI structure in the screenshot, including tabs, panes, menus, "
             "buttons, inputs, taskbar items, terminal controls, status bars, labels, icons, browser chrome, "
             "window chrome, sidebars, headings, and text. "
             "Prefer exhaustive reporting. Return many elements if the screen is dense. "
             "Return this exact root shape with required fields: "
             "{image, image_size, coordinate_system, element_count, elements}. "
             "coordinate_system must be 'pixel'. "
-            "All element coordinates must be relative to the crop/screen, not the full camera frame. "
+            "All element coordinates must be absolute pixel coordinates relative to the full screenshot. "
+            "Do not return normalized fractions. "
             "elements must be an array of objects with fields: "
             "id, type, label, description, state, dx, dy, confidence, source, bbox. "
             "confidence must be numeric in [0,1]. "
-            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element, "
-            "using screen-local pixels. "
+            "bbox must be a tight pixel box [x_min, y_min, x_max, y_max] around the element using screenshot pixels. "
             f"dx must be integer in [0,{image_width}]. "
             f"dy must be integer in [0,{image_height}]. "
             "source must be 'gemini_vlm'. "
@@ -238,6 +237,15 @@ class GeminiVLM(BaseVLM):
         req_w, req_h = original_w, original_h
         scale_x = 1.0
         scale_y = 1.0
+        # If running in screenshot mode, prefer sending the full crop at native
+        # resolution so returned coordinates map directly to screen pixels.
+        try:
+            if GeminiVLM._is_screenshot_mode():
+                # disable downscaling
+                max_side = max(original_w, original_h)
+        except Exception:
+            pass
+
         longest = max(original_w, original_h)
         if longest > max_side:
             scale = float(max_side) / float(longest)
@@ -938,6 +946,13 @@ class GeminiVLM(BaseVLM):
         scale_x = 1.0
         scale_y = 1.0
 
+        # When in screenshot mode, avoid downscaling so coordinates remain exact
+        try:
+            if GeminiVLM._is_screenshot_mode():
+                max_side = max(original_w, original_h)
+        except Exception:
+            pass
+
         longest = max(original_w, original_h)
         if longest > max_side:
             scale = float(max_side) / float(longest)
@@ -1012,10 +1027,10 @@ class GeminiVLM(BaseVLM):
         region_prompt = (
             self._system_prompt(request_width, request_height)
             + "\n\n"
+            "This fallback path is only for legacy non-screenshot mode. "
             f"You are analyzing the {region_name} crop of a larger screen.\n"
             f"The crop corresponds to full-image coordinates x={x1}..{x2} and y={y1}..{y2}.\n"
             "Report dx and dy in crop-local pixels.\n"
-            "You may return bbox either as pixel coordinates or normalized fractions in [0,1].\n"
             "Return every visible UI element in this crop, including text, labels, icons, controls, tabs, "
             "browser chrome, window chrome, sidebars, toolbars, headings, and panels.\n"
             "Prefer exhaustive recall over minimalism."
@@ -1218,7 +1233,7 @@ class GeminiVLM(BaseVLM):
             screen_height=screen_crop.shape[0],
         )
 
-        if self._is_screenshot_mode() and normalized.get("element_count", 0) < 12:
+        if not self._is_screenshot_mode() and normalized.get("element_count", 0) < 12:
             region_elements: List[Dict[str, Any]] = []
             for region_name, x1, y1, x2, y2 in self._region_specs(image_width, image_height):
                 region_elements.extend(

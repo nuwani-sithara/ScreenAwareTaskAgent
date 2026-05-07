@@ -6,53 +6,63 @@ Prompt templates for VLM-based UI detection and analysis.
 from typing import Optional
 
 UI_DISCOVERY_PROMPT = """
-You are a high-recall, high-precision UI parser for automation.
+You are a strict UI parser for automation. Your job: return a complete list of
+every visible UI element in the screenshot as a single JSON object and nothing
+else. Follow the rules exactly.
 
-Goal:
-Detect every visible UI element on the screen, not just the obvious ones:
-buttons, input fields, labels, static text, table cells, tabs, menus, icons,
-cards, list items, chips, links, toggles, checkboxes, radios, dialogs, images,
-browser chrome, window chrome, status bars, sidebars, toolbars, headings, and
-other meaningful on-screen controls or text.
+Required rules (read carefully):
+1) Return ONLY valid JSON with a single top-level object. No prose, no
+   markdown, no commentary, no extra keys outside the schema shown below.
+2) Output must include an "elements" array. Each element must contain the
+   fields: "id", "type", "label", "description", "state", "bbox",
+   "confidence".
+3) Use bbox = [x_min, y_min, x_max, y_max] and PROVIDE ABSOLUTE PIXEL
+   COORDINATES from the exact screenshot. Do NOT normalize to 0..1.
+   Ensure x_min < x_max and y_min < y_max.
+4) Labels and descriptions must never be empty. If no visible text exists,
+   generate a concise functional label (examples: "menu icon", "submit button",
+   "username input"). Descriptions should be one concrete sentence about what
+   the element shows or what it does (short, not generic).
+5) Use the allowed `type` values only: button, input_field, text, label, icon,
+   dropdown, checkbox, radio, menu, tab, modal, dialog, link, card, list_item,
+   image, unknown. Prefer a specific type; use "unknown" only as a last resort.
+6) `state` must be one of: enabled, disabled, focused, checked, unchecked,
+   normal. Use `normal` when unsure.
+7) `confidence` is a float between 0.0 and 1.0 representing your certainty.
+8) Keep bounding boxes tight: each bbox should tightly enclose the visible
+   control (do not include large whitespace or unrelated nearby elements).
+9) If an element is partially off-screen, clip the bbox to the visible area.
+10) Do NOT invent interactions not visible in the screenshot (no hover hints,
+    no tooltips unless visible).
 
-Hard constraints:
-1. Return ONLY a valid JSON object (no markdown, no commentary).
-2. Detect only what is visible in the screenshot.
-3. Bounding boxes must be tight and axis-aligned around each individual element.
-4. Use bbox = [x_min, y_min, x_max, y_max], with x_min < x_max and y_min < y_max.
-5. Coordinates can be normalized (0-1) or pixels; stay consistent.
-6. Never leave label empty: if no visible text, create a short functional label
-   like "search icon", "profile avatar", "submit button", "data row 3".
-7. Never leave description empty: one concrete sentence about what the element
-   shows or does in context.
-8. Use type "unknown" only as last resort.
-9. Keep confidence realistic (0.0-1.0).
-10. Prefer recall over minimalism. If the screen is complex, return many small
-    elements instead of collapsing them into only a few large ones.
-
-Allowed types:
-button, input_field, text, label, icon, dropdown, checkbox, radio, menu, tab,
-modal, dialog, link, card, list_item, image, unknown
-
-Output schema:
+Output schema (exact):
 {
   "elements": [
     {
-      "id": "element_1",
+      "id": "elem_0",
       "type": "button",
       "label": "Save",
-      "description": "Primary action button to persist the current form values.",
+      "description": "Primary action saving the form.",
       "state": "enabled",
-      "bbox": [0.35, 0.70, 0.65, 0.85],
+   "bbox": [680, 720, 1230, 820],
       "confidence": 0.95
     }
-  ],
-  "page_structure": {
-    "title": "short title",
-    "layout": "brief layout description",
-    "density": "sparse|normal|dense"
-  }
+  ]
 }
+
+Small concrete example (use this style exactly):
+{
+  "elements": [
+    {"id":"username_input","type":"input_field","label":"Username","description":"Text input where the user types their username.","state":"normal","bbox":[520,410,1120,470],"confidence":0.96},
+    {"id":"password_input","type":"input_field","label":"Password","description":"Text input for the user password (masked).","state":"normal","bbox":[520,495,1120,555],"confidence":0.95},
+    {"id":"login_button","type":"button","label":"LOGIN","description":"Primary action to submit credentials and sign in.","state":"enabled","bbox":[540,610,1110,690],"confidence":0.98}
+  ]
+}
+
+If the screenshot contains many elements, return them all. Keep labels short
+(2-6 words) and descriptions concise (one sentence). Do not return any other
+top-level keys or additional metadata. Follow the schema and normalization
+rules; incorrect formats will be rejected.
 """
 
 ELEMENT_REFINEMENT_PROMPT = """

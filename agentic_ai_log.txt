@@ -88772,3 +88772,200 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2026-05-07 16:15:00,173 | INFO | === Agentic AI System Started ===
 2026-05-07 16:15:08,916 | INFO | === Agentic AI System Started ===
 2026-05-07 16:15:09,343 | INFO | HID API server already running on port 3015.
+2026-05-07 17:02:53,741 | INFO | === Agentic AI System Started ===
+2026-05-07 17:02:57,168 | INFO | === Agentic AI System Started ===
+2026-05-07 17:02:57,192 | INFO | HID API server already running on port 3015.
+2026-05-07 17:03:38,674 | INFO | \U0001f680 V2 run started: dcd13634-a9e2-4205-8b0a-3054d81cd13d  task=login to the system using username = "admin" and password = 1234
+2026-05-07 17:03:49,066 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 17:04:32,178 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:05:39,477 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 17:06:17,978 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:06:22,591 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:06:26,631 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:06:26,633 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 17:06:27,875 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:06:27,878 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 17:07:08,584 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:07:31,133 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 17:08:22,612 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:08:26,344 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:08:30,055 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:08:30,057 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 17:08:31,283 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:08:31,285 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 17:09:10,816 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:09:31,765 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 17:10:08,826 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:10:33,862 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:10:36,022 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:10:36,023 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 17:10:37,252 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:10:37,253 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 17:11:15,852 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:11:19,988 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 17:18:49,267 | INFO | === Agentic AI System Started ===
+2026-05-07 17:18:52,814 | INFO | === Agentic AI System Started ===
+2026-05-07 17:18:56,842 | WARNING | HID server dist not found at E:\sliit-project\ScreenAwareTaskAgent\hid\api-server\dist\server.js — skipping auto-start.
+2026-05-07 17:31:10,284 | INFO | \U0001f680 V2 run started: dc7b6ed3-efb1-4587-806c-2b5f60c262b8  task=click on the WhatsApp tab
+2026-05-07 17:31:20,753 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 17:32:11,288 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:32:35,798 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 17:33:13,817 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:33:16,876 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:33:22,470 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:33:22,473 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 17:33:23,711 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:33:23,714 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 17:34:04,241 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:34:24,588 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 17:35:08,678 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:35:12,428 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:35:17,630 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:35:17,631 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 17:35:18,864 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 17:35:18,865 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 17:35:55,299 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:35:58,487 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 17:36:36,763 | INFO | HTTP Request: POST http://localhost:8001/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 17:37:05,418 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:37:42,037 | ERROR | Screen capture failed: 
+2026-05-07 17:39:40,533 | INFO | === Agentic AI System Started ===
+2026-05-07 17:39:43,906 | INFO | === Agentic AI System Started ===
+2026-05-07 17:39:43,916 | INFO | HID API server already running on port 3015.
+2026-05-07 17:40:03,642 | INFO | \U0001f680 V2 run started: f903f21c-6e97-4fa7-9f33-e1465b434cab  task=click on the WhatsApp tab
+2026-05-07 17:40:14,162 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 17:40:17,130 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:40:24,740 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 17:40:27,576 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:40:39,174 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:40:43,538 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:40:56,272 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:41:00,604 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:41:11,131 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:41:13,911 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:41:19,481 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 17:42:55,464 | INFO | \U0001f680 V2 run started: 1f8f9a8a-7ef7-4a84-95bc-d75f77dd6ba9  task=click on the WhatsApp tab
+2026-05-07 17:43:05,885 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 17:43:08,669 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:43:56,593 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 17:43:59,285 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:44:17,496 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:44:21,676 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:44:31,817 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:44:35,940 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:44:59,746 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 17:45:02,435 | ERROR | Screen capture failed: All connection attempts failed
+2026-05-07 17:45:08,440 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 18:14:13,842 | INFO | === Agentic AI System Started ===
+2026-05-07 18:14:28,914 | INFO | === Agentic AI System Started ===
+2026-05-07 18:14:28,940 | INFO | HID API server already running on port 3015.
+2026-05-07 18:16:04,564 | INFO | \U0001f680 V2 run started: de9f71d3-bd5c-468d-8733-ea8f7c7181c8  task=Click on the WhatsApp tab and navigate to the WhatsApp
+2026-05-07 18:16:15,522 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 18:18:16,814 | ERROR | Screen capture failed: 
+2026-05-07 18:18:30,475 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 18:19:01,403 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:19:04,981 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:19:07,578 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:19:07,580 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 18:19:08,855 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:19:08,863 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 18:21:11,697 | ERROR | Screen capture failed: 
+2026-05-07 18:21:15,699 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 18:23:17,633 | ERROR | Screen capture failed: 
+2026-05-07 18:23:38,855 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:24:46,845 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:25:41,105 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:25:46,447 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:25:46,449 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 18:25:47,673 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:25:47,674 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 18:27:14,038 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:29:14,687 | ERROR | Step evaluation error: 
+2026-05-07 18:29:16,053 | INFO | \U0001f680 V2 run started: 352f7971-b386-400b-b509-8d0fc5ab5d13  task=go to the WhatsApp tab
+2026-05-07 18:29:26,609 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 18:31:15,436 | ERROR | Screen capture failed: 
+2026-05-07 18:31:28,023 | ERROR | Screen capture failed: 
+2026-05-07 18:32:16,781 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 18:33:17,040 | ERROR | Final report generation failed: 
+2026-05-07 18:34:17,467 | ERROR | Screen capture failed: 
+2026-05-07 18:34:31,014 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:36:33,315 | ERROR | Screen capture failed: 
+2026-05-07 18:36:44,772 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:38:47,202 | ERROR | Screen capture failed: 
+2026-05-07 18:39:02,845 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:41:03,239 | ERROR | Screen capture failed: 
+2026-05-07 18:43:03,635 | ERROR | Final report generation failed: 
+2026-05-07 18:43:56,104 | INFO | === Agentic AI System Started ===
+2026-05-07 18:43:58,924 | INFO | === Agentic AI System Started ===
+2026-05-07 18:43:58,943 | INFO | HID API server already running on port 3015.
+2026-05-07 18:52:06,142 | INFO | === Agentic AI System Started ===
+2026-05-07 18:52:08,939 | INFO | === Agentic AI System Started ===
+2026-05-07 18:52:08,944 | INFO | HID API server already running on port 3015.
+2026-05-07 18:53:58,459 | INFO | \U0001f680 V2 run started: 9cbd4182-b748-4dfe-8628-f9dc31c19e29  task=Click on the "WhatsApp" tab
+2026-05-07 18:54:09,586 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 18:54:59,848 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:55:13,091 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 18:55:49,283 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:55:53,534 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:55:55,038 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:55:55,040 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 18:55:56,258 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:55:56,265 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 18:57:03,006 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:57:10,008 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 18:58:12,595 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:58:17,175 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 18:58:20,202 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:58:20,206 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 18:58:21,471 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 18:58:21,491 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 18:58:59,536 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 18:59:11,132 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 18:59:59,256 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 19:00:05,187 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 19:14:26,149 | INFO | === Agentic AI System Started ===
+2026-05-07 19:14:29,007 | INFO | === Agentic AI System Started ===
+2026-05-07 19:16:41,664 | INFO | === Agentic AI System Started ===
+2026-05-07 19:16:44,595 | INFO | === Agentic AI System Started ===
+2026-05-07 19:28:30,037 | INFO | === Agentic AI System Started ===
+2026-05-07 19:28:32,915 | INFO | === Agentic AI System Started ===
+2026-05-07 19:29:23,887 | INFO | \U0001f680 V2 run started: a74492ed-1b3e-4d2b-aafe-324903ab9728  task=Click on the "WhatsApp" tab
+2026-05-07 19:29:34,776 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 19:30:23,368 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 19:31:21,813 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 19:33:22,915 | ERROR | Screen capture failed: 
+2026-05-07 19:35:00,060 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 19:35:01,170 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 19:35:01,174 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 19:35:01,908 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 19:35:01,916 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 19:35:54,764 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 19:36:00,612 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 19:36:45,046 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 19:36:49,272 | INFO | HTTP Request: POST http://localhost:8002/llm/final_report "HTTP/1.1 200 OK"
+2026-05-07 19:49:21,240 | INFO | \U0001f680 V2 run started: 8e1d0c5b-6231-4957-819a-aa09f70ce5ed  task=go to the "VINCI PVT LTD" tab and click on the "Products" and wait until product
+2026-05-07 19:49:32,364 | INFO | HTTP Request: GET http://localhost:3015/hid/status "HTTP/1.1 200 OK"
+2026-05-07 19:49:55,773 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 19:50:45,497 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_todos "HTTP/1.1 200 OK"
+2026-05-07 19:52:15,348 | INFO | HTTP Request: POST http://localhost:8003/vision/capture?camera_index=0&provider=gemini&use_current_session=false "HTTP/1.1 200 OK"
+2026-05-07 19:52:19,116 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 19:52:20,638 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 19:52:20,643 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 19:52:21,483 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 19:52:21,507 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 19:54:24,337 | ERROR | Screen capture failed: 
+2026-05-07 19:54:30,926 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 19:56:33,467 | ERROR | Screen capture failed: 
+2026-05-07 19:56:47,107 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 19:56:48,608 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 19:56:48,611 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 19:56:49,471 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 19:56:49,475 | INFO | HID [2/2] mouse_click \u2192 200
+2026-05-07 19:58:52,165 | ERROR | Screen capture failed: 
+2026-05-07 19:58:59,468 | INFO | HTTP Request: POST http://localhost:8002/llm/evaluate_step "HTTP/1.1 200 OK"
+2026-05-07 20:01:01,370 | ERROR | Screen capture failed: 
+2026-05-07 20:01:06,221 | INFO | HTTP Request: POST http://localhost:8002/llm/plan_step_hid "HTTP/1.1 200 OK"
+2026-05-07 20:01:06,826 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 20:01:06,827 | INFO | HID [1/2] mouse_move \u2192 200
+2026-05-07 20:01:07,605 | INFO | HTTP Request: POST http://localhost:3015/hid/command "HTTP/1.1 200 OK"
+2026-05-07 20:01:07,605 | INFO | HID [2/2] mouse_click \u2192 200

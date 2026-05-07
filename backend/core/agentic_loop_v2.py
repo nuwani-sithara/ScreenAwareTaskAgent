@@ -6,8 +6,8 @@ Loop flow (mirrors the design diagram):
   2.  LLM  → todo list  (screen + task + system prompt)
   3.  For each step in todo list:
         a. Capture current screen
-        b. LLM  → HID commands  (screen + todo + step + task)
-        c. Execute HID commands via HID API
+        b. LLM  → action commands  (screen + todo + step + task)
+        c. Execute commands via the HID API server
         d. Capture screen *after* execution
         e. LLM  → evaluate  (new screen + step + task + todo)
         f. Branch:
@@ -32,6 +32,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import httpx
+
+from backend.core.runtime_env import load_runtime_env
+
+load_runtime_env()
 
 logger = logging.getLogger(__name__)
 
@@ -219,6 +223,7 @@ if VISION_MODE in {"vision2", "vision_2", "v2"}:
     VISION_BASE_URL = VISION2_BASE_URL
 LLM_BASE_URL = "http://localhost:8002"
 HID_API_URL = "http://localhost:3015/hid/command"
+HID_STATUS_URL = "http://localhost:3015/hid/status"
 
 # ---------------------------------------------------------------------------
 # Tunables
@@ -236,7 +241,7 @@ _CURSOR_RESET_MAGNITUDE = -5000
 
 
 # ---------------------------------------------------------------------------
-# HID key name → USB HID keycode lookup
+# Key translation lookup for planner compatibility.
 # ---------------------------------------------------------------------------
 _KEY_NAME_TO_HID: dict = {
     # Special keys that the Gemini planner emits as strings
@@ -300,10 +305,19 @@ def _screen_fingerprint(screen_data: dict) -> str:
     import hashlib
     elements = []
     if isinstance(screen_data, dict):
-        elems = (
-            screen_data.get("elements")
-            or screen_data.get("vision_data", {}).get("elements", [])
-        )
+        elems = screen_data.get("elements")
+        if not elems:
+            vision_data = screen_data.get("vision_data")
+            if isinstance(vision_data, dict):
+                elems = vision_data.get("elements", [])
+        if not elems:
+            session_data = screen_data.get("session_data")
+            if isinstance(session_data, dict):
+                screens = session_data.get("screens", [])
+                if screens:
+                    latest = screens[-1]
+                    if isinstance(latest, dict):
+                        elems = latest.get("elements", [])
         if isinstance(elems, list):
             for e in elems[:30]:   # cap to 30 for speed
                 if isinstance(e, dict):
@@ -314,6 +328,31 @@ def _screen_fingerprint(screen_data: dict) -> str:
                     )
     raw = ";".join(sorted(elements))
     return hashlib.md5(raw.encode(), usedforsecurity=False).hexdigest()[:12]
+
+
+def _load_final_json_from_response(resp: dict) -> dict:
+    if not isinstance(resp, dict):
+        return resp
+
+    final_json_path = resp.get("final_json_path")
+    if isinstance(final_json_path, str) and final_json_path:
+        try:
+            path = Path(final_json_path)
+            if path.exists():
+                with path.open("r", encoding="utf-8") as f:
+                    return json.load(f)
+        except Exception as exc:
+            logger.warning("Could not load final_json_path %s: %s", final_json_path, exc)
+
+    vision_data = resp.get("vision_data")
+    if isinstance(vision_data, dict) and vision_data:
+        return vision_data
+
+    vision_output = resp.get("vision_output")
+    if isinstance(vision_output, dict) and vision_output:
+        return vision_output
+
+    return resp
 
 
 def _validate_hid_commands(commands: list) -> tuple[list, list]:
@@ -421,7 +460,10 @@ async def _capture_screen() -> dict:
                 },
             )
             resp.raise_for_status()
-            return resp.json()
+            data = resp.json()
+            if isinstance(data, dict) and data.get("status") == "completed":
+                return _load_final_json_from_response(data)
+            return data
         except Exception as exc:
             logger.error("Screen capture failed: %s", exc)
             return {"elements": [], "error": str(exc)}
@@ -503,14 +545,7 @@ async def _generate_final_report(
 # HID helpers
 # =============================================================================
 
-HID_STATUS_URL = "http://localhost:3015/hid/status"
-
-
 async def _check_hid_health() -> dict:
-    """
-    Returns {"ok": True} if the HID server is reachable.
-    Includes a warning when the device is offline but fallback is available.
-    """
     async with httpx.AsyncClient(timeout=5.0) as client:
         try:
             resp = await client.get(HID_STATUS_URL)
@@ -518,47 +553,20 @@ async def _check_hid_health() -> dict:
             if not data.get("connected"):
                 return {
                     "ok": True,
-                    "warning": (
-                        "HID device not connected. "
-                        "Fallback actuation is active while the HID reconnects."
-                    ),
+                    "warning": "HID server reachable but device not connected.",
                 }
             return {"ok": True, "warning": ""}
         except Exception as exc:
             return {
                 "ok": False,
-                "reason": (
-                    f"HID API server is not running on port 3015 ({exc}). "
-                    "Start it with: cd hid/api-server && node dist/server.js"
-                ),
+                "reason": f"HID API server is not running on port 3015 ({exc}).",
             }
 
 
-# =============================================================================
-# HID execution
-# =============================================================================
-
 async def _execute_hid_commands(commands: List[dict]) -> dict:
-    """
-    Execute a sequence of HID commands with small human-paced delays between
-    each command.
-
-    The LLM generates mouse_move with dx/dy as ABSOLUTE screen pixel coordinates
-    (e.g. dx=323, dy=247 means "click at screen position (323, 247)").  The HID
-    device, however, only understands *relative* movement reports.  We reconcile
-    this by:
-      1. Sending a large negative move to push the cursor to the screen's top-left
-         corner (0, 0).
-      2. Tracking a virtual cursor position starting at (0, 0).
-      3. For every mouse_move command, computing the relative delta from the
-         tracked position before forwarding to the HID API.
-
-    Returns {"status": "success"} or {"status": "failed", ...}.
-    """
     async with httpx.AsyncClient(timeout=30.0) as client:
         for idx, cmd in enumerate(commands):
             cmd_type = cmd.get("cmd")
-
             payload = {
                 "type": cmd_type,
                 "payload": {k: v for k, v in cmd.items() if k not in ("cmd", "meta")},
@@ -567,9 +575,7 @@ async def _execute_hid_commands(commands: List[dict]) -> dict:
             try:
                 resp = await client.post(HID_API_URL, json=payload)
                 resp.raise_for_status()
-                logger.info(
-                    "HID [%d/%d] %s → %d", idx + 1, len(commands), cmd_type, resp.status_code
-                )
+                logger.info("HID [%d/%d] %s → %d", idx + 1, len(commands), cmd_type, resp.status_code)
             except Exception as exc:
                 logger.error("HID command %d failed: %s", idx + 1, exc)
                 return {"status": "failed", "error": str(exc), "failed_at": idx}
@@ -647,7 +653,7 @@ async def run_agentic_loop_v2(
                 step["_coord_fix_tried"] = True
                 exec_result = await _execute_hid_commands(click_cmds)
                 if exec_result.get("status") == "failed":
-                    logger.warning("Coordinate-fix click failed: %s", exec_result.get("error"))
+                    logger.warning("Coordinate-fix click failed: %s", exec_result.get("reason") or exec_result.get("error"))
                     return evaluation
 
                 # Wait briefly for UI reaction, capture and re-evaluate
@@ -675,7 +681,7 @@ async def run_agentic_loop_v2(
             )
             await asyncio.sleep(START_DELAY_SECONDS)
 
-        # ── Phase 0: Pre-flight HID health check ────────────────────────────
+        # Pre-flight HID health check
         hid_health = await _check_hid_health()
         if not hid_health["ok"]:
             await emit({"type": "fatal_error", "message": hid_health["reason"]})
