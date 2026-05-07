@@ -43,5 +43,5 @@ typing_extensions==4.10.0
 # Optional OCR fallback (install paddleocr and its dependencies per your platform)
 # NOTE: PaddleOCR requires a compatible paddlepaddle installation. See https://www.paddlepaddle.org for install instructions
 paddleocr==2.6.1
-# Gemini Vision API
-google-generativeai==0.8.4
+# OpenAI Vision API
+openai>=1.0.0

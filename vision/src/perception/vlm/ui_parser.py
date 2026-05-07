@@ -352,7 +352,43 @@ class UIParser:
             else:
                 raise ValueError("Unexpected JSON root type")
             elements = []
-            
+
+            # Heuristic: some VLMs return absolute pixel coords but relative to
+            # an internal/resized canvas (e.g. 1024px wide) instead of the
+            # original image. If that's the case we detect a global bbox max
+            # smaller than the real image size and rescale the coordinates
+            # before normalization so boxes map correctly to the original.
+            scale_x = 1.0
+            scale_y = 1.0
+            try:
+                if image_width and image_height and isinstance(elements_data, list) and elements_data:
+                    max_x = 0.0
+                    max_y = 0.0
+                    for e in elements_data:
+                        b = e.get("bbox")
+                        if isinstance(b, (list, tuple)) and len(b) == 4:
+                            try:
+                                x1, y1, x2, y2 = float(b[0]), float(b[1]), float(b[2]), float(b[3])
+                                max_x = max(max_x, x1, x2)
+                                max_y = max(max_y, y1, y2)
+                            except Exception:
+                                continue
+                    # If the largest reported coordinate is noticeably smaller
+                    # than the actual image dimension, assume coords were given
+                    # on a resized canvas and compute a scale factor.
+                    if max_x > 1.0 and max_y > 1.0:
+                        if max_x < float(image_width) * 0.95 and (float(image_width) / max_x) > 1.2:
+                            scale_x = float(image_width) / max_x
+                        if max_y < float(image_height) * 0.95 and (float(image_height) / max_y) > 1.2:
+                            scale_y = float(image_height) / max_y
+                        # If scales are wildly different, fall back to uniform scale
+                        if scale_x > 1.0 and scale_y > 1.0:
+                            if abs(scale_x - scale_y) / max(scale_x, scale_y) < 0.35:
+                                scale = (scale_x + scale_y) / 2.0
+                                scale_x = scale_y = scale
+            except Exception:
+                scale_x = scale_y = 1.0
+
             for elem_data in elements_data:
                 # Validate
                 is_valid, error = self.validate_element(elem_data)
@@ -363,9 +399,20 @@ class UIParser:
                 # Normalize type
                 elem_type = self.normalize_element_type(elem_data.get("type", "unknown"))
                 
-                # Normalize bbox
+                # Normalize bbox (apply inferred scale if VLM returned coords on
+                # a resized canvas)
+                raw_bbox = elem_data.get("bbox", [0, 0, 1, 1])
+                try:
+                    if isinstance(raw_bbox, (list, tuple)) and len(raw_bbox) == 4 and (scale_x != 1.0 or scale_y != 1.0):
+                        # Scale x coords by scale_x and y coords by scale_y
+                        rb = [float(raw_bbox[0]) * scale_x, float(raw_bbox[1]) * scale_y, float(raw_bbox[2]) * scale_x, float(raw_bbox[3]) * scale_y]
+                    else:
+                        rb = raw_bbox
+                except Exception:
+                    rb = raw_bbox
+
                 bbox = self.normalize_bbox(
-                    elem_data.get("bbox", [0, 0, 1, 1]),
+                    rb,
                     image_width,
                     image_height
                 )

@@ -14,34 +14,6 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
     if image is None:
         raise ValueError(f"Could not load image: {image_path}")
 
-    screen_bbox = None
-    if isinstance(payload, dict):
-        root_bbox = payload.get("screen_bbox")
-        if isinstance(root_bbox, (list, tuple)) and len(root_bbox) == 4:
-            try:
-                screen_bbox = tuple(int(round(float(v))) for v in root_bbox)
-            except Exception:
-                screen_bbox = None
-
-    if screen_bbox is not None:
-        cv2.rectangle(
-            image,
-            (screen_bbox[0], screen_bbox[1]),
-            (screen_bbox[2], screen_bbox[3]),
-            (0, 0, 255),
-            2,
-        )
-        cv2.putText(
-            image,
-            "screen",
-            (max(0, screen_bbox[0]), max(15, screen_bbox[1] - 8)),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.55,
-            (0, 0, 255),
-            1,
-            cv2.LINE_AA,
-        )
-
     elements = payload.get("elements", []) if isinstance(payload, dict) else []
     occupied_labels = []
 
@@ -52,16 +24,13 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
         if not text:
             return
         (tw, th), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.45, 1)
-        pad_x = 4
-        pad_y = 3
+        pad_x, pad_y = 4, 3
         label_w = tw + pad_x * 2
         label_h = th + baseline + pad_y * 2
         x = max(0, min(image.shape[1] - label_w - 1, anchor_x))
         y = max(label_h, min(image.shape[0] - 1, anchor_y))
         rect = [x, y - label_h, x + label_w, y]
 
-        # If the preferred position collides with existing labels, step downward
-        # a few times to keep dense clusters readable.
         attempts = 0
         while attempts < 8 and any(_intersects(rect, existing) for existing in occupied_labels):
             y = min(image.shape[0] - 1, y + label_h + 2)
@@ -85,38 +54,45 @@ def generate_overlay(image_path: str, payload: Dict[str, Any], output_path: str 
         )
 
     for element in elements:
-        dx = int(element.get("dx", 0))
-        dy = int(element.get("dy", 0))
+        # frame_dx/frame_dy and frame_bbox are already absolute pixel coords
+        # produced by _finalize_elements_with_dxdy. Use them directly.
+        # Fall back to dx/dy only if frame_* fields are absent (legacy path).
+        frame_dx = element.get("frame_dx") or element.get("dx", 0)
+        frame_dy = element.get("frame_dy") or element.get("dy", 0)
+        try:
+            cx = int(round(float(frame_dx)))
+            cy = int(round(float(frame_dy)))
+        except Exception:
+            cx, cy = 0, 0
+
         label = str(element.get("label", "unknown"))
         elem_type = str(element.get("type", "unknown"))
         text = f"{elem_type}:{label}"[:80]
 
-        bbox = element.get("bbox")
-        if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
+        # Prefer frame_bbox (absolute pixels set by finalize), fall back to bbox.
+        # Never add screen_bbox offsets here — frame_bbox/frame_dx/frame_dy are
+        # already in absolute screen pixel space.
+        raw_bbox = element.get("frame_bbox") or element.get("bbox")
+        drew_box = False
+
+        if isinstance(raw_bbox, (list, tuple)) and len(raw_bbox) == 4:
             try:
-                x1 = int(round(float(bbox[0])))
-                y1 = int(round(float(bbox[1])))
-                x2 = int(round(float(bbox[2])))
-                y2 = int(round(float(bbox[3])))
-                if screen_bbox is not None:
-                    x1 += screen_bbox[0]
-                    y1 += screen_bbox[1]
-                    x2 += screen_bbox[0]
-                    y2 += screen_bbox[1]
-                    dx += screen_bbox[0]
-                    dy += screen_bbox[1]
+                x1, y1, x2, y2 = (int(round(float(v))) for v in raw_bbox)
+                img_h, img_w = image.shape[:2]
+                x1 = max(0, min(img_w - 1, x1))
+                y1 = max(0, min(img_h - 1, y1))
+                x2 = max(0, min(img_w, x2))
+                y2 = max(0, min(img_h, y2))
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
-                _draw_label(text, max(0, x1), max(15, y1 - 6), (0, 255, 0))
-                continue
+                cv2.circle(image, (cx, cy), 4, (0, 255, 0), thickness=-1)
+                _draw_label(text, x1, max(15, y1 - 6), (0, 255, 0))
+                drew_box = True
             except Exception:
                 pass
 
-        if screen_bbox is not None:
-            dx += screen_bbox[0]
-            dy += screen_bbox[1]
-        cv2.circle(image, (dx, dy), 4, (0, 255, 0), thickness=-1)
-        _draw_label(text, max(0, dx - 4), max(15, dy - 6), (0, 255, 0))
+        if not drew_box:
+            cv2.circle(image, (cx, cy), 4, (0, 255, 0), thickness=-1)
+            _draw_label(text, max(0, cx - 4), max(15, cy - 6), (0, 255, 0))
 
     out = Path(output_path)
     if out.parent != Path("."):

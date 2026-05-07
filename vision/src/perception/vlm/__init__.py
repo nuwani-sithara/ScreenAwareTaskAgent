@@ -1,6 +1,6 @@
 """VLM (Vision-Language Model) integration for UI detection."""
 
-from .vlm_client import VLMClient, GeminiVLMClient, get_vlm_client
+from .vlm_client import VLMClient, GeminiVLMClient, OpenAIVLMClient, get_vlm_client
 from .ui_parser import UIElement, UIAnalysisResult, UIParser
 from .prompt_templates import (
     get_ui_discovery_prompt,
@@ -12,6 +12,7 @@ from .prompt_templates import (
 __all__ = [
     "VLMClient",
     "GeminiVLMClient",
+    "OpenAIVLMClient",
     "get_vlm_client",
     "UIElement",
     "UIAnalysisResult",

@@ -434,7 +434,7 @@ def capture_once(
     vlm_batch_max_elements: int = 90,
     no_vlm: bool = False,
     use_current_session: bool = False,
-    provider: str = "gemini",
+    provider: str = "openai",
 ):
     """Single-shot desktop screenshot capture and pipeline execution."""
     effective_monitor = monitor_index if monitor_index is not None else camera_index

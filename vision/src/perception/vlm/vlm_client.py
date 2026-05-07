@@ -11,7 +11,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import cv2
 import numpy as np
+import requests
 
+from src.vision.config import OPENAI_API_KEY as VISION_OPENAI_API_KEY
 from .prompt_templates import get_ui_discovery_prompt
 from .ui_parser import UIAnalysisResult, UIElement, UIParser
 
@@ -415,7 +417,7 @@ class VLMClient(ABC):
                     elem.description = vlm_desc
                 elif elem.description in stale:
                     elem.description = ""
-                elem.raw_data["source"] = "gemini_enriched"
+                elem.raw_data["source"] = "vlm_enriched"
             if not elem.type or elem.type == "unknown":
                 elem.type = "text"
             elem.label = " ".join(str(elem.label or "").split()).strip()
@@ -592,8 +594,168 @@ class GeminiVLMClient(VLMClient):
         return data["elements"]
 
 
-def get_vlm_client(provider: str = "gemini", **kwargs) -> VLMClient:
+class OpenAIVLMClient(VLMClient):
+    """OpenAI Vision API client."""
+
+    def __init__(self, api_key: Optional[str] = None, model_name: str = "gpt-4.1"):
+        super().__init__(api_key or VISION_OPENAI_API_KEY or os.getenv("OPEN_API_KEY") or os.getenv("OPENAI_API_KEY"), model_name)
+        if not self.api_key:
+            raise ValueError("OPEN_API_KEY or OPENAI_API_KEY not set")
+
+    @staticmethod
+    def _image_to_data_url(image_bytes: bytes) -> str:
+        return "data:image/jpeg;base64," + base64.standard_b64encode(image_bytes).decode("ascii")
+
+    @staticmethod
+    def _extract_output_text(response_json: Dict[str, Any]) -> str:
+        output_text = response_json.get("output_text")
+        if isinstance(output_text, str) and output_text.strip():
+            return output_text.strip()
+
+        parts: List[str] = []
+        for item in response_json.get("output", []) or []:
+            if not isinstance(item, dict):
+                continue
+            if item.get("type") == "message":
+                for content in item.get("content", []) or []:
+                    if isinstance(content, dict) and content.get("type") in {"output_text", "text"}:
+                        text = content.get("text")
+                        if isinstance(text, str) and text.strip():
+                            parts.append(text.strip())
+            elif item.get("type") in {"output_text", "text"}:
+                text = item.get("text")
+                if isinstance(text, str) and text.strip():
+                    parts.append(text.strip())
+        return "\n".join(parts).strip()
+
+    @staticmethod
+    def _ensure_json_schema(schema: Dict[str, Any]) -> Dict[str, Any]:
+        def _walk(node: Any) -> Any:
+            if isinstance(node, dict):
+                new_node = dict(node)
+                if new_node.get("type") == "object":
+                    props = new_node.get("properties", {})
+                    if isinstance(props, dict):
+                        new_node["properties"] = {key: _walk(value) for key, value in props.items()}
+                        if "required" not in new_node:
+                            new_node["required"] = list(new_node["properties"].keys())
+                    new_node.setdefault("additionalProperties", False)
+                elif new_node.get("type") == "array" and "items" in new_node:
+                    new_node["items"] = _walk(new_node["items"])
+                return new_node
+            if isinstance(node, list):
+                return [_walk(item) for item in node]
+            return node
+
+        return _walk(schema)
+
+    def _openai_vision_call(
+        self,
+        image_path: str,
+        prompt: str,
+        timeout_seconds: float = 60.0,
+        response_schema: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        with open(image_path, "rb") as image_file:
+            image_bytes = image_file.read()
+
+        if isinstance(response_schema, dict):
+            text_format: Dict[str, Any] = {
+                "type": "json_schema",
+                "name": "ui_detection_batch",
+                "strict": True,
+                "schema": self._ensure_json_schema(response_schema),
+            }
+        else:
+            text_format = {"type": "json_object"}
+
+        body = {
+            "model": self.model_name,
+            "input": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_image",
+                            "image_url": self._image_to_data_url(image_bytes),
+                            "detail": "high",
+                        },
+                        {
+                            "type": "input_text",
+                            "text": prompt,
+                        },
+                    ],
+                }
+            ],
+            "text": {"format": text_format},
+            "temperature": 0,
+            "max_output_tokens": 4096,
+        }
+
+        response = requests.post(
+            "https://api.openai.com/v1/responses",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            json=body,
+            timeout=int(max(1.0, timeout_seconds)),
+        )
+        if response.status_code >= 400:
+            raise RuntimeError(f"OpenAI API error {response.status_code}: {response.text}")
+        response_json = response.json()
+        text = self._extract_output_text(response_json)
+        if not text:
+            raise RuntimeError("OpenAI response did not contain output text")
+        return text
+
+    def analyze_ui(self, image_path: str, prompt: Optional[str] = None, **kwargs) -> UIAnalysisResult:
+        prompt = prompt or get_ui_discovery_prompt()
+        try:
+            width, height = self.get_image_dimensions(image_path)
+            timeout_seconds = float(kwargs.get("timeout_seconds", 60.0))
+            response_text = self._openai_vision_call(image_path, prompt, timeout_seconds=timeout_seconds)
+            result = self.parser.parse_vlm_response(response_text, width, height)
+            if (not result.parse_successful or not result.elements) and "parse" in str(result.parse_error or "").lower():
+                retry_prompt = (
+                    get_ui_discovery_prompt()
+                    + "\n\nIMPORTANT: Return strict JSON only. Keep descriptions short and do not add prose."
+                )
+                retry_text = self._openai_vision_call(image_path, retry_prompt, timeout_seconds=timeout_seconds)
+                retry_result = self.parser.parse_vlm_response(retry_text, width, height)
+                if retry_result.elements:
+                    return retry_result
+                return retry_result
+            return result
+        except Exception as exc:
+            return UIAnalysisResult(elements=[], parse_successful=False, parse_error=f"OpenAI API error: {exc}")
+
+    def _do_batch_classify(self, image_path: str, prompt: str, timeout_seconds: float) -> Optional[List[Dict[str, Any]]]:
+        response_text = self._openai_vision_call(
+            image_path,
+            prompt,
+            timeout_seconds=timeout_seconds,
+            response_schema=BATCH_RESPONSE_SCHEMA,
+        )
+        data = self.parser.extract_json_from_response(response_text)
+        if not _validate_batch_response(data):
+            retry_prompt = prompt + "\n\nIMPORTANT: Return strict JSON only and do not truncate the elements list."
+            retry_text = self._openai_vision_call(
+                image_path,
+                retry_prompt,
+                timeout_seconds=timeout_seconds,
+                response_schema=BATCH_RESPONSE_SCHEMA,
+            )
+            data = self.parser.extract_json_from_response(retry_text)
+            if not _validate_batch_response(data):
+                raise ValueError("OpenAI batch response failed schema validation")
+        return data["elements"]
+
+
+def get_vlm_client(provider: str = "openai", **kwargs) -> VLMClient:
     provider = provider.lower().strip()
-    if provider != "gemini":
-        raise ValueError(f"Unsupported VLM provider: {provider!r}. Gemini is the only supported provider.")
-    return GeminiVLMClient(**kwargs)
+    if provider in {"openai", "gpt", "gpt4v"}:
+        return OpenAIVLMClient(**kwargs)
+    if provider == "gemini":
+        return GeminiVLMClient(**kwargs)
+    raise ValueError(f"Unsupported VLM provider: {provider!r}. Supported providers are 'openai' and 'gemini'.")

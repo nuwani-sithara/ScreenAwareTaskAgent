@@ -97,17 +97,17 @@ def _init_vlm_client(no_vlm: bool):
     if no_vlm:
         logger.info("VLM disabled via no_vlm flag")
         return None
-    logger.info("Initializing Gemini VLM client")
+    logger.info("Initializing OpenAI VLM client")
     return get_vlm_client()
 
 
 def _init_semantic_pipeline(no_vlm: bool) -> Optional["VisionPipeline"]:
-    """Initialize the Gemini semantic pipeline when requested."""
+    """Initialize the OpenAI semantic pipeline when requested."""
     if no_vlm:
         return None
     from src.vision.pipeline import VisionPipeline
 
-    logger.info("Initializing Gemini semantic pipeline")
+    logger.info("Initializing OpenAI semantic pipeline")
     return VisionPipeline()
 
 
@@ -677,6 +677,25 @@ def _finalize_elements_with_dxdy(
         screen_width = max(1, int(round(sx2 - sx1)))
         screen_height = max(1, int(round(sy2 - sy1)))
 
+    # ── helpers ──────────────────────────────────────────────────────────────
+    def _is_normalized(v: float) -> bool:
+        """True when a coordinate value is in 0-1 normalised space."""
+        return v <= 1.5  # safe threshold; pixel values are always >> 1.5
+
+    def _norm_to_px_x(v: float) -> float:
+        return sx1 + v * image_width
+
+    def _norm_to_px_y(v: float) -> float:
+        return sy1 + v * image_height
+
+    def _raw_to_px_x(v: float) -> float:
+        """Raw pixel value that may already be relative to screen origin."""
+        return sx1 + v
+
+    def _raw_to_px_y(v: float) -> float:
+        return sy1 + v
+    # ─────────────────────────────────────────────────────────────────────────
+
     finalized: List[Dict[str, Any]] = []
     for elem in elements:
         if not isinstance(elem, dict):
@@ -710,65 +729,57 @@ def _finalize_elements_with_dxdy(
         }:
             desc = ""
 
+        # ── bbox → frame_bbox ────────────────────────────────────────────────
+        frame_bbox = None
+        frame_dx = None
+        frame_dy = None
+
         bbox = elem.get("bbox")
         if isinstance(bbox, (list, tuple)) and len(bbox) == 4:
             try:
-                x1 = float(bbox[0])
-                y1 = float(bbox[1])
-                x2 = float(bbox[2])
-                y2 = float(bbox[3])
-                cx = (x1 + x2) * 0.5
-                cy = (y1 + y2) * 0.5
-                elem["dx"] = cx
-                elem["dy"] = cy
-                elem["frame_bbox"] = [
-                    max(0, min(image_width - 1, int(round(sx1 + x1)))),
-                    max(0, min(image_height - 1, int(round(sy1 + y1)))),
-                    max(0, min(image_width, int(round(sx1 + x2)))),
-                    max(0, min(image_height, int(round(sy1 + y2)))),
+                x1, y1, x2, y2 = (float(v) for v in bbox)
+
+                # Detect coordinate space: are these normalised (0-1) or raw pixels?
+                if _is_normalized(max(abs(x1), abs(y1), abs(x2), abs(y2))):
+                    # Normalised → multiply by full image dimensions
+                    px1 = int(round(sx1 + x1 * image_width))
+                    py1 = int(round(sy1 + y1 * image_height))
+                    px2 = int(round(sx1 + x2 * image_width))
+                    py2 = int(round(sy1 + y2 * image_height))
+                else:
+                    # Already pixel values (possibly relative to screen origin)
+                    px1 = int(round(sx1 + x1))
+                    py1 = int(round(sy1 + y1))
+                    px2 = int(round(sx1 + x2))
+                    py2 = int(round(sy1 + y2))
+
+                frame_bbox = [
+                    max(0, min(image_width - 1,  px1)),
+                    max(0, min(image_height - 1, py1)),
+                    max(0, min(image_width,       px2)),
+                    max(0, min(image_height,      py2)),
                 ]
-                elem["frame_dx"] = max(0, min(image_width - 1, int(round(sx1 + cx))))
-                elem["frame_dy"] = max(0, min(image_height - 1, int(round(sy1 + cy))))
+                frame_dx = max(0, min(image_width - 1,  (px1 + px2) // 2))
+                frame_dy = max(0, min(image_height - 1, (py1 + py2) // 2))
+
             except Exception:
                 pass
-        try:
-            raw_dx = float(elem.get("dx", 0)) if str(elem.get("dx", "")).strip() else 0.0
-        except Exception:
-            raw_dx = 0.0
-        try:
-            raw_dy = float(elem.get("dy", 0)) if str(elem.get("dy", "")).strip() else 0.0
-        except Exception:
-            raw_dy = 0.0
-            
-        screen_w_img = max(1e-9, sx2 - sx1)
-        screen_h_img = max(1e-9, sy2 - sy1)
-        
-        rel_x = (raw_dx - sx1) / screen_w_img
-        rel_y = (raw_dy - sy1) / screen_h_img
-        
-        dx = int(round(rel_x * screen_width))
-        dy = int(round(rel_y * screen_height))
-        dx = max(0, min(screen_width, dx))
-        dy = max(0, min(screen_height, dy))
+        # ─────────────────────────────────────────────────────────────────────
 
-        frame_dx = elem.get("frame_dx")
-        frame_dy = elem.get("frame_dy")
+        # Fallback: use existing frame_dx/frame_dy if bbox conversion failed
         if frame_dx is None:
-            frame_dx = max(0, min(image_width - 1, int(round(sx1 + dx))))
-        else:
             try:
-                frame_dx = int(round(float(frame_dx)))
+                raw_dx = float(elem.get("dx", 0) or 0)
+                raw_dy = float(elem.get("dy", 0) or 0)
+                if _is_normalized(max(abs(raw_dx), abs(raw_dy))):
+                    frame_dx = max(0, min(image_width - 1,  int(round(sx1 + raw_dx * image_width))))
+                    frame_dy = max(0, min(image_height - 1, int(round(sy1 + raw_dy * image_height))))
+                else:
+                    frame_dx = max(0, min(image_width - 1,  int(round(sx1 + raw_dx))))
+                    frame_dy = max(0, min(image_height - 1, int(round(sy1 + raw_dy))))
             except Exception:
-                frame_dx = max(0, min(image_width - 1, int(round(sx1 + dx))))
-        if frame_dy is None:
-            frame_dy = max(0, min(image_height - 1, int(round(sy1 + dy))))
-        else:
-            try:
-                frame_dy = int(round(float(frame_dy)))
-            except Exception:
-                frame_dy = max(0, min(image_height - 1, int(round(sy1 + dy))))
-
-        # no coordinate-based label fallback
+                frame_dx = image_width // 2
+                frame_dy = image_height // 2
 
         confidence = elem.get("confidence", 0.5)
         try:
@@ -778,29 +789,24 @@ def _finalize_elements_with_dxdy(
         confidence = max(0.0, min(1.0, confidence))
 
         final_source = str(elem.get("source", "")).strip() or "ui_detector"
-        # Use frame_dx/frame_dy as the primary dx/dy — these are pixel-space
-        # coordinates that map directly to HID mouse_move targets.
-        # The earlier normalized (0-1) dx/dy fractions rounded to 0 or 1,
-        # causing every mouse move to go to (0,0).
-        pixel_dx = frame_dx
-        pixel_dy = frame_dy
+
         final_elem = {
             "id": str(elem.get("id", "elem_0")),
             "type": etype,
             "label": label,
-            "description": desc if desc else _specific_description(etype, label, pixel_dx, pixel_dy),
+            "description": desc if desc else _specific_description(etype, label, frame_dx, frame_dy),
             "state": state,
-            "dx": pixel_dx,
-            "dy": pixel_dy,
+            "dx": frame_dx,
+            "dy": frame_dy,
             "frame_dx": frame_dx,
             "frame_dy": frame_dy,
             "confidence": confidence,
             "source": final_source,
         }
-        frame_bbox = elem.get("frame_bbox")
-        if isinstance(frame_bbox, list) and len(frame_bbox) == 4:
+        if frame_bbox is not None:
             final_elem["frame_bbox"] = frame_bbox
         finalized.append(final_elem)
+
     payload["elements"] = finalized
     return payload
 
@@ -909,11 +915,11 @@ def _run_pipeline_for_frame(
     vlm_batch_max_elements: int = 90,
 ) -> Dict[str, Any]:
     """
-    Run the Gemini-only pipeline for one frame:
-      preprocess → Gemini semantic analysis → save final JSON.
+    Run the OpenAI-backed pipeline for one frame:
+      preprocess → OpenAI semantic analysis → save final JSON.
 
     The session still writes the expected artifact files, but it no longer
-    invokes any non-Gemini detector or fallback vision backend.
+    invokes any non-OpenAI detector or fallback vision backend by default.
     """
     frame_name = Path(frame_path).name
     frame_stem = Path(frame_path).stem
@@ -951,14 +957,14 @@ def _run_pipeline_for_frame(
 
     pipeline_image_path = frame_path if screenshot_mode else preprocessed_image
     if screenshot_mode:
-        logger.info("Screenshot mode enabled; Gemini will analyze the raw frame %s", pipeline_image_path)
+        logger.info("Screenshot mode enabled; OpenAI will analyze the raw frame %s", pipeline_image_path)
 
-    # Gemini semantic path:
+    # OpenAI semantic path:
     # - semantic VLM returns dx/dy points (no bbox)
     # - validation/overlay are handled inside VisionPipeline
     # - keep existing output file pattern for session compatibility
     if semantic_pipeline is not None:
-        logger.info("Using Gemini semantic pipeline for %s", frame_name)
+        logger.info("Using OpenAI semantic pipeline for %s", frame_name)
         img_h, img_w = image.shape[:2]
 
         coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
@@ -970,7 +976,7 @@ def _run_pipeline_for_frame(
         next_allowed = float(session.get("semantic_next_allowed_at", 0.0) or 0.0)
         now_ts = time.time()
         if next_allowed > now_ts:
-            logger.info("Gemini backoff active for %.1fs before processing %s", next_allowed - now_ts, frame_name)
+            logger.info("OpenAI backoff active for %.1fs before processing %s", next_allowed - now_ts, frame_name)
             time.sleep(min(30.0, next_allowed - now_ts))
 
         logger.info("Calling semantic pipeline for %s", frame_name)
@@ -988,11 +994,11 @@ def _run_pipeline_for_frame(
             retry_after,
         )
 
-        # Gemini-only retry path for quota/rate limiting.
+        # Provider retry path for quota/rate limiting.
         if semantic_error == "quota_exceeded" and retry_after > 0.0:
             wait_s = min(30.0, retry_after + 0.5)
             session["semantic_next_allowed_at"] = time.time() + wait_s
-            logger.warning("Gemini quota/rate limit. Retrying this frame in %.1fs", wait_s)
+            logger.warning("OpenAI quota/rate limit. Retrying this frame in %.1fs", wait_s)
             time.sleep(wait_s)
             semantic_result = semantic_pipeline.run(pipeline_image_path)
             payload = semantic_result.get("vision_output", {})
@@ -1009,9 +1015,9 @@ def _run_pipeline_for_frame(
         coarse_json_path = os.path.join(session["coarse_dir"], f"{frame_stem}.json")
 
         if semantic_has_elements:
-            logger.debug("Gemini returned elements; writing semantic session artifacts")
+            logger.debug("OpenAI returned elements; writing semantic session artifacts")
         else:
-            logger.warning("Gemini semantic pipeline returned zero elements; keeping empty Gemini output")
+            logger.warning("OpenAI semantic pipeline returned zero elements; keeping empty OpenAI output")
 
         with open(coarse_json_path, "w", encoding="utf-8") as f:
             json.dump({"bboxes": []}, f, indent=2)
@@ -1189,7 +1195,7 @@ def processing_worker():
 def vision_diagnose():
     """
     Run pre-flight checks and report what is available:
-    camera, Gemini VLM, installed packages.
+    camera, OpenAI VLM, installed packages.
     """
     results: Dict[str, Any] = {}
 
@@ -1205,27 +1211,27 @@ def vision_diagnose():
         results["camera_error"] = str(_exc)
     results["camera_index_0_available"] = camera_ok
 
-    # --- Gemini availability ---
+    # --- OpenAI availability ---
     providers: Dict[str, Any] = {}
     try:
-        import google.generativeai  # type: ignore  # noqa: F401
-        providers["gemini"] = {
+        import requests  # noqa: F401
+        providers["openai"] = {
             "available": True,
-            "api_key_set": bool(os.getenv("GEMINI_API_KEY")),
+            "api_key_set": bool(os.getenv("OPEN_API_KEY") or os.getenv("OPENAI_API_KEY")),
             "mode": "semantic_dxdy_pipeline",
         }
     except ImportError:
-        providers["gemini"] = {"available": False, "reason": "google-generativeai not installed"}
+        providers["openai"] = {"available": False, "reason": "requests not installed"}
 
     results["vlm_providers"] = providers
 
     # --- recommended start params ---
     recommended_provider = "no_vlm"
-    if providers.get("gemini", {}).get("api_key_set"):
-        recommended_provider = "gemini"
+    if providers.get("openai", {}).get("api_key_set"):
+        recommended_provider = "openai"
 
     results["recommended_provider"] = recommended_provider
-    if providers.get("gemini", {}).get("api_key_set"):
+    if providers.get("openai", {}).get("api_key_set"):
         results["recommended_start_params"] = (
             "POST /vision/start?camera_index=0&save_interval=1"
             "&no_vlm=false"
@@ -1445,7 +1451,7 @@ def capture_once(
     vlm_batch_max_elements: int = 90,
     no_vlm: bool = False,
     use_current_session: bool = False,
-    provider: str = "gemini",
+    provider: str = "openai",
 ):
     """Single-shot capture and pipeline execution. Returns final JSON.
 
@@ -1484,7 +1490,7 @@ def capture_once(
         return {"status": "error", "detail": f"Failed to capture frame from camera {camera_index}"}
 
     # Re-use VLM pipeline if one is already alive in the current session to
-    # avoid the 3-5 second Gemini client re-initialization cost per capture.
+    # avoid the 3-5 second OpenAI client re-initialization cost per capture.
     with session_lock:
         _reuse_session = current_session if capture_running and current_session else None
 
@@ -1568,6 +1574,6 @@ def vision_status():
         "session_id": session.get("id") if session else None,
         "camera_index": session.get("camera_index") if session else None,
         "no_vlm": session.get("no_vlm") if session else None,
-        "vlm": "gemini" if session and session.get("vlm_client") is not None else "disabled",
+        "vlm": "openai" if session and session.get("vlm_client") is not None else "disabled",
     }
 

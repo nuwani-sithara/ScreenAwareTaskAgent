@@ -1,5 +1,7 @@
 """VLM provider implementations for the vision subsystem."""
 
-from src.vision.vlm.gemini_vlm import GeminiVLM
+from src.vision.vlm.openai_vlm import OpenAIVLM
 
-__all__ = ["GeminiVLM"]
+GeminiVLM = OpenAIVLM
+
+__all__ = ["OpenAIVLM", "GeminiVLM"]

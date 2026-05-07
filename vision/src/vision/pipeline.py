@@ -1,4 +1,4 @@
-"""Orchestrator for Gemini semantic vision analysis with validation and debug overlay."""
+"""Orchestrator for OpenAI semantic vision analysis with validation and debug overlay."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ import cv2
 from src.vision.debug.overlay_generator import generate_overlay
 from src.vision.validation.coordinate_validator import validate_coordinates
 from src.vision.validation.schema_validator import build_empty_response, validate_schema
-from src.vision.vlm.gemini_vlm import GeminiVLM
-from src.vision.config import GEMINI_TIMEOUT_SECONDS
+from src.vision.vlm.openai_vlm import OpenAIVLM
+from src.vision.config import OPENAI_TIMEOUT_SECONDS
 
 logger = logging.getLogger(__name__)
 
@@ -21,15 +21,15 @@ class VisionPipeline:
     """Run semantic VLM analysis and enforce reliability checks."""
 
     def __init__(self) -> None:
-        # Pass configured timeout for Gemini RPCs so we can tune network timeouts
-        # via the vision/.env `GEMINI_TIMEOUT_SECONDS` value.
-        self.vlm = GeminiVLM(timeout_seconds=float(GEMINI_TIMEOUT_SECONDS))
+        # Pass configured timeout for OpenAI RPCs so we can tune network timeouts
+        # via the vision/.env `OPENAI_TIMEOUT_SECONDS` value.
+        self.vlm = OpenAIVLM(timeout_seconds=float(OPENAI_TIMEOUT_SECONDS))
 
     def run(self, image_path: str, debug_output_path: str | None = None) -> Dict[str, Any]:
         """
         Pipeline flow:
         1) Load image
-        2) Call GeminiVLM
+        2) Call OpenAIVLM
         3) Validate schema
         4) Validate coordinates/confidence
         5) Generate debug overlay
@@ -46,10 +46,10 @@ class VisionPipeline:
         image_height, image_width = image.shape[:2]
         logger.info("Loaded image size width=%d height=%d", image_width, image_height)
 
-        logger.info("Calling Gemini VLM")
+        logger.info("Calling OpenAI VLM")
         raw_output = self.vlm.analyze(image_path=image_path, image_width=image_width, image_height=image_height)
         if isinstance(raw_output, dict):
-            logger.debug("Gemini raw output keys: %s", sorted(raw_output.keys()))
+            logger.debug("OpenAI raw output keys: %s", sorted(raw_output.keys()))
         vlm_error_type = str(raw_output.get("_vlm_error_type", "")).strip().lower() if isinstance(raw_output, dict) else ""
         try:
             vlm_retry_after = float(raw_output.get("_vlm_retry_after_seconds", 0.0)) if isinstance(raw_output, dict) else 0.0

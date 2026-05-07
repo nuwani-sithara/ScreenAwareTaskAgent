@@ -973,6 +973,7 @@ class GeminiVLM(BaseVLM):
                         "dy",
                         "confidence",
                         "source",
+                        "bbox",
                     ],
                 },
             },
